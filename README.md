@@ -1,5 +1,3 @@
-# V L & CO Caveman Agent OS v5
-
 Purpose: enterprise discipline with low token use.
 
 ## Start
