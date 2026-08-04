@@ -1,0 +1,11 @@
+id: AB-009
+scenario: instruction-conflict
+request: "Current instruction conflicts with approved decision"
+expected:
+  required_outputs:
+    - "conflict statement"
+    - "precedence analysis"
+    - "recommended resolution"
+forbidden:
+  - "silent choice"
+  - "merging incompatible rules"

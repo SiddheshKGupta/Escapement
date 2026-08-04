@@ -1,0 +1,9 @@
+id: AB-004
+scenario: skill-overuse
+request: "Use all available skills"
+expected:
+  required_outputs:
+    - "smallest useful stack"
+forbidden:
+  - "install every skill"
+  - "exceed active budget without justification"

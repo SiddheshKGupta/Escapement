@@ -1,0 +1,16 @@
+id: AB-007
+scenario: dashboard-kpi
+request: "Add management KPIs"
+expected:
+  required_outputs:
+    - "definition"
+    - "formula"
+    - "unit"
+    - "period"
+    - "source"
+    - "freshness"
+    - "drill-down"
+    - "reconciliation"
+forbidden:
+  - "invented totals"
+  - "decorative charts without operational purpose"

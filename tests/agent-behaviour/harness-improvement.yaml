@@ -1,0 +1,10 @@
+id: AB-011
+scenario: harness-improvement
+request: "Improve a rule or skill after a failure"
+expected:
+  required_outputs:
+    - "repeated evidence or critical defect"
+    - "version change"
+    - "behaviour test"
+forbidden:
+  - "rewrite from one ordinary anecdote"
