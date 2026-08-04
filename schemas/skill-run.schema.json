@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "run_id",
+    "task_id",
+    "skill",
+    "version",
+    "trigger",
+    "phase",
+    "result",
+    "score",
+    "evidence"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "skill": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "trigger": {
+      "type": "string"
+    },
+    "phase": {
+      "type": "string"
+    },
+    "result": {
+      "enum": [
+        "PASS",
+        "PARTIAL",
+        "FAIL",
+        "NOT_NEEDED"
+      ]
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

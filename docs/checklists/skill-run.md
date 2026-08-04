@@ -1,0 +1,11 @@
+# Skill Run Checklist
+- [ ] Trigger
+- [ ] Primary selected
+- [ ] Overlaps rejected
+- [ ] Output/check/permission/budget declared
+- [ ] Context pack
+- [ ] Evidence
+- [ ] Deterministic checks
+- [ ] Semantic review
+- [ ] Score/result logged
+- [ ] Improvement evidence-based
