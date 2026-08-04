@@ -1,0 +1,25 @@
+project_name: TBD
+phase: discovery
+work_mode: FULL
+implementation_authorized: false
+approved_ticket: null
+
+documents:
+  brd: missing
+  prd: missing
+  frd: missing
+  architecture: missing
+  security: missing
+  frontend_spec: missing
+  tickets: missing
+  ai_report: active
+
+blocking_decisions: []
+accepted_assumptions: []
+selected_skills: []
+reference_repositories:
+  - AppFlowy-IO/AppFlowy
+  - plausible/analytics
+  - mvanhorn/last30days-skill
+
+last_updated: 2026-08-03
