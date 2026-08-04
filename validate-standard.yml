@@ -1,0 +1,32 @@
+name: Validate VLCO Standard
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Environment doctor
+        run: python scripts/vlco_build.py doctor
+
+      - name: Unified validation
+        run: python scripts/vlco_build.py validate
+
+      - name: Skill evidence audit
+        run: python scripts/vlco_build.py skill-audit
