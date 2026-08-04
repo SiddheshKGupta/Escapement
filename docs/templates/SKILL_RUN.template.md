@@ -1,0 +1,20 @@
+# Skill Run
+- Run ID:
+- Task ID:
+- Skill/version:
+- Trigger:
+- Why selected:
+- Alternatives rejected:
+- Inputs:
+- Expected output:
+- Actual output:
+- Evidence:
+- Deterministic checks:
+- Semantic review:
+- Tokens/turns/time:
+- Result: PASS / PARTIAL / FAIL / NOT_NEEDED
+- Score:
+- Impact:
+- Failure reason:
+- Improvement candidate:
+- Human decision:

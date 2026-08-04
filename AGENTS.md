@@ -1,6 +1,6 @@
 ---
 owner: V L & CO
-version: "5.0"
+version: "5.2"
 mode: caveman
 purpose: "Build correct enterprise software with minimum reading and minimum paperwork."
 ---
@@ -202,6 +202,25 @@ Need → Primary skill → Optional helper → Redundant skills rejected
 Do not count reference websites as missing skills.
 
 Read `SKILLS_INVENTORY.md` and `SKILL_USAGE_PLAN.md`.
+
+## 9A. Context + Harness Rule
+
+Before material work:
+
+1. Build a task context pack: goal, approved decisions, exact files, constraints, acceptance, current state.
+2. Load only relevant standards and skills.
+3. Declare selected skills and why.
+4. Run the Skill Evidence Loop.
+5. Use deterministic checks before model judgement.
+6. Record outcome in `logs/skill-usage.jsonl`.
+7. Update or retire a skill only from repeated evidence.
+
+Read when needed:
+
+- `docs/standards/context-engineering.md`
+- `docs/standards/harness-engineering.md`
+- `skills/skill-governance/SKILL.md`
+- `docs/templates/SKILL_RUN.template.md`
 
 ## 10. Required Small Docs
 

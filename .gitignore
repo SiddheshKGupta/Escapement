@@ -1,0 +1,24 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dependencies and build
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+.tmp/
+*.log
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local state
+PROJECT_STATE.local.yaml

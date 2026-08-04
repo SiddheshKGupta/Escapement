@@ -1,0 +1,15 @@
+# Context Pack
+- Task ID:
+- Goal:
+- Mode: FULL / DELTA / EXECUTE
+- Approved scope:
+- Non-goals:
+- Current state:
+- Exact files/modules:
+- Rules:
+- Data/permissions:
+- Acceptance:
+- Blockers:
+- Selected skills:
+- Checks:
+- Token/turn budget:
