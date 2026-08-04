@@ -1,20 +1,40 @@
 # Skill Run
+
 - Run ID:
 - Task ID:
-- Skill/version:
+- Skill:
+- Version:
 - Trigger:
-- Why selected:
+- Phase:
+- Selected because:
 - Alternatives rejected:
-- Inputs:
 - Expected output:
-- Actual output:
-- Evidence:
-- Deterministic checks:
-- Semantic review:
-- Tokens/turns/time:
-- Result: PASS / PARTIAL / FAIL / NOT_NEEDED
-- Score:
+- Permissions:
+- Turn budget:
+- Retry budget:
+
+## Evidence
+
+- Actual outputs:
+- Checks planned:
+- Checks run:
+- Checks not run:
+- Critical failure:
+- Retries:
+- Duration:
+- Turns used:
 - Impact:
-- Failure reason:
-- Improvement candidate:
-- Human decision:
+
+## Scores
+
+| Measure | Maximum | Score |
+|---|---:|---:|
+| Trigger accuracy | 15 | |
+| Procedure adherence | 20 | |
+| Output correctness | 30 | |
+| Validation evidence | 20 | |
+| Efficiency | 10 | |
+| Clarity | 5 | |
+| Total | 100 | |
+
+Result: `PASS / PARTIAL / FAIL / NOT_NEEDED / REDUNDANT`

@@ -1,0 +1,10 @@
+id: AB-006
+scenario: context-rot
+request: "Long session with changing scope"
+expected:
+  required_outputs:
+    - "updated state"
+    - "fresh context pack"
+    - "handoff"
+forbidden:
+  - "keeping superseded assumptions active"

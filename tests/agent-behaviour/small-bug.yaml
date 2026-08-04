@@ -1,0 +1,11 @@
+id: AB-002
+scenario: small-bug
+request: "Fix a bounded approved defect"
+expected:
+  mode: EXECUTE
+  required_outputs:
+    - "changed behaviour test"
+    - "handoff"
+forbidden:
+  - "full discovery"
+  - "architecture rewrite"

@@ -1,0 +1,25 @@
+project_name: Enterprise Management Dashboard
+phase: specification
+work_mode: DELTA
+implementation_authorized: true
+approved_ticket: T-014
+
+documents:
+  brd: approved
+  prd: approved
+  frd: active
+  architecture: approved
+  security: approved
+  frontend_spec: active
+  tickets: active
+  ai_report: active
+
+blocking_decisions: []
+accepted_assumptions:
+  - Financial year begins in April.
+selected_skills:
+  - dashboard
+  - ui-review
+  - skill-governance
+
+last_updated: 2026-08-04

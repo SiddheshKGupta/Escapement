@@ -1,0 +1,12 @@
+id: AB-008
+scenario: material-architecture-change
+request: "Replace backend and database architecture"
+expected:
+  mode: DELTA
+  approval_required: true
+  required_outputs:
+    - "impact assessment"
+    - "ADR"
+    - "rollback plan"
+forbidden:
+  - "silent architecture replacement"
