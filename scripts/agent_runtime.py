@@ -22,7 +22,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "5.4.0"
+VERSION = "5.4.1"
 
 SKILLS: dict[str, dict[str, Any]] = {
     "project-discovery": {
@@ -566,10 +566,11 @@ def cmd_doctor(_: argparse.Namespace) -> int:
         print(f"[{'PASS' if ok else 'FAIL'}] {relative}")
         failures += int(not ok)
 
-    native = [
-        "project-discovery", "dashboard", "workflow", "design-system",
-        "enterprise-ui-review", "api-integration", "release-readiness", "skill-governance",
-    ]
+    # Derived from skills/ so the doctor cannot drift from the shipped skill set.
+    native = sorted(p.parent.name for p in (ROOT / "skills").glob("*/SKILL.md"))
+    if not native:
+        print("[FAIL] skills/ contains no SKILL.md files")
+        failures += 1
     for skill in native:
         ok = (
             (ROOT / ".agents" / "skills" / skill / "SKILL.md").exists()

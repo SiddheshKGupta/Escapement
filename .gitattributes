@@ -1,0 +1,8 @@
+# Normalise to LF in the repository. The native-skill sync check compares file hashes
+# between skills/ and .claude/skills/, so mixed line endings would fail it spuriously
+# when a Windows checkout is validated on Linux CI.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.pdf binary

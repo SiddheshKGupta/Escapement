@@ -6,7 +6,7 @@ Developed by V L & CO.
 
 ## Purpose
 
-VLCO Product Build Standard is a compact, progressive-disclosure operating framework for disciplined AI-assisted product planning, architecture, engineering, governance, testing, and delivery.
+Escapement, formerly the VLCO Product Build Standard, is a compact, progressive-disclosure operating framework for disciplined AI-assisted product planning, architecture, engineering, governance, testing, and delivery.
 
 ## External References
 
