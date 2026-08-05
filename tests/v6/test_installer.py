@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import subprocess
 import sys
@@ -8,10 +9,20 @@ import unittest
 from pathlib import Path
 
 
+def _load_escapement_version(script: Path) -> str:
+    """Read VERSION from the live script rather than hardcoding it, so this test
+    does not need editing on every version bump."""
+    spec = importlib.util.spec_from_file_location("escapement_under_test", script)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.VERSION
+
+
 class InstallerSafetyTest(unittest.TestCase):
     def setUp(self) -> None:
         self.source = Path(__file__).resolve().parents[2]
         self.cli = self.source / "scripts" / "escapement.py"
+        self.expected_version = _load_escapement_version(self.cli)
         self.temp = tempfile.TemporaryDirectory(prefix="escapement-installer-")
         self.target = Path(self.temp.name) / "product"
         process = subprocess.run(
@@ -66,7 +77,7 @@ class InstallerSafetyTest(unittest.TestCase):
         record = json.loads(
             (self.target / ".escapement-install.json").read_text(encoding="utf-8")
         )
-        self.assertEqual(record["version"], "6.0.0")
+        self.assertEqual(record["version"], self.expected_version)
         self.assertIn("AGENTS.md", record["managed_files"])
         self.assertIn("PROJECT_STATE.yaml", record["project_owned_files"])
 

@@ -1,28 +1,25 @@
 ---
 name: enterprise-ui-review
-description: Review interface structure, density, hierarchy, table quality, state coverage, keyboard access, accessibility, brand fit, responsiveness, and motion. Returns critical, material, and polish fixes. Use for new UI, redesigns, generic-AI-looking output, and usability review.
-trigger: "New UI, redesign, generic AI look, usability review."
+description: Use for new UI, redesign, frontend implementation, screen or component review, responsive work, accessibility, generic AI appearance, or usability problems. Do not use for backend-only work.
 ---
 
-# UI Review
+# Enterprise UI Review
 
-Check:
+Review:
 
-- structure
-- density
-- hierarchy
-- table quality
-- state coverage
-- keyboard
-- accessibility
-- brand
-- responsiveness
-- motion
-- dead actions
+1. user and task;
+2. information architecture;
+3. navigation and location;
+4. hierarchy and density;
+5. action hierarchy;
+6. forms, tables, filters, and drill-down;
+7. loading, empty, error, permission, success, and stale states;
+8. keyboard and focus;
+9. accessibility;
+10. responsiveness;
+11. brand and `DESIGN.md`;
+12. motion;
+13. dead controls.
 
-Select one taste skill only.
-Use Playwright for proof when available.
-Return:
-- critical fixes
-- material fixes
-- polish
+Use real browser evidence when available. Capture screenshots and commands as
+structured evidence.

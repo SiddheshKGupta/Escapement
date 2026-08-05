@@ -16,9 +16,8 @@
 
 | Check | Result |
 |---|---|
-| `python scripts/vlco_build.py validate` | |
-| `python scripts/agent_runtime.py doctor` | |
-| `python -m unittest discover tests` | |
+| `python scripts/escapement.py doctor` | |
+| `python scripts/escapement.py self-test` | |
 
 ## Checks not run
 

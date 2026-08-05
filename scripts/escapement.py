@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-VERSION = "6.0.0"
+VERSION = "6.3.0"
 INSTALL_RECORD = ".escapement-install.json"
 
 ROOT_FILES = [

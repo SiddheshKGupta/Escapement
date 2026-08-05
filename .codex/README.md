@@ -8,9 +8,9 @@
 Native skills are generated from `skills/` and must stay identical to it. After editing a skill, run:
 
 ```bash
-python scripts/vlco_build.py sync-skills
+python scripts/escapement.py sync-skills
 ```
 
-`python scripts/vlco_build.py validate` fails if the native copies have drifted from `skills/`.
+`python scripts/escapement.py doctor` fails if the native copies have drifted from `skills/`.
 
 Codex does not read `.claude/settings.json`. Both harnesses run the same three runtime commands, so behaviour is identical across them.

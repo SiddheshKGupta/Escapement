@@ -22,21 +22,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Environment doctor
-        run: python scripts/vlco_build.py doctor
+      - name: Repository doctor
+        run: python scripts/escapement.py doctor
 
-      - name: Unified validation
-        run: python scripts/vlco_build.py validate
-
-      - name: Skill evidence audit
-        run: python scripts/vlco_build.py skill-audit
-
-      - name: Runtime tests
-        run: python -m unittest discover -s tests
-
-      - name: Fresh install passes its own checks
-        run: |
-          python scripts/vlco_build.py init "${RUNNER_TEMP}/install-check"
-          cd "${RUNNER_TEMP}/install-check"
-          python scripts/validate_standard.py
-          python scripts/agent_runtime.py doctor
+      - name: Self-test (compile, feature list, evals, unit tests, fresh install)
+        run: python scripts/escapement.py self-test

@@ -16,8 +16,8 @@ assignees: ''
 - [ ] Runtime (`scripts/agent_runtime.py`, hooks, turn lifecycle)
 - [ ] A skill — which:
 - [ ] A standard in `docs/standards/`
-- [ ] Validation (`scripts/validate_standard.py`)
-- [ ] Install or update (`scripts/vlco_build.py`)
+- [ ] Validation or self-test (`scripts/escapement.py doctor` / `self-test`)
+- [ ] Install, update, or repair (`scripts/escapement.py init` / `update` / `repair`)
 
 ## Evidence
 

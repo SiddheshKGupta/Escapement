@@ -1,19 +1,19 @@
 ---
 name: workflow
-description: Model operational processes as states, actors, transitions, controls, and exceptions, with maker-checker roles, SLAs, escalation, and audit. Use for approval flows, exception handling, and process governance.
-trigger: "Operational process, approval, exception, SLA, governance."
+description: Use for business processes, approvals, state machines, exception management, maker-checker controls, journeys, escalations, ownership, or SLA. Do not use for a purely visual page with no process behaviour.
 ---
 
-# Workflow
+# Workflow Design
 
-Capture:
+Model:
 
-`Trigger | Owner | Maker | Checker | Approver | Input | Rule | Status | SLA | Evidence | Exception | Escalation | Audit | Closure`
+```text
+Trigger | Actors | Inputs | States | Transitions | Rules | Controls
+Exceptions | Escalations | Outputs | Audit | SLA | Permissions
+```
 
-Output minimal:
+Separate current and target flows. Define allowed transitions, owner,
+permissions, validation, maker-checker rules, exceptions, timeouts, reversals,
+duplicates, audit events, and acceptance tests.
 
-- flow
-- status table
-- permission table
-- exception table
-- acceptance
+Never invent policy, authority, or SLA.
