@@ -1,36 +1,63 @@
-# Agent Runtime
+# Escapement Runtime
 
-The repository standard becomes effective only when executed on every material turn.
+## Lifecycle
 
 ```text
-SessionStart → durable memory
-UserPromptSubmit → mode + skill routing
-Agent work → native skill invocation
-Stop → one-shot gate
-close-turn → state + evidence + handoff
+SessionStart
+→ Load durable state
+
+UserPromptSubmit
+→ Continue/open turn
+→ Classify mode
+→ Route skills
+→ Write active context
+
+Agent work
+→ Execute one bounded feature
+→ Capture structured checks
+
+Stop
+→ Block one premature stop
+
+Close turn
+→ Validate evidence
+→ Update feature/handoff
+→ Persist append-only records
 ```
 
-## Runtime Files
+## Local State
 
-| File | Role |
-|---|---|
-| `.agent/runtime/ACTIVE_CONTEXT.md` | Current goal, mode, state, obligations |
-| `.agent/runtime/ACTIVE_SKILLS.md` | Selected skills and native invocations |
-| `.agent/runtime/SESSION_MEMORY.md` | Durable compact handoff |
-| `.agent/runtime/current-turn.json` | Local open-turn control state |
-| `.agent/runtime/turns.jsonl` | Append-only turn history |
-| `logs/skill-usage.jsonl` | Provisional evidence records |
+```text
+.agent/runtime/
+.agent/evidence/
+.agent/evals/
+.agent/runs/
+```
+
+These are local by default.
+
+## Shared State
+
+```text
+PROJECT_STATE.yaml
+PROJECT_CONTEXT.md
+feature_list.json
+SESSION_HANDOFF.md
+docs/specs/
+docs/decisions/
+```
+
+Shared state should be committed when it materially changes.
 
 ## Commands
 
 ```bash
-python scripts/agent_runtime.py doctor
-python scripts/agent_runtime.py manual-start --prompt "Build a dashboard"
+python scripts/agent_runtime.py manual-start --prompt "Task"
 python scripts/agent_runtime.py status
-python scripts/agent_runtime.py close-turn --summary "Done" --next "Next" --files "a,b" --checks "test;lint" --evidence "a,b"
-python scripts/agent_runtime.py reset-turn --reason "Stale session"
+python scripts/agent_runtime.py explain --prompt "Task"
+python scripts/agent_runtime.py close-turn ...
+python scripts/agent_runtime.py reset-turn --reason "Reason"
+python scripts/agent_runtime.py doctor
 ```
 
-The Stop hook blocks at most once. It never creates an unbounded loop.
-
-A normal web chat with GitHub read access does not execute repository hooks. Use Codex/Claude Code in the repo, or invoke `manual-start`.
+The Stop gate blocks at most once and never creates an unbounded loop.

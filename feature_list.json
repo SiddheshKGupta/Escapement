@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "project": "Escapement",
+  "updated_at": "2026-08-05",
+  "features": [
+    {
+      "id": "ESC-600-01",
+      "behavior": "Safe installer and updater preserve project-owned state and create backups.",
+      "verification": "python -m unittest tests.v6.test_installer",
+      "state": "active",
+      "required": true,
+      "dependencies": [],
+      "evidence": [],
+      "owner": "maintainer"
+    },
+    {
+      "id": "ESC-600-02",
+      "behavior": "Open runtime turns survive later prompts and close only with structured evidence.",
+      "verification": "python -m unittest tests.v6.test_runtime",
+      "state": "not_started",
+      "required": true,
+      "dependencies": [
+        "ESC-600-01"
+      ],
+      "evidence": [],
+      "owner": "maintainer"
+    },
+    {
+      "id": "ESC-600-03",
+      "behavior": "Router and harness behaviours execute from resumable evaluation fixtures.",
+      "verification": "python scripts/eval_harness.py run",
+      "state": "not_started",
+      "required": true,
+      "dependencies": [
+        "ESC-600-02"
+      ],
+      "evidence": [],
+      "owner": "maintainer"
+    },
+    {
+      "id": "ESC-600-04",
+      "behavior": "Security, observability, plugins, components, and documentation are release-ready.",
+      "verification": "python scripts/escapement.py self-test",
+      "state": "not_started",
+      "required": true,
+      "dependencies": [
+        "ESC-600-03"
+      ],
+      "evidence": [],
+      "owner": "maintainer"
+    }
+  ]
+}

@@ -1,50 +1,6 @@
 # Data and Reporting Standard
 
-## KPI Contract
+Every metric requires meaning, formula, unit, period, source, freshness, filters,
+breakdown, drill-down, owner, access, and reconciliation.
 
-Each KPI needs:
-
-```text
-ID
-Name
-Meaning
-Formula
-Unit
-Period
-Source
-Freshness
-Filters
-Breakdowns
-Drill-down
-Owner
-Target
-Access
-```
-
-## Time
-
-Use where relevant:
-
-`FY | Q | Month | YTD | QTD | MTD | Custom | Prior | Target`
-
-Confirm FY definition.
-
-## Breakdown
-
-Pick relevant:
-
-`Entity | Product | Program | Customer | Vendor | Location | Team | Owner | Status | Ageing | Exception`
-
-## Reconcile
-
-```text
-Source total
-Dashboard total
-Record count
-Rejected count
-Difference
-Refresh time
-```
-
-No total without record path.
-No chart without business question.
+No dashboard total is accepted without a path to source records.

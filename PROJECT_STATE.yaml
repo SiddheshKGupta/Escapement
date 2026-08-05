@@ -1,26 +1,30 @@
 project_name: Escapement
-phase: runtime-validation
+phase: v6-release
 work_mode: DELTA
 implementation_authorized: true
-approved_ticket: V5.4-RUNTIME
+approved_ticket: ESC-V6-ALL-IN-ONE
 
 documents:
+  constitution: active
   project_context: active
-  current_context: active
+  feature_list: active
   design_intelligence: active
   runtime_enforcement: active
-  native_skills: active
-  tests: active
+  executable_evals: active
+  security: active
+  release: active
 
 blocking_decisions: []
 accepted_assumptions:
-  - Repository hooks require approval or trust in the coding-agent runtime.
+  - The source repository is the Escapement standard itself.
+  - Consuming projects receive a safe unauthorised state template.
 selected_skills:
+  - project-discovery
+  - security-review
   - skill-governance
-  - design-system
 
 runtime:
-  version: "5.4"
+  version: "6.0.0"
   enabled: true
   last_closed_turn: null
 

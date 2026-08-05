@@ -1,29 +1,7 @@
 # Integration Standard
 
-For each integration:
+Define purpose, owner, provider, authentication, permissions, request, response,
+validation, idempotency, timeout, retry, rate limit, errors, audit, secrets,
+data classification, observability, and fallback.
 
-```text
-Purpose
-Owner
-Provider
-Auth
-Endpoint/file
-Direction
-Frequency
-Schema
-Mapping
-Validation
-Rate limit
-Timeout
-Retry
-Idempotency
-Duplicate rule
-Reconciliation
-Error owner
-Audit
-Monitoring
-Fallback
-Exit
-```
-
-Keep third-party calls behind internal service layer.
+New external integrations require approval.

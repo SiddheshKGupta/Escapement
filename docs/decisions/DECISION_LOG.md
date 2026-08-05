@@ -1,4 +1,4 @@
 # Decision Log
 
-| ID | Date | Decision | Owner | Status | Link |
-|---|---|---|---|---|---|
+| Date | Decision | Reason | Impact | Approver |
+|---|---|---|---|---|

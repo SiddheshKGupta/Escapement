@@ -1,10 +1,9 @@
 # Build Readiness
 
-- [ ] Approved ticket
-- [ ] Acceptance testable
-- [ ] Dependencies ready
-- [ ] Data/API known
-- [ ] Permission rule known
-- [ ] UI states known
-- [ ] Tests planned
-- [ ] Rollback known if material
+- [ ] Specification approved
+- [ ] Plan approved
+- [ ] Tasks bounded
+- [ ] Feature verification defined
+- [ ] Skills selected
+- [ ] Checks defined
+- [ ] Approval gates resolved

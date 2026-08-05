@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Escapement External Resource",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "publisher",
+    "type",
+    "url",
+    "license",
+    "license_status",
+    "use_mode",
+    "triggers",
+    "use_when",
+    "how_to_use",
+    "do_not"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "publisher": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "pattern": "^https://"
+    },
+    "license": {
+      "type": "string"
+    },
+    "license_status": {
+      "type": "string"
+    },
+    "use_mode": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "triggers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "use_when": {
+      "type": "string"
+    },
+    "how_to_use": {
+      "type": "string"
+    },
+    "do_not": {
+      "type": "string"
+    }
+  }
+}

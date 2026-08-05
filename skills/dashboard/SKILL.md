@@ -1,25 +1,27 @@
 ---
 name: dashboard
-description: Define traceable KPIs and build management, analysis, and record layers with sources, periods, drill-down, and reconciliation. Use for dashboards, MIS, analytics, and management reporting.
-trigger: "Dashboard, MIS, KPI, analytics, management reporting."
+description: Use for dashboards, KPIs, MIS, metrics, management reporting, analytics, charts, drill-down, ageing, or reconciliation. Do not use for decorative data visualisation without an operational decision.
 ---
 
-# Dashboard
+# Dashboard and KPI Contract
 
-For each KPI capture:
+For every material metric define:
 
-`Meaning | Formula | Unit | FY/Q/Month | Source | Freshness | Breakdown | Drill-down | Target | Access`
+```text
+Meaning | Formula | Unit | Period | Source | Freshness | Filters
+Breakdown | Drill-down | Target/comparison | Owner | Access | Reconciliation
+```
 
-Then define:
+Procedure:
 
-- management layer
-- analysis layer
-- record layer
-- filters
-- reconciliation
-- export
-- states
-- tests
+1. Identify the decision supported.
+2. Confirm source records and time logic.
+3. Define KPI contracts before visualisation.
+4. Select the simplest chart or table.
+5. Add loading, empty, partial, stale, error, and permission states.
+6. Provide record-level drill-down.
+7. Reconcile totals.
+8. Verify filters and periods.
 
-No decorative chart.
-No number without evidence.
+Critical failures: invented totals, missing source, missing reconciliation,
+misleading periods, or colour-only meaning.

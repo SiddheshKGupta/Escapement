@@ -1,25 +1,14 @@
 # Testing Standard
 
-For changed behaviour:
-
-1. Unit
-2. Integration
-3. E2E for key flow
-4. Permission
-5. Negative case
-6. Accessibility
-7. Reconciliation
-8. Performance when material
-
-Report:
+Use the smallest sufficient test pyramid:
 
 ```text
-Ran:
-Passed:
-Failed:
-Not run:
-Reason:
-Risk:
+Static checks
+→ Unit tests
+→ Integration tests
+→ Browser/end-to-end tests
+→ UAT
 ```
 
-Never say “tested” without evidence.
+Capture executed commands, exit codes, output paths, and hashes through
+`scripts/run_check.py`.

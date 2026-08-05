@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "type": "bundle",
+  "name": "security-reviewer",
+  "version": "1.0.0",
+  "description": "Security, external capability, integration, and evidence setup.",
+  "approval_required": false,
+  "files_root": "files",
+  "skills": [
+    "security-review",
+    "reference-router",
+    "api-integration",
+    "skill-governance"
+  ],
+  "preset": "enterprise-governance"
+}

@@ -1,37 +1,7 @@
 # Security Standard
 
-## Must Decide
+Use least privilege, server-side enforcement, input validation, secret
+isolation, safe logging, dependency review, audit events, secure defaults, and
+explicit approval for material security changes.
 
-- Auth
-- roles
-- tenant boundary
-- row access
-- field access
-- maker/checker
-- export rights
-- admin rights
-- audit
-- retention
-- secrets
-- encryption
-- backup
-- AI data rule
-
-## Must Enforce
-
-- Server-side permission
-- least privilege
-- input validation
-- secure secrets
-- audit material actions
-- no shared-cache data leak
-- no confidential data to unapproved AI
-
-## Ask First
-
-- SSO
-- MFA
-- data residency
-- deletion
-- production access
-- VAPT/certification claim
+Hooks and MCP servers are executable trust boundaries.

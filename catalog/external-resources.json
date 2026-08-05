@@ -1,0 +1,589 @@
+{
+  "schema_version": "1.0",
+  "title": "Escapement External Resource Catalogue",
+  "reviewed_at": "2026-08-05",
+  "policy": {
+    "default": "reference-only-until-verified",
+    "approval_required_for": [
+      "installing a dependency, skill, plugin, MCP server, CLI, or service",
+      "network access or credentials",
+      "copying source code or substantial documentation",
+      "licence-sensitive integration",
+      "destructive or offensive security testing"
+    ],
+    "rules": [
+      "Public visibility is not a licence.",
+      "Verify the licence at the exact tag or commit before reuse.",
+      "Prefer integration over copying.",
+      "Pin versions or commit SHAs.",
+      "Record attribution and third-party notices.",
+      "Inspect hooks, scripts, permissions, MCP tools, and network access.",
+      "Do not combine overlapping harness installations without an explicit decision."
+    ]
+  },
+  "resources": [
+    {
+      "id": "voltagent-awesome-design-md",
+      "name": "awesome-design-md",
+      "publisher": "VoltAgent",
+      "type": "reference-repository",
+      "url": "https://github.com/VoltAgent/awesome-design-md",
+      "license": "MIT",
+      "license_status": "verified-in-prior-review",
+      "use_mode": [
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "design system",
+        "visual direction",
+        "brand",
+        "layout",
+        "colour",
+        "typography",
+        "motion"
+      ],
+      "use_when": "A product needs a design archetype, component language, visual benchmark, or product-specific DESIGN.md.",
+      "how_to_use": "Read only the relevant company DESIGN.md files, extract principles, and create an original system under client-brand precedence.",
+      "do_not": "Do not copy protected logos, proprietary fonts, imagery, screenshots, or another company's trade dress.",
+      "escapement_inspiration": "The 73-company design-intelligence synthesis and design-system routing."
+    },
+    {
+      "id": "perplexity-org",
+      "name": "Perplexity AI GitHub organisation",
+      "publisher": "Perplexity AI",
+      "type": "organisation-index",
+      "url": "https://github.com/perplexityai",
+      "license": "Per-repository",
+      "license_status": "must-verify-per-resource",
+      "use_mode": [
+        "reference"
+      ],
+      "triggers": [
+        "research",
+        "search",
+        "evaluation",
+        "CLI distribution",
+        "supply chain",
+        "MCP"
+      ],
+      "use_when": "An agent needs current patterns for research tooling, evaluation runners, safe binary distribution, or developer-tool inventory.",
+      "how_to_use": "Select a specific repository from this catalogue and verify its current licence before reuse.",
+      "do_not": "Do not assume every public repository in an organisation has the same licence.",
+      "escapement_inspiration": "Research extension, resumable evals, content-addressed records, self-tests, and safe installers."
+    },
+    {
+      "id": "perplexity-api-platform-developers",
+      "name": "api-platform-developers",
+      "publisher": "Perplexity AI",
+      "type": "skills-and-plugin-repository",
+      "url": "https://github.com/perplexityai/api-platform-developers",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "use_mode": [
+        "integrate",
+        "adapt"
+      ],
+      "triggers": [
+        "Perplexity",
+        "live web search",
+        "page snippets",
+        "Sonar migration",
+        "docs MCP"
+      ],
+      "use_when": "The project needs official Perplexity Agent Skills, a Claude/Codex plugin example, or live documentation through MCP.",
+      "how_to_use": "Prefer installing the official skill/plugin or using it as the model for portable Agent Skills. Pin a release or commit.",
+      "do_not": "Do not make Perplexity credentials or the docs MCP mandatory for Escapement core.",
+      "escapement_inspiration": "Portable skills, plugin manifests, optional docs MCP, and an official research extension."
+    },
+    {
+      "id": "perplexity-cli",
+      "name": "pplx CLI",
+      "publisher": "Perplexity AI",
+      "type": "external-cli",
+      "url": "https://github.com/perplexityai/perplexity-cli",
+      "license": "No licence file observed during review",
+      "license_status": "unverified-restrict-copying",
+      "use_mode": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "live search",
+        "grounded web research",
+        "query-relevant snippets",
+        "Perplexity CLI"
+      ],
+      "use_when": "A user explicitly wants Perplexity-backed current web search or snippets and can provide an API key.",
+      "how_to_use": "Use the released CLI as an optional external dependency after approval. Verify checksum and current terms.",
+      "do_not": "Do not copy repository code into Escapement or claim open-source reuse until a licence is present and verified.",
+      "escapement_inspiration": "Checksum-verified releases, atomic updates, JSON stdout, and agent-friendly CLI design."
+    },
+    {
+      "id": "perplexity-search-evals",
+      "name": "search_evals",
+      "publisher": "Perplexity AI",
+      "type": "evaluation-framework",
+      "url": "https://github.com/perplexityai/search_evals",
+      "license": "MIT",
+      "license_status": "verified",
+      "use_mode": [
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "evaluation",
+        "benchmark",
+        "grader",
+        "cost accounting",
+        "resumable run",
+        "trace"
+      ],
+      "use_when": "Escapement needs reproducible eval suites, provider adapters, task traces, resumable runs, or cost/evidence accounting.",
+      "how_to_use": "Adapt the run-directory, config-hash, resume, trace, and summary patterns to local harness evaluations.",
+      "do_not": "Do not import paid-provider assumptions or third-party benchmark data without accepting their separate terms.",
+      "escapement_inspiration": "Resumable executable evaluations and inspectable per-task traces."
+    },
+    {
+      "id": "perplexity-bumblebee",
+      "name": "Bumblebee",
+      "publisher": "Perplexity AI",
+      "type": "security-inventory-tool",
+      "url": "https://github.com/perplexityai/bumblebee",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "use_mode": [
+        "integrate",
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "dependency inventory",
+        "skill inventory",
+        "MCP inventory",
+        "supply-chain",
+        "self-test",
+        "NDJSON"
+      ],
+      "use_when": "A security review needs read-only package, skill, editor-extension, or MCP inventory from local metadata.",
+      "how_to_use": "Prefer invoking Bumblebee externally. Reuse its read-only, profile-based, NDJSON, confidence, and self-test patterns where useful.",
+      "do_not": "Do not expose credentials found in MCP env blocks or broaden scans beyond approved roots.",
+      "escapement_inspiration": "Read-only inventory profiles, structured NDJSON, confidence levels, and built-in self-test."
+    },
+    {
+      "id": "perplexity-modelcontextprotocol",
+      "name": "Perplexity MCP server",
+      "publisher": "Perplexity AI",
+      "type": "mcp-repository",
+      "url": "https://github.com/perplexityai/modelcontextprotocol",
+      "license": "Verify current repository licence",
+      "license_status": "must-verify",
+      "use_mode": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "Perplexity MCP",
+        "research MCP",
+        "search tool server"
+      ],
+      "use_when": "A project wants Perplexity search through MCP rather than a CLI.",
+      "how_to_use": "Install as an optional project MCP after explicit approval, review its tools, permissions, network access, and credential storage.",
+      "do_not": "Do not register remote MCP servers silently or make network access part of the default core.",
+      "escapement_inspiration": "Optional freshness and research integrations through a narrow MCP boundary."
+    },
+    {
+      "id": "perplexity-codescythe",
+      "name": "Codescythe",
+      "publisher": "Perplexity AI",
+      "type": "code-analysis-tool",
+      "url": "https://github.com/perplexityai/codescythe",
+      "license": "Verify current repository licence",
+      "license_status": "must-verify",
+      "use_mode": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "dead code",
+        "unused exports",
+        "unused files",
+        "dependency path",
+        "cleanup"
+      ],
+      "use_when": "A TypeScript or JavaScript repository needs deterministic dead-code analysis or dependency-path explanation.",
+      "how_to_use": "Use as an external check after approval. Run doctor/explain before destructive fix mode and capture output through structured evidence.",
+      "do_not": "Do not run destructive fixes without a clean branch, tests, and explicit approval.",
+      "escapement_inspiration": "Narrow deterministic contracts, doctor commands, explainability, and safe destructive-mode gates."
+    },
+    {
+      "id": "appflowy",
+      "name": "AppFlowy",
+      "publisher": "AppFlowy-IO",
+      "type": "product-repository",
+      "url": "https://github.com/AppFlowy-IO/AppFlowy",
+      "license": "AGPL-3.0",
+      "license_status": "verified",
+      "use_mode": [
+        "reference",
+        "integrate-separately"
+      ],
+      "triggers": [
+        "local-first",
+        "workspace",
+        "data ownership",
+        "self-hosting",
+        "extensible blocks"
+      ],
+      "use_when": "Designing local-first state, user-owned data, extensible workspace architecture, or self-hosted collaboration.",
+      "how_to_use": "Reuse architectural principles or integrate as a separate service under its licence. Review AGPL obligations before copying code.",
+      "do_not": "Do not copy AGPL code into Escapement's source-available core without a deliberate licence decision.",
+      "escapement_inspiration": "Privacy-first local control, cross-platform reliability, and extensible building blocks."
+    },
+    {
+      "id": "plausible-analytics",
+      "name": "Plausible Analytics",
+      "publisher": "Plausible Insights",
+      "type": "product-repository",
+      "url": "https://github.com/plausible/analytics",
+      "license": "AGPL-3.0-or-later",
+      "license_status": "verified",
+      "use_mode": [
+        "reference",
+        "integrate-separately"
+      ],
+      "triggers": [
+        "privacy analytics",
+        "local observability",
+        "simple dashboard",
+        "no cookies",
+        "self-hosting"
+      ],
+      "use_when": "Designing privacy-first observability, minimal dashboards, transparent metrics, or optional self-hosted analytics.",
+      "how_to_use": "Adopt privacy and simplicity principles or integrate a separately deployed instance under its licence.",
+      "do_not": "Do not embed AGPL application code into Escapement core without licence review.",
+      "escapement_inspiration": "Local-only telemetry by default, transparent metrics, and clutter-free observability."
+    },
+    {
+      "id": "github-spec-kit",
+      "name": "Spec Kit",
+      "publisher": "GitHub",
+      "type": "specification-framework",
+      "url": "https://github.com/github/spec-kit",
+      "license": "MIT",
+      "license_status": "verified",
+      "use_mode": [
+        "reference",
+        "adapt",
+        "integrate"
+      ],
+      "triggers": [
+        "constitution",
+        "specification",
+        "implementation plan",
+        "tasks",
+        "converge",
+        "preset",
+        "bundle"
+      ],
+      "use_when": "New or material work needs a constitution, executable specification, technical plan, task breakdown, or convergence review.",
+      "how_to_use": "Use Spec Kit directly or adapt its phases and extension/preset/bundle model with attribution.",
+      "do_not": "Do not duplicate its whole command surface in Escapement when an optional integration is sufficient.",
+      "escapement_inspiration": "Constitution \u2192 specify \u2192 plan \u2192 tasks \u2192 implement \u2192 converge, plus extensions, presets, and bundles."
+    },
+    {
+      "id": "500-ai-agents-projects",
+      "name": "500+ AI Agent Projects & Use Cases",
+      "publisher": "Ashish Patel",
+      "type": "agent-pattern-catalogue",
+      "url": "https://github.com/ashishpatel26/500-AI-Agents-Projects",
+      "license": "MIT",
+      "license_status": "verified-from-readme",
+      "use_mode": [
+        "reference"
+      ],
+      "triggers": [
+        "agent pattern",
+        "industry use case",
+        "framework comparison",
+        "example agent"
+      ],
+      "use_when": "An agent needs to discover relevant implementation patterns or comparable industry use cases.",
+      "how_to_use": "Search the catalogue, inspect the linked source project, and independently verify that project's licence and quality.",
+      "do_not": "Do not treat inclusion in a catalogue as proof of safety, quality, maintenance, or licence compatibility.",
+      "escapement_inspiration": "A curated agent-pattern registry rather than hundreds of always-loaded agents."
+    },
+    {
+      "id": "walkinglabs-learn-harness-engineering",
+      "name": "Learn Harness Engineering",
+      "publisher": "Walking Labs",
+      "type": "course-and-reference-repository",
+      "url": "https://walkinglabs.github.io/learn-harness-engineering/en/",
+      "license": "MIT",
+      "license_status": "verified-from-project-docs",
+      "use_mode": [
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "harness",
+        "state persistence",
+        "feature list",
+        "verification loop",
+        "session lifecycle",
+        "observability"
+      ],
+      "use_when": "Creating, assessing, or teaching the instructions, tools, environment, state, and feedback subsystems of a harness.",
+      "how_to_use": "Use relevant lectures, templates, and projects; compare weak and strong harness outcomes; preserve attribution.",
+      "do_not": "Do not load the complete course into every task or confuse a prompt file with a complete harness.",
+      "escapement_inspiration": "Repository as system of record, feature-state primitives, lifecycle bootstrap, verification, and clean session closure.",
+      "source_url": "https://github.com/walkinglabs/learn-harness-engineering"
+    },
+    {
+      "id": "walkinglabs-harness-creator",
+      "name": "harness-creator skill",
+      "publisher": "Walking Labs",
+      "type": "agent-skill",
+      "url": "https://github.com/walkinglabs/learn-harness-engineering/tree/main/skills/harness-creator",
+      "license": "MIT",
+      "license_status": "verified-from-skill-docs",
+      "use_mode": [
+        "install",
+        "adapt",
+        "reference"
+      ],
+      "triggers": [
+        "create harness",
+        "assess harness",
+        "improve harness",
+        "harness benchmark"
+      ],
+      "use_when": "A project lacks a harness or needs a structured five-subsystem assessment.",
+      "how_to_use": "Install through the skills ecosystem or reference its SKILL.md; run its evaluations before adopting changes.",
+      "do_not": "Do not install it on top of overlapping native Escapement harness skills without an overlap decision.",
+      "escapement_inspiration": "Harness assessment, templates, reference patterns, and benchmark-oriented skill development."
+    },
+    {
+      "id": "penpot",
+      "name": "Penpot",
+      "publisher": "Kaleidos",
+      "type": "design-platform",
+      "url": "https://github.com/penpot/penpot",
+      "license": "MPL-2.0",
+      "license_status": "verified",
+      "use_mode": [
+        "integrate",
+        "reference",
+        "adapt-with-file-level-obligations"
+      ],
+      "triggers": [
+        "design tokens",
+        "design-code workflow",
+        "SVG",
+        "CSS",
+        "design MCP",
+        "self-hosted design"
+      ],
+      "use_when": "A product needs open design tokens, inspectable design-to-code workflows, or an optional design MCP/API.",
+      "how_to_use": "Prefer integration through its API/MCP or adopt open-standard design-token concepts. Review MPL file-level obligations before code reuse.",
+      "do_not": "Do not copy branding or assume a design file alone proves implementation correctness.",
+      "escapement_inspiration": "Design tokens as shared source of truth and programmable design-code integration."
+    },
+    {
+      "id": "helixdb",
+      "name": "HelixDB",
+      "publisher": "HelixDB",
+      "type": "database-and-cli",
+      "url": "https://github.com/HelixDB/helix-db",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "use_mode": [
+        "integrate",
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "agent memory",
+        "knowledge graph",
+        "vector graph",
+        "local database",
+        "one-shot bootstrap"
+      ],
+      "use_when": "A project genuinely needs graph-vector memory, knowledge graphs, or a local agent data layer.",
+      "how_to_use": "Integrate as an optional data service after architecture approval; adapt its one-shot bootstrap and explainable local setup patterns.",
+      "do_not": "Do not make a database mandatory for Escapement's file-based core or add it merely to appear agentic.",
+      "escapement_inspiration": "A guided one-shot bootstrap and optional structured memory backend."
+    },
+    {
+      "id": "agent-reach",
+      "name": "Agent Reach",
+      "publisher": "Panniantong",
+      "type": "capability-installer",
+      "url": "https://github.com/Panniantong/agent-reach",
+      "license": "MIT",
+      "license_status": "verified-from-readme",
+      "use_mode": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "internet access",
+        "social search",
+        "video transcript",
+        "RSS",
+        "platform connector",
+        "doctor"
+      ],
+      "use_when": "A user explicitly needs internet/platform access not already available through approved tools.",
+      "how_to_use": "Use its safe mode, local credential model, doctor, and primary/fallback provider approach after reviewing every installed tool.",
+      "do_not": "Do not bypass platform protections, harvest credentials, or install broad internet capabilities without explicit approval.",
+      "escapement_inspiration": "Capability doctor, safe mode, fallback routing, and agent-friendly configuration."
+    },
+    {
+      "id": "agent-browser",
+      "name": "agent-browser",
+      "publisher": "Vercel Labs",
+      "type": "browser-automation-cli",
+      "url": "https://github.com/vercel-labs/agent-browser",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "use_mode": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "browser test",
+        "UI verification",
+        "accessibility snapshot",
+        "screenshot",
+        "web workflow"
+      ],
+      "use_when": "A frontend or end-to-end task needs real browser evidence, accessibility-tree interaction, screenshots, or DOM inspection.",
+      "how_to_use": "Install as an optional external CLI, pin its version, restrict allowed domains, and capture commands/screenshots as evidence.",
+      "do_not": "Do not browse authenticated or sensitive sites without approval or use browser automation as proof when business data is fabricated.",
+      "escapement_inspiration": "Agent-readable accessibility snapshots, early interaction failure, and browser-based verification."
+    },
+    {
+      "id": "gsd-core",
+      "name": "GSD Core",
+      "publisher": "Open GSD",
+      "type": "context-and-phase-framework",
+      "url": "https://github.com/gsd-build/get-shit-done",
+      "license": "MIT",
+      "license_status": "verified-from-readme",
+      "use_mode": [
+        "reference",
+        "integrate",
+        "adapt"
+      ],
+      "triggers": [
+        "context rot",
+        "phase loop",
+        "fresh subagent",
+        "discuss plan execute verify ship"
+      ],
+      "use_when": "A project needs phase-level context isolation, fresh execution contexts, or a discuss-plan-execute-verify-ship loop.",
+      "how_to_use": "Integrate directly or adopt focused context-isolation and phase-verification patterns.",
+      "do_not": "Do not run parallel agents when tasks share mutable state or when the repository lacks merge and verification controls.",
+      "escapement_inspiration": "Fresh-context phase execution, lean main sessions, and verified shipping.",
+      "current_url": "https://github.com/open-gsd/gsd-core"
+    },
+    {
+      "id": "anthropic-mcp-builder",
+      "name": "mcp-builder skill",
+      "publisher": "Anthropic",
+      "type": "agent-skill",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/mcp-builder",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "use_mode": [
+        "install",
+        "adapt",
+        "reference"
+      ],
+      "triggers": [
+        "build MCP",
+        "MCP server",
+        "tool schema",
+        "MCP evaluation"
+      ],
+      "use_when": "A project is approved to build an MCP server for an external API or service.",
+      "how_to_use": "Install or read the skill; research the current MCP specification; design concise tools, schemas, annotations, errors, pagination, and evaluations.",
+      "do_not": "Do not expose broad destructive endpoints, secrets, or an unbounded API surface to agents.",
+      "escapement_inspiration": "MCP quality workflow, tool discoverability, output schemas, annotations, and realistic evaluations."
+    },
+    {
+      "id": "vercel-find-skills",
+      "name": "find-skills skill",
+      "publisher": "Vercel Labs",
+      "type": "agent-skill",
+      "url": "https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md",
+      "license": "MIT",
+      "license_status": "verified",
+      "use_mode": [
+        "install",
+        "adapt",
+        "reference"
+      ],
+      "triggers": [
+        "find a skill",
+        "install a skill",
+        "missing capability",
+        "skill marketplace"
+      ],
+      "use_when": "A task requires a specialised capability that Escapement core does not own.",
+      "how_to_use": "Search the skills ecosystem, check source reputation and maintenance, inspect the skill, verify its licence, then request installation approval.",
+      "do_not": "Do not recommend or install a skill solely because it ranks highly or has many installs.",
+      "escapement_inspiration": "Reference-router skill and a quality gate before external skill installation."
+    },
+    {
+      "id": "ecc",
+      "name": "ECC",
+      "publisher": "Affaan Mustafa",
+      "type": "agent-harness-ecosystem",
+      "url": "https://github.com/affaan-m/ECC",
+      "license": "MIT",
+      "license_status": "verified-from-readme",
+      "use_mode": [
+        "reference",
+        "integrate-selectively"
+      ],
+      "triggers": [
+        "agent harness",
+        "doctor",
+        "repair",
+        "continuous learning",
+        "agent security",
+        "cross-runtime sync"
+      ],
+      "use_when": "Reviewing cross-runtime distribution, doctor/repair, installation conflict detection, skill packaging, or harness security.",
+      "how_to_use": "Study or integrate narrowly selected capabilities; avoid overlapping full installations in the same agent runtime.",
+      "do_not": "Do not copy its hundreds of agents/skills into Escapement core or imply full platform parity.",
+      "escapement_inspiration": "Doctor/repair, official-source warning, install-conflict prevention, security scanning, and support matrix honesty."
+    },
+    {
+      "id": "strix",
+      "name": "Strix",
+      "publisher": "Strix AI",
+      "type": "security-testing-tool",
+      "url": "https://github.com/usestrix/strix",
+      "license": "Apache-2.0",
+      "license_status": "verified-from-readme",
+      "use_mode": [
+        "integrate-authorised-only",
+        "reference"
+      ],
+      "triggers": [
+        "pentest",
+        "dynamic security test",
+        "proof of concept",
+        "DAST",
+        "security scan"
+      ],
+      "use_when": "The user has explicit authorisation to dynamically assess a local, owned, or approved target in a sandbox.",
+      "how_to_use": "Run as an external optional tool with a written scope, exclusions, credentials policy, target approval, and structured evidence.",
+      "do_not": "Do not autonomously attack public or third-party targets, run exploits without permission, or place offensive capability in Escapement core.",
+      "escapement_inspiration": "Local run viewer, evidence-rich findings, CI security gates, and sandboxed external security integrations."
+    }
+  ]
+}
