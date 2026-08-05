@@ -28,23 +28,7 @@ capabilities, agents and external tools at the phase where each is strongest.
 
 ---
 
-## Why “Escapement”?
-
-A mechanical escapement converts stored energy into controlled, measurable movement.
-
-Escapement applies the same principle to AI coding agents:
-
-```text
-Unbounded generation
-        ↓
-Specify → Route → Execute → Verify → Persist
-        ↓
-Controlled delivery
-```
-
-Agents can generate code quickly. Reliable delivery also requires a shared definition of done, durable decisions, limited scope, explicit permissions, runtime evidence, and a handoff the next session can trust.
-
-### Why the framework exists
+## Why Escapement
 
 AI agents usually fail in one of two directions:
 

@@ -1,7 +1,8 @@
-name: Validate Escapement Standard
+name: Validate Escapement
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -11,19 +12,36 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.13"]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
+
+      - name: Compile scripts
+        run: python -m py_compile scripts/*.py
+
+      - name: Runtime doctor
+        run: python scripts/agent_runtime.py doctor
 
       - name: Repository doctor
-        run: python scripts/escapement.py doctor
+        run: python scripts/escapement.py doctor --root .
 
-      - name: Self-test (compile, feature list, evals, unit tests, fresh install)
+      - name: Routing evaluations
+        run: |
+          rm -rf .agent/evals
+          python scripts/eval_harness.py run
+
+      - name: Unit tests
+        run: python -m unittest discover -s tests -p "test_*.py"
+
+      - name: Security gate
+        run: python scripts/security_gate.py --fail-on high
+
+      - name: Fresh-install self-test
         run: python scripts/escapement.py self-test

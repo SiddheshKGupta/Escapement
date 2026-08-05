@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "title": "Escapement Agent Pattern Catalogue",
   "patterns": [
     {
@@ -176,6 +176,126 @@
         "gsd-core"
       ],
       "promotion_rule": "Every harness edit needs a predicted effect and a follow-up evaluation."
+    },
+    {
+      "id": "consulting-principal",
+      "name": "Consulting Principal",
+      "category": "consulting",
+      "use_when": "A material recommendation needs an independent management-outcome and implementation review.",
+      "native_skills": [
+        "consulting-analysis"
+      ],
+      "source_references": [],
+      "promotion_rule": "Fresh-context review only; it does not own implementation."
+    },
+    {
+      "id": "cto-reviewer",
+      "name": "CTO Reviewer",
+      "category": "engineering",
+      "use_when": "A product or architecture decision needs independent technical credibility, security, scale, and debt review.",
+      "native_skills": [
+        "engineering-review",
+        "security-review"
+      ],
+      "source_references": [
+        "gstack",
+        "superpowers"
+      ],
+      "promotion_rule": "Use only for material architecture or release decisions."
+    },
+    {
+      "id": "governance-reviewer",
+      "name": "Governance Reviewer",
+      "category": "governance",
+      "use_when": "A workflow or policy needs independent review of authority, controls, evidence, exceptions, and reporting.",
+      "native_skills": [
+        "governance-risk-controls"
+      ],
+      "source_references": [],
+      "promotion_rule": "Must cite approved policies or decisions."
+    },
+    {
+      "id": "artifact-editor",
+      "name": "Artifact Editor",
+      "category": "communication",
+      "use_when": "A completed business artifact needs a fresh-context quality, structure, and style pass.",
+      "native_skills": [
+        "artifact-production",
+        "writing-quality"
+      ],
+      "source_references": [
+        "stop-slop"
+      ],
+      "promotion_rule": "Editing only; it cannot change business facts or decisions."
+    },
+    {
+      "id": "decision-facilitator",
+      "name": "Decision Facilitator",
+      "category": "discovery",
+      "use_when": "A rough request contains hidden decisions or unclear success criteria.",
+      "native_skills": [
+        "decision-coach"
+      ],
+      "source_references": [
+        "superpowers"
+      ],
+      "promotion_rule": "Ask no more than five material questions and recommend defaults."
+    },
+    {
+      "id": "domain-standards-researcher",
+      "name": "Domain and Standards Researcher",
+      "category": "research",
+      "use_when": "Industry, jurisdiction, regulation, standards or current practice can change the recommendation.",
+      "native_skills": [
+        "domain-research"
+      ],
+      "source_references": [
+        "agent-reach",
+        "last30days",
+        "context7"
+      ],
+      "promotion_rule": "Authoritative evidence first; trend sources remain supporting signals."
+    },
+    {
+      "id": "solution-architect-brainstormer",
+      "name": "Solution Brainstormer",
+      "category": "planning",
+      "use_when": "A material solution needs genuinely different alternatives before planning.",
+      "native_skills": [
+        "solution-brainstorming"
+      ],
+      "source_references": [
+        "superpowers"
+      ],
+      "promotion_rule": "Compare outcomes, complexity, risk, reversibility and implementation."
+    },
+    {
+      "id": "parallel-work-coordinator",
+      "name": "Parallel Work Coordinator",
+      "category": "orchestration",
+      "use_when": "A plan contains independent tasks that can be delegated safely.",
+      "native_skills": [
+        "agent-orchestration"
+      ],
+      "source_references": [
+        "superpowers",
+        "gsd-core"
+      ],
+      "promotion_rule": "No shared mutable state without an explicit integration protocol."
+    },
+    {
+      "id": "agent-blueprint-scout",
+      "name": "Agent Blueprint Scout",
+      "category": "agent-engineering",
+      "use_when": "A domain problem may have an existing agent implementation worth reusing.",
+      "native_skills": [
+        "agent-blueprint-discovery"
+      ],
+      "source_references": [
+        "500-ai-agents-projects"
+      ],
+      "promotion_rule": "Inspect the exact linked repository before recommending deployment."
     }
-  ]
+  ],
+  "version": "6.2.0"
 }

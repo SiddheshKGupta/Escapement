@@ -1,0 +1,10 @@
+{
+  "description": "Security, external capability, integration, and evidence setup.",
+  "skills": [
+    "security-review",
+    "reference-router",
+    "api-integration",
+    "skill-governance"
+  ],
+  "preset": "enterprise-governance"
+}

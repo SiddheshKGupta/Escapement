@@ -21,5 +21,7 @@ Review:
 12. motion;
 13. dead controls.
 
+Read `docs/standards/design-intelligence.md` as the governing design authority. Use Impeccable for audit/hardening and Emil Kowalski skills for motion review when installed and relevant.
+
 Use real browser evidence when available. Capture screenshots and commands as
 structured evidence.

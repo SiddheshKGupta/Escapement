@@ -1,704 +1,1272 @@
-# External References, Skills, Plugins, and Repositories
+# External Reference Catalogue
 
-Reviewed: 2026-08-05  
-Machine-readable catalogue: `catalog/external-resources.json`
+Escapement currently preserves **54** external skills, plugins,
+tools, repositories, MCP servers, services and reference systems.
 
-## Purpose
+Machine-readable source:
 
-This file records every external repository, skill, plugin, course, and tool
-used as an Escapement reference.
+```text
+catalog/capability-registry.json
+```
 
-It tells an agent:
+Subskill strengths:
 
-- when a resource is relevant;
-- whether to integrate it, adapt it, or use it only as reference;
-- which licence was observed;
-- what approval is required;
-- what must not be copied or executed automatically.
+```text
+catalog/skill-strengths.json
+```
 
-## Important licence rule
+Overlap decisions:
 
-**A public GitHub repository is not automatically open source.**
+```text
+catalog/overlap-matrix.json
+```
 
-Before copying or modifying source:
-
-1. inspect the licence at the exact tag or commit;
-2. confirm compatibility with the target project's licence;
-3. preserve copyright, licence, and NOTICE obligations;
-4. record the dependency or adapted material in third-party notices;
-5. request approval for a new dependency, plugin, MCP server, CLI, or service.
-
-### Usage modes
-
-| Mode | Meaning |
-|---|---|
-| `reference` | Learn principles; do not copy substantial source |
-| `adapt` | Reuse or modify under the verified licence and attribution obligations |
-| `install` | Install the published skill after approval and source review |
-| `integrate` | Use it as an external tool, service, plugin, CLI, or MCP |
-| `integrate-separately` | Keep it as a separate deployed/licensed system |
-| `integrate-authorised-only` | Use only with explicit scope and authorisation |
-
-## Agent decision sequence
+## Activation contract
 
 ```text
 Capability gap
-→ Search this catalogue
-→ Match trigger and use case
-→ Verify current source and licence
-→ Inspect security and overlap
-→ Prefer integration over copying
-→ Request required approval
-→ Pin version or commit
-→ Record attribution and evidence
-→ Install/use
+→ Search native skills and strengths
+→ Select the strongest lifecycle phase
+→ Resolve overlap
+→ Verify exact source and licence
+→ Inspect scripts, hooks, network, credentials and permissions
+→ Request approval
+→ Pin a version or commit
+→ Install or integrate
 → Validate
+→ Record attribution and evidence
 ```
 
-## Global prohibitions
+A public repository is not automatically installed, safe, maintained or
+compatible.
 
-The agent must not:
+## Status meanings
 
-- assume every resource listed here is safe to copy;
-- silently install tools, skills, plugins, MCP servers, or dependencies;
-- provide credentials to a tool without explicit approval;
-- combine overlapping harness systems without a conflict decision;
-- run offensive security tooling without written authorisation and scope;
-- copy protected branding, imagery, proprietary fonts, or trade dress;
-- treat catalogue popularity as proof of quality.
+| Status | Meaning |
+|---|---|
+| `preferred-policy` | Recommended behavioural baseline |
+| `optional` | May be installed after review |
+| `optional-preferred-*` | Strong specialist for a particular phase |
+| `conditional` | Requires a demonstrated need and extra governance |
+| `reference-only` | Use for principles or design evidence |
+| `discovery-only-until-validated` | Use to find exact implementations; never deploy the catalogue entry itself |
+| `discouraged-legacy` | Existing-project compatibility only |
+| `preserved-unresolved` | Retained but disabled until exact source is confirmed |
 
 # Catalogue
 
-
 ## awesome-design-md
 
+- ID: `voltagent-awesome-design-md`
+- Kind: `reference-repository`
+- Source: https://github.com/VoltAgent/awesome-design-md
 - Publisher: VoltAgent
-- Type: `reference-repository`
-- URL: https://github.com/VoltAgent/awesome-design-md
 - Licence: **MIT**
 - Licence status: `verified-in-prior-review`
-- Permitted Escapement mode: `reference`, `adapt`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `design-reference`
+- Permitted modes: `reference`, `adapt`
 - Trigger cues: `design system`, `visual direction`, `brand`, `layout`, `colour`, `typography`, `motion`
 
-### Use when
+### Core strength
 
 A product needs a design archetype, component language, visual benchmark, or product-specific DESIGN.md.
-
-### How the agent should use it
-
-Read only the relevant company DESIGN.md files, extract principles, and create an original system under client-brand precedence.
 
 ### Do not
 
 Do not copy protected logos, proprietary fonts, imagery, screenshots, or another company's trade dress.
 
-### What Escapement takes from it
-
-The 73-company design-intelligence synthesis and design-system routing.
-
 ## Perplexity AI GitHub organisation
 
+- ID: `perplexity-org`
+- Kind: `organisation-index`
+- Source: https://github.com/perplexityai
 - Publisher: Perplexity AI
-- Type: `organisation-index`
-- URL: https://github.com/perplexityai
 - Licence: **Per-repository**
 - Licence status: `must-verify-per-resource`
-- Permitted Escapement mode: `reference`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `research-freshness`
+- Permitted modes: `reference`
 - Trigger cues: `research`, `search`, `evaluation`, `CLI distribution`, `supply chain`, `MCP`
 
-### Use when
+### Core strength
 
 An agent needs current patterns for research tooling, evaluation runners, safe binary distribution, or developer-tool inventory.
-
-### How the agent should use it
-
-Select a specific repository from this catalogue and verify its current licence before reuse.
 
 ### Do not
 
 Do not assume every public repository in an organisation has the same licence.
 
-### What Escapement takes from it
-
-Research extension, resumable evals, content-addressed records, self-tests, and safe installers.
-
 ## api-platform-developers
 
+- ID: `perplexity-api-platform-developers`
+- Kind: `skills-and-plugin-repository`
+- Source: https://github.com/perplexityai/api-platform-developers
 - Publisher: Perplexity AI
-- Type: `skills-and-plugin-repository`
-- URL: https://github.com/perplexityai/api-platform-developers
 - Licence: **Apache-2.0**
 - Licence status: `verified`
-- Permitted Escapement mode: `integrate`, `adapt`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `research-freshness`
+- Permitted modes: `integrate`, `adapt`
 - Trigger cues: `Perplexity`, `live web search`, `page snippets`, `Sonar migration`, `docs MCP`
 
-### Use when
+### Core strength
 
 The project needs official Perplexity Agent Skills, a Claude/Codex plugin example, or live documentation through MCP.
-
-### How the agent should use it
-
-Prefer installing the official skill/plugin or using it as the model for portable Agent Skills. Pin a release or commit.
 
 ### Do not
 
 Do not make Perplexity credentials or the docs MCP mandatory for Escapement core.
 
-### What Escapement takes from it
-
-Portable skills, plugin manifests, optional docs MCP, and an official research extension.
-
 ## pplx CLI
 
+- ID: `perplexity-cli`
+- Kind: `external-cli`
+- Source: https://github.com/perplexityai/perplexity-cli
 - Publisher: Perplexity AI
-- Type: `external-cli`
-- URL: https://github.com/perplexityai/perplexity-cli
 - Licence: **No licence file observed during review**
 - Licence status: `unverified-restrict-copying`
-- Permitted Escapement mode: `integrate`, `reference`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `research-freshness`
+- Permitted modes: `integrate`, `reference`
 - Trigger cues: `live search`, `grounded web research`, `query-relevant snippets`, `Perplexity CLI`
 
-### Use when
+### Core strength
 
 A user explicitly wants Perplexity-backed current web search or snippets and can provide an API key.
-
-### How the agent should use it
-
-Use the released CLI as an optional external dependency after approval. Verify checksum and current terms.
 
 ### Do not
 
 Do not copy repository code into Escapement or claim open-source reuse until a licence is present and verified.
 
-### What Escapement takes from it
-
-Checksum-verified releases, atomic updates, JSON stdout, and agent-friendly CLI design.
-
 ## search_evals
 
+- ID: `perplexity-search-evals`
+- Kind: `evaluation-framework`
+- Source: https://github.com/perplexityai/search_evals
 - Publisher: Perplexity AI
-- Type: `evaluation-framework`
-- URL: https://github.com/perplexityai/search_evals
 - Licence: **MIT**
 - Licence status: `verified`
-- Permitted Escapement mode: `reference`, `adapt`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `evaluation`
+- Permitted modes: `reference`, `adapt`
 - Trigger cues: `evaluation`, `benchmark`, `grader`, `cost accounting`, `resumable run`, `trace`
 
-### Use when
+### Core strength
 
 Escapement needs reproducible eval suites, provider adapters, task traces, resumable runs, or cost/evidence accounting.
-
-### How the agent should use it
-
-Adapt the run-directory, config-hash, resume, trace, and summary patterns to local harness evaluations.
 
 ### Do not
 
 Do not import paid-provider assumptions or third-party benchmark data without accepting their separate terms.
 
-### What Escapement takes from it
-
-Resumable executable evaluations and inspectable per-task traces.
-
 ## Bumblebee
 
+- ID: `perplexity-bumblebee`
+- Kind: `security-inventory-tool`
+- Source: https://github.com/perplexityai/bumblebee
 - Publisher: Perplexity AI
-- Type: `security-inventory-tool`
-- URL: https://github.com/perplexityai/bumblebee
 - Licence: **Apache-2.0**
 - Licence status: `verified`
-- Permitted Escapement mode: `integrate`, `reference`, `adapt`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `security-testing`
+- Permitted modes: `integrate`, `reference`, `adapt`
 - Trigger cues: `dependency inventory`, `skill inventory`, `MCP inventory`, `supply-chain`, `self-test`, `NDJSON`
 
-### Use when
+### Core strength
 
 A security review needs read-only package, skill, editor-extension, or MCP inventory from local metadata.
-
-### How the agent should use it
-
-Prefer invoking Bumblebee externally. Reuse its read-only, profile-based, NDJSON, confidence, and self-test patterns where useful.
 
 ### Do not
 
 Do not expose credentials found in MCP env blocks or broaden scans beyond approved roots.
 
-### What Escapement takes from it
-
-Read-only inventory profiles, structured NDJSON, confidence levels, and built-in self-test.
-
 ## Perplexity MCP server
 
+- ID: `perplexity-modelcontextprotocol`
+- Kind: `mcp-repository`
+- Source: https://github.com/perplexityai/modelcontextprotocol
 - Publisher: Perplexity AI
-- Type: `mcp-repository`
-- URL: https://github.com/perplexityai/modelcontextprotocol
 - Licence: **Verify current repository licence**
 - Licence status: `must-verify`
-- Permitted Escapement mode: `integrate`, `reference`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `research-freshness`
+- Permitted modes: `integrate`, `reference`
 - Trigger cues: `Perplexity MCP`, `research MCP`, `search tool server`
 
-### Use when
+### Core strength
 
 A project wants Perplexity search through MCP rather than a CLI.
-
-### How the agent should use it
-
-Install as an optional project MCP after explicit approval, review its tools, permissions, network access, and credential storage.
 
 ### Do not
 
 Do not register remote MCP servers silently or make network access part of the default core.
 
-### What Escapement takes from it
-
-Optional freshness and research integrations through a narrow MCP boundary.
-
 ## Codescythe
 
+- ID: `perplexity-codescythe`
+- Kind: `code-analysis-tool`
+- Source: https://github.com/perplexityai/codescythe
 - Publisher: Perplexity AI
-- Type: `code-analysis-tool`
-- URL: https://github.com/perplexityai/codescythe
 - Licence: **Verify current repository licence**
 - Licence status: `must-verify`
-- Permitted Escapement mode: `integrate`, `reference`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `code-review`
+- Permitted modes: `integrate`, `reference`
 - Trigger cues: `dead code`, `unused exports`, `unused files`, `dependency path`, `cleanup`
 
-### Use when
+### Core strength
 
 A TypeScript or JavaScript repository needs deterministic dead-code analysis or dependency-path explanation.
-
-### How the agent should use it
-
-Use as an external check after approval. Run doctor/explain before destructive fix mode and capture output through structured evidence.
 
 ### Do not
 
 Do not run destructive fixes without a clean branch, tests, and explicit approval.
 
-### What Escapement takes from it
-
-Narrow deterministic contracts, doctor commands, explainability, and safe destructive-mode gates.
-
 ## AppFlowy
 
+- ID: `appflowy`
+- Kind: `product-repository`
+- Source: https://github.com/AppFlowy-IO/AppFlowy
 - Publisher: AppFlowy-IO
-- Type: `product-repository`
-- URL: https://github.com/AppFlowy-IO/AppFlowy
 - Licence: **AGPL-3.0**
 - Licence status: `verified`
-- Permitted Escapement mode: `reference`, `integrate-separately`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `session-memory`
+- Permitted modes: `reference`, `integrate-separately`
 - Trigger cues: `local-first`, `workspace`, `data ownership`, `self-hosting`, `extensible blocks`
 
-### Use when
+### Core strength
 
 Designing local-first state, user-owned data, extensible workspace architecture, or self-hosted collaboration.
-
-### How the agent should use it
-
-Reuse architectural principles or integrate as a separate service under its licence. Review AGPL obligations before copying code.
 
 ### Do not
 
 Do not copy AGPL code into Escapement's source-available core without a deliberate licence decision.
 
-### What Escapement takes from it
-
-Privacy-first local control, cross-platform reliability, and extensible building blocks.
-
 ## Plausible Analytics
 
+- ID: `plausible-analytics`
+- Kind: `product-repository`
+- Source: https://github.com/plausible/analytics
 - Publisher: Plausible Insights
-- Type: `product-repository`
-- URL: https://github.com/plausible/analytics
 - Licence: **AGPL-3.0-or-later**
 - Licence status: `verified`
-- Permitted Escapement mode: `reference`, `integrate-separately`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `observability`
+- Permitted modes: `reference`, `integrate-separately`
 - Trigger cues: `privacy analytics`, `local observability`, `simple dashboard`, `no cookies`, `self-hosting`
 
-### Use when
+### Core strength
 
 Designing privacy-first observability, minimal dashboards, transparent metrics, or optional self-hosted analytics.
-
-### How the agent should use it
-
-Adopt privacy and simplicity principles or integrate a separately deployed instance under its licence.
 
 ### Do not
 
 Do not embed AGPL application code into Escapement core without licence review.
 
-### What Escapement takes from it
-
-Local-only telemetry by default, transparent metrics, and clutter-free observability.
-
 ## Spec Kit
 
+- ID: `github-spec-kit`
+- Kind: `specification-framework`
+- Source: https://github.com/github/spec-kit
 - Publisher: GitHub
-- Type: `specification-framework`
-- URL: https://github.com/github/spec-kit
 - Licence: **MIT**
 - Licence status: `verified`
-- Permitted Escapement mode: `reference`, `adapt`, `integrate`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `harness-methodology`
+- Permitted modes: `reference`, `adapt`, `integrate`
 - Trigger cues: `constitution`, `specification`, `implementation plan`, `tasks`, `converge`, `preset`, `bundle`
 
-### Use when
+### Core strength
 
 New or material work needs a constitution, executable specification, technical plan, task breakdown, or convergence review.
-
-### How the agent should use it
-
-Use Spec Kit directly or adapt its phases and extension/preset/bundle model with attribution.
 
 ### Do not
 
 Do not duplicate its whole command surface in Escapement when an optional integration is sufficient.
 
-### What Escapement takes from it
-
-Constitution → specify → plan → tasks → implement → converge, plus extensions, presets, and bundles.
-
 ## 500+ AI Agent Projects & Use Cases
 
+- ID: `500-ai-agents-projects`
+- Kind: `agent-pattern-catalogue`
+- Source: https://github.com/ashishpatel26/500-AI-Agents-Projects
 - Publisher: Ashish Patel
-- Type: `agent-pattern-catalogue`
-- URL: https://github.com/ashishpatel26/500-AI-Agents-Projects
 - Licence: **MIT**
 - Licence status: `verified-from-readme`
-- Permitted Escapement mode: `reference`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `agent-pattern-catalogue`
+- Permitted modes: `reference`
 - Trigger cues: `agent pattern`, `industry use case`, `framework comparison`, `example agent`
 
-### Use when
+### Core strength
 
 An agent needs to discover relevant implementation patterns or comparable industry use cases.
-
-### How the agent should use it
-
-Search the catalogue, inspect the linked source project, and independently verify that project's licence and quality.
 
 ### Do not
 
 Do not treat inclusion in a catalogue as proof of safety, quality, maintenance, or licence compatibility.
 
-### What Escapement takes from it
-
-A curated agent-pattern registry rather than hundreds of always-loaded agents.
-
 ## Learn Harness Engineering
 
+- ID: `walkinglabs-learn-harness-engineering`
+- Kind: `course-and-reference-repository`
+- Source: https://walkinglabs.github.io/learn-harness-engineering/en/
 - Publisher: Walking Labs
-- Type: `course-and-reference-repository`
-- URL: https://walkinglabs.github.io/learn-harness-engineering/en/
-- Source repository: https://github.com/walkinglabs/learn-harness-engineering
 - Licence: **MIT**
 - Licence status: `verified-from-project-docs`
-- Permitted Escapement mode: `reference`, `adapt`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `harness-methodology`
+- Permitted modes: `reference`, `adapt`
 - Trigger cues: `harness`, `state persistence`, `feature list`, `verification loop`, `session lifecycle`, `observability`
 
-### Use when
+### Core strength
 
 Creating, assessing, or teaching the instructions, tools, environment, state, and feedback subsystems of a harness.
-
-### How the agent should use it
-
-Use relevant lectures, templates, and projects; compare weak and strong harness outcomes; preserve attribution.
 
 ### Do not
 
 Do not load the complete course into every task or confuse a prompt file with a complete harness.
 
-### What Escapement takes from it
-
-Repository as system of record, feature-state primitives, lifecycle bootstrap, verification, and clean session closure.
-
 ## harness-creator skill
 
+- ID: `walkinglabs-harness-creator`
+- Kind: `agent-skill`
+- Source: https://github.com/walkinglabs/learn-harness-engineering/tree/main/skills/harness-creator
 - Publisher: Walking Labs
-- Type: `agent-skill`
-- URL: https://github.com/walkinglabs/learn-harness-engineering/tree/main/skills/harness-creator
 - Licence: **MIT**
 - Licence status: `verified-from-skill-docs`
-- Permitted Escapement mode: `install`, `adapt`, `reference`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `harness-methodology`
+- Permitted modes: `install`, `adapt`, `reference`
 - Trigger cues: `create harness`, `assess harness`, `improve harness`, `harness benchmark`
 
-### Use when
+### Core strength
 
 A project lacks a harness or needs a structured five-subsystem assessment.
-
-### How the agent should use it
-
-Install through the skills ecosystem or reference its SKILL.md; run its evaluations before adopting changes.
 
 ### Do not
 
 Do not install it on top of overlapping native Escapement harness skills without an overlap decision.
 
-### What Escapement takes from it
-
-Harness assessment, templates, reference patterns, and benchmark-oriented skill development.
-
 ## Penpot
 
+- ID: `penpot`
+- Kind: `design-platform`
+- Source: https://github.com/penpot/penpot
 - Publisher: Kaleidos
-- Type: `design-platform`
-- URL: https://github.com/penpot/penpot
 - Licence: **MPL-2.0**
 - Licence status: `verified`
-- Permitted Escapement mode: `integrate`, `reference`, `adapt-with-file-level-obligations`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `design-reference`
+- Permitted modes: `integrate`, `reference`, `adapt-with-file-level-obligations`
 - Trigger cues: `design tokens`, `design-code workflow`, `SVG`, `CSS`, `design MCP`, `self-hosted design`
 
-### Use when
+### Core strength
 
 A product needs open design tokens, inspectable design-to-code workflows, or an optional design MCP/API.
-
-### How the agent should use it
-
-Prefer integration through its API/MCP or adopt open-standard design-token concepts. Review MPL file-level obligations before code reuse.
 
 ### Do not
 
 Do not copy branding or assume a design file alone proves implementation correctness.
 
-### What Escapement takes from it
-
-Design tokens as shared source of truth and programmable design-code integration.
-
 ## HelixDB
 
+- ID: `helixdb`
+- Kind: `database-and-cli`
+- Source: https://github.com/HelixDB/helix-db
 - Publisher: HelixDB
-- Type: `database-and-cli`
-- URL: https://github.com/HelixDB/helix-db
 - Licence: **Apache-2.0**
 - Licence status: `verified`
-- Permitted Escapement mode: `integrate`, `reference`, `adapt`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `session-memory`
+- Permitted modes: `integrate`, `reference`, `adapt`
 - Trigger cues: `agent memory`, `knowledge graph`, `vector graph`, `local database`, `one-shot bootstrap`
 
-### Use when
+### Core strength
 
 A project genuinely needs graph-vector memory, knowledge graphs, or a local agent data layer.
-
-### How the agent should use it
-
-Integrate as an optional data service after architecture approval; adapt its one-shot bootstrap and explainable local setup patterns.
 
 ### Do not
 
 Do not make a database mandatory for Escapement's file-based core or add it merely to appear agentic.
 
-### What Escapement takes from it
-
-A guided one-shot bootstrap and optional structured memory backend.
-
 ## Agent Reach
 
+- ID: `agent-reach`
+- Kind: `capability-installer`
+- Source: https://github.com/Panniantong/agent-reach
 - Publisher: Panniantong
-- Type: `capability-installer`
-- URL: https://github.com/Panniantong/agent-reach
 - Licence: **MIT**
 - Licence status: `verified-from-readme`
-- Permitted Escapement mode: `integrate`, `reference`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `research-freshness`
+- Permitted modes: `integrate`, `reference`
 - Trigger cues: `internet access`, `social search`, `video transcript`, `RSS`, `platform connector`, `doctor`
 
-### Use when
+### Core strength
 
 A user explicitly needs internet/platform access not already available through approved tools.
-
-### How the agent should use it
-
-Use its safe mode, local credential model, doctor, and primary/fallback provider approach after reviewing every installed tool.
 
 ### Do not
 
 Do not bypass platform protections, harvest credentials, or install broad internet capabilities without explicit approval.
 
-### What Escapement takes from it
-
-Capability doctor, safe mode, fallback routing, and agent-friendly configuration.
-
 ## agent-browser
 
+- ID: `agent-browser`
+- Kind: `browser-automation-cli`
+- Source: https://github.com/vercel-labs/agent-browser
 - Publisher: Vercel Labs
-- Type: `browser-automation-cli`
-- URL: https://github.com/vercel-labs/agent-browser
 - Licence: **Apache-2.0**
 - Licence status: `verified`
-- Permitted Escapement mode: `integrate`, `reference`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `browser-automation`
+- Permitted modes: `integrate`, `reference`
 - Trigger cues: `browser test`, `UI verification`, `accessibility snapshot`, `screenshot`, `web workflow`
 
-### Use when
+### Core strength
 
 A frontend or end-to-end task needs real browser evidence, accessibility-tree interaction, screenshots, or DOM inspection.
-
-### How the agent should use it
-
-Install as an optional external CLI, pin its version, restrict allowed domains, and capture commands/screenshots as evidence.
 
 ### Do not
 
 Do not browse authenticated or sensitive sites without approval or use browser automation as proof when business data is fabricated.
 
-### What Escapement takes from it
-
-Agent-readable accessibility snapshots, early interaction failure, and browser-based verification.
-
 ## GSD Core
 
+- ID: `gsd-core`
+- Kind: `context-and-phase-framework`
+- Source: https://github.com/gsd-build/get-shit-done
 - Publisher: Open GSD
-- Type: `context-and-phase-framework`
-- URL: https://github.com/gsd-build/get-shit-done
-- Current repository: https://github.com/open-gsd/gsd-core
 - Licence: **MIT**
 - Licence status: `verified-from-readme`
-- Permitted Escapement mode: `reference`, `integrate`, `adapt`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `harness-methodology`
+- Permitted modes: `reference`, `integrate`, `adapt`
 - Trigger cues: `context rot`, `phase loop`, `fresh subagent`, `discuss plan execute verify ship`
 
-### Use when
+### Core strength
 
 A project needs phase-level context isolation, fresh execution contexts, or a discuss-plan-execute-verify-ship loop.
-
-### How the agent should use it
-
-Integrate directly or adopt focused context-isolation and phase-verification patterns.
 
 ### Do not
 
 Do not run parallel agents when tasks share mutable state or when the repository lacks merge and verification controls.
 
-### What Escapement takes from it
-
-Fresh-context phase execution, lean main sessions, and verified shipping.
-
 ## mcp-builder skill
 
+- ID: `anthropic-mcp-builder`
+- Kind: `agent-skill`
+- Source: https://github.com/anthropics/skills/tree/main/skills/mcp-builder
 - Publisher: Anthropic
-- Type: `agent-skill`
-- URL: https://github.com/anthropics/skills/tree/main/skills/mcp-builder
 - Licence: **Apache-2.0**
 - Licence status: `verified`
-- Permitted Escapement mode: `install`, `adapt`, `reference`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `mcp-building`
+- Permitted modes: `install`, `adapt`, `reference`
 - Trigger cues: `build MCP`, `MCP server`, `tool schema`, `MCP evaluation`
 
-### Use when
+### Core strength
 
 A project is approved to build an MCP server for an external API or service.
-
-### How the agent should use it
-
-Install or read the skill; research the current MCP specification; design concise tools, schemas, annotations, errors, pagination, and evaluations.
 
 ### Do not
 
 Do not expose broad destructive endpoints, secrets, or an unbounded API surface to agents.
 
-### What Escapement takes from it
-
-MCP quality workflow, tool discoverability, output schemas, annotations, and realistic evaluations.
-
 ## find-skills skill
 
+- ID: `vercel-find-skills`
+- Kind: `agent-skill`
+- Source: https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md
 - Publisher: Vercel Labs
-- Type: `agent-skill`
-- URL: https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md
 - Licence: **MIT**
 - Licence status: `verified`
-- Permitted Escapement mode: `install`, `adapt`, `reference`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `external-discovery`
+- Permitted modes: `install`, `adapt`, `reference`
 - Trigger cues: `find a skill`, `install a skill`, `missing capability`, `skill marketplace`
 
-### Use when
+### Core strength
 
 A task requires a specialised capability that Escapement core does not own.
-
-### How the agent should use it
-
-Search the skills ecosystem, check source reputation and maintenance, inspect the skill, verify its licence, then request installation approval.
 
 ### Do not
 
 Do not recommend or install a skill solely because it ranks highly or has many installs.
 
-### What Escapement takes from it
-
-Reference-router skill and a quality gate before external skill installation.
-
 ## ECC
 
+- ID: `ecc`
+- Kind: `agent-harness-ecosystem`
+- Source: https://github.com/affaan-m/ECC
 - Publisher: Affaan Mustafa
-- Type: `agent-harness-ecosystem`
-- URL: https://github.com/affaan-m/ECC
 - Licence: **MIT**
 - Licence status: `verified-from-readme`
-- Permitted Escapement mode: `reference`, `integrate-selectively`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `harness-methodology`
+- Permitted modes: `reference`, `integrate-selectively`
 - Trigger cues: `agent harness`, `doctor`, `repair`, `continuous learning`, `agent security`, `cross-runtime sync`
 
-### Use when
+### Core strength
 
 Reviewing cross-runtime distribution, doctor/repair, installation conflict detection, skill packaging, or harness security.
-
-### How the agent should use it
-
-Study or integrate narrowly selected capabilities; avoid overlapping full installations in the same agent runtime.
 
 ### Do not
 
 Do not copy its hundreds of agents/skills into Escapement core or imply full platform parity.
 
-### What Escapement takes from it
-
-Doctor/repair, official-source warning, install-conflict prevention, security scanning, and support matrix honesty.
-
 ## Strix
 
+- ID: `strix`
+- Kind: `security-testing-tool`
+- Source: https://github.com/usestrix/strix
 - Publisher: Strix AI
-- Type: `security-testing-tool`
-- URL: https://github.com/usestrix/strix
 - Licence: **Apache-2.0**
 - Licence status: `verified-from-readme`
-- Permitted Escapement mode: `integrate-authorised-only`, `reference`
+- Registry status: `catalogued`
+- Activation: `on-demand`
+- Overlap group: `security-testing`
+- Permitted modes: `integrate-authorised-only`, `reference`
 - Trigger cues: `pentest`, `dynamic security test`, `proof of concept`, `DAST`, `security scan`
 
-### Use when
+### Core strength
 
 The user has explicit authorisation to dynamically assess a local, owned, or approved target in a sandbox.
-
-### How the agent should use it
-
-Run as an external optional tool with a written scope, exclusions, credentials policy, target approval, and structured evidence.
 
 ### Do not
 
 Do not autonomously attack public or third-party targets, run exploits without permission, or place offensive capability in Escapement core.
 
-### What Escapement takes from it
+## Stop Slop
 
-Local run viewer, evidence-rich findings, CI security gates, and sandboxed external security integrations.
+- ID: `stop-slop`
+- Kind: `agent-skill`
+- Source: https://github.com/hardikpandya/stop-slop
+- Publisher: Hardik Pandya
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `on-demand`
+- Overlap group: `writing-quality`
+- Permitted modes: `install`, `reference`
+- Trigger cues: `remove AI tells`, `human prose`, `slop`, `writing cleanup`, `generic AI wording`, `AI wording`, `polish prose`
+
+### Core strength
+
+A complete human-facing draft needs a final anti-slop pass after content and judgement are correct.
+
+### Do not
+
+Do not load for code-only work or use it as a substitute for substantive writing.
+
+## Task Observer
+
+- ID: `task-observer`
+- Kind: `meta-skill`
+- Source: https://github.com/rebelytics/one-skill-to-rule-them-all
+- Publisher: rebelytics
+- Licence: **Attribution-required open licence; verify current file**
+- Licence status: `must-verify`
+- Registry status: `conditional`
+- Activation: `explicit-opt-in`
+- Overlap group: `skill-learning`
+- Permitted modes: `install`, `reference`
+- Trigger cues: `observe tasks`, `suggest skills`, `learn patterns`, `continuous improvement`
+
+### Core strength
+
+A long-running project wants to observe repeated task patterns and propose candidate skills.
+
+### Do not
+
+Do not let it modify skills automatically or observe sensitive sessions without approval.
+
+## Taste Skill
+
+- ID: `taste-skill`
+- Kind: `agent-skill-suite`
+- Source: https://github.com/Leonxlnx/taste-skill
+- Publisher: Leonxlnx
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `choose-one-design-director`
+- Overlap group: `design-director`
+- Permitted modes: `install`, `reference`
+- Trigger cues: `anti-slop frontend`, `design taste`, `layout`, `motion`, `density`, `generic AI styling`, `design skill`
+
+### Core strength
+
+A frontend project needs a strong external design director with adjustable variance, motion, and density.
+
+### Do not
+
+Do not load alongside Impeccable or Open Design as a second full design director.
+
+## Open Design
+
+- ID: `open-design`
+- Kind: `design-platform-and-skill-suite`
+- Source: https://github.com/nexu-io/open-design
+- Publisher: Nexu
+- Licence: **Apache-2.0**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `choose-one-design-director`
+- Overlap group: `design-director`
+- Permitted modes: `integrate`, `install`, `reference`
+- Trigger cues: `local design studio`, `design systems`, `prototype`, `design artifact`, `plugin`
+
+### Core strength
+
+A project needs a local-first design workspace, broad design-skill suite, or artifact-first design workflow.
+
+### Do not
+
+Do not install the full platform merely for a small UI review or combine it with another full design suite.
+
+## Emil Kowalski Design Skills
+
+- ID: `emil-kowalski-skill`
+- Kind: `agent-skill-suite`
+- Source: https://github.com/emilkowalski/skill
+- Publisher: Emil Kowalski
+- Licence: **Verify current repository licence**
+- Licence status: `must-verify`
+- Registry status: `optional`
+- Activation: `narrow-motion-specialist`
+- Overlap group: `motion`
+- Permitted modes: `install`, `reference`
+- Trigger cues: `animation review`, `motion`, `easing`, `interaction polish`
+
+### Core strength
+
+A UI needs specialised motion judgement or animation review.
+
+### Do not
+
+Do not use motion to compensate for weak hierarchy or load the full suite for static enterprise screens.
+
+## Impeccable
+
+- ID: `impeccable`
+- Kind: `agent-skill-and-cli`
+- Source: https://github.com/pbakaus/impeccable
+- Publisher: Paul Bakaus
+- Licence: **Apache-2.0**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `choose-one-design-director`
+- Overlap group: `design-director`
+- Permitted modes: `install`, `integrate`, `reference`
+- Trigger cues: `design audit`, `polish UI`, `anti-pattern detection`, `UX writing`, `responsive`
+
+### Core strength
+
+A frontend needs one comprehensive design skill plus deterministic anti-pattern checks.
+
+### Do not
+
+Do not load with Taste Skill or Open Design as a second primary design director.
+
+## Superpowers
+
+- ID: `superpowers`
+- Kind: `agent-methodology-plugin`
+- Source: https://github.com/obra/superpowers
+- Publisher: Jesse Vincent / Prime Radiant
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `choose-one-external-methodology`
+- Overlap group: `harness-methodology`
+- Permitted modes: `install`, `reference`
+- Trigger cues: `TDD`, `systematic debugging`, `brainstorming`, `subagent development`, `plan execution`
+
+### Core strength
+
+A team explicitly wants the Superpowers methodology for development execution.
+
+### Do not
+
+Do not combine its full lifecycle hooks with ECC or GSD without an overlap decision.
+
+## Claude Mem
+
+- ID: `claude-mem`
+- Kind: `memory-plugin`
+- Source: https://github.com/thedotmack/claude-mem
+- Publisher: thedotmack
+- Licence: **AGPL-3.0 for main package; verify subcomponents**
+- Licence status: `verified-with-obligations`
+- Registry status: `conditional`
+- Activation: `choose-one-session-memory`
+- Overlap group: `session-memory`
+- Permitted modes: `integrate`, `reference`
+- Trigger cues: `persistent memory`, `semantic session history`, `memory search`, `long-running project`
+
+### Core strength
+
+Local file handoffs are insufficient and the project accepts a background memory service and its licence.
+
+### Do not
+
+Do not install by default, duplicate Escapement state, or capture confidential sessions without a privacy decision.
+
+## Graphify
+
+- ID: `graphify`
+- Kind: `code-knowledge-skill-and-cli`
+- Source: https://github.com/Graphify-Labs/graphify
+- Publisher: Graphify Labs
+- Licence: **Apache-2.0 and MIT components**
+- Licence status: `verified`
+- Registry status: `conditional`
+- Activation: `on-demand`
+- Overlap group: `code-knowledge`
+- Permitted modes: `install`, `integrate`, `reference`
+- Trigger cues: `knowledge graph`, `large codebase`, `architecture map`, `relationship query`
+
+### Core strength
+
+A large or heterogeneous repository needs deterministic relationship mapping beyond ordinary file search.
+
+### Do not
+
+Do not index sensitive material through external backends without approval or use it for a small codebase.
+
+## gstack
+
+- ID: `gstack`
+- Kind: `agent-role-skill-suite`
+- Source: https://github.com/garrytan/gstack
+- Publisher: Garry Tan
+- Licence: **Verify current repository licence**
+- Licence status: `must-verify`
+- Registry status: `optional`
+- Activation: `choose-one-external-methodology`
+- Overlap group: `harness-methodology`
+- Permitted modes: `install`, `reference`
+- Trigger cues: `CEO review`, `engineering plan review`, `design review`, `QA`, `release review`
+
+### Core strength
+
+A project explicitly wants role-based plan reviews or fresh-context specialist reviews.
+
+### Do not
+
+Do not install its full workflow alongside Superpowers or ECC without deciding which system owns orchestration.
+
+## Everything Claude Code / ECC
+
+- ID: `everything-claude-code`
+- Kind: `harness-ecosystem`
+- Source: https://github.com/affaan-m/everything-claude-code
+- Publisher: Affaan Mustafa
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `choose-one-external-methodology`
+- Overlap group: `harness-methodology`
+- Permitted modes: `install`, `reference`
+- Trigger cues: `agent harness`, `rules`, `agents`, `skills`, `hooks`, `memory optimisation`
+
+### Core strength
+
+A user wants ECC components or profiles that Escapement does not provide.
+
+### Do not
+
+Do not install the full profile on top of Escapement hooks and native skills; use component-level selection.
+
+## Context7
+
+- ID: `context7`
+- Kind: `documentation-mcp`
+- Source: https://github.com/upstash/context7
+- Publisher: Upstash
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `on-demand`
+- Overlap group: `research-freshness`
+- Permitted modes: `integrate`, `reference`
+- Trigger cues: `current library docs`, `API documentation`, `framework version`, `technical docs`
+
+### Core strength
+
+Implementation depends on current external library documentation.
+
+### Do not
+
+Do not use it as the source of truth for the project's own code or business rules.
+
+## Last30Days
+
+- ID: `last30days`
+- Kind: `research-skill`
+- Source: https://github.com/mvanhorn/last30days-skill
+- Publisher: Matt Van Horn
+- Licence: **Verify current repository licence**
+- Licence status: `must-verify`
+- Registry status: `optional`
+- Activation: `on-demand`
+- Overlap group: `research-freshness`
+- Permitted modes: `install`, `reference`
+- Trigger cues: `last 30 days`, `recent discourse`, `Reddit`, `X`, `YouTube`, `HN`
+
+### Core strength
+
+A decision benefits from recent community signals rather than only authoritative documentation.
+
+### Do not
+
+Do not use social discourse as authoritative evidence or load it for stable facts.
+
+## Skill UI
+
+- ID: `skill-ui`
+- Kind: `legacy-capability-reference`
+- Source: Source pending confirmation
+- Publisher: Pending confirmation
+- Licence: **Unknown**
+- Licence status: `source-required`
+- Registry status: `preserved-unresolved`
+- Activation: `disabled-until-source-confirmed`
+- Overlap group: `external-discovery`
+- Permitted modes: `reference`
+- Trigger cues: `skill UI`
+
+### Core strength
+
+Retained from the original capability set pending exact source confirmation.
+
+### Do not
+
+Do not install or attribute this entry until the exact repository is confirmed.
+
+## Claude Code Review
+
+- ID: `claude-code-review`
+- Kind: `managed-code-review-service`
+- Source: https://code.claude.com/docs/en/code-review
+- Publisher: Anthropic
+- Licence: **Commercial managed service**
+- Licence status: `not-open-source-service`
+- Registry status: `optional`
+- Activation: `choose-one-code-review`
+- Overlap group: `code-review`
+- Permitted modes: `integrate`, `reference`
+- Trigger cues: `PR review`, `managed code review`, `multi-agent review`
+
+### Core strength
+
+A supported organisation wants Anthropic's managed PR review service.
+
+### Do not
+
+Do not present it as open source or use it in addition to another expensive full review workflow without reason.
+
+## Ponytail
+
+- ID: `ponytail`
+- Kind: `minimal-code-skill-and-plugin`
+- Source: https://github.com/DietrichGebert/ponytail
+- Publisher: Dietrich Gebert
+- Licence: **Verify current repository licence**
+- Licence status: `must-verify`
+- Registry status: `optional`
+- Activation: `on-demand`
+- Overlap group: `engineering-minimalism`
+- Permitted modes: `install`, `reference`
+- Trigger cues: `minimal code`, `overengineering`, `lazy senior dev`, `code bloat`
+
+### Core strength
+
+An agent repeatedly overbuilds bounded implementation tasks.
+
+### Do not
+
+Do not let minimalism remove validation, security, observability, or approved requirements.
+
+## Mobbin
+
+- ID: `mobbin`
+- Kind: `commercial-design-reference`
+- Source: https://mobbin.com
+- Publisher: Mobbin
+- Licence: **Commercial service/content terms**
+- Licence status: `not-open-source`
+- Registry status: `reference-only`
+- Activation: `on-demand`
+- Overlap group: `design-reference`
+- Permitted modes: `reference`
+- Trigger cues: `mobile pattern`, `product UI reference`, `screen flow`
+
+### Core strength
+
+A designer needs real-product interaction and screen references.
+
+### Do not
+
+Do not scrape, redistribute, or copy protected screens and assets.
+
+## Refero
+
+- ID: `refero`
+- Kind: `design-reference`
+- Source: https://refero.design
+- Publisher: Refero
+- Licence: **Website content terms**
+- Licence status: `not-code-resource`
+- Registry status: `reference-only`
+- Activation: `on-demand`
+- Overlap group: `design-reference`
+- Permitted modes: `reference`
+- Trigger cues: `web app reference`, `page pattern`, `component inspiration`
+
+### Core strength
+
+A product needs curated web and product references.
+
+### Do not
+
+Do not copy protected layouts or assets as trade dress.
+
+## Recent
+
+- ID: `recent-designs`
+- Kind: `design-reference`
+- Source: https://recent.design
+- Publisher: Recent
+- Licence: **Website content terms**
+- Licence status: `not-code-resource`
+- Registry status: `reference-only`
+- Activation: `on-demand`
+- Overlap group: `design-reference`
+- Permitted modes: `reference`
+- Trigger cues: `recent design`, `website inspiration`, `current visual trend`
+
+### Core strength
+
+A task needs a current design-reference shortlist.
+
+### Do not
+
+Do not let trend references override brand, usability, or enterprise density.
+
+## 21st.dev
+
+- ID: `21st-dev`
+- Kind: `component-reference-and-service`
+- Source: https://21st.dev
+- Publisher: 21st.dev
+- Licence: **Per component/project; verify**
+- Licence status: `must-verify`
+- Registry status: `optional`
+- Activation: `on-demand`
+- Overlap group: `component-source`
+- Permitted modes: `integrate`, `reference`
+- Trigger cues: `component inspiration`, `React component`, `UI block`
+
+### Core strength
+
+A project needs a component starting point compatible with its stack.
+
+### Do not
+
+Do not introduce copied components without licence, dependency, accessibility, and design-system review.
+
+## shadcn/ui
+
+- ID: `shadcn-ui`
+- Kind: `component-system`
+- Source: https://github.com/shadcn-ui/ui
+- Publisher: shadcn
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `on-demand`
+- Overlap group: `component-source`
+- Permitted modes: `integrate`, `reference`
+- Trigger cues: `shadcn`, `React components`, `Radix`, `component library`
+
+### Core strength
+
+A React project explicitly chooses shadcn/ui as its component foundation.
+
+### Do not
+
+Do not add it to a project with an established incompatible component system.
+
+## GSAP
+
+- ID: `gsap`
+- Kind: `motion-library`
+- Source: https://github.com/greensock/GSAP
+- Publisher: GreenSock
+- Licence: **GSAP standard licence; verify current terms**
+- Licence status: `special-terms`
+- Registry status: `optional`
+- Activation: `approved-dependency`
+- Overlap group: `motion`
+- Permitted modes: `integrate`, `reference`
+- Trigger cues: `GSAP`, `timeline animation`, `scroll animation`, `complex motion`
+
+### Core strength
+
+The approved interaction genuinely requires advanced timeline or scroll animation.
+
+### Do not
+
+Do not add it for ordinary transitions or without dependency and licence review.
+
+## Headroom.js
+
+- ID: `headroom-js`
+- Kind: `interaction-library`
+- Source: https://github.com/WickyNilliams/headroom.js
+- Publisher: WickyNilliams
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `approved-dependency`
+- Overlap group: `motion`
+- Permitted modes: `integrate`, `reference`
+- Trigger cues: `hide header on scroll`, `headroom`, `scroll header`
+
+### Core strength
+
+A product specifically needs scroll-aware header behaviour.
+
+### Do not
+
+Do not add a dependency when a small native implementation already exists and is tested.
+
+## Playwright
+
+- ID: `playwright`
+- Kind: `browser-testing-framework`
+- Source: https://github.com/microsoft/playwright
+- Publisher: Microsoft
+- Licence: **Apache-2.0**
+- Licence status: `verified`
+- Registry status: `preferred-when-existing`
+- Activation: `choose-one-browser-driver`
+- Overlap group: `browser-automation`
+- Permitted modes: `integrate`, `reference`
+- Trigger cues: `browser test`, `E2E`, `visual test`, `accessibility test`
+
+### Core strength
+
+A project needs robust browser automation and either already uses Playwright or approves it.
+
+### Do not
+
+Do not install it solely for a tiny static inspection.
+
+## Andrej Karpathy Coding Guidelines
+
+- ID: `karpathy-guidelines`
+- Kind: `behavioural-skill`
+- Source: https://github.com/forrestchang/andrej-karpathy-skills
+- Publisher: forrestchang / derived from Andrej Karpathy observations
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `preferred-policy`
+- Activation: `baseline-engineering-policy`
+- Overlap group: `engineering-behaviour`
+- Permitted modes: `adapt`, `install`, `reference`
+- Trigger cues: `assumptions`, `simple code`, `surgical changes`, `goal-driven`, `overengineering`
+
+### Core strength
+
+Engineering work needs explicit assumptions, simplicity, surgical changes and verifiable goals.
+
+### Do not
+
+Do not duplicate the same guidance through another always-loaded minimalism rule.
+
+## UI/UX Pro Max
+
+- ID: `ui-ux-pro-max`
+- Kind: `design-intelligence-skill-and-cli`
+- Source: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+- Publisher: NextLevelBuilder
+- Licence: **Repository reports MIT; CLI materials may differ. Verify selected release and component.**
+- Licence status: `mixed-verify-selected-component`
+- Registry status: `optional-preferred-design-research`
+- Activation: `phase-adapter`
+- Overlap group: `design-authority`
+- Permitted modes: `install`, `integrate`, `reference`
+- Trigger cues: `UI UX Pro`, `design system generator`, `palette`, `font pairing`, `UX guideline`, `chart recommendation`
+
+### Core strength
+
+A UI task benefits from searchable product-type, style, palette, typography, UX, chart or stack recommendations.
+
+### Do not
+
+Do not let generated recommendations override DESIGN.md or the design intelligence constitution.
+
+## Anthropic Frontend Design
+
+- ID: `frontend-design`
+- Kind: `frontend-implementation-skill`
+- Source: https://github.com/openclaw/skills/tree/main/skills/qrucio/anthropic-frontend-design
+- Publisher: Community packaging of frontend-design guidance
+- Licence: **Verify source repository licence**
+- Licence status: `must-verify`
+- Registry status: `optional`
+- Activation: `phase-adapter`
+- Overlap group: `design-authority`
+- Permitted modes: `install`, `reference`
+- Trigger cues: `frontend design`, `production-grade frontend`, `anti-slop interface`
+
+### Core strength
+
+An approved design specification needs production-grade frontend implementation.
+
+### Do not
+
+Do not use as the design constitution or alongside multiple primary art-direction systems.
+
+## Playwright MCP
+
+- ID: `playwright-mcp`
+- Kind: `browser-automation-mcp`
+- Source: https://github.com/microsoft/playwright-mcp
+- Publisher: Microsoft
+- Licence: **Apache-2.0**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `choose-one-browser-driver`
+- Overlap group: `browser-verification`
+- Permitted modes: `integrate`, `reference`
+- Trigger cues: `Playwright MCP`, `persistent browser context`, `accessibility tree`
+
+### Core strength
+
+Exploratory or long-running agent browser loops benefit from persistent accessibility-tree state.
+
+### Do not
+
+Do not prefer MCP over CLI or project tests when token efficiency and deterministic test code are more important.
+
+## Stagehand
+
+- ID: `stagehand`
+- Kind: `ai-browser-automation-framework`
+- Source: https://github.com/browserbase/stagehand
+- Publisher: Browserbase
+- Licence: **MIT**
+- Licence status: `verify-current-release`
+- Registry status: `optional`
+- Activation: `approved-browser-automation`
+- Overlap group: `browser-verification`
+- Permitted modes: `integrate`, `reference`
+- Trigger cues: `Stagehand`, `self-healing browser automation`, `natural-language browser`
+
+### Core strength
+
+Production browser automation needs a controlled blend of code, natural language, caching and self-healing.
+
+### Do not
+
+Do not add it for ordinary end-to-end tests or without reviewing network, model and credential requirements.
+
+## Cypress
+
+- ID: `cypress`
+- Kind: `browser-testing-framework`
+- Source: https://github.com/cypress-io/cypress
+- Publisher: Cypress.io
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `preferred-when-existing`
+- Activation: `choose-one-browser-driver`
+- Overlap group: `browser-verification`
+- Permitted modes: `integrate`, `reference`
+- Trigger cues: `Cypress`, `Cypress tests`
+
+### Core strength
+
+The project already uses Cypress or explicitly selects it as the browser test framework.
+
+### Do not
+
+Do not introduce Cypress into a Playwright-based project without a migration reason.
+
+## Puppeteer MCP Server
+
+- ID: `puppeteer-mcp`
+- Kind: `legacy-browser-mcp`
+- Source: https://github.com/modelcontextprotocol/servers-archived
+- Publisher: Model Context Protocol community archive
+- Licence: **Per archived repository/package**
+- Licence status: `archived-security-review-required`
+- Registry status: `discouraged-legacy`
+- Activation: `existing-project-only`
+- Overlap group: `browser-verification`
+- Permitted modes: `reference`
+- Trigger cues: `Puppeteer MCP`
+
+### Core strength
+
+An existing approved project depends on the archived Puppeteer MCP server and migration is not immediate.
+
+### Do not
+
+Do not select for new projects; prefer maintained Playwright CLI/MCP or project-native tests.
 
 
-# Attribution practice
 
-For any installed or adapted external resource, update:
+# Third-party usage record
+
+When any external capability is actually installed, copied, adapted or invoked
+against project data, update:
 
 ```text
 THIRD_PARTY_NOTICES.md
 docs/decisions/DECISION_LOG.md
-.escapement-install.json or the project dependency manifest
+.escapement-install.json
 ```
 
 Record:
 
 ```text
-Name
-Source URL
-Pinned version or commit
+Exact source
+Tag or commit
 Licence
 Files or capability used
 Changes made
-Reason selected
-Alternatives rejected
-Security review
+Network and credential requirements
+Data handled
+Approval
 Validation evidence
+Removal or rollback path
 ```
-
-# Maintenance
-
-Re-check links, licences, archive status, and recommended install methods before
-each Escapement release. A licence status of `must-verify` or
-`unverified-restrict-copying` means reference or external integration only until
-a current licence is confirmed.

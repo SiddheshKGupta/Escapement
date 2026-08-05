@@ -10,7 +10,7 @@ Read:
 - `SECURITY.md`
 - `docs/standards/security.md`
 - `docs/standards/privacy-observability.md`
-- `catalog/external-resources.json`
+- `catalog/capability-registry.json`
 
 Review:
 

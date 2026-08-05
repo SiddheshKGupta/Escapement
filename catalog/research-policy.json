@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "version": "6.2.0",
+  "evidence_ladder": [
+    "approved project evidence",
+    "law, regulator or standards body",
+    "official vendor or product documentation",
+    "primary company disclosures",
+    "peer-reviewed or institutional research",
+    "reputable industry research",
+    "practitioner and community signals"
+  ],
+  "research_triggers": [
+    "domain is unknown or DOMAIN_CONTEXT.md is incomplete",
+    "the user requests industry standards, benchmarks, latest practice or current trends",
+    "regulation, technology, pricing, market structure or user behaviour may have changed",
+    "the decision carries material financial, legal, security or operational risk",
+    "an external agent, framework, plugin or deployment pattern is being considered"
+  ],
+  "question_rules": {
+    "maximum_normal_questions": 5,
+    "ask_only_material_questions": true,
+    "provide_recommended_default": true,
+    "state_consequence": true,
+    "inspect_and_research_first": true
+  },
+  "trend_sources": {
+    "agent-reach": "broad platform access and niche community evidence",
+    "last30days": "recent community-ranked discourse and emerging practice",
+    "primary_web": "authoritative current facts and official standards"
+  }
+}

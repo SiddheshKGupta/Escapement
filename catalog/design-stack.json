@@ -1,0 +1,185 @@
+{
+  "schema_version": "1.0",
+  "version": "6.3.0",
+  "authority": {
+    "id": "design-intelligence-constitution",
+    "path": "docs/standards/design-intelligence.md",
+    "status": "supreme",
+    "rule": "No design specialist or external reference may silently override the approved DESIGN.md or this constitution."
+  },
+  "lifecycle": [
+    {
+      "phase": "RESEARCH",
+      "primary": [
+        "ui-ux-pro-max"
+      ],
+      "supporting": [
+        "mobbin",
+        "refero",
+        "recent-designs",
+        "voltagent-awesome-design-md"
+      ],
+      "purpose": "Find product-type patterns, UX guidelines, visual archetypes, palettes, typography, chart guidance and current references.",
+      "maximum_active_specialists": 2
+    },
+    {
+      "phase": "BRAINSTORM",
+      "primary_options": [
+        "taste-skill",
+        "ui-ux-pro-max",
+        "open-design"
+      ],
+      "selection_rule": "Choose one primary art-direction system based on the task. Do not load all three.",
+      "purpose": "Establish the design read, visual archetype, density, motion, information hierarchy and product-specific DESIGN.md.",
+      "maximum_active_specialists": 1
+    },
+    {
+      "phase": "SPECIFY",
+      "primary": [
+        "design-system",
+        "ui-ux-pro-max"
+      ],
+      "supporting": [
+        "frontend-design",
+        "design:information-architecture",
+        "design:accessibility-review",
+        "design:ux-copy"
+      ],
+      "purpose": "Translate the approved direction into tokens, components, states, responsive rules, accessibility and screen contracts.",
+      "maximum_active_specialists": 3
+    },
+    {
+      "phase": "IMPLEMENT",
+      "primary": [
+        "frontend-design",
+        "enterprise-ui-review"
+      ],
+      "conditional": [
+        "emil-kowalski-skill",
+        "shadcn-ui",
+        "21st-dev",
+        "gsap",
+        "headroom-js"
+      ],
+      "purpose": "Implement the approved design using the project stack. Add motion or component sources only when justified.",
+      "maximum_active_specialists": 3
+    },
+    {
+      "phase": "VERIFY",
+      "primary": [
+        "impeccable",
+        "enterprise-ui-review"
+      ],
+      "conditional": [
+        "emil-review-animations",
+        "agent-browser",
+        "playwright"
+      ],
+      "purpose": "Audit anti-patterns, usability, complete states, responsiveness, accessibility, interaction and motion.",
+      "maximum_active_specialists": 3
+    },
+    {
+      "phase": "POLISH",
+      "primary": [
+        "impeccable"
+      ],
+      "conditional": [
+        "emil-kowalski-skill",
+        "stop-slop"
+      ],
+      "purpose": "Perform final visual, interaction and UX-writing polish without changing approved business behaviour.",
+      "maximum_active_specialists": 2
+    }
+  ],
+  "specialists": [
+    {
+      "id": "ui-ux-pro-max",
+      "source": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "strength": "Searchable design intelligence and design-system recommendation across product types, styles, palettes, typography, UX guidelines, charts and stacks.",
+      "best_phases": [
+        "RESEARCH",
+        "BRAINSTORM",
+        "SPECIFY"
+      ],
+      "not_for": [
+        "final authority",
+        "blind installation of generated dependencies",
+        "overriding project brand"
+      ],
+      "licence": "Repository reports MIT; CLI materials may use different terms. Verify the selected release/component."
+    },
+    {
+      "id": "taste-skill",
+      "source": "https://github.com/Leonxlnx/taste-skill",
+      "strength": "Greenfield art direction, anti-slop layout, typography, density and motion dials; specialised redesign and visual variants.",
+      "best_phases": [
+        "BRAINSTORM",
+        "IMPLEMENT"
+      ],
+      "not_for": [
+        "enterprise policy authority",
+        "simultaneous use with another primary art director"
+      ],
+      "licence": "MIT"
+    },
+    {
+      "id": "impeccable",
+      "source": "https://github.com/pbakaus/impeccable",
+      "strength": "Design vocabulary, deterministic anti-pattern detection, audit, critique, hardening, adaptation and final polish.",
+      "best_phases": [
+        "VERIFY",
+        "POLISH"
+      ],
+      "not_for": [
+        "initial domain strategy",
+        "replacing the design constitution"
+      ],
+      "licence": "Verify current repository licence before install."
+    },
+    {
+      "id": "emil-kowalski-skill",
+      "source": "https://github.com/emilkowalski/skills",
+      "strength": "Animation decisions, motion craft, performance, perceived speed, motion opportunities and strict animation review.",
+      "best_phases": [
+        "IMPLEMENT",
+        "VERIFY",
+        "POLISH"
+      ],
+      "not_for": [
+        "general product strategy",
+        "adding motion without purpose",
+        "high-frequency keyboard interactions"
+      ],
+      "licence": "Verify current repository licence before install."
+    },
+    {
+      "id": "open-design",
+      "source": "https://github.com/nexu-io/open-design",
+      "strength": "Local-first design workspace, broad skill and design-system library, prototypes, design assets, migrations and multiple export formats.",
+      "best_phases": [
+        "RESEARCH",
+        "BRAINSTORM",
+        "ARTIFACT"
+      ],
+      "not_for": [
+        "small UI fixes",
+        "automatic full-platform installation"
+      ],
+      "licence": "Apache-2.0"
+    },
+    {
+      "id": "frontend-design",
+      "source": "https://github.com/openclaw/skills/tree/main/skills/qrucio/anthropic-frontend-design",
+      "strength": "General production-grade frontend implementation with anti-generic-AI guidance.",
+      "best_phases": [
+        "SPECIFY",
+        "IMPLEMENT"
+      ],
+      "not_for": [
+        "supreme design authority",
+        "replacing specialised design research or motion review"
+      ],
+      "licence": "Verify source repository licence."
+    }
+  ]
+}

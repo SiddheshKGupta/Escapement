@@ -1,9 +1,66 @@
+# Design Intelligence Constitution
+
+**Status: SUPREME DESIGN AUTHORITY**
+
+This file is the governing design constitution for Escapement projects. It is
+not one optional design skill among many.
+
+External design skills, plugins, reference libraries and component systems may
+specialise, search, generate, critique or implement. They may not silently
+override the approved product design direction.
+
+## Authority order
+
+```text
+Approved user and product requirements
+→ Accessibility, safety and regulatory obligations
+→ Project DESIGN.md and brand configuration
+→ This Design Intelligence Constitution
+→ Phase-specific design specialists
+→ External references and component sources
+```
+
+## Specialist roles beneath this constitution
+
+| Capability | Permitted role |
+|---|---|
+| UI/UX Pro Max | Searchable recommendations for product type, styles, palettes, typography, UX guidance, charts and stack implementation |
+| Taste Skill | Greenfield art direction, anti-slop variation, density and motion dials |
+| Impeccable | Deterministic audit, critique, hardening, responsive adaptation and final polish |
+| Emil Kowalski Skills | Motion decisions, animation implementation, animation opportunities and strict motion review |
+| Open Design | Optional local design workspace, prototypes, assets, migrations and exports |
+| Anthropic/frontend-design | General interface construction when no stronger specialised implementation skill is active |
+| Mobbin / Refero / Recent | Bounded design research and pattern references |
+| Penpot | Collaborative open design-system and design-to-code workflow |
+| 21st.dev / shadcn/ui | Component sources after stack, licence, accessibility and design-system review |
+| GSAP / Headroom | Approved implementation libraries for specific interactions |
+
+## Non-negotiable rule
+
+A specialist must state:
+
+```text
+Design decision being supported
+Constitution sections applied
+Specialist capability used
+Patterns adopted
+Patterns rejected
+Accessibility impact
+Implementation and verification
+```
+
+When a specialist recommendation conflicts with this constitution or the
+approved `DESIGN.md`, the specialist recommendation is rejected or escalated
+for an explicit design decision.
+
+---
+
 # Design Intelligence Standard
 
-**A corpus-wide synthesis of 73 company `DESIGN.md` systems from VoltAgent's `awesome-design-md` collection.**
+**A corpus-wide synthesis of 73 company `DESIGN.md` systems and the supreme design authority for Escapement projects.**
 
 Version: 1.0  
-Status: Reference standard  
+Status: Design constitution / mandatory authority  
 Recommended repository path: `docs/standards/design-intelligence.md`
 
 ---
@@ -27,7 +84,7 @@ This is not a replacement for approved client brand guidelines.
 Client brand
 → Product requirements
 → Product-specific DESIGN.md
-→ VLCO enterprise standards
+→ project enterprise standards
 → External design references
 ```
 
@@ -1410,7 +1467,7 @@ A product may share brand tokens while using a different density and component s
 
 ---
 
-## 24. Recommended VLCO Enterprise Default
+## 24. Recommended Enterprise Default
 
 When client branding is incomplete, begin with:
 

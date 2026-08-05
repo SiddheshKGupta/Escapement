@@ -1,0 +1,247 @@
+{
+  "schema_version": "1.0",
+  "version": "6.3.0",
+  "phases": [
+    {
+      "id": "ORIENT",
+      "purpose": "Understand the repository, user request and decision context.",
+      "native_skills": [],
+      "doctrine_packs": [
+        "decision-intelligence"
+      ],
+      "outputs": [
+        "decision statement",
+        "known facts",
+        "initial task tier"
+      ],
+      "capability_strengths": [
+        "karpathy:think-before-coding"
+      ]
+    },
+    {
+      "id": "DISCOVER",
+      "purpose": "Ask high-impact questions, recommend defaults and improve the execution brief.",
+      "native_skills": [
+        "decision-coach",
+        "project-discovery"
+      ],
+      "doctrine_packs": [
+        "decision-intelligence",
+        "domain-expertise"
+      ],
+      "outputs": [
+        "material questions",
+        "recommended defaults",
+        "improved prompt",
+        "open decisions"
+      ],
+      "capability_strengths": [
+        "karpathy:think-before-coding"
+      ]
+    },
+    {
+      "id": "RESEARCH",
+      "purpose": "Ground the decision in domain evidence, standards and current practice.",
+      "native_skills": [
+        "domain-research",
+        "reference-router"
+      ],
+      "doctrine_packs": [
+        "domain-expertise"
+      ],
+      "external_candidates": [
+        "agent-reach",
+        "last30days",
+        "context7"
+      ],
+      "outputs": [
+        "DOMAIN_CONTEXT.md",
+        "standards map",
+        "trend map",
+        "evidence register"
+      ],
+      "capability_strengths": [
+        "context7:library-docs",
+        "last30days:recent-discourse",
+        "agent-reach:platform-research",
+        "500-ai-agents:blueprint-discovery",
+        "ui-ux-pro-max:style-search"
+      ]
+    },
+    {
+      "id": "BRAINSTORM",
+      "purpose": "Explore materially different approaches and select one.",
+      "native_skills": [
+        "solution-brainstorming"
+      ],
+      "doctrine_packs": [
+        "decision-intelligence",
+        "orchestration-strategy"
+      ],
+      "external_candidates": [
+        "superpowers-sdlc",
+        "500-ai-agents"
+      ],
+      "outputs": [
+        "alternatives",
+        "trade-off matrix",
+        "approved solution direction"
+      ],
+      "capability_strengths": [
+        "superpowers:brainstorming",
+        "taste:design-taste-frontend",
+        "open-design:workspace"
+      ]
+    },
+    {
+      "id": "SPECIFY",
+      "purpose": "Turn the approved direction into behaviour, requirements and acceptance.",
+      "native_skills": [
+        "project-discovery",
+        "consulting-analysis",
+        "workflow",
+        "engineering-review"
+      ],
+      "external_candidates": [
+        "github-spec-kit"
+      ],
+      "outputs": [
+        "specification",
+        "non-goals",
+        "acceptance criteria"
+      ],
+      "capability_strengths": [
+        "ui-ux-pro-max:design-system-generator",
+        "ui-ux-pro-max:chart-and-data-viz",
+        "emil:animation-vocabulary"
+      ]
+    },
+    {
+      "id": "PLAN",
+      "purpose": "Create bounded tasks, dependencies, verification and agent assignments.",
+      "native_skills": [
+        "delivery-planning",
+        "agent-orchestration"
+      ],
+      "doctrine_packs": [
+        "orchestration-strategy"
+      ],
+      "external_candidates": [
+        "superpowers-sdlc",
+        "github-spec-kit",
+        "gsd-core"
+      ],
+      "outputs": [
+        "implementation plan",
+        "task graph",
+        "parallelisation decision",
+        "verification plan"
+      ],
+      "capability_strengths": [
+        "karpathy:simplicity-first",
+        "karpathy:goal-driven-execution",
+        "superpowers:writing-plans",
+        "ponytail:lite"
+      ]
+    },
+    {
+      "id": "IMPLEMENT",
+      "purpose": "Execute bounded tasks with the strongest implementation skills.",
+      "native_skills": [
+        "engineering-review",
+        "api-integration",
+        "enterprise-ui-review"
+      ],
+      "external_candidates": [
+        "superpowers-sdlc"
+      ],
+      "outputs": [
+        "working implementation",
+        "tests",
+        "task evidence"
+      ],
+      "capability_strengths": [
+        "karpathy:surgical-changes",
+        "superpowers:test-driven-development",
+        "superpowers:subagent-driven-development",
+        "superpowers:dispatching-parallel-agents",
+        "frontend-design:implementation",
+        "emil:emil-design-eng",
+        "ponytail:full"
+      ]
+    },
+    {
+      "id": "VERIFY",
+      "purpose": "Independently verify behaviour, engineering quality, security and user experience.",
+      "native_skills": [
+        "engineering-review",
+        "security-review",
+        "enterprise-ui-review"
+      ],
+      "external_candidates": [
+        "superpowers-sdlc",
+        "agent-browser",
+        "perplexity-bumblebee",
+        "strix"
+      ],
+      "outputs": [
+        "check records",
+        "review findings",
+        "remaining defects"
+      ],
+      "capability_strengths": [
+        "superpowers:requesting-code-review",
+        "superpowers:verification-before-completion",
+        "impeccable:audit",
+        "impeccable:harden",
+        "emil:review-animations",
+        "playwright:project-tests",
+        "agent-browser:agent-snapshots"
+      ]
+    },
+    {
+      "id": "POLISH",
+      "purpose": "Refine visual craft, motion, UX writing and consistency after functional verification.",
+      "native_skills": [
+        "enterprise-ui-review",
+        "writing-quality"
+      ],
+      "doctrine_packs": [
+        "design-taste",
+        "communication-artifacts"
+      ],
+      "external_candidates": [
+        "impeccable",
+        "emil-kowalski-skill",
+        "stop-slop"
+      ],
+      "capability_strengths": [
+        "impeccable:polish",
+        "impeccable:clarify",
+        "emil:improve-animations",
+        "stop-slop:final-lint"
+      ],
+      "outputs": [
+        "polish findings",
+        "approved refinements",
+        "final design and copy evidence"
+      ]
+    },
+    {
+      "id": "RELEASE",
+      "purpose": "Prove readiness, rollback, monitoring, approvals and handoff.",
+      "native_skills": [
+        "release-readiness"
+      ],
+      "outputs": [
+        "go/no-go",
+        "rollback",
+        "monitoring",
+        "handoff"
+      ],
+      "capability_strengths": [
+        "superpowers:finishing-a-development-branch"
+      ]
+    }
+  ]
+}

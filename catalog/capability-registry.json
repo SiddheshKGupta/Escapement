@@ -1,0 +1,1634 @@
+{
+  "schema_version": "1.0",
+  "version": "6.3.0",
+  "principle": "Preserve every capability, use each at its strongest phase, and keep only the current phase active.",
+  "layers": {
+    "kernel": {
+      "path": "AGENTS.md",
+      "always_loaded": true
+    },
+    "profiles": {
+      "registry": "profiles/",
+      "default": "domain-expertise",
+      "activation": "one active project profile"
+    },
+    "doctrine_packs": {
+      "registry": "catalog/doctrine-packs.json",
+      "activation": "token-budgeted"
+    },
+    "native_skills": {
+      "registry": "catalog/native-skills.json",
+      "activation": "task-routed"
+    },
+    "agent_patterns": {
+      "registry": "catalog/agent-patterns.json",
+      "activation": "fresh-context only"
+    },
+    "external_resources": {
+      "activation": "approval and overlap governed"
+    },
+    "overlap_groups": {
+      "registry": "catalog/overlap-groups.json"
+    },
+    "phase_orchestration": {
+      "registry": "catalog/phase-capabilities.json",
+      "adapters": "catalog/strategy-adapters.json"
+    },
+    "domain_context": {
+      "path": "DOMAIN_CONTEXT.md",
+      "activation": "research and decision support"
+    },
+    "capability_strengths": {
+      "registry": "catalog/skill-strengths.json",
+      "activation": "phase-routed"
+    },
+    "design_constitution": {
+      "path": "docs/standards/design-intelligence.md",
+      "status": "supreme-design-authority"
+    },
+    "overlap_matrix": {
+      "registry": "catalog/overlap-matrix.json"
+    }
+  },
+  "resources": [
+    {
+      "id": "voltagent-awesome-design-md",
+      "name": "awesome-design-md",
+      "kind": "reference-repository",
+      "source": "https://github.com/VoltAgent/awesome-design-md",
+      "publisher": "VoltAgent",
+      "license": "MIT",
+      "license_status": "verified-in-prior-review",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "design-reference",
+      "use_modes": [
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "design system",
+        "visual direction",
+        "brand",
+        "layout",
+        "colour",
+        "typography",
+        "motion"
+      ],
+      "use_when": "A product needs a design archetype, component language, visual benchmark, or product-specific DESIGN.md.",
+      "do_not": "Do not copy protected logos, proprietary fonts, imagery, screenshots, or another company's trade dress.",
+      "notes": "The 73-company design-intelligence synthesis and design-system routing."
+    },
+    {
+      "id": "perplexity-org",
+      "name": "Perplexity AI GitHub organisation",
+      "kind": "organisation-index",
+      "source": "https://github.com/perplexityai",
+      "publisher": "Perplexity AI",
+      "license": "Per-repository",
+      "license_status": "must-verify-per-resource",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "research-freshness",
+      "use_modes": [
+        "reference"
+      ],
+      "triggers": [
+        "research",
+        "search",
+        "evaluation",
+        "CLI distribution",
+        "supply chain",
+        "MCP"
+      ],
+      "use_when": "An agent needs current patterns for research tooling, evaluation runners, safe binary distribution, or developer-tool inventory.",
+      "do_not": "Do not assume every public repository in an organisation has the same licence.",
+      "notes": "Research extension, resumable evals, content-addressed records, self-tests, and safe installers."
+    },
+    {
+      "id": "perplexity-api-platform-developers",
+      "name": "api-platform-developers",
+      "kind": "skills-and-plugin-repository",
+      "source": "https://github.com/perplexityai/api-platform-developers",
+      "publisher": "Perplexity AI",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "research-freshness",
+      "use_modes": [
+        "integrate",
+        "adapt"
+      ],
+      "triggers": [
+        "Perplexity",
+        "live web search",
+        "page snippets",
+        "Sonar migration",
+        "docs MCP"
+      ],
+      "use_when": "The project needs official Perplexity Agent Skills, a Claude/Codex plugin example, or live documentation through MCP.",
+      "do_not": "Do not make Perplexity credentials or the docs MCP mandatory for Escapement core.",
+      "notes": "Portable skills, plugin manifests, optional docs MCP, and an official research extension."
+    },
+    {
+      "id": "perplexity-cli",
+      "name": "pplx CLI",
+      "kind": "external-cli",
+      "source": "https://github.com/perplexityai/perplexity-cli",
+      "publisher": "Perplexity AI",
+      "license": "No licence file observed during review",
+      "license_status": "unverified-restrict-copying",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "research-freshness",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "live search",
+        "grounded web research",
+        "query-relevant snippets",
+        "Perplexity CLI"
+      ],
+      "use_when": "A user explicitly wants Perplexity-backed current web search or snippets and can provide an API key.",
+      "do_not": "Do not copy repository code into Escapement or claim open-source reuse until a licence is present and verified.",
+      "notes": "Checksum-verified releases, atomic updates, JSON stdout, and agent-friendly CLI design."
+    },
+    {
+      "id": "perplexity-search-evals",
+      "name": "search_evals",
+      "kind": "evaluation-framework",
+      "source": "https://github.com/perplexityai/search_evals",
+      "publisher": "Perplexity AI",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "evaluation",
+      "use_modes": [
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "evaluation",
+        "benchmark",
+        "grader",
+        "cost accounting",
+        "resumable run",
+        "trace"
+      ],
+      "use_when": "Escapement needs reproducible eval suites, provider adapters, task traces, resumable runs, or cost/evidence accounting.",
+      "do_not": "Do not import paid-provider assumptions or third-party benchmark data without accepting their separate terms.",
+      "notes": "Resumable executable evaluations and inspectable per-task traces."
+    },
+    {
+      "id": "perplexity-bumblebee",
+      "name": "Bumblebee",
+      "kind": "security-inventory-tool",
+      "source": "https://github.com/perplexityai/bumblebee",
+      "publisher": "Perplexity AI",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "security-testing",
+      "use_modes": [
+        "integrate",
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "dependency inventory",
+        "skill inventory",
+        "MCP inventory",
+        "supply-chain",
+        "self-test",
+        "NDJSON"
+      ],
+      "use_when": "A security review needs read-only package, skill, editor-extension, or MCP inventory from local metadata.",
+      "do_not": "Do not expose credentials found in MCP env blocks or broaden scans beyond approved roots.",
+      "notes": "Read-only inventory profiles, structured NDJSON, confidence levels, and built-in self-test."
+    },
+    {
+      "id": "perplexity-modelcontextprotocol",
+      "name": "Perplexity MCP server",
+      "kind": "mcp-repository",
+      "source": "https://github.com/perplexityai/modelcontextprotocol",
+      "publisher": "Perplexity AI",
+      "license": "Verify current repository licence",
+      "license_status": "must-verify",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "research-freshness",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "Perplexity MCP",
+        "research MCP",
+        "search tool server"
+      ],
+      "use_when": "A project wants Perplexity search through MCP rather than a CLI.",
+      "do_not": "Do not register remote MCP servers silently or make network access part of the default core.",
+      "notes": "Optional freshness and research integrations through a narrow MCP boundary."
+    },
+    {
+      "id": "perplexity-codescythe",
+      "name": "Codescythe",
+      "kind": "code-analysis-tool",
+      "source": "https://github.com/perplexityai/codescythe",
+      "publisher": "Perplexity AI",
+      "license": "Verify current repository licence",
+      "license_status": "must-verify",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "code-review",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "dead code",
+        "unused exports",
+        "unused files",
+        "dependency path",
+        "cleanup"
+      ],
+      "use_when": "A TypeScript or JavaScript repository needs deterministic dead-code analysis or dependency-path explanation.",
+      "do_not": "Do not run destructive fixes without a clean branch, tests, and explicit approval.",
+      "notes": "Narrow deterministic contracts, doctor commands, explainability, and safe destructive-mode gates."
+    },
+    {
+      "id": "appflowy",
+      "name": "AppFlowy",
+      "kind": "product-repository",
+      "source": "https://github.com/AppFlowy-IO/AppFlowy",
+      "publisher": "AppFlowy-IO",
+      "license": "AGPL-3.0",
+      "license_status": "verified",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "session-memory",
+      "use_modes": [
+        "reference",
+        "integrate-separately"
+      ],
+      "triggers": [
+        "local-first",
+        "workspace",
+        "data ownership",
+        "self-hosting",
+        "extensible blocks"
+      ],
+      "use_when": "Designing local-first state, user-owned data, extensible workspace architecture, or self-hosted collaboration.",
+      "do_not": "Do not copy AGPL code into Escapement's source-available core without a deliberate licence decision.",
+      "notes": "Privacy-first local control, cross-platform reliability, and extensible building blocks."
+    },
+    {
+      "id": "plausible-analytics",
+      "name": "Plausible Analytics",
+      "kind": "product-repository",
+      "source": "https://github.com/plausible/analytics",
+      "publisher": "Plausible Insights",
+      "license": "AGPL-3.0-or-later",
+      "license_status": "verified",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "observability",
+      "use_modes": [
+        "reference",
+        "integrate-separately"
+      ],
+      "triggers": [
+        "privacy analytics",
+        "local observability",
+        "simple dashboard",
+        "no cookies",
+        "self-hosting"
+      ],
+      "use_when": "Designing privacy-first observability, minimal dashboards, transparent metrics, or optional self-hosted analytics.",
+      "do_not": "Do not embed AGPL application code into Escapement core without licence review.",
+      "notes": "Local-only telemetry by default, transparent metrics, and clutter-free observability."
+    },
+    {
+      "id": "github-spec-kit",
+      "name": "Spec Kit",
+      "kind": "specification-framework",
+      "source": "https://github.com/github/spec-kit",
+      "publisher": "GitHub",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "harness-methodology",
+      "use_modes": [
+        "reference",
+        "adapt",
+        "integrate"
+      ],
+      "triggers": [
+        "constitution",
+        "specification",
+        "implementation plan",
+        "tasks",
+        "converge",
+        "preset",
+        "bundle"
+      ],
+      "use_when": "New or material work needs a constitution, executable specification, technical plan, task breakdown, or convergence review.",
+      "do_not": "Do not duplicate its whole command surface in Escapement when an optional integration is sufficient.",
+      "notes": "Constitution → specify → plan → tasks → implement → converge, plus extensions, presets, and bundles."
+    },
+    {
+      "id": "500-ai-agents-projects",
+      "name": "500+ AI Agent Projects & Use Cases",
+      "kind": "agent-pattern-catalogue",
+      "source": "https://github.com/ashishpatel26/500-AI-Agents-Projects",
+      "publisher": "Ashish Patel",
+      "license": "MIT",
+      "license_status": "verified-from-readme",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "agent-pattern-catalogue",
+      "use_modes": [
+        "reference"
+      ],
+      "triggers": [
+        "agent pattern",
+        "industry use case",
+        "framework comparison",
+        "example agent"
+      ],
+      "use_when": "An agent needs to discover relevant implementation patterns or comparable industry use cases.",
+      "do_not": "Do not treat inclusion in a catalogue as proof of safety, quality, maintenance, or licence compatibility.",
+      "notes": "A curated agent-pattern registry rather than hundreds of always-loaded agents."
+    },
+    {
+      "id": "walkinglabs-learn-harness-engineering",
+      "name": "Learn Harness Engineering",
+      "kind": "course-and-reference-repository",
+      "source": "https://walkinglabs.github.io/learn-harness-engineering/en/",
+      "publisher": "Walking Labs",
+      "license": "MIT",
+      "license_status": "verified-from-project-docs",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "harness-methodology",
+      "use_modes": [
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "harness",
+        "state persistence",
+        "feature list",
+        "verification loop",
+        "session lifecycle",
+        "observability"
+      ],
+      "use_when": "Creating, assessing, or teaching the instructions, tools, environment, state, and feedback subsystems of a harness.",
+      "do_not": "Do not load the complete course into every task or confuse a prompt file with a complete harness.",
+      "notes": "Repository as system of record, feature-state primitives, lifecycle bootstrap, verification, and clean session closure."
+    },
+    {
+      "id": "walkinglabs-harness-creator",
+      "name": "harness-creator skill",
+      "kind": "agent-skill",
+      "source": "https://github.com/walkinglabs/learn-harness-engineering/tree/main/skills/harness-creator",
+      "publisher": "Walking Labs",
+      "license": "MIT",
+      "license_status": "verified-from-skill-docs",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "harness-methodology",
+      "use_modes": [
+        "install",
+        "adapt",
+        "reference"
+      ],
+      "triggers": [
+        "create harness",
+        "assess harness",
+        "improve harness",
+        "harness benchmark"
+      ],
+      "use_when": "A project lacks a harness or needs a structured five-subsystem assessment.",
+      "do_not": "Do not install it on top of overlapping native Escapement harness skills without an overlap decision.",
+      "notes": "Harness assessment, templates, reference patterns, and benchmark-oriented skill development."
+    },
+    {
+      "id": "penpot",
+      "name": "Penpot",
+      "kind": "design-platform",
+      "source": "https://github.com/penpot/penpot",
+      "publisher": "Kaleidos",
+      "license": "MPL-2.0",
+      "license_status": "verified",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "design-reference",
+      "use_modes": [
+        "integrate",
+        "reference",
+        "adapt-with-file-level-obligations"
+      ],
+      "triggers": [
+        "design tokens",
+        "design-code workflow",
+        "SVG",
+        "CSS",
+        "design MCP",
+        "self-hosted design"
+      ],
+      "use_when": "A product needs open design tokens, inspectable design-to-code workflows, or an optional design MCP/API.",
+      "do_not": "Do not copy branding or assume a design file alone proves implementation correctness.",
+      "notes": "Design tokens as shared source of truth and programmable design-code integration."
+    },
+    {
+      "id": "helixdb",
+      "name": "HelixDB",
+      "kind": "database-and-cli",
+      "source": "https://github.com/HelixDB/helix-db",
+      "publisher": "HelixDB",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "session-memory",
+      "use_modes": [
+        "integrate",
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "agent memory",
+        "knowledge graph",
+        "vector graph",
+        "local database",
+        "one-shot bootstrap"
+      ],
+      "use_when": "A project genuinely needs graph-vector memory, knowledge graphs, or a local agent data layer.",
+      "do_not": "Do not make a database mandatory for Escapement's file-based core or add it merely to appear agentic.",
+      "notes": "A guided one-shot bootstrap and optional structured memory backend."
+    },
+    {
+      "id": "agent-reach",
+      "name": "Agent Reach",
+      "kind": "capability-installer",
+      "source": "https://github.com/Panniantong/agent-reach",
+      "publisher": "Panniantong",
+      "license": "MIT",
+      "license_status": "verified-from-readme",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "research-freshness",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "internet access",
+        "social search",
+        "video transcript",
+        "RSS",
+        "platform connector",
+        "doctor"
+      ],
+      "use_when": "A user explicitly needs internet/platform access not already available through approved tools.",
+      "do_not": "Do not bypass platform protections, harvest credentials, or install broad internet capabilities without explicit approval.",
+      "notes": "Capability doctor, safe mode, fallback routing, and agent-friendly configuration."
+    },
+    {
+      "id": "agent-browser",
+      "name": "agent-browser",
+      "kind": "browser-automation-cli",
+      "source": "https://github.com/vercel-labs/agent-browser",
+      "publisher": "Vercel Labs",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "browser-automation",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "browser test",
+        "UI verification",
+        "accessibility snapshot",
+        "screenshot",
+        "web workflow"
+      ],
+      "use_when": "A frontend or end-to-end task needs real browser evidence, accessibility-tree interaction, screenshots, or DOM inspection.",
+      "do_not": "Do not browse authenticated or sensitive sites without approval or use browser automation as proof when business data is fabricated.",
+      "notes": "Agent-readable accessibility snapshots, early interaction failure, and browser-based verification."
+    },
+    {
+      "id": "gsd-core",
+      "name": "GSD Core",
+      "kind": "context-and-phase-framework",
+      "source": "https://github.com/gsd-build/get-shit-done",
+      "publisher": "Open GSD",
+      "license": "MIT",
+      "license_status": "verified-from-readme",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "harness-methodology",
+      "use_modes": [
+        "reference",
+        "integrate",
+        "adapt"
+      ],
+      "triggers": [
+        "context rot",
+        "phase loop",
+        "fresh subagent",
+        "discuss plan execute verify ship"
+      ],
+      "use_when": "A project needs phase-level context isolation, fresh execution contexts, or a discuss-plan-execute-verify-ship loop.",
+      "do_not": "Do not run parallel agents when tasks share mutable state or when the repository lacks merge and verification controls.",
+      "notes": "Fresh-context phase execution, lean main sessions, and verified shipping."
+    },
+    {
+      "id": "anthropic-mcp-builder",
+      "name": "mcp-builder skill",
+      "kind": "agent-skill",
+      "source": "https://github.com/anthropics/skills/tree/main/skills/mcp-builder",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "mcp-building",
+      "use_modes": [
+        "install",
+        "adapt",
+        "reference"
+      ],
+      "triggers": [
+        "build MCP",
+        "MCP server",
+        "tool schema",
+        "MCP evaluation"
+      ],
+      "use_when": "A project is approved to build an MCP server for an external API or service.",
+      "do_not": "Do not expose broad destructive endpoints, secrets, or an unbounded API surface to agents.",
+      "notes": "MCP quality workflow, tool discoverability, output schemas, annotations, and realistic evaluations."
+    },
+    {
+      "id": "vercel-find-skills",
+      "name": "find-skills skill",
+      "kind": "agent-skill",
+      "source": "https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md",
+      "publisher": "Vercel Labs",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "external-discovery",
+      "use_modes": [
+        "install",
+        "adapt",
+        "reference"
+      ],
+      "triggers": [
+        "find a skill",
+        "install a skill",
+        "missing capability",
+        "skill marketplace"
+      ],
+      "use_when": "A task requires a specialised capability that Escapement core does not own.",
+      "do_not": "Do not recommend or install a skill solely because it ranks highly or has many installs.",
+      "notes": "Reference-router skill and a quality gate before external skill installation."
+    },
+    {
+      "id": "ecc",
+      "name": "ECC",
+      "kind": "agent-harness-ecosystem",
+      "source": "https://github.com/affaan-m/ECC",
+      "publisher": "Affaan Mustafa",
+      "license": "MIT",
+      "license_status": "verified-from-readme",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "harness-methodology",
+      "use_modes": [
+        "reference",
+        "integrate-selectively"
+      ],
+      "triggers": [
+        "agent harness",
+        "doctor",
+        "repair",
+        "continuous learning",
+        "agent security",
+        "cross-runtime sync"
+      ],
+      "use_when": "Reviewing cross-runtime distribution, doctor/repair, installation conflict detection, skill packaging, or harness security.",
+      "do_not": "Do not copy its hundreds of agents/skills into Escapement core or imply full platform parity.",
+      "notes": "Doctor/repair, official-source warning, install-conflict prevention, security scanning, and support matrix honesty."
+    },
+    {
+      "id": "strix",
+      "name": "Strix",
+      "kind": "security-testing-tool",
+      "source": "https://github.com/usestrix/strix",
+      "publisher": "Strix AI",
+      "license": "Apache-2.0",
+      "license_status": "verified-from-readme",
+      "status": "catalogued",
+      "activation": "on-demand",
+      "overlap_group": "security-testing",
+      "use_modes": [
+        "integrate-authorised-only",
+        "reference"
+      ],
+      "triggers": [
+        "pentest",
+        "dynamic security test",
+        "proof of concept",
+        "DAST",
+        "security scan"
+      ],
+      "use_when": "The user has explicit authorisation to dynamically assess a local, owned, or approved target in a sandbox.",
+      "do_not": "Do not autonomously attack public or third-party targets, run exploits without permission, or place offensive capability in Escapement core.",
+      "notes": "Local run viewer, evidence-rich findings, CI security gates, and sandboxed external security integrations."
+    },
+    {
+      "id": "stop-slop",
+      "name": "Stop Slop",
+      "kind": "agent-skill",
+      "source": "https://github.com/hardikpandya/stop-slop",
+      "publisher": "Hardik Pandya",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "writing-quality",
+      "use_modes": [
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "remove AI tells",
+        "human prose",
+        "slop",
+        "writing cleanup",
+        "generic AI wording",
+        "AI wording",
+        "polish prose"
+      ],
+      "use_when": "A complete human-facing draft needs a final anti-slop pass after content and judgement are correct.",
+      "do_not": "Do not load for code-only work or use it as a substitute for substantive writing."
+    },
+    {
+      "id": "task-observer",
+      "name": "Task Observer",
+      "kind": "meta-skill",
+      "source": "https://github.com/rebelytics/one-skill-to-rule-them-all",
+      "publisher": "rebelytics",
+      "license": "Attribution-required open licence; verify current file",
+      "license_status": "must-verify",
+      "status": "conditional",
+      "activation": "explicit-opt-in",
+      "overlap_group": "skill-learning",
+      "use_modes": [
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "observe tasks",
+        "suggest skills",
+        "learn patterns",
+        "continuous improvement"
+      ],
+      "use_when": "A long-running project wants to observe repeated task patterns and propose candidate skills.",
+      "do_not": "Do not let it modify skills automatically or observe sensitive sessions without approval."
+    },
+    {
+      "id": "taste-skill",
+      "name": "Taste Skill",
+      "kind": "agent-skill-suite",
+      "source": "https://github.com/Leonxlnx/taste-skill",
+      "publisher": "Leonxlnx",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "choose-one-design-director",
+      "overlap_group": "design-director",
+      "use_modes": [
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "anti-slop frontend",
+        "design taste",
+        "layout",
+        "motion",
+        "density",
+        "generic AI styling",
+        "design skill"
+      ],
+      "use_when": "A frontend project needs a strong external design director with adjustable variance, motion, and density.",
+      "do_not": "Do not load alongside Impeccable or Open Design as a second full design director."
+    },
+    {
+      "id": "open-design",
+      "name": "Open Design",
+      "kind": "design-platform-and-skill-suite",
+      "source": "https://github.com/nexu-io/open-design",
+      "publisher": "Nexu",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "choose-one-design-director",
+      "overlap_group": "design-director",
+      "use_modes": [
+        "integrate",
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "local design studio",
+        "design systems",
+        "prototype",
+        "design artifact",
+        "plugin"
+      ],
+      "use_when": "A project needs a local-first design workspace, broad design-skill suite, or artifact-first design workflow.",
+      "do_not": "Do not install the full platform merely for a small UI review or combine it with another full design suite."
+    },
+    {
+      "id": "emil-kowalski-skill",
+      "name": "Emil Kowalski Design Skills",
+      "kind": "agent-skill-suite",
+      "source": "https://github.com/emilkowalski/skill",
+      "publisher": "Emil Kowalski",
+      "license": "Verify current repository licence",
+      "license_status": "must-verify",
+      "status": "optional",
+      "activation": "narrow-motion-specialist",
+      "overlap_group": "motion",
+      "use_modes": [
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "animation review",
+        "motion",
+        "easing",
+        "interaction polish"
+      ],
+      "use_when": "A UI needs specialised motion judgement or animation review.",
+      "do_not": "Do not use motion to compensate for weak hierarchy or load the full suite for static enterprise screens."
+    },
+    {
+      "id": "impeccable",
+      "name": "Impeccable",
+      "kind": "agent-skill-and-cli",
+      "source": "https://github.com/pbakaus/impeccable",
+      "publisher": "Paul Bakaus",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "choose-one-design-director",
+      "overlap_group": "design-director",
+      "use_modes": [
+        "install",
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "design audit",
+        "polish UI",
+        "anti-pattern detection",
+        "UX writing",
+        "responsive"
+      ],
+      "use_when": "A frontend needs one comprehensive design skill plus deterministic anti-pattern checks.",
+      "do_not": "Do not load with Taste Skill or Open Design as a second primary design director."
+    },
+    {
+      "id": "superpowers",
+      "name": "Superpowers",
+      "kind": "agent-methodology-plugin",
+      "source": "https://github.com/obra/superpowers",
+      "publisher": "Jesse Vincent / Prime Radiant",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "choose-one-external-methodology",
+      "overlap_group": "harness-methodology",
+      "use_modes": [
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "TDD",
+        "systematic debugging",
+        "brainstorming",
+        "subagent development",
+        "plan execution"
+      ],
+      "use_when": "A team explicitly wants the Superpowers methodology for development execution.",
+      "do_not": "Do not combine its full lifecycle hooks with ECC or GSD without an overlap decision."
+    },
+    {
+      "id": "claude-mem",
+      "name": "Claude Mem",
+      "kind": "memory-plugin",
+      "source": "https://github.com/thedotmack/claude-mem",
+      "publisher": "thedotmack",
+      "license": "AGPL-3.0 for main package; verify subcomponents",
+      "license_status": "verified-with-obligations",
+      "status": "conditional",
+      "activation": "choose-one-session-memory",
+      "overlap_group": "session-memory",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "persistent memory",
+        "semantic session history",
+        "memory search",
+        "long-running project"
+      ],
+      "use_when": "Local file handoffs are insufficient and the project accepts a background memory service and its licence.",
+      "do_not": "Do not install by default, duplicate Escapement state, or capture confidential sessions without a privacy decision."
+    },
+    {
+      "id": "graphify",
+      "name": "Graphify",
+      "kind": "code-knowledge-skill-and-cli",
+      "source": "https://github.com/Graphify-Labs/graphify",
+      "publisher": "Graphify Labs",
+      "license": "Apache-2.0 and MIT components",
+      "license_status": "verified",
+      "status": "conditional",
+      "activation": "on-demand",
+      "overlap_group": "code-knowledge",
+      "use_modes": [
+        "install",
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "knowledge graph",
+        "large codebase",
+        "architecture map",
+        "relationship query"
+      ],
+      "use_when": "A large or heterogeneous repository needs deterministic relationship mapping beyond ordinary file search.",
+      "do_not": "Do not index sensitive material through external backends without approval or use it for a small codebase."
+    },
+    {
+      "id": "gstack",
+      "name": "gstack",
+      "kind": "agent-role-skill-suite",
+      "source": "https://github.com/garrytan/gstack",
+      "publisher": "Garry Tan",
+      "license": "Verify current repository licence",
+      "license_status": "must-verify",
+      "status": "optional",
+      "activation": "choose-one-external-methodology",
+      "overlap_group": "harness-methodology",
+      "use_modes": [
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "CEO review",
+        "engineering plan review",
+        "design review",
+        "QA",
+        "release review"
+      ],
+      "use_when": "A project explicitly wants role-based plan reviews or fresh-context specialist reviews.",
+      "do_not": "Do not install its full workflow alongside Superpowers or ECC without deciding which system owns orchestration."
+    },
+    {
+      "id": "everything-claude-code",
+      "name": "Everything Claude Code / ECC",
+      "kind": "harness-ecosystem",
+      "source": "https://github.com/affaan-m/everything-claude-code",
+      "publisher": "Affaan Mustafa",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "choose-one-external-methodology",
+      "overlap_group": "harness-methodology",
+      "use_modes": [
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "agent harness",
+        "rules",
+        "agents",
+        "skills",
+        "hooks",
+        "memory optimisation"
+      ],
+      "use_when": "A user wants ECC components or profiles that Escapement does not provide.",
+      "do_not": "Do not install the full profile on top of Escapement hooks and native skills; use component-level selection."
+    },
+    {
+      "id": "context7",
+      "name": "Context7",
+      "kind": "documentation-mcp",
+      "source": "https://github.com/upstash/context7",
+      "publisher": "Upstash",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "research-freshness",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "current library docs",
+        "API documentation",
+        "framework version",
+        "technical docs"
+      ],
+      "use_when": "Implementation depends on current external library documentation.",
+      "do_not": "Do not use it as the source of truth for the project's own code or business rules."
+    },
+    {
+      "id": "last30days",
+      "name": "Last30Days",
+      "kind": "research-skill",
+      "source": "https://github.com/mvanhorn/last30days-skill",
+      "publisher": "Matt Van Horn",
+      "license": "Verify current repository licence",
+      "license_status": "must-verify",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "research-freshness",
+      "use_modes": [
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "last 30 days",
+        "recent discourse",
+        "Reddit",
+        "X",
+        "YouTube",
+        "HN"
+      ],
+      "use_when": "A decision benefits from recent community signals rather than only authoritative documentation.",
+      "do_not": "Do not use social discourse as authoritative evidence or load it for stable facts."
+    },
+    {
+      "id": "skill-ui",
+      "name": "Skill UI",
+      "kind": "legacy-capability-reference",
+      "source": null,
+      "publisher": null,
+      "license": "Unknown",
+      "license_status": "source-required",
+      "status": "preserved-unresolved",
+      "activation": "disabled-until-source-confirmed",
+      "overlap_group": "external-discovery",
+      "use_modes": [
+        "reference"
+      ],
+      "triggers": [
+        "skill UI"
+      ],
+      "use_when": "Retained from the original capability set pending exact source confirmation.",
+      "do_not": "Do not install or attribute this entry until the exact repository is confirmed."
+    },
+    {
+      "id": "claude-code-review",
+      "name": "Claude Code Review",
+      "kind": "managed-code-review-service",
+      "source": "https://code.claude.com/docs/en/code-review",
+      "publisher": "Anthropic",
+      "license": "Commercial managed service",
+      "license_status": "not-open-source-service",
+      "status": "optional",
+      "activation": "choose-one-code-review",
+      "overlap_group": "code-review",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "PR review",
+        "managed code review",
+        "multi-agent review"
+      ],
+      "use_when": "A supported organisation wants Anthropic's managed PR review service.",
+      "do_not": "Do not present it as open source or use it in addition to another expensive full review workflow without reason."
+    },
+    {
+      "id": "ponytail",
+      "name": "Ponytail",
+      "kind": "minimal-code-skill-and-plugin",
+      "source": "https://github.com/DietrichGebert/ponytail",
+      "publisher": "Dietrich Gebert",
+      "license": "Verify current repository licence",
+      "license_status": "must-verify",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "engineering-minimalism",
+      "use_modes": [
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "minimal code",
+        "overengineering",
+        "lazy senior dev",
+        "code bloat"
+      ],
+      "use_when": "An agent repeatedly overbuilds bounded implementation tasks.",
+      "do_not": "Do not let minimalism remove validation, security, observability, or approved requirements."
+    },
+    {
+      "id": "mobbin",
+      "name": "Mobbin",
+      "kind": "commercial-design-reference",
+      "source": "https://mobbin.com",
+      "publisher": "Mobbin",
+      "license": "Commercial service/content terms",
+      "license_status": "not-open-source",
+      "status": "reference-only",
+      "activation": "on-demand",
+      "overlap_group": "design-reference",
+      "use_modes": [
+        "reference"
+      ],
+      "triggers": [
+        "mobile pattern",
+        "product UI reference",
+        "screen flow"
+      ],
+      "use_when": "A designer needs real-product interaction and screen references.",
+      "do_not": "Do not scrape, redistribute, or copy protected screens and assets."
+    },
+    {
+      "id": "refero",
+      "name": "Refero",
+      "kind": "design-reference",
+      "source": "https://refero.design",
+      "publisher": "Refero",
+      "license": "Website content terms",
+      "license_status": "not-code-resource",
+      "status": "reference-only",
+      "activation": "on-demand",
+      "overlap_group": "design-reference",
+      "use_modes": [
+        "reference"
+      ],
+      "triggers": [
+        "web app reference",
+        "page pattern",
+        "component inspiration"
+      ],
+      "use_when": "A product needs curated web and product references.",
+      "do_not": "Do not copy protected layouts or assets as trade dress."
+    },
+    {
+      "id": "recent-designs",
+      "name": "Recent",
+      "kind": "design-reference",
+      "source": "https://recent.design",
+      "publisher": "Recent",
+      "license": "Website content terms",
+      "license_status": "not-code-resource",
+      "status": "reference-only",
+      "activation": "on-demand",
+      "overlap_group": "design-reference",
+      "use_modes": [
+        "reference"
+      ],
+      "triggers": [
+        "recent design",
+        "website inspiration",
+        "current visual trend"
+      ],
+      "use_when": "A task needs a current design-reference shortlist.",
+      "do_not": "Do not let trend references override brand, usability, or enterprise density."
+    },
+    {
+      "id": "21st-dev",
+      "name": "21st.dev",
+      "kind": "component-reference-and-service",
+      "source": "https://21st.dev",
+      "publisher": "21st.dev",
+      "license": "Per component/project; verify",
+      "license_status": "must-verify",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "component-source",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "component inspiration",
+        "React component",
+        "UI block"
+      ],
+      "use_when": "A project needs a component starting point compatible with its stack.",
+      "do_not": "Do not introduce copied components without licence, dependency, accessibility, and design-system review."
+    },
+    {
+      "id": "shadcn-ui",
+      "name": "shadcn/ui",
+      "kind": "component-system",
+      "source": "https://github.com/shadcn-ui/ui",
+      "publisher": "shadcn",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "component-source",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "shadcn",
+        "React components",
+        "Radix",
+        "component library"
+      ],
+      "use_when": "A React project explicitly chooses shadcn/ui as its component foundation.",
+      "do_not": "Do not add it to a project with an established incompatible component system."
+    },
+    {
+      "id": "gsap",
+      "name": "GSAP",
+      "kind": "motion-library",
+      "source": "https://github.com/greensock/GSAP",
+      "publisher": "GreenSock",
+      "license": "GSAP standard licence; verify current terms",
+      "license_status": "special-terms",
+      "status": "optional",
+      "activation": "approved-dependency",
+      "overlap_group": "motion",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "GSAP",
+        "timeline animation",
+        "scroll animation",
+        "complex motion"
+      ],
+      "use_when": "The approved interaction genuinely requires advanced timeline or scroll animation.",
+      "do_not": "Do not add it for ordinary transitions or without dependency and licence review."
+    },
+    {
+      "id": "headroom-js",
+      "name": "Headroom.js",
+      "kind": "interaction-library",
+      "source": "https://github.com/WickyNilliams/headroom.js",
+      "publisher": "WickyNilliams",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "approved-dependency",
+      "overlap_group": "motion",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "hide header on scroll",
+        "headroom",
+        "scroll header"
+      ],
+      "use_when": "A product specifically needs scroll-aware header behaviour.",
+      "do_not": "Do not add a dependency when a small native implementation already exists and is tested."
+    },
+    {
+      "id": "playwright",
+      "name": "Playwright",
+      "kind": "browser-testing-framework",
+      "source": "https://github.com/microsoft/playwright",
+      "publisher": "Microsoft",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "status": "preferred-when-existing",
+      "activation": "choose-one-browser-driver",
+      "overlap_group": "browser-automation",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "browser test",
+        "E2E",
+        "visual test",
+        "accessibility test"
+      ],
+      "use_when": "A project needs robust browser automation and either already uses Playwright or approves it.",
+      "do_not": "Do not install it solely for a tiny static inspection."
+    },
+    {
+      "id": "karpathy-guidelines",
+      "name": "Andrej Karpathy Coding Guidelines",
+      "kind": "behavioural-skill",
+      "source": "https://github.com/forrestchang/andrej-karpathy-skills",
+      "publisher": "forrestchang / derived from Andrej Karpathy observations",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "preferred-policy",
+      "activation": "baseline-engineering-policy",
+      "overlap_group": "engineering-behaviour",
+      "use_modes": [
+        "adapt",
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "assumptions",
+        "simple code",
+        "surgical changes",
+        "goal-driven",
+        "overengineering"
+      ],
+      "use_when": "Engineering work needs explicit assumptions, simplicity, surgical changes and verifiable goals.",
+      "do_not": "Do not duplicate the same guidance through another always-loaded minimalism rule."
+    },
+    {
+      "id": "ui-ux-pro-max",
+      "name": "UI/UX Pro Max",
+      "kind": "design-intelligence-skill-and-cli",
+      "source": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "publisher": "NextLevelBuilder",
+      "license": "Repository reports MIT; CLI materials may differ. Verify selected release and component.",
+      "license_status": "mixed-verify-selected-component",
+      "status": "optional-preferred-design-research",
+      "activation": "phase-adapter",
+      "overlap_group": "design-authority",
+      "use_modes": [
+        "install",
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "UI UX Pro",
+        "design system generator",
+        "palette",
+        "font pairing",
+        "UX guideline",
+        "chart recommendation"
+      ],
+      "use_when": "A UI task benefits from searchable product-type, style, palette, typography, UX, chart or stack recommendations.",
+      "do_not": "Do not let generated recommendations override DESIGN.md or the design intelligence constitution."
+    },
+    {
+      "id": "frontend-design",
+      "name": "Anthropic Frontend Design",
+      "kind": "frontend-implementation-skill",
+      "source": "https://github.com/openclaw/skills/tree/main/skills/qrucio/anthropic-frontend-design",
+      "publisher": "Community packaging of frontend-design guidance",
+      "license": "Verify source repository licence",
+      "license_status": "must-verify",
+      "status": "optional",
+      "activation": "phase-adapter",
+      "overlap_group": "design-authority",
+      "use_modes": [
+        "install",
+        "reference"
+      ],
+      "triggers": [
+        "frontend design",
+        "production-grade frontend",
+        "anti-slop interface"
+      ],
+      "use_when": "An approved design specification needs production-grade frontend implementation.",
+      "do_not": "Do not use as the design constitution or alongside multiple primary art-direction systems."
+    },
+    {
+      "id": "playwright-mcp",
+      "name": "Playwright MCP",
+      "kind": "browser-automation-mcp",
+      "source": "https://github.com/microsoft/playwright-mcp",
+      "publisher": "Microsoft",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "choose-one-browser-driver",
+      "overlap_group": "browser-verification",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "Playwright MCP",
+        "persistent browser context",
+        "accessibility tree"
+      ],
+      "use_when": "Exploratory or long-running agent browser loops benefit from persistent accessibility-tree state.",
+      "do_not": "Do not prefer MCP over CLI or project tests when token efficiency and deterministic test code are more important."
+    },
+    {
+      "id": "stagehand",
+      "name": "Stagehand",
+      "kind": "ai-browser-automation-framework",
+      "source": "https://github.com/browserbase/stagehand",
+      "publisher": "Browserbase",
+      "license": "MIT",
+      "license_status": "verify-current-release",
+      "status": "optional",
+      "activation": "approved-browser-automation",
+      "overlap_group": "browser-verification",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "Stagehand",
+        "self-healing browser automation",
+        "natural-language browser"
+      ],
+      "use_when": "Production browser automation needs a controlled blend of code, natural language, caching and self-healing.",
+      "do_not": "Do not add it for ordinary end-to-end tests or without reviewing network, model and credential requirements."
+    },
+    {
+      "id": "cypress",
+      "name": "Cypress",
+      "kind": "browser-testing-framework",
+      "source": "https://github.com/cypress-io/cypress",
+      "publisher": "Cypress.io",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "preferred-when-existing",
+      "activation": "choose-one-browser-driver",
+      "overlap_group": "browser-verification",
+      "use_modes": [
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "Cypress",
+        "Cypress tests"
+      ],
+      "use_when": "The project already uses Cypress or explicitly selects it as the browser test framework.",
+      "do_not": "Do not introduce Cypress into a Playwright-based project without a migration reason."
+    },
+    {
+      "id": "puppeteer-mcp",
+      "name": "Puppeteer MCP Server",
+      "kind": "legacy-browser-mcp",
+      "source": "https://github.com/modelcontextprotocol/servers-archived",
+      "publisher": "Model Context Protocol community archive",
+      "license": "Per archived repository/package",
+      "license_status": "archived-security-review-required",
+      "status": "discouraged-legacy",
+      "activation": "existing-project-only",
+      "overlap_group": "browser-verification",
+      "use_modes": [
+        "reference"
+      ],
+      "triggers": [
+        "Puppeteer MCP"
+      ],
+      "use_when": "An existing approved project depends on the archived Puppeteer MCP server and migration is not immediate.",
+      "do_not": "Do not select for new projects; prefer maintained Playwright CLI/MCP or project-native tests."
+    }
+  ],
+  "agents": [
+    {
+      "id": "planner",
+      "name": "Planner",
+      "category": "delivery",
+      "use_when": "A material feature needs decomposition, dependencies, risks, and verification before implementation.",
+      "native_skills": [
+        "project-discovery",
+        "skill-governance"
+      ],
+      "source_references": [
+        "github-spec-kit",
+        "gsd-core"
+      ],
+      "promotion_rule": "Keep as a pattern unless repeated evidence supports a dedicated native skill."
+    },
+    {
+      "id": "evaluator",
+      "name": "Independent Evaluator",
+      "category": "verification",
+      "use_when": "Implementation needs assessment from a fresh context against explicit acceptance criteria.",
+      "native_skills": [
+        "skill-governance"
+      ],
+      "source_references": [
+        "perplexity-search-evals",
+        "walkinglabs-learn-harness-engineering"
+      ],
+      "promotion_rule": "Must use structured fixtures and deterministic evidence."
+    },
+    {
+      "id": "security-reviewer",
+      "name": "Security Reviewer",
+      "category": "security",
+      "use_when": "Auth, permissions, hooks, MCP, privacy, secrets, or deployment changes are material.",
+      "native_skills": [
+        "security-review"
+      ],
+      "source_references": [
+        "perplexity-bumblebee",
+        "ecc",
+        "strix"
+      ],
+      "promotion_rule": "Offensive tools remain external and authorised-only."
+    },
+    {
+      "id": "browser-verifier",
+      "name": "Browser Verifier",
+      "category": "frontend",
+      "use_when": "A UI change needs accessibility-tree, interaction, screenshot, or responsive evidence.",
+      "native_skills": [
+        "enterprise-ui-review"
+      ],
+      "source_references": [
+        "agent-browser"
+      ],
+      "promotion_rule": "Prefer an external pinned browser CLI over custom browser orchestration."
+    },
+    {
+      "id": "research-agent",
+      "name": "Grounded Research Agent",
+      "category": "research",
+      "use_when": "A task requires current external facts, primary-source discovery, or multi-step research.",
+      "native_skills": [
+        "reference-router"
+      ],
+      "source_references": [
+        "perplexity-api-platform-developers",
+        "perplexity-cli",
+        "agent-reach"
+      ],
+      "promotion_rule": "Network access and credentials require approval."
+    },
+    {
+      "id": "workflow-analyst",
+      "name": "Workflow Analyst",
+      "category": "business-analysis",
+      "use_when": "A process requires states, owners, exceptions, SLA, controls, and audit.",
+      "native_skills": [
+        "workflow"
+      ],
+      "source_references": [
+        "500-ai-agents-projects"
+      ],
+      "promotion_rule": "Business policy must come from approved sources, not agent inference."
+    },
+    {
+      "id": "dashboard-analyst",
+      "name": "Dashboard Analyst",
+      "category": "analytics",
+      "use_when": "Management needs traceable KPIs, drill-down, reconciliation, and decision support.",
+      "native_skills": [
+        "dashboard"
+      ],
+      "source_references": [
+        "plausible-analytics",
+        "voltagent-awesome-design-md"
+      ],
+      "promotion_rule": "No metric is accepted without source and formula."
+    },
+    {
+      "id": "design-system-architect",
+      "name": "Design System Architect",
+      "category": "design",
+      "use_when": "A product needs tokens, components, design-code handoff, or a product DESIGN.md.",
+      "native_skills": [
+        "design-system",
+        "enterprise-ui-review"
+      ],
+      "source_references": [
+        "penpot",
+        "voltagent-awesome-design-md"
+      ],
+      "promotion_rule": "Client brand and accessibility take precedence."
+    },
+    {
+      "id": "mcp-builder",
+      "name": "MCP Builder",
+      "category": "integration",
+      "use_when": "An approved external service should be exposed to agents through MCP.",
+      "native_skills": [
+        "api-integration",
+        "reference-router",
+        "security-review"
+      ],
+      "source_references": [
+        "anthropic-mcp-builder",
+        "perplexity-modelcontextprotocol"
+      ],
+      "promotion_rule": "Use explicit schemas, annotations, pagination, errors, and evals."
+    },
+    {
+      "id": "cleanup-agent",
+      "name": "Deterministic Cleanup Agent",
+      "category": "maintenance",
+      "use_when": "A repository needs dead-code or dependency cleanup with explainable proof.",
+      "native_skills": [
+        "skill-governance",
+        "reference-router"
+      ],
+      "source_references": [
+        "perplexity-codescythe"
+      ],
+      "promotion_rule": "Doctor and explain before destructive fix; verify after every cleanup pass."
+    },
+    {
+      "id": "memory-architect",
+      "name": "Memory Architect",
+      "category": "state",
+      "use_when": "File-based state is insufficient and a project has a justified graph/vector memory requirement.",
+      "native_skills": [
+        "project-discovery",
+        "api-integration"
+      ],
+      "source_references": [
+        "helixdb",
+        "appflowy"
+      ],
+      "promotion_rule": "External storage is optional; file state remains the core default."
+    },
+    {
+      "id": "harness-optimizer",
+      "name": "Harness Optimizer",
+      "category": "harness",
+      "use_when": "Repeated failures show that instructions, tools, environment, state, or feedback need adjustment.",
+      "native_skills": [
+        "skill-governance",
+        "reference-router"
+      ],
+      "source_references": [
+        "walkinglabs-harness-creator",
+        "ecc",
+        "gsd-core"
+      ],
+      "promotion_rule": "Every harness edit needs a predicted effect and a follow-up evaluation."
+    },
+    {
+      "id": "consulting-principal",
+      "name": "Consulting Principal",
+      "category": "consulting",
+      "use_when": "A material recommendation needs an independent management-outcome and implementation review.",
+      "native_skills": [
+        "consulting-analysis"
+      ],
+      "source_references": [],
+      "promotion_rule": "Fresh-context review only; it does not own implementation."
+    },
+    {
+      "id": "cto-reviewer",
+      "name": "CTO Reviewer",
+      "category": "engineering",
+      "use_when": "A product or architecture decision needs independent technical credibility, security, scale, and debt review.",
+      "native_skills": [
+        "engineering-review",
+        "security-review"
+      ],
+      "source_references": [
+        "gstack",
+        "superpowers"
+      ],
+      "promotion_rule": "Use only for material architecture or release decisions."
+    },
+    {
+      "id": "governance-reviewer",
+      "name": "Governance Reviewer",
+      "category": "governance",
+      "use_when": "A workflow or policy needs independent review of authority, controls, evidence, exceptions, and reporting.",
+      "native_skills": [
+        "governance-risk-controls"
+      ],
+      "source_references": [],
+      "promotion_rule": "Must cite approved policies or decisions."
+    },
+    {
+      "id": "artifact-editor",
+      "name": "Artifact Editor",
+      "category": "communication",
+      "use_when": "A completed business artifact needs a fresh-context quality, structure, and style pass.",
+      "native_skills": [
+        "artifact-production",
+        "writing-quality"
+      ],
+      "source_references": [
+        "stop-slop"
+      ],
+      "promotion_rule": "Editing only; it cannot change business facts or decisions."
+    }
+  ]
+}

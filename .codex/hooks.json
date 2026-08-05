@@ -2,10 +2,13 @@
   "hooks": {
     "SessionStart": [
       {
+        "matcher": "startup|resume|compact",
         "hooks": [
           {
             "type": "command",
-            "command": "python scripts/agent_runtime.py session-start"
+            "command": "sh \"$(git rev-parse --show-toplevel)/scripts/escapement-hook.sh\" session-start",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$(git rev-parse --show-toplevel)\\scripts\\escapement-hook.ps1\" session-start",
+            "timeout": 20
           }
         ]
       }
@@ -15,7 +18,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python scripts/agent_runtime.py prompt"
+            "command": "sh \"$(git rev-parse --show-toplevel)/scripts/escapement-hook.sh\" prompt",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$(git rev-parse --show-toplevel)\\scripts\\escapement-hook.ps1\" prompt",
+            "timeout": 20
           }
         ]
       }
@@ -25,7 +30,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python scripts/agent_runtime.py stop"
+            "command": "sh \"$(git rev-parse --show-toplevel)/scripts/escapement-hook.sh\" stop",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$(git rev-parse --show-toplevel)\\scripts\\escapement-hook.ps1\" stop",
+            "timeout": 20
           }
         ]
       }

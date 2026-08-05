@@ -7,7 +7,8 @@ description: Use when a user asks to find, compare, install, or use an external 
 
 ## Mandatory reads
 
-- `catalog/external-resources.json`
+- `catalog/capability-registry.json`
+- `catalog/overlap-groups.json`
 - `docs/REFERENCE_CATALOG.md`
 - `SECURITY.md`
 - `docs/decisions/DECISION_LOG.md`

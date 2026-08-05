@@ -26,7 +26,7 @@ def find_root() -> Path:
 
 ROOT = find_root()
 sys.path.insert(0, str(ROOT / "scripts"))
-from agent_runtime import route_prompt  # noqa: E402
+from capability_router import route_prompt  # noqa: E402
 
 RESULTS = ROOT / ".agent" / "evals" / "results.ndjson"
 
@@ -67,7 +67,8 @@ def read_completed() -> set[str]:
 
 def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str, Any]:
     prompt = str(case.get("prompt") or "")
-    route = route_prompt(prompt)
+    phase_override = case.get("phase_override")
+    route = route_prompt(prompt, phase_override=phase_override)
     expected = case.get("expected", {})
     failures: list[str] = []
 
@@ -76,12 +77,13 @@ def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str
             f"material expected {expected.get('material')} got {route['material']}"
         )
 
-    expected_mode = expected.get("mode")
-    if expected_mode and route["mode"] != expected_mode:
-        failures.append(f"mode expected {expected_mode} got {route['mode']}")
+    for key in ("tier", "mode", "register", "profile", "current_phase"):
+        value = expected.get(key)
+        if value and route.get(key) != value:
+            failures.append(f"{key} expected {value} got {route.get(key)}")
 
+    actual_skills = {item["id"] for item in route.get("native_skills", [])}
     required_skills = set(expected.get("skills", []))
-    actual_skills = set(route["skills"])
     missing = sorted(required_skills - actual_skills)
     if missing:
         failures.append(f"missing skills {missing}")
@@ -91,20 +93,107 @@ def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str
         failures.append(f"forbidden skills selected {forbidden}")
 
     maximum_skills = expected.get("maximum_skills")
-    if maximum_skills is not None and len(route["skills"]) > int(maximum_skills):
+    if maximum_skills is not None and len(actual_skills) > int(maximum_skills):
         failures.append(
-            f"skill budget expected <= {maximum_skills} got {len(route['skills'])}"
+            f"skill budget expected <= {maximum_skills} got {len(actual_skills)}"
         )
 
-    expected_reads = set(expected.get("required_reads", []))
-    missing_reads = sorted(expected_reads - set(route["required_reads"]))
-    if missing_reads:
-        failures.append(f"missing required reads {missing_reads}")
+    actual_packs = {item["id"] for item in route.get("doctrine_packs", [])}
+    required_packs = set(expected.get("packs", []))
+    missing_packs = sorted(required_packs - actual_packs)
+    if missing_packs:
+        failures.append(f"missing packs {missing_packs}")
+
+    forbidden_packs = sorted(set(expected.get("forbidden_packs", [])) & actual_packs)
+    if forbidden_packs:
+        failures.append(f"forbidden packs selected {forbidden_packs}")
+
+    maximum_packs = expected.get("maximum_packs")
+    if maximum_packs is not None and len(actual_packs) > int(maximum_packs):
+        failures.append(
+            f"pack budget expected <= {maximum_packs} got {len(actual_packs)}"
+        )
+
+    maximum_context = expected.get("maximum_context_words")
+    actual_context = int(route.get("context_cost", {}).get("total", 0))
+    if maximum_context is not None and actual_context > int(maximum_context):
+        failures.append(
+            f"context expected <= {maximum_context} got {actual_context}"
+        )
+
+    required_external = set(expected.get("external_candidates", []))
+    actual_external = {
+        item["id"] for item in route.get("external_candidates", [])
+    }
+    missing_external = sorted(required_external - actual_external)
+    if missing_external:
+        failures.append(f"missing external candidates {missing_external}")
+
+    actual_strengths = {
+        item["id"] for item in route.get("capability_strengths", [])
+    }
+    required_strengths = set(expected.get("strengths", []))
+    missing_strengths = sorted(required_strengths - actual_strengths)
+    if missing_strengths:
+        failures.append(f"missing capability strengths {missing_strengths}")
+
+    forbidden_strengths = sorted(
+        set(expected.get("forbidden_strengths", [])) & actual_strengths
+    )
+    if forbidden_strengths:
+        failures.append(
+            f"forbidden capability strengths selected {forbidden_strengths}"
+        )
+
+    maximum_strengths = expected.get("maximum_strengths")
+    if maximum_strengths is not None and len(actual_strengths) > int(maximum_strengths):
+        failures.append(
+            f"strength budget expected <= {maximum_strengths} "
+            f"got {len(actual_strengths)}"
+        )
+
+    context_cost = route.get("context_cost", {})
+    maximum_skill_context = expected.get("maximum_skill_context_words")
+    actual_skill_context = int(context_cost.get("invoked_skill_total", 0))
+    if (
+        maximum_skill_context is not None
+        and actual_skill_context > int(maximum_skill_context)
+    ):
+        failures.append(
+            f"skill context expected <= {maximum_skill_context} "
+            f"got {actual_skill_context}"
+        )
+
+    expected_design_authority = expected.get("design_authority")
+    actual_design_authority = (
+        "design-intelligence:constitution" in actual_strengths
+    )
+    if (
+        expected_design_authority is not None
+        and actual_design_authority != bool(expected_design_authority)
+    ):
+        failures.append(
+            f"design authority expected {expected_design_authority} "
+            f"got {actual_design_authority}"
+        )
+
+    required_research_sources = set(expected.get("research_sources", []))
+    actual_research_sources = set(
+        route.get("research_plan", {}).get("sources", [])
+    )
+    missing_research_sources = sorted(
+        required_research_sources - actual_research_sources
+    )
+    if missing_research_sources:
+        failures.append(
+            f"missing research sources {missing_research_sources}"
+        )
 
     identity = {
         "suite": suite_name,
         "suite_path": suite_path,
         "case_id": case.get("id"),
+        "phase_override": case.get("phase_override"),
         "prompt": prompt,
         "expected": expected,
     }
@@ -116,7 +205,7 @@ def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str
             "route": route,
             "failures": failures,
         }),
-        "schema_version": "1.0",
+        "schema_version": "3.0",
         "eval_id": eval_id,
         "suite": suite_name,
         "suite_path": suite_path,

@@ -1,0 +1,1133 @@
+{
+  "schema_version": "1.0",
+  "version": "6.3.0",
+  "default_maximum": {
+    "MICRO": 1,
+    "MATERIAL": 5,
+    "PROGRAM": 6
+  },
+  "skills": [
+    {
+      "id": "project-discovery",
+      "overlap_group": "discovery-planning",
+      "priority": 100,
+      "triggers": [
+        "new product",
+        "new application",
+        "new module",
+        "from scratch",
+        "discovery",
+        "unclear requirements",
+        "specification",
+        "new platform",
+        "new module",
+        "new system"
+      ],
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "PROGRAM",
+        "MATERIAL"
+      ],
+      "paired_with": [
+        "consulting-analysis",
+        "workflow",
+        "engineering-review"
+      ],
+      "phases": [
+        "DISCOVER",
+        "SPECIFY"
+      ]
+    },
+    {
+      "id": "consulting-analysis",
+      "overlap_group": "consulting-analysis",
+      "priority": 100,
+      "triggers": [
+        "consultant",
+        "business model",
+        "management recommendation",
+        "operating model",
+        "transformation",
+        "business analysis",
+        "stakeholder",
+        "requirements"
+      ],
+      "registers": [
+        "CONSULTING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "project-discovery",
+        "governance-risk-controls",
+        "finance-reporting",
+        "workflow",
+        "engineering-review"
+      ],
+      "phases": [
+        "DISCOVER",
+        "RESEARCH",
+        "BRAINSTORM",
+        "SPECIFY",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "governance-risk-controls",
+      "overlap_group": "governance-controls",
+      "priority": 100,
+      "triggers": [
+        "governance",
+        "risk",
+        "control",
+        "compliance",
+        "RCSA",
+        "audit",
+        "maker checker",
+        "approval authority",
+        "exception",
+        "privacy"
+      ],
+      "registers": [
+        "CONSULTING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "workflow",
+        "security-review",
+        "consulting-analysis"
+      ],
+      "phases": [
+        "DISCOVER",
+        "SPECIFY",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "finance-reporting",
+      "overlap_group": "finance-analysis",
+      "priority": 100,
+      "triggers": [
+        "finance",
+        "accounting",
+        "reconciliation",
+        "portfolio",
+        "variance",
+        "journal",
+        "financial statement",
+        "data validation",
+        "metric formula"
+      ],
+      "registers": [
+        "CONSULTING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "dashboard",
+        "consulting-analysis"
+      ],
+      "phases": [
+        "RESEARCH",
+        "SPECIFY",
+        "IMPLEMENT",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "dashboard",
+      "overlap_group": "dashboard-reporting",
+      "priority": 100,
+      "triggers": [
+        "dashboard",
+        "KPI",
+        "MIS",
+        "analytics",
+        "chart",
+        "drill-down",
+        "management reporting"
+      ],
+      "registers": [
+        "CONSULTING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "finance-reporting",
+        "design-system",
+        "enterprise-ui-review"
+      ],
+      "phases": [
+        "SPECIFY",
+        "IMPLEMENT",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "workflow",
+      "overlap_group": "workflow-design",
+      "priority": 100,
+      "triggers": [
+        "workflow",
+        "process",
+        "approval",
+        "state machine",
+        "SLA",
+        "escalation",
+        "exception",
+        "journey"
+      ],
+      "registers": [
+        "CONSULTING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "governance-risk-controls",
+        "consulting-analysis",
+        "api-integration"
+      ],
+      "phases": [
+        "DISCOVER",
+        "SPECIFY",
+        "IMPLEMENT",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "engineering-review",
+      "overlap_group": "engineering-review",
+      "priority": 100,
+      "triggers": [
+        "architecture",
+        "system design",
+        "code review",
+        "debug",
+        "refactor",
+        "technical debt",
+        "performance",
+        "reliability",
+        "data model",
+        "testing strategy"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "api-integration",
+        "security-review",
+        "release-readiness"
+      ],
+      "phases": [
+        "BRAINSTORM",
+        "SPECIFY",
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "design-system",
+      "overlap_group": "design-direction",
+      "priority": 100,
+      "triggers": [
+        "design system",
+        "brand",
+        "colour",
+        "color",
+        "typography",
+        "layout",
+        "motion",
+        "visual direction",
+        "DESIGN.md",
+        "redesign",
+        "design skill",
+        "generic AI styling"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "enterprise-ui-review",
+        "dashboard"
+      ],
+      "phases": [
+        "BRAINSTORM",
+        "SPECIFY"
+      ]
+    },
+    {
+      "id": "enterprise-ui-review",
+      "overlap_group": "ui-quality",
+      "priority": 100,
+      "triggers": [
+        "UI",
+        "UX",
+        "frontend",
+        "screen",
+        "component",
+        "responsive",
+        "accessibility",
+        "generic AI",
+        "usability",
+        "dashboard",
+        "app shell"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "design-system",
+        "dashboard"
+      ],
+      "phases": [
+        "IMPLEMENT",
+        "VERIFY",
+        "POLISH"
+      ]
+    },
+    {
+      "id": "api-integration",
+      "overlap_group": "integration",
+      "priority": 100,
+      "triggers": [
+        "API",
+        "integration",
+        "webhook",
+        "OAuth",
+        "connector",
+        "endpoint",
+        "MCP"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "engineering-review",
+        "security-review",
+        "workflow"
+      ],
+      "phases": [
+        "SPECIFY",
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "artifact-production",
+      "overlap_group": "artifact-production",
+      "priority": 100,
+      "triggers": [
+        "report",
+        "SOP",
+        "proposal",
+        "presentation",
+        "PowerPoint",
+        "PPT",
+        "spreadsheet",
+        "Excel",
+        "Word",
+        "DOCX",
+        "PDF",
+        "tracker"
+      ],
+      "registers": [
+        "ARTIFACT",
+        "CONSULTING"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "writing-quality",
+        "consulting-analysis",
+        "finance-reporting"
+      ],
+      "phases": [
+        "SPECIFY",
+        "IMPLEMENT",
+        "VERIFY",
+        "POLISH",
+        "RELEASE"
+      ]
+    },
+    {
+      "id": "writing-quality",
+      "overlap_group": "writing-quality",
+      "priority": 100,
+      "triggers": [
+        "email",
+        "rewrite",
+        "polish",
+        "professional",
+        "copy",
+        "report writing",
+        "proposal writing",
+        "AI wording",
+        "slop",
+        "typo",
+        "grammar"
+      ],
+      "registers": [
+        "ARTIFACT",
+        "CONSULTING"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL"
+      ],
+      "paired_with": [
+        "artifact-production",
+        "consulting-analysis"
+      ],
+      "phases": [
+        "IMPLEMENT",
+        "VERIFY",
+        "POLISH"
+      ]
+    },
+    {
+      "id": "security-review",
+      "overlap_group": "security-review",
+      "priority": 100,
+      "triggers": [
+        "security",
+        "authentication",
+        "authorization",
+        "RBAC",
+        "permission",
+        "secret",
+        "vulnerability",
+        "PII",
+        "payment",
+        "pentest",
+        "hook",
+        "MCP"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "api-integration",
+        "engineering-review",
+        "governance-risk-controls"
+      ],
+      "phases": [
+        "RESEARCH",
+        "SPECIFY",
+        "PLAN",
+        "VERIFY",
+        "RELEASE"
+      ]
+    },
+    {
+      "id": "release-readiness",
+      "overlap_group": "release",
+      "priority": 100,
+      "triggers": [
+        "release",
+        "deploy",
+        "production",
+        "go-live",
+        "rollout",
+        "launch",
+        "UAT",
+        "handover",
+        "rollback"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "engineering-review",
+        "security-review"
+      ],
+      "phases": [
+        "RELEASE"
+      ]
+    },
+    {
+      "id": "reference-router",
+      "overlap_group": "external-discovery",
+      "priority": 100,
+      "triggers": [
+        "find a skill",
+        "install a skill",
+        "plugin",
+        "external tool",
+        "GitHub repo",
+        "open source",
+        "MCP server",
+        "inspiration",
+        "reference",
+        "find skill",
+        "design skill"
+      ],
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "security-review"
+      ],
+      "phases": [
+        "DISCOVER",
+        "RESEARCH",
+        "BRAINSTORM",
+        "PLAN"
+      ]
+    },
+    {
+      "id": "skill-governance",
+      "overlap_group": "meta-governance",
+      "priority": 100,
+      "triggers": [
+        "skill audit",
+        "skill effectiveness",
+        "overlap",
+        "retire skill",
+        "promote skill",
+        "harness audit",
+        "token overhead"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "paired_with": [
+        "reference-router"
+      ],
+      "phases": [
+        "DISCOVER",
+        "RESEARCH",
+        "PLAN",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "decision-coach",
+      "overlap_group": "decision-discovery",
+      "priority": 130,
+      "triggers": [
+        "build",
+        "create",
+        "design",
+        "recommend",
+        "choose",
+        "decision",
+        "rough idea",
+        "help me plan",
+        "better prompt"
+      ],
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "DISCOVER"
+      ],
+      "paired_with": [
+        "project-discovery",
+        "domain-research"
+      ]
+    },
+    {
+      "id": "domain-research",
+      "overlap_group": "domain-research",
+      "priority": 125,
+      "triggers": [
+        "industry standard",
+        "current trend",
+        "latest",
+        "regulation",
+        "domain",
+        "market practice",
+        "benchmark",
+        "competitor",
+        "best practice"
+      ],
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "RESEARCH"
+      ],
+      "paired_with": [
+        "reference-router",
+        "consulting-analysis",
+        "engineering-review"
+      ]
+    },
+    {
+      "id": "solution-brainstorming",
+      "overlap_group": "solution-brainstorming",
+      "priority": 120,
+      "triggers": [
+        "new product",
+        "new platform",
+        "new module",
+        "design",
+        "brainstorm",
+        "alternative",
+        "approach",
+        "architecture",
+        "workflow"
+      ],
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "BRAINSTORM"
+      ],
+      "paired_with": [
+        "consulting-analysis",
+        "engineering-review",
+        "design-system"
+      ]
+    },
+    {
+      "id": "delivery-planning",
+      "overlap_group": "delivery-planning",
+      "priority": 120,
+      "triggers": [
+        "plan",
+        "tasks",
+        "roadmap",
+        "implementation plan",
+        "milestone",
+        "dependency",
+        "acceptance"
+      ],
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "PLAN"
+      ],
+      "paired_with": [
+        "agent-orchestration",
+        "project-discovery"
+      ]
+    },
+    {
+      "id": "agent-orchestration",
+      "overlap_group": "agent-orchestration",
+      "priority": 115,
+      "triggers": [
+        "parallel",
+        "subagent",
+        "agent team",
+        "multiple workstreams",
+        "multiple modules",
+        "delegate",
+        "orchestrate"
+      ],
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "PLAN",
+        "IMPLEMENT"
+      ],
+      "paired_with": [
+        "delivery-planning",
+        "engineering-review",
+        "consulting-analysis"
+      ]
+    },
+    {
+      "id": "agent-blueprint-discovery",
+      "overlap_group": "agent-blueprint-discovery",
+      "priority": 115,
+      "triggers": [
+        "AI agent",
+        "agent blueprint",
+        "deploy agent",
+        "500 agents",
+        "agent project",
+        "multi-agent solution"
+      ],
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "RESEARCH",
+        "BRAINSTORM",
+        "PLAN"
+      ],
+      "paired_with": [
+        "domain-research",
+        "reference-router",
+        "security-review"
+      ]
+    },
+    {
+      "id": "product-specification",
+      "overlap_group": "product-specification",
+      "priority": 120,
+      "triggers": [
+        "PRD",
+        "BRD",
+        "FRS",
+        "user story",
+        "acceptance criteria",
+        "information architecture",
+        "feature ticket",
+        "status model",
+        "KPI catalogue"
+      ],
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "SPECIFY"
+      ],
+      "paired_with": [
+        "workflow",
+        "governance-risk-controls",
+        "data-engineering",
+        "design-system"
+      ]
+    },
+    {
+      "id": "data-engineering",
+      "overlap_group": "data-engineering",
+      "priority": 120,
+      "triggers": [
+        "ETL",
+        "ELT",
+        "data pipeline",
+        "ingestion",
+        "data mapping",
+        "data cleansing",
+        "lineage",
+        "warehouse",
+        "semantic layer",
+        "data quality",
+        "reconciliation",
+        "SQL"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL",
+        "CONSULTING"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "SPECIFY",
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY"
+      ],
+      "paired_with": [
+        "api-integration",
+        "finance-reporting",
+        "dashboard",
+        "quality-engineering"
+      ]
+    },
+    {
+      "id": "frontend-implementation",
+      "overlap_group": "frontend-implementation",
+      "priority": 120,
+      "triggers": [
+        "frontend",
+        "UI",
+        "UX",
+        "page",
+        "component",
+        "dashboard",
+        "responsive",
+        "design implementation"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "IMPLEMENT"
+      ],
+      "paired_with": [
+        "design-system",
+        "enterprise-ui-review",
+        "quality-engineering"
+      ]
+    },
+    {
+      "id": "quality-engineering",
+      "overlap_group": "quality-engineering",
+      "priority": 125,
+      "triggers": [
+        "test",
+        "verification",
+        "unit test",
+        "integration test",
+        "E2E",
+        "UAT",
+        "accessibility test",
+        "performance test",
+        "negative test",
+        "reconciliation test"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY",
+        "RELEASE"
+      ],
+      "paired_with": [
+        "engineering-review",
+        "security-review",
+        "enterprise-ui-review",
+        "release-readiness"
+      ]
+    },
+    {
+      "id": "ai-agent-engineering",
+      "overlap_group": "ai-agent-engineering",
+      "priority": 130,
+      "triggers": [
+        "AI agent",
+        "LangGraph",
+        "LangChain",
+        "RAG",
+        "tool calling",
+        "agent memory",
+        "multi-agent",
+        "human-in-the-loop",
+        "agent evaluation",
+        "deploy agent"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL",
+        "CONSULTING"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "SPECIFY",
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY"
+      ],
+      "paired_with": [
+        "agent-blueprint-discovery",
+        "security-review",
+        "quality-engineering",
+        "api-integration"
+      ]
+    },
+    {
+      "id": "automation-engineering",
+      "overlap_group": "automation-engineering",
+      "priority": 120,
+      "triggers": [
+        "n8n",
+        "workflow automation",
+        "automation",
+        "scheduled job",
+        "webhook",
+        "background job",
+        "notification workflow",
+        "event trigger"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL",
+        "CONSULTING"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "SPECIFY",
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY"
+      ],
+      "paired_with": [
+        "workflow",
+        "api-integration",
+        "security-review",
+        "quality-engineering"
+      ]
+    },
+    {
+      "id": "data-analysis",
+      "overlap_group": "data-analysis",
+      "priority": 120,
+      "triggers": [
+        "analyze data",
+        "analyse data",
+        "explore data",
+        "statistical analysis",
+        "cohort",
+        "segmentation",
+        "variance driver",
+        "forecast",
+        "data visualization",
+        "data visualisation"
+      ],
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "RESEARCH",
+        "SPECIFY",
+        "IMPLEMENT",
+        "VERIFY"
+      ],
+      "paired_with": [
+        "data-engineering",
+        "dashboard",
+        "finance-reporting"
+      ]
+    },
+    {
+      "id": "legal-compliance-analysis",
+      "overlap_group": "legal-compliance-analysis",
+      "priority": 130,
+      "triggers": [
+        "contract",
+        "NDA",
+        "legal",
+        "clause",
+        "compliance",
+        "regulation",
+        "regulatory",
+        "vendor legal",
+        "legal risk"
+      ],
+      "registers": [
+        "CONSULTING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "RESEARCH",
+        "SPECIFY",
+        "VERIFY"
+      ],
+      "paired_with": [
+        "domain-research",
+        "governance-risk-controls",
+        "workflow"
+      ]
+    },
+    {
+      "id": "investment-analysis",
+      "overlap_group": "investment-analysis",
+      "priority": 125,
+      "triggers": [
+        "investment",
+        "portfolio monitoring",
+        "returns analysis",
+        "unit economics",
+        "due diligence",
+        "investment committee",
+        "IC memo",
+        "valuation",
+        "XIRR"
+      ],
+      "registers": [
+        "CONSULTING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "RESEARCH",
+        "BRAINSTORM",
+        "SPECIFY",
+        "VERIFY"
+      ],
+      "paired_with": [
+        "finance-reporting",
+        "data-analysis",
+        "consulting-analysis"
+      ]
+    },
+    {
+      "id": "software-implementation",
+      "overlap_group": "software-implementation",
+      "priority": 100,
+      "triggers": [
+        "implement",
+        "build",
+        "fix",
+        "feature",
+        "backend",
+        "service",
+        "module"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "IMPLEMENT"
+      ],
+      "paired_with": [
+        "quality-engineering",
+        "engineering-review",
+        "security-review"
+      ]
+    }
+  ]
+}

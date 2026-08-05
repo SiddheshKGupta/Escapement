@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Escapement v6 command-line interface.
+"""Escapement v6.3 command-line interface.
 
 Standard-library only.
 
@@ -55,23 +55,35 @@ MANAGED_PREFIXES = [
     "catalog",
     "docs/standards",
     "docs/templates",
+    "docs/doctrine",
+    "docs/CAPABILITY_MAP.md",
+    "docs/ORIGINS.md",
+    "docs/architecture",
+    "docs/releases",
+    "docs/CAPABILITY_MAP.md",
+    "docs/REFERENCE_CATALOG.md",
+    "profiles",
     "schemas",
     "evals",
     "extensions",
     "presets",
     "bundles",
-    "tests",
 ]
 
 PROJECT_SEEDS = {
     "PROJECT_STATE.yaml": "docs/templates/PROJECT_STATE.template.yaml",
     "PROJECT_CONTEXT.md": "docs/templates/PROJECT_CONTEXT.template.md",
+    "DOMAIN_CONTEXT.md": "docs/templates/DOMAIN_CONTEXT.template.md",
     "feature_list.json": "docs/templates/feature-list.template.json",
     "SESSION_HANDOFF.md": "docs/templates/SESSION_HANDOFF.template.md",
     "THIRD_PARTY_NOTICES.md": "THIRD_PARTY_NOTICES.md",
     ".gitignore": ".gitignore",
     "docs/specs/CONSTITUTION.md": "docs/templates/spec/CONSTITUTION.template.md",
     "docs/decisions/DECISION_LOG.md": None,
+    "docs/plans/.gitkeep": None,
+    ".agent/runtime/ACTIVE_CONTEXT.md": "docs/templates/runtime/ACTIVE_CONTEXT.template.md",
+    ".agent/runtime/CONTEXT_PACK.md": "docs/templates/runtime/CONTEXT_PACK.template.md",
+    ".agent/runtime/SESSION_MEMORY.md": "docs/templates/runtime/SESSION_MEMORY.template.md",
 }
 
 NATIVE_HOSTS = [".agents", ".claude"]
@@ -399,11 +411,25 @@ def command_sync_skills(args: argparse.Namespace) -> int:
 
 def command_explain(args: argparse.Namespace) -> int:
     sys.path.insert(0, str(SOURCE_ROOT / "scripts"))
-    from agent_runtime import route_prompt
+    from capability_router import route_prompt
 
     route = route_prompt(args.prompt)
     print(json.dumps(route, indent=2))
     return 0
+
+
+
+def command_capability_audit(args: argparse.Namespace) -> int:
+    command = [
+        sys.executable,
+        str(SOURCE_ROOT / "scripts" / "capability_audit.py"),
+        args.prompt,
+    ]
+    if args.markdown:
+        command.append("--markdown")
+    if args.output:
+        command.extend(["--output", args.output])
+    return subprocess.run(command, cwd=SOURCE_ROOT, check=False).returncode
 
 
 def command_eval(args: argparse.Namespace) -> int:
@@ -667,12 +693,13 @@ def command_doctor(args: argparse.Namespace) -> int:
         "PROJECT_STATE.yaml",
         "PROJECT_CONTEXT.md",
         "feature_list.json",
+        "DOMAIN_CONTEXT.md",
         ".codex/hooks.json",
         ".claude/settings.json",
         "scripts/agent_runtime.py",
         "scripts/run_check.py",
         "scripts/feature_list.py",
-        "catalog/external-resources.json",
+        "catalog/capability-registry.json",
     ]
     for relative in required:
         ok = (target / relative).exists()
@@ -826,6 +853,12 @@ def build_parser() -> argparse.ArgumentParser:
     explain = sub.add_parser("explain")
     explain.add_argument("prompt")
     explain.set_defaults(func=command_explain)
+
+    capability_audit = sub.add_parser("capability-audit")
+    capability_audit.add_argument("prompt")
+    capability_audit.add_argument("--markdown", action="store_true")
+    capability_audit.add_argument("--output")
+    capability_audit.set_defaults(func=command_capability_audit)
 
     eval_parser = sub.add_parser("eval")
     eval_parser.add_argument("--resume", action="store_true")

@@ -2,10 +2,12 @@
   "hooks": {
     "SessionStart": [
       {
+        "matcher": "startup|resume|compact",
         "hooks": [
           {
             "type": "command",
-            "command": "python scripts/agent_runtime.py session-start"
+            "command": "python \"${CLAUDE_PROJECT_DIR}/scripts/agent_runtime.py\" session-start",
+            "timeout": 20
           }
         ]
       }
@@ -15,7 +17,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python scripts/agent_runtime.py prompt"
+            "command": "python \"${CLAUDE_PROJECT_DIR}/scripts/agent_runtime.py\" prompt",
+            "timeout": 20
           }
         ]
       }
@@ -25,7 +28,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python scripts/agent_runtime.py stop"
+            "command": "python \"${CLAUDE_PROJECT_DIR}/scripts/agent_runtime.py\" stop",
+            "timeout": 20
           }
         ]
       }
