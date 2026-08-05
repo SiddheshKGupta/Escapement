@@ -761,6 +761,11 @@ python scripts/escapement.py self-test
 python scripts/security_gate.py --fail-on high
 ```
 
+These checks prove the framework's own code is healthy. For what the
+governed lifecycle catches on an actual feature that a fast, ungoverned
+implementation does not, see
+[Case Study: Vanilla vs. Governed Implementation](reports/CASE_STUDY_vanilla_vs_governed.md).
+
 ---
 
 # Project structure
