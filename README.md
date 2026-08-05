@@ -10,9 +10,9 @@ capabilities, agents and external tools at the phase where each is strongest.
 
 [![Version](https://img.shields.io/badge/version-6.3.0-53284F?style=flat-square)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![Kernel](https://img.shields.io/badge/kernel-644%20words-2F855A?style=flat-square)](AGENTS.md)
+[![Kernel](https://img.shields.io/badge/kernel-651%20words-2F855A?style=flat-square)](AGENTS.md)
 [![Evals](https://img.shields.io/badge/routing%20evals-22%2F22-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
-[![Tests](https://img.shields.io/badge/unit%20tests-34%2F34-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
+[![Tests](https://img.shields.io/badge/unit%20tests-38%2F38-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
 [![Security](https://img.shields.io/badge/security-0%20findings-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
 
 **Ask better questions. Use each capability at its strongest phase. Build. Test. Prove. Persist.**
@@ -90,7 +90,7 @@ flowchart LR
 ## Current inventory
 
 ```text
-Kernel words:          644
+Kernel words:          651
 Profiles:                2
 Doctrine packs:         11
 Native skills:          32
@@ -156,7 +156,7 @@ Each transition unloads the previous phase context before loading the next.
 
 ```text
 Always-loaded kernel:          <= 700 words
-Actual kernel:                 644 words
+Actual kernel:                 651 words
 Automatic phase context:       <= 1,800 words
 Invoked native skill context:  <= 1,200 words
 Normal doctrine packs:         <= 3 per phase
@@ -657,7 +657,7 @@ See [Reference Catalogue](docs/REFERENCE_CATALOG.md).
 
 ```text
 Routing evaluations:      22 / 22 PASS
-Unit tests:               34 / 34 PASS
+Unit tests:               38 / 38 PASS
 Runtime doctor:            0 failures
 Repository doctor:         0 failures, 0 warnings
 Security gate:             0 findings
