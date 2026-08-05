@@ -1,306 +1,185 @@
 ---
 owner: V L & CO
-version: "5.2"
-mode: caveman
-purpose: "Build correct enterprise software with minimum reading and minimum paperwork."
+version: "5.4"
+mode: runtime-enforced
+purpose: "Build correct enterprise software with durable state, explicit skill routing, and evidence."
 ---
 
-# AGENTS.md
+# VLCO Agent Instructions
+
+## 0. Mandatory Runtime Protocol
+
+For every material user prompt:
+
+1. Read `.agent/runtime/ACTIVE_CONTEXT.md`.
+2. Read `.agent/runtime/ACTIVE_SKILLS.md`.
+3. Read `PROJECT_STATE.yaml`.
+4. Invoke every selected native skill before material work:
+   - Codex: `$skill-name`
+   - Claude Code: `/skill-name`
+5. Work on one bounded step.
+6. Run deterministic checks before model judgement.
+7. Before the final response, close the turn:
+
+```bash
+python scripts/agent_runtime.py close-turn \
+  --summary "What was completed" \
+  --next "Exact next action" \
+  --files "path/a,path/b" \
+  --checks "check one;check two" \
+  --evidence "path/a,path/b"
+```
+
+Do not provide the final response while the runtime turn is open.
+
+The `Stop` hook blocks one premature stop and directs the agent to close the turn. It then allows stopping to prevent an infinite loop.
+
+### Runtime fallback
+
+When hooks are unavailable:
+
+```bash
+python scripts/agent_runtime.py manual-start --prompt "User request"
+```
+
+Then follow the same close-turn command.
 
 ## 1. Prime Rule
 
-**Understand enough. Decide enough. Build. Test. Update docs.**
+**Understand enough. Decide enough. Build. Test. Prove. Persist.**
 
-Do not write long essays.
-Do not ask what repo already answers.
-Do not install every skill.
-Do not code from guesses.
+Do not code from guesses, treat chat as the source of truth, claim unrun checks, load every skill, mix overlapping skills without reason, or finish material work without durable state.
 
-## 2. Work Mode
-
-Pick one:
+## 2. Work Modes
 
 | Mode | Use |
 |---|---|
-| FULL | New app, module, architecture, major workflow |
-| DELTA | Material change to existing product |
-| EXECUTE | Approved ticket, bug, small UI change |
+| `FULL` | New application, product, module, architecture, or major workflow |
+| `DELTA` | Material change to an existing product |
+| `EXECUTE` | Approved ticket, isolated bug, copy change, or bounded UI improvement |
 
-### FULL
-
-Ask essential questions. Create short plan docs. Get approval. Build.
-
-### DELTA
-
-Read existing docs. Ask only what changed or is unclear. Update affected docs. Build.
-
-### EXECUTE
-
-Confirm ticket, files, tests, acceptance. Build. No full discovery.
+`FULL`: Inspect → discover → decide → readiness gate → approve → build.  
+`DELTA`: Read state/decisions → identify impact → approve material change → build.  
+`EXECUTE`: Confirm ticket/files/acceptance/checks → implement → prove → close turn.
 
 ## 3. First Actions
 
-1. Read `PROJECT_STATE.yaml`.
-2. Read nearest `AGENTS.md`.
-3. Read only linked docs needed for current task.
-4. Inspect repo before asking questions.
-5. State:
-   - what is known
-   - what is unknown
-   - what blocks work
-   - proposed mode
-6. Ask questions in small rounds.
-7. Do not repeat answered questions.
+1. Inspect repository state before asking questions.
+2. Determine known, unknown, blocker, mode, selected skills, and checks.
+3. Ask only questions that can change scope, workflow, data/KPI, permissions, integrations, security, architecture, brand/UI, or acceptance.
+4. Do not repeat answered questions.
 
-## 4. Ask Before Build
+## 4. Readiness Gate
 
-Ask only questions that can change:
-
-- Scope
-- workflow
-- data
-- KPI
-- permission
-- integration
-- security
-- architecture
-- brand/UI
-- acceptance
-
-For every question:
-
-```text
-Question:
-Why it matters:
-Recommended answer:
-Other options:
-Decision:
-```
-
-Stop asking when build can safely start.
-
-## 5. Mandatory Approval Gate
-
-For FULL or DELTA work, show:
+For `FULL` or `DELTA`:
 
 ```text
 READY CHECK
-- Scope:
-- Non-goals:
-- Users:
-- Workflow:
-- Data/KPIs:
-- Permissions:
-- Integrations:
-- UI direction:
-- Security:
-- Scale:
-- Skill stack:
-- Open risks:
-- Ready to build: YES/NO
+Scope:
+Non-goals:
+Users:
+Workflow:
+Data/KPIs:
+Permissions:
+Integrations:
+UI direction:
+Security:
+Scale:
+Selected skills:
+Open risks:
+Ready to build: YES/NO
 ```
 
-Build only after approval or explicit instruction to proceed with listed assumptions.
+Proceed only after approval or explicit instruction to proceed with listed assumptions.
 
-## 6. Always / Ask / Never
+## 5. Skill Rule
 
-### Always
-
-- Preserve approved behaviour.
-- Use server-side permissions.
-- Validate inputs.
-- Handle loading, empty, error, permission, success.
-- Test changed behaviour.
-- Update affected docs.
-- Tell truth about checks not run.
-- Every KPI: definition, period, source, breakdown, drill-down.
-- Dashboards: FY, quarter, month where relevant.
-- Use client brand for primary actions.
-- Use Deep Plum `#53284F` only as restrained V L & CO signature.
-
-### Ask First
-
-- New dependency
-- schema migration
-- auth/RBAC change
-- destructive action
-- production deploy
-- paid service
-- new integration
-- broad refactor
-- licence-sensitive code reuse
-- external skill installation
-
-### Never
-
-- Invent business rules.
-- Claim tests passed without running them.
-- expose secrets.
-- disable controls to make code work.
-- copy reference repo code without licence review.
-- use fake KPI totals.
-- use generic AI UI.
-- install overlapping skills without reason.
-
-## 7. Enterprise UI Rule
-
-Avoid:
-
-- purple/indigo gradients
-- glow cards
-- sparkle icons
-- huge padding
-- low data density
-- rounded-3xl everywhere
-- fake charts
-- decorative dashboards
-
-Use:
-
-- neutral canvas
-- client primary colour
-- compact tables
-- sidebar + header + breadcrumbs
-- filter bar + toolbar
-- status dots/pills
-- skeletons
-- actionable empty states
-- keyboard support
-- clear focus
-- restrained motion
-
-Read `docs/standards/ui.md` only for UI work.
-
-## 8. Dashboard Rule
-
-Every important number must show:
+The runtime router selects the smallest useful stack:
 
 ```text
-Definition | Formula | Unit | Period | Source | Freshness | Filters | Breakdown | Drill-down
+Capability → Primary skill → Reason → Artifact → Validation → Overlap rejected
 ```
 
-Default time views where relevant:
+Maximum active material skills: 4 by default.
+
+Native skill directories:
 
 ```text
-FY | Quarter | Month | YTD | QTD | MTD | Custom | Prior period | Target
+Codex: .agents/skills/<skill>/SKILL.md
+Claude Code: .claude/skills/<skill>/SKILL.md
 ```
 
-Read `docs/standards/data-reporting.md` for dashboard/MIS work.
+The compatibility `skills/` folder is documentation only and must not be assumed to auto-load.
 
-## 9. Skill Rule
+## 6. Design Rule
 
-Use the **smallest useful stack**.
+For design, frontend, UI, brand, colour, typography, layout, animation, or responsive work:
 
-Default maximum: 8 active material skills.
+1. Invoke `design-system`.
+2. Invoke `enterprise-ui-review` for implementation/review.
+3. Read `docs/standards/design-intelligence.md`.
+4. Create/update product `DESIGN.md`.
+5. State adopted and rejected reference patterns.
+6. Client brand overrides external references.
 
-For each capability:
+Do not copy protected logos, fonts, images, or trade dress.
+
+## 7. Enterprise Product Rules
+
+Always preserve approved behaviour, use server-side permissions, validate inputs, cover loading/empty/error/permission/success, test changed behaviour, report checks not run, and make KPIs traceable.
+
+Ask before dependencies, schema, auth/RBAC, destructive actions, production, paid services, integrations, broad refactors, licence-sensitive reuse, or confidential data.
+
+Never invent business rules/KPIs, expose secrets, disable controls to force success, use generic AI UI, silently change architecture, or claim unrun tests.
+
+## 8. Durable Context
 
 ```text
-Need → Primary skill → Optional helper → Redundant skills rejected
+PROJECT_STATE.yaml
+PROJECT_CONTEXT.md
+CURRENT_PHASE.md
+CURRENT_CONTEXT.md
+.agent/runtime/ACTIVE_CONTEXT.md
+.agent/runtime/ACTIVE_SKILLS.md
+.agent/runtime/SESSION_MEMORY.md
+SESSION_HANDOFF.md
+docs/decisions/DECISION_LOG.md
 ```
 
-Do not count reference websites as missing skills.
+Use `Write → Select → Compress → Isolate`.
 
-Read `SKILLS_INVENTORY.md` and `SKILL_USAGE_PLAN.md`.
+## 9. Evidence
 
-## 9A. Context + Harness Rule
+Run deterministic checks first: tests, types, lint, schemas, files, manifest, reconciliation, permissions, and exit codes. Then perform semantic, business, UX, risk, and human review.
 
-Before material work:
-
-1. Build a task context pack: goal, approved decisions, exact files, constraints, acceptance, current state.
-2. Load only relevant standards and skills.
-3. Declare selected skills and why.
-4. Run the Skill Evidence Loop.
-5. Use deterministic checks before model judgement.
-6. Record outcome in `logs/skill-usage.jsonl`.
-7. Update or retire a skill only from repeated evidence.
-
-Read when needed:
-
-- `docs/standards/context-engineering.md`
-- `docs/standards/harness-engineering.md`
-- `skills/skill-governance/SKILL.md`
-- `docs/templates/SKILL_RUN.template.md`
-
-## 10. Required Small Docs
-
-Create only what the task needs.
-
-| File | Max size |
-|---|---:|
-| BRD.md | 120 lines |
-| PRD.md | 150 lines |
-| FRD.md | 180 lines |
-| ARCHITECTURE.md | 180 lines |
-| SECURITY.md | 120 lines |
-| FRONTEND_SPEC.md | 150 lines |
-| TICKETS.md | 1 table, atomic tickets |
-| AI_REPORT.md | append-only short log |
-| SESSION_HANDOFF.md | 40 lines |
-
-Use templates in `docs/templates/`.
-
-## 11. Documentation Stop Rule
-
-Stop documenting when:
-
-- Scope is clear.
-- Material decisions are recorded.
-- Acceptance is testable.
-- Architecture is safe enough.
-- Blocking unknowns are closed.
-
-Then build.
-
-No repeated background.
-No marketing prose.
-No generic explanations.
-Use IDs, bullets, tables, links.
-
-## 12. Delivery Loop
+## 10. Delivery Loop
 
 ```text
-Inspect → Clarify → Decide → Plan → Build → Test → Review → Update docs → Handoff
+Bootstrap → Route → Declare → Execute → Observe → Validate → Decide → Persist → Close turn → Handoff
 ```
 
-Implement one approved ticket at a time.
+## 11. Done Means
 
-## 13. Done Means
+Requirements work; permissions and edge states work; checks are truthful; totals reconcile; accessibility/performance are considered; evidence exists; state is updated; the runtime turn is closed; next action is explicit.
 
-- Requirement works.
-- permissions work.
-- edge states work.
-- tests pass.
-- totals reconcile.
-- performance acceptable.
-- accessibility checked.
-- docs updated.
-- no critical defect.
-- handoff written.
-
-## 14. Read When Relevant
+## 12. Read When Relevant
 
 | Work | Read |
 |---|---|
-| Discovery | `skills/project-discovery/SKILL.md` |
-| Dashboard | `skills/dashboard/SKILL.md` |
-| Workflow | `skills/workflow/SKILL.md` |
-| UI | `skills/ui-review/SKILL.md` |
-| API | `skills/api-integration/SKILL.md` |
-| Release | `skills/release-readiness/SKILL.md` |
-| Security | `docs/standards/security.md` |
-| Performance | `docs/standards/performance.md` |
-| Testing | `docs/standards/testing.md` |
+| Runtime | `AGENT_RUNTIME.md` |
+| Discovery | native `project-discovery` |
+| Dashboard/MIS | native `dashboard` + `data-reporting.md` |
+| Workflow | native `workflow` |
+| UI | native `enterprise-ui-review` + `ui.md` |
+| Design/brand/motion | native `design-system` + `design-intelligence.md` |
+| API | native `api-integration` |
+| Release | native `release-readiness` |
+| Skill evidence | native `skill-governance` |
+| Context | `context-engineering.md` |
+| Harness | `harness-engineering.md` |
 
-## 15. Instruction Order
+## 13. Instruction Precedence
 
-1. Safety/platform rules
-2. Current user instruction
-3. Approved decisions
-4. Nearest folder `AGENTS.md`
-5. Root `AGENTS.md`
-6. Project docs
-7. Loaded skill
-8. Reference material
+Safety/platform → current user → approved decisions → nearest `AGENTS.md` → root `AGENTS.md` → runtime/project state → loaded skill → references.
 
-On conflict: stop, show conflict, recommend resolution.
+On conflict: stop, state it, recommend resolution.

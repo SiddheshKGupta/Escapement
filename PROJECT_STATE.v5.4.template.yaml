@@ -1,0 +1,24 @@
+project_name: REPLACE_WITH_PROJECT_NAME
+phase: discovery
+work_mode: FULL
+implementation_authorized: false
+approved_ticket: null
+
+documents:
+  project_context: active
+  current_context: active
+  design: missing
+  architecture: missing
+  security: missing
+  tickets: missing
+
+blocking_decisions: []
+accepted_assumptions: []
+selected_skills: []
+
+runtime:
+  version: "5.4"
+  enabled: true
+  last_closed_turn: null
+
+last_updated: 2026-08-05

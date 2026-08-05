@@ -1,40 +1,89 @@
-# Upload Instructions
+# v5.4 Runtime Enforcement Upload
 
-Upload this package into the repository root while preserving all paths.
+Upload into the repository root while preserving all paths.
 
 ## Replace
 
-- `README.md`
-- `scripts/build_context_pack.py`
-- `scripts/skill_audit.py`
-- `schemas/skill-run.schema.json`
-- `logs/skill-usage.jsonl` only if the repository log is currently empty
+- `AGENTS.md`
+- `PROJECT_STATE.yaml`
 
 ## Add
 
-- `scripts/vlco_build.py`
-- `scripts/validate_standard.py`
-- `.github/workflows/validate-standard.yml`
-- `docs/standards/policy-levels.md`
-- `reports/SKILL_EFFECTIVENESS.md`
-- all `.yaml` behaviour tests
-- `examples/enterprise-dashboard/`
-- `manifest.v5.3.patch.json`
+- `CLAUDE.md`
+- `AGENT_RUNTIME.md`
+- `.codex/hooks.json`
+- `.claude/settings.json`
+- `.github/copilot-instructions.md`
+- `.agent/runtime/`
+- `.agents/skills/`
+- `.claude/skills/`
+- `scripts/agent_runtime.py`
+- `docs/standards/runtime-enforcement.md`
+- `docs/standards/design-intelligence.md`
+- `docs/templates/DESIGN.template.md`
+- `tests/runtime/`
+- `PROJECT_STATE.v5.4.template.yaml`
 
-## Important
+## Protect real logs
 
-Do not overwrite a non-empty production `logs/skill-usage.jsonl`. Migrate existing records to the enhanced schema instead.
-
-## Test
-
-```bash
-python scripts/vlco_build.py doctor
-python scripts/vlco_build.py validate
-python scripts/vlco_build.py skill-audit
-```
-
-## Suggested Commit
+The package contains empty seed files:
 
 ```text
-feat: add v5.3 enforcement CLI, doctor, CI and worked example
+logs/skill-usage.jsonl
+.agent/runtime/turns.jsonl
+```
+
+Do not overwrite non-empty production logs. Migrate or retain them.
+
+## Verify
+
+```bash
+python scripts/agent_runtime.py doctor
+python -m unittest tests.runtime.test_agent_runtime
+```
+
+## Activate Codex
+
+1. Open the repository in Codex.
+2. Review and trust `.codex/hooks.json`.
+3. Confirm project hooks are active.
+4. Start a new session.
+5. Native skills are under `.agents/skills/`.
+
+## Activate Claude Code
+
+1. Open the repository root in Claude Code.
+2. Approve `.claude/settings.json` project hooks.
+3. Start a new session.
+4. Native skills are under `.claude/skills/`.
+5. `CLAUDE.md` imports runtime memory automatically.
+
+## Test prompt
+
+```text
+Redesign the management dashboard using the client brand, define KPI drill-down,
+and remove the generic AI look.
+```
+
+Expected route:
+
+```text
+Mode: DELTA
+Skills:
+- dashboard
+- design-system
+- enterprise-ui-review
+- skill-governance
+```
+
+The agent should be prevented from finishing once until it runs `close-turn`.
+
+## Important distinction
+
+GitHub Actions validate pushes and pull requests. They do not inject memory into an interactive agent.
+
+Normal ChatGPT GitHub access also does not execute local project hooks. Use Codex/Claude Code in the repository or invoke:
+
+```bash
+python scripts/agent_runtime.py manual-start --prompt "<request>"
 ```
