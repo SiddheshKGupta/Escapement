@@ -32,6 +32,8 @@ Everything else loads on demand. Do not read the whole repository.
 
 The distinction matters because the failure mode of AI-assisted delivery is not bad code — it is confident code with no durable record of what was decided, what was verified, and what was merely asserted.
 
+It does not govern another repository automatically, make an ordinary web chat execute local hooks, guarantee correct software because the files exist, replace business judgement or human approval, permit copying protected brand assets, or remove your need to read the tests and the evidence. It works when it is installed inside the actual product repository and driven by a supported coding-agent runtime.
+
 ---
 
 ## Why
@@ -50,9 +52,9 @@ Install into an existing project:
 python scripts/vlco_build.py init /path/to/your-project
 ```
 
-This copies the instruction set, standards, templates, skills, scripts, schemas, and behaviour tests. It writes `.vlco-build.json` to record the source and version.
+This copies the instruction set, standards, templates, skills, scripts, schemas, hook configuration, native skills, and behaviour tests. It writes `.vlco-build.json` to record the source and version.
 
-Then wire the runtime — this is the step that makes the standard enforced rather than aspirational.
+The hooks ship pre-configured, so normally you only need to approve them in your harness. This is the step that makes the standard enforced rather than aspirational.
 
 **Claude Code** — `.claude/settings.json`:
 
@@ -72,16 +74,15 @@ Then wire the runtime — this is the step that makes the standard enforced rath
 }
 ```
 
-**Codex** — `.codex/hooks.json` follows the same three events.
+**Codex** — `.codex/hooks.json` uses the same three events.
 
-Verify both layers:
+Verify every layer:
 
 ```bash
 python scripts/vlco_build.py doctor
-python scripts/agent_runtime.py doctor
 ```
 
-Both must reach zero failures. The runtime doctor checks that hook config exists and that all eight native skills are present under `.claude/skills/` and `.agents/skills/`.
+That runs the environment checks, the unified validator, and the runtime doctor in sequence. All three must reach zero failures.
 
 ### Without hooks
 
@@ -119,6 +120,16 @@ python scripts/agent_runtime.py close-turn \
   --evidence "reports/kpi-run.json"
 ```
 
+Durable state between turns:
+
+```text
+.agent/runtime/ACTIVE_CONTEXT.md   goal, mode, obligations
+.agent/runtime/ACTIVE_SKILLS.md    selected skills and how to invoke them
+.agent/runtime/SESSION_MEMORY.md   compact carry-over
+SESSION_HANDOFF.md                 the human-readable handoff
+logs/skill-usage.jsonl             evidence records
+```
+
 ---
 
 ## Work modes
@@ -148,9 +159,73 @@ Eight native skills. The router selects at most four per turn.
 | `release-readiness` | UAT, deploy, production, handover |
 | `skill-governance` | Selecting, scoring, improving, and retiring skills |
 
-Native skills load from `.claude/skills/<skill>/SKILL.md` and `.agents/skills/<skill>/SKILL.md`. The `skills/` directory is documentation only and does not auto-load.
+Native skills load from `.claude/skills/<skill>/SKILL.md` and `.agents/skills/<skill>/SKILL.md`. Both are generated from `skills/`, which is the single source of truth. After editing a skill:
+
+```bash
+python scripts/vlco_build.py sync-skills
+```
+
+Validation fails if the native copies drift from `skills/`.
 
 A skill counts as used only when evidence exists. Each run records its trigger, the alternatives rejected, expected versus actual output, checks planned and skipped, scores, and evidence paths. Passing requires a total at or above 85 with no critical correctness, security, data, or permission failure.
+
+---
+
+## Example prompts and expected routing
+
+**New product** — `FULL` mode; routes to `project-discovery`, `workflow`, `skill-governance`:
+
+```text
+I want to build a Subvention Management Platform.
+
+First understand the users, workflows, data, approvals, reporting,
+permissions, integrations, security and design direction.
+
+Do not begin implementation until the READY CHECK is approved.
+```
+
+**Dashboard** — routes to `dashboard`, `design-system`, `enterprise-ui-review`, `skill-governance`:
+
+```text
+Build a management dashboard for subvention claims.
+
+Show claim value, approved amount, collected amount, outstanding amount,
+ageing, recovery rate, source records, freshness, filters, reconciliation
+and drill-down.
+
+Use the client brand and avoid generic AI styling.
+```
+
+**Workflow** — routes to `workflow`, `skill-governance`:
+
+```text
+Design the workflow from OEM scheme creation through transaction eligibility,
+claim generation, approval, OEM submission, rejection handling, invoice,
+collection, accounting, MIS and closure.
+
+Include actors, states, permissions, controls, exceptions, escalations,
+audit events and SLA.
+```
+
+**UI redesign** — routes to `design-system`, `enterprise-ui-review`, `skill-governance`:
+
+```text
+Redesign this application as a credible enterprise platform.
+
+Use the client brand, improve density and hierarchy, create or update
+DESIGN.md, cover all operating states, add keyboard focus and remove
+generic AI gradients and glow cards.
+```
+
+**API integration** — routes to `api-integration`, `skill-governance`:
+
+```text
+Integrate the application with the lease management system.
+
+Before coding, define authentication, permissions, request and response
+contracts, validation, idempotency, retries, timeouts, error handling,
+audit events, monitoring and fallback behaviour.
+```
 
 ---
 
@@ -161,8 +236,9 @@ A skill counts as used only when evidence exists. Each run records its trigger, 
 | Command | Purpose |
 |---|---|
 | `init <target>` | Install into a project (`--force` to overwrite) |
-| `update <target>` | Compare an install against this standard (`--apply` to sync) |
-| `doctor` | Environment and repository readiness |
+| `update <target>` | Compare an install against this standard (`--apply` to sync, `--check` to fail on drift) |
+| `sync-skills` | Regenerate native skills from `skills/` |
+| `doctor` | Environment, validation, and runtime readiness |
 | `validate` | All deterministic standard checks |
 | `context` | Build a task-scoped context pack |
 | `skill-audit` | Validate and summarise skill evidence |
@@ -214,9 +290,11 @@ python scripts/vlco_build.py context \
 python scripts/vlco_build.py validate
 ```
 
-Manifest completeness, required root files, Markdown line budgets, skill frontmatter, duplicate skill names, broken internal links, project-state structure, skill JSONL schema, evidence-path existence, score consistency, context-pack word budget, release placeholders, and coverage of all eleven behaviour tests.
+Manifest completeness, required root files, version consistency across the manifest and both scripts, Markdown line budgets, skill frontmatter, duplicate skill names, native skill sync, broken internal links, project-state structure, skill JSONL schema, evidence-path existence, score consistency, context-pack word budget, release placeholders, and coverage of all eleven behaviour tests.
 
-CI runs the same checks on every push and pull request via `.github/workflows/validate-standard.yml`.
+Validation runs in two profiles. In this repository it checks the standard's own inventory. In a project the standard was installed into — detected via `.vlco-build.json` — it skips `manifest.json` and `README.md`, which describe the standard itself and which no consuming project should be failed for lacking.
+
+CI runs the validator, the runtime tests, and a fresh-install check on every push and pull request via `.github/workflows/validate-standard.yml`.
 
 ---
 
@@ -256,23 +334,20 @@ manifest.json          # file inventory, validated
 
 .claude/               # Claude Code hooks and native skills
 .agents/               # Codex native skills
-.agent/runtime/        # per-turn state (generated)
+.codex/                # Codex hooks
+.agent/runtime/        # per-turn state (generated, gitignored)
 
 docs/
   standards/           # domain standards, loaded on demand
-  templates/           # BRD, PRD, FRD, architecture, security, frontend
+  templates/           # BRD, PRD, FRD, architecture, security, frontend, design
   checklists/          # readiness, discovery, context health, pre-release
   decisions/           # ADR template and decision log
-skills/                # documentation copies of the native skills
+skills/                # source of truth for all skills
 scripts/               # build CLI, runtime, validator, context packer
 schemas/               # JSON schemas for state and evidence
 tests/                 # behaviour tests and runtime unit tests
 examples/              # worked end-to-end example
 ```
-
----
-
-## Worked example
 
 `examples/enterprise-dashboard/` walks a real request through mode selection, context pack, skill routing, KPI contracts, evidence records, validation, and handoff.
 
@@ -280,18 +355,51 @@ examples/              # worked end-to-end example
 
 ## Troubleshooting
 
-**The agent ignores the standard.** Run `python scripts/agent_runtime.py doctor`. If hook config is missing, nothing is enforced and the standard is only advisory.
+**The agent forgets after one turn.** Run `python scripts/agent_runtime.py status` and read `.agent/runtime/SESSION_MEMORY.md`. Usual causes: the standard sits outside the product repository, the agent was started from the wrong folder, hooks were never approved, the previous turn was never closed, the agent was not restarted after a hook or skill change, or you are in a web chat rather than a repository runtime.
 
-**`doctor` reports missing native skills.** The `skills/` directory does not auto-load. Skills must exist under `.claude/skills/` and `.agents/skills/`.
+**Skills are not being used.** Confirm `.claude/skills/` and `.agents/skills/` exist, then test the router:
+
+```bash
+python scripts/agent_runtime.py manual-start --prompt "Redesign the management dashboard and define KPI drill-down"
+```
+
+Expect `dashboard`, `design-system`, `enterprise-ui-review`, `skill-governance`. Inspect `.agent/runtime/ACTIVE_SKILLS.md` for what was actually selected.
+
+**The agent starts coding too quickly.** Tell it: *Treat this as FULL or DELTA mode. Do not implement until the READY CHECK is complete and approved.*
+
+**The agent asks too many questions.** Tell it: *Use the smallest sufficient discovery round. Recommend a default answer for every question. Stop asking when implementation can safely begin.* For a bounded task, state that the mode is `EXECUTE` and the acceptance criteria are already approved.
+
+**The UI still looks generic.** Require `design-system` and `enterprise-ui-review`, and require `DESIGN.md` before implementation, stating the archetype, adopted and rejected patterns, colour tokens, typography, layout, component states, responsive rules, and motion rules.
+
+**The Stop hook interrupts the agent.** The turn is still open. Close it with `close-turn`, or clear a stale one:
+
+```bash
+python scripts/agent_runtime.py reset-turn --reason "Previous session ended unexpectedly"
+```
 
 **An install has drifted.** `python scripts/vlco_build.py update <target>` reports the difference; `--apply` syncs it.
 
-**A turn is stuck open.** `python scripts/agent_runtime.py reset-turn --reason "Stale session"`.
+---
+
+## Roadmap
+
+- [x] Progressive-disclosure project standard
+- [x] Runtime state and session memory
+- [x] Native Codex and Claude Code skills
+- [x] Prompt-based skill routing
+- [x] Completion gate and skill evidence
+- [x] Design intelligence
+- [x] Runtime doctor and smoke test
+- [ ] Packaged CLI installer
+- [ ] Automatic skill-effectiveness reports
+- [ ] Organisation-level policy overlays
+- [ ] MCP server
+- [ ] Cross-project health reporting
 
 ---
 
 ## Ownership
 
-Developed by **V L & CO**.
+Developed by **V L & CO**. Formerly the VLCO Product Build Standard.
 
-Source-available, not open source. Commercial redistribution, white-labelling, or substantial republication requires permission. See `LICENSE.md` and `NOTICE.md`.
+Source-available, not open source. Commercial redistribution, white-labelling, or substantial republication requires permission. See [LICENSE.md](LICENSE.md) and [NOTICE.md](NOTICE.md).
