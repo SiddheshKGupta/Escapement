@@ -1,0 +1,51 @@
+from __future__ import annotations
+
+import sys
+import unittest
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+from security_gate import SECRET_PATTERNS  # noqa: E402
+
+GENERIC_SECRET_PATTERN = next(p for name, _, p in SECRET_PATTERNS if name == "generic-secret-assignment")
+
+
+class GenericSecretPatternTest(unittest.TestCase):
+    """Found via adversarial testing: the original pattern wrapped its keywords in
+    \\b...\\b, so admin_password = "..." was silently missed -- an underscore is a
+    word character, so there is no boundary between "admin_" and "password". Bare
+    password = "..." matched; the far more common prefixed/compound convention did
+    not."""
+
+    # Fixture values use "fake" so they don't themselves trip security_gate.py's own
+    # repository scan (it excludes lines containing fake/example/placeholder/redacted).
+    def test_prefixed_identifiers_are_detected(self) -> None:
+        cases = [
+            'admin_password = "fake-Adm1nSecretValue2026"',
+            'db_secret = "fake-Adm1nSecretValue2026"',
+            'stripe_api_key = "fake-whatever12345"',
+            'user_token: "fake-abcdefghijklmnop"',
+            'DB_SECRET_KEY="fake-abcdefghijklmnop"',
+        ]
+        for line in cases:
+            with self.subTest(line=line):
+                self.assertIsNotNone(GENERIC_SECRET_PATTERN.search(line), f"missed: {line}")
+
+    def test_bare_keywords_are_still_detected(self) -> None:
+        for line in ['password = "fake-Adm1nSecretValue2026"', 'api_key = "fake-not-a-real-key-value"']:
+            with self.subTest(line=line):
+                self.assertIsNotNone(GENERIC_SECRET_PATTERN.search(line))
+
+    def test_non_assignments_are_not_flagged(self) -> None:
+        cases = [
+            'password = "short"',
+            'is_password_valid = check(x)',
+            'passwordless_login = True',
+        ]
+        for line in cases:
+            with self.subTest(line=line):
+                self.assertIsNone(GENERIC_SECRET_PATTERN.search(line), f"false positive: {line}")
+
+
+if __name__ == "__main__":
+    unittest.main()
