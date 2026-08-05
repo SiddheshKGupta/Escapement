@@ -14,7 +14,7 @@
 - Capability families: `10`
 - Overlap groups: `12`
 - Routing evaluations: `22 / 22 PASS`
-- Unit tests: `34 / 34 PASS`
+- Unit tests: `41 / 41 PASS`
 - Runtime doctor: `0 failures`
 - Repository doctor: `0 failures, 0 warnings`
 - Security findings: `0`
