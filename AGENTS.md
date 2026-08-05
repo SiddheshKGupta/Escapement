@@ -82,6 +82,7 @@ ORIENT
 → PLAN
 → IMPLEMENT
 → VERIFY
+→ POLISH
 → RELEASE
 ```
 
@@ -111,7 +112,7 @@ Prefer installed Superpowers capabilities when compatible:
 Kernel:            <= 700 words
 Active phase pack: <= 1,800 words
 Doctrine packs:    <= 3 per phase
-Native skills:     <= 4 per phase
+Native skills:     <= 1 (MICRO), <= 5 (MATERIAL), <= 6 (PROGRAM)
 ```
 
 Use more skills across phases, not more skills in one context. Resolve overlap through `catalog/overlap-matrix.json`.
