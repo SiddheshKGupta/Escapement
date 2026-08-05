@@ -1,0 +1,378 @@
+{
+  "schema_version": "1.0",
+  "version": "6.2.0",
+  "default_limits": {
+    "MICRO": 1,
+    "MATERIAL": 3,
+    "PROGRAM": 4
+  },
+  "packs": [
+    {
+      "id": "institutional-judgement",
+      "path": "docs/doctrine/institutional-judgement/PACK.md",
+      "priority": 90,
+      "registers": [
+        "CONSULTING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "triggers": [
+        "recommend",
+        "review",
+        "analyse",
+        "analyze",
+        "prioritise",
+        "prioritize",
+        "decision",
+        "strategy",
+        "management"
+      ],
+      "compatible_with": [
+        "consulting-delivery",
+        "governance-risk-controls",
+        "finance-reporting",
+        "product-engineering"
+      ]
+    },
+    {
+      "id": "consulting-delivery",
+      "path": "docs/doctrine/consulting-delivery/PACK.md",
+      "priority": 100,
+      "registers": [
+        "CONSULTING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "triggers": [
+        "consultant",
+        "business model",
+        "operating model",
+        "transformation",
+        "stakeholder",
+        "requirements",
+        "recommendation",
+        "management review"
+      ],
+      "compatible_with": [
+        "institutional-judgement",
+        "governance-risk-controls",
+        "finance-reporting",
+        "workflow-operating-model",
+        "product-engineering"
+      ]
+    },
+    {
+      "id": "governance-risk-controls",
+      "path": "docs/doctrine/governance-risk-controls/PACK.md",
+      "priority": 100,
+      "registers": [
+        "CONSULTING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "triggers": [
+        "governance",
+        "risk",
+        "control",
+        "compliance",
+        "audit",
+        "RCSA",
+        "maker checker",
+        "approval authority",
+        "exception",
+        "privacy"
+      ],
+      "compatible_with": [
+        "consulting-delivery",
+        "workflow-operating-model",
+        "product-engineering"
+      ]
+    },
+    {
+      "id": "finance-reporting",
+      "path": "docs/doctrine/finance-reporting/PACK.md",
+      "priority": 100,
+      "registers": [
+        "CONSULTING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "triggers": [
+        "finance",
+        "accounting",
+        "reconciliation",
+        "KPI",
+        "MIS",
+        "portfolio",
+        "returns",
+        "variance",
+        "journal",
+        "financial year",
+        "data quality"
+      ],
+      "compatible_with": [
+        "consulting-delivery",
+        "workflow-operating-model",
+        "product-engineering"
+      ]
+    },
+    {
+      "id": "workflow-operating-model",
+      "path": "docs/doctrine/workflow-operating-model/PACK.md",
+      "priority": 100,
+      "registers": [
+        "CONSULTING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "triggers": [
+        "workflow",
+        "process",
+        "approval",
+        "state",
+        "SLA",
+        "exception",
+        "escalation",
+        "operations",
+        "operating rhythm"
+      ],
+      "compatible_with": [
+        "consulting-delivery",
+        "governance-risk-controls",
+        "finance-reporting",
+        "product-engineering"
+      ]
+    },
+    {
+      "id": "product-engineering",
+      "path": "docs/doctrine/product-engineering/PACK.md",
+      "priority": 100,
+      "registers": [
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "triggers": [
+        "product",
+        "architecture",
+        "code",
+        "API",
+        "integration",
+        "security",
+        "data model",
+        "automation",
+        "scalability",
+        "testing",
+        "deployment",
+        "platform",
+        "module",
+        "system"
+      ],
+      "compatible_with": [
+        "consulting-delivery",
+        "governance-risk-controls",
+        "finance-reporting",
+        "workflow-operating-model",
+        "design-taste"
+      ]
+    },
+    {
+      "id": "design-taste",
+      "path": "docs/doctrine/design-taste/PACK.md",
+      "priority": 100,
+      "registers": [
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "triggers": [
+        "design",
+        "UI",
+        "UX",
+        "brand",
+        "layout",
+        "colour",
+        "color",
+        "typography",
+        "motion",
+        "visual",
+        "dashboard"
+      ],
+      "compatible_with": [
+        "product-engineering",
+        "finance-reporting",
+        "communication-artifacts"
+      ]
+    },
+    {
+      "id": "communication-artifacts",
+      "path": "docs/doctrine/communication-artifacts/PACK.md",
+      "priority": 100,
+      "registers": [
+        "ARTIFACT",
+        "CONSULTING"
+      ],
+      "tiers": [
+        "MICRO",
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "triggers": [
+        "email",
+        "report",
+        "proposal",
+        "SOP",
+        "presentation",
+        "PowerPoint",
+        "spreadsheet",
+        "Excel",
+        "Word",
+        "PDF",
+        "writing"
+      ],
+      "compatible_with": [
+        "consulting-delivery",
+        "finance-reporting",
+        "design-taste"
+      ]
+    },
+    {
+      "id": "decision-intelligence",
+      "path": "docs/doctrine/decision-intelligence/PACK.md",
+      "priority": 120,
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "ORIENT",
+        "DISCOVER",
+        "BRAINSTORM"
+      ],
+      "triggers": [
+        "decision",
+        "recommend",
+        "choose",
+        "plan",
+        "build",
+        "create",
+        "design",
+        "review",
+        "strategy"
+      ],
+      "compatible_with": [
+        "domain-expertise",
+        "consulting-delivery",
+        "product-engineering",
+        "orchestration-strategy"
+      ]
+    },
+    {
+      "id": "domain-expertise",
+      "path": "docs/doctrine/domain-expertise/PACK.md",
+      "priority": 115,
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "DISCOVER",
+        "RESEARCH",
+        "BRAINSTORM",
+        "SPECIFY"
+      ],
+      "triggers": [
+        "industry",
+        "domain",
+        "standard",
+        "regulation",
+        "latest",
+        "current trend",
+        "benchmark",
+        "market",
+        "competitor",
+        "best practice"
+      ],
+      "compatible_with": [
+        "decision-intelligence",
+        "consulting-delivery",
+        "product-engineering",
+        "finance-reporting",
+        "governance-risk-controls"
+      ]
+    },
+    {
+      "id": "orchestration-strategy",
+      "path": "docs/doctrine/orchestration-strategy/PACK.md",
+      "priority": 110,
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "BRAINSTORM",
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY"
+      ],
+      "triggers": [
+        "parallel",
+        "subagent",
+        "agent team",
+        "multiple modules",
+        "plan",
+        "orchestrate",
+        "workstream"
+      ],
+      "compatible_with": [
+        "decision-intelligence",
+        "product-engineering",
+        "consulting-delivery"
+      ]
+    }
+  ]
+}

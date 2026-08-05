@@ -1,0 +1,11 @@
+{
+  "description": "Discovery, workflow, dashboard, design, and governance setup.",
+  "skills": [
+    "project-discovery",
+    "workflow",
+    "dashboard",
+    "design-system",
+    "skill-governance"
+  ],
+  "preset": "enterprise-governance"
+}

@@ -1,0 +1,181 @@
+{
+  "schema_version": "1.0",
+  "version": "6.3.0",
+  "relation_types": {
+    "BASELINE_PLUS_INTENSIFIER": "The baseline remains active; the optional capability intensifies one narrow behaviour.",
+    "SUBSTITUTE": "Choose one capability for the same job in the same phase.",
+    "COMPLEMENTARY": "Capabilities solve distinct parts and may pair.",
+    "SEQUENTIAL": "Capabilities overlap broadly but are strongest in different phases.",
+    "REFERENCE_ONLY": "Use for inspiration or evidence, not as an active execution skill.",
+    "META_OBSERVER": "Observes and recommends changes but does not own execution."
+  },
+  "groups": [
+    {
+      "id": "engineering-behaviour",
+      "members": [
+        "karpathy-guidelines",
+        "ponytail"
+      ],
+      "relation": "BASELINE_PLUS_INTENSIFIER",
+      "canonical": "karpathy-guidelines",
+      "rule": "Karpathy Guidelines remain the baseline for thinking, surgical changes and verifiable goals. Ponytail may intensify implementation minimalism when overengineering risk is high.",
+      "phase_use": {
+        "ALL_ENGINEERING_PHASES": [
+          "karpathy-guidelines"
+        ],
+        "IMPLEMENT": [
+          "ponytail"
+        ]
+      }
+    },
+    {
+      "id": "design-authority",
+      "members": [
+        "design-intelligence-constitution",
+        "ui-ux-pro-max",
+        "taste-skill",
+        "impeccable",
+        "emil-kowalski-skill",
+        "open-design",
+        "frontend-design"
+      ],
+      "relation": "SEQUENTIAL",
+      "canonical": "design-intelligence-constitution",
+      "rule": "The constitution is supreme. Use UI/UX Pro Max for research/specification, one art director for brainstorming, frontend-design for implementation, Impeccable for audit/polish and Emil for motion.",
+      "forbidden_same_phase": [
+        [
+          "taste-skill",
+          "open-design",
+          "impeccable"
+        ],
+        [
+          "taste-skill",
+          "ui-ux-pro-max",
+          "open-design"
+        ]
+      ],
+      "allowed_pairings": [
+        [
+          "design-intelligence-constitution",
+          "ui-ux-pro-max"
+        ],
+        [
+          "design-intelligence-constitution",
+          "taste-skill"
+        ],
+        [
+          "design-intelligence-constitution",
+          "impeccable"
+        ],
+        [
+          "design-intelligence-constitution",
+          "emil-kowalski-skill"
+        ],
+        [
+          "frontend-design",
+          "emil-kowalski-skill"
+        ],
+        [
+          "impeccable",
+          "emil-review-animations"
+        ]
+      ]
+    },
+    {
+      "id": "writing-quality",
+      "members": [
+        "writing-quality",
+        "stop-slop"
+      ],
+      "relation": "BASELINE_PLUS_INTENSIFIER",
+      "canonical": "writing-quality",
+      "rule": "Native writing-quality owns content clarity and business usefulness. Stop Slop is a final anti-AI-pattern lint pass."
+    },
+    {
+      "id": "skill-learning",
+      "members": [
+        "skill-governance",
+        "task-observer"
+      ],
+      "relation": "META_OBSERVER",
+      "canonical": "skill-governance",
+      "rule": "Task Observer may log repeated gaps. Skill governance owns evaluation, promotion, overlap and retirement. Task Observer must not rewrite skills automatically."
+    },
+    {
+      "id": "delivery-methodology",
+      "members": [
+        "escapement-core",
+        "superpowers",
+        "github-spec-kit",
+        "gsd-core",
+        "ecc"
+      ],
+      "relation": "SEQUENTIAL",
+      "canonical": "escapement-core",
+      "rule": "Escapement owns runtime, state and evidence. Use component-level adapters from external methodologies at their strongest phases; do not install competing complete lifecycle hooks together."
+    },
+    {
+      "id": "memory-and-knowledge",
+      "members": [
+        "escapement-file-state",
+        "claude-mem",
+        "appflowy",
+        "helixdb",
+        "graphify"
+      ],
+      "relation": "SUBSTITUTE",
+      "canonical": "escapement-file-state",
+      "rule": "File state is default. Claude Mem, AppFlowy or HelixDB may become the primary external memory substrate only after a demonstrated need. Graphify may complement file state for code relationships."
+    },
+    {
+      "id": "research-freshness",
+      "members": [
+        "primary-web",
+        "context7",
+        "perplexity",
+        "last30days",
+        "agent-reach"
+      ],
+      "relation": "COMPLEMENTARY",
+      "canonical": "primary-web",
+      "rule": "Choose by evidence type: authoritative public facts, technical documentation, grounded research, recent discourse or platform-specific reach. Maximum two supporting channels per research question."
+    },
+    {
+      "id": "browser-verification",
+      "members": [
+        "playwright",
+        "agent-browser",
+        "stagehand",
+        "puppeteer-mcp",
+        "cypress"
+      ],
+      "relation": "SUBSTITUTE",
+      "canonical": "project-existing-browser-framework",
+      "rule": "Use the project's existing browser test framework first. Select one primary driver per run; do not duplicate browser automation stacks."
+    },
+    {
+      "id": "code-review",
+      "members": [
+        "engineering-review",
+        "superpowers-requesting-code-review",
+        "claude-code-review",
+        "gstack-review"
+      ],
+      "relation": "SUBSTITUTE",
+      "canonical": "engineering-review",
+      "rule": "Choose one primary review workflow. Add a second independent reviewer only for material/high-risk changes with a stated reason."
+    },
+    {
+      "id": "component-sources",
+      "members": [
+        "project-component-system",
+        "shadcn-ui",
+        "21st-dev",
+        "open-design"
+      ],
+      "relation": "SUBSTITUTE",
+      "canonical": "project-component-system",
+      "rule": "Use the existing project component system first. External component sources require stack, licence, accessibility and visual-consistency review."
+    }
+  ]
+}

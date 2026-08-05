@@ -1,13 +1,13 @@
 project_name: TBD
+profile: domain-expertise
 phase: discovery
 work_mode: FULL
 implementation_authorized: false
 approved_ticket: null
 
 documents:
-  constitution: missing
   project_context: active
-  feature_list: active
+  constitution: missing
   design: missing
   architecture: missing
   security: missing
@@ -18,7 +18,7 @@ accepted_assumptions: []
 selected_skills: []
 
 runtime:
-  version: "6.0.0"
+  version: "6.3.0"
   enabled: true
   last_closed_turn: null
 

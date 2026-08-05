@@ -1,0 +1,9 @@
+{
+  "name": "escapement",
+  "version": "6.3.0",
+  "description": "Domain-aware decision coaching, phase-specific skills, capability strength orchestration, evidence and delivery gates for AI agents.",
+  "repository": "https://github.com/SiddheshKGupta/escapement",
+  "skills": ".agents/skills",
+  "hooks": ".codex/hooks.json",
+  "mcpServers": {}
+}

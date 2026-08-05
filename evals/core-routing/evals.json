@@ -1,189 +1,482 @@
 {
-  "name": "core-routing",
-  "version": "1.0",
+  "name": "capability-strength-routing-v6.3",
+  "version": "6.3.0",
   "evals": [
     {
-      "id": "new-product",
-      "description": "New product invokes discovery and workflow.",
-      "prompt": "Build a new claims management platform with an approval workflow.",
-      "expected": {
-        "material": true,
-        "mode": "FULL",
-        "skills": [
-          "project-discovery",
-          "workflow",
-          "skill-governance"
-        ],
-        "maximum_skills": 4
-      }
-    },
-    {
-      "id": "dashboard-design",
-      "description": "Dashboard redesign selects KPI and design review skills.",
-      "prompt": "Redesign the management dashboard and define KPI drill-down using the client brand.",
-      "expected": {
-        "material": true,
-        "mode": "DELTA",
-        "skills": [
-          "dashboard",
-          "design-system",
-          "enterprise-ui-review",
-          "skill-governance"
-        ],
-        "maximum_skills": 4,
-        "required_reads": [
-          "docs/standards/design-intelligence.md"
-        ]
-      }
-    },
-    {
-      "id": "workflow",
-      "description": "Workflow prompt selects workflow.",
-      "prompt": "Design maker-checker approval states, exceptions, escalations and SLA.",
-      "expected": {
-        "material": true,
-        "mode": "DELTA",
-        "skills": [
-          "workflow",
-          "skill-governance"
-        ],
-        "maximum_skills": 4
-      }
-    },
-    {
-      "id": "api-security",
-      "description": "Sensitive integration selects API and security.",
-      "prompt": "Integrate an OAuth API that processes confidential PII and review permissions.",
-      "expected": {
-        "material": true,
-        "mode": "DELTA",
-        "skills": [
-          "api-integration",
-          "security-review",
-          "skill-governance"
-        ],
-        "maximum_skills": 4
-      }
-    },
-    {
-      "id": "release",
-      "description": "Release prompt selects release readiness.",
-      "prompt": "Prepare the application for production go-live with rollback and monitoring.",
-      "expected": {
-        "material": true,
-        "mode": "DELTA",
-        "skills": [
-          "release-readiness",
-          "skill-governance"
-        ],
-        "maximum_skills": 4
-      }
-    },
-    {
-      "id": "bug",
-      "description": "Bug fix is execute mode.",
-      "prompt": "Fix the isolated pagination bug in the approved ticket.",
-      "expected": {
-        "material": true,
-        "mode": "EXECUTE",
-        "skills": [
-          "skill-governance"
-        ],
-        "maximum_skills": 4
-      }
-    },
-    {
-      "id": "find-skill",
-      "description": "External skill discovery invokes reference router.",
-      "prompt": "Find an open-source skill or plugin for building an MCP server.",
-      "expected": {
-        "material": true,
-        "mode": "DELTA",
-        "skills": [
-          "api-integration",
-          "security-review",
-          "reference-router",
-          "skill-governance"
-        ],
-        "maximum_skills": 4,
-        "required_reads": [
-          "catalog/external-resources.json"
-        ]
-      }
-    },
-    {
-      "id": "security-test",
-      "description": "Pentest request invokes security review.",
-      "prompt": "Review whether we can run an authorised penetration test in a sandbox.",
-      "expected": {
-        "material": true,
-        "mode": "DELTA",
-        "skills": [
-          "security-review",
-          "skill-governance"
-        ],
-        "maximum_skills": 4
-      }
-    },
-    {
-      "id": "informational",
-      "description": "Simple informational question does not open material work.",
+      "id": "info-no-ceremony",
+      "description": "Informational questions open no lifecycle.",
       "prompt": "What is the current project name?",
       "expected": {
         "material": false,
+        "tier": "INFO",
         "mode": "NONE",
-        "skills": [],
-        "maximum_skills": 0
+        "current_phase": "INFO",
+        "maximum_skills": 0,
+        "maximum_packs": 0,
+        "maximum_strengths": 0,
+        "maximum_context_words": 1800
       }
     },
     {
-      "id": "design-only",
-      "description": "Design direction without implementation selects design system.",
-      "prompt": "Create the colour palette, typography and motion direction.",
+      "id": "micro-karpathy-ponytail",
+      "description": "Small implementation uses Karpathy baseline and Ponytail intensifier without discovery overhead.",
+      "prompt": "Implement this isolated API fix using the simplest solution and avoid overengineering.",
       "expected": {
         "material": true,
-        "mode": "DELTA",
-        "skills": [
-          "design-system",
-          "skill-governance"
+        "tier": "MICRO",
+        "mode": "EXECUTE",
+        "current_phase": "IMPLEMENT",
+        "strengths": [
+          "karpathy:surgical-changes",
+          "karpathy:goal-driven-execution",
+          "ponytail:full"
         ],
-        "forbidden_skills": [
-          "enterprise-ui-review"
+        "forbidden_strengths": [
+          "karpathy:think-before-coding"
         ],
-        "maximum_skills": 4
+        "maximum_skills": 1,
+        "maximum_context_words": 1800,
+        "maximum_skill_context_words": 1200
       }
     },
     {
-      "id": "browser-ui",
-      "description": "UI verification remains under enterprise review rather than external router unless requested.",
-      "prompt": "Review this frontend screen for accessibility and responsive behaviour.",
+      "id": "design-discovery",
+      "description": "Design begins with decision coaching and supreme design authority.",
+      "prompt": "Design a premium enterprise management dashboard with charts, responsive behaviour and subtle animations.",
       "expected": {
         "material": true,
-        "mode": "DELTA",
+        "tier": "MATERIAL",
+        "register": "DUAL",
+        "current_phase": "DISCOVER",
         "skills": [
-          "enterprise-ui-review",
-          "skill-governance"
+          "decision-coach",
+          "project-discovery"
         ],
-        "forbidden_skills": [
+        "strengths": [
+          "design-intelligence:constitution",
+          "karpathy:think-before-coding"
+        ],
+        "forbidden_strengths": [
+          "taste:design-taste-frontend",
+          "impeccable:audit"
+        ],
+        "design_authority": true,
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "design-research",
+      "description": "UI UX Pro Max is used as design research, not final authority.",
+      "prompt": "Design a premium enterprise management dashboard with charts, responsive behaviour and subtle animations.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "current_phase": "RESEARCH",
+        "skills": [
+          "domain-research",
           "reference-router"
         ],
-        "maximum_skills": 4
+        "strengths": [
+          "design-intelligence:constitution",
+          "ui-ux-pro-max:style-search",
+          "ui-ux-pro-max:chart-and-data-viz"
+        ],
+        "forbidden_strengths": [
+          "taste:design-taste-frontend",
+          "impeccable:audit"
+        ],
+        "design_authority": true,
+        "maximum_context_words": 1800
       }
     },
     {
-      "id": "skill-budget",
-      "description": "Complex prompt respects four-skill budget.",
-      "prompt": "Build a new enterprise product with a secure dashboard workflow, API integration, client branding and production release planning.",
+      "id": "design-brainstorm",
+      "description": "Taste and Superpowers contribute during art direction and brainstorming.",
+      "prompt": "Design a premium enterprise management dashboard with charts, responsive behaviour and subtle animations.",
+      "phase_override": "BRAINSTORM",
       "expected": {
         "material": true,
-        "mode": "FULL",
+        "current_phase": "BRAINSTORM",
         "skills": [
-          "project-discovery",
+          "solution-brainstorming"
+        ],
+        "strengths": [
+          "design-intelligence:constitution",
+          "superpowers:brainstorming",
+          "taste:design-taste-frontend"
+        ],
+        "forbidden_strengths": [
+          "impeccable:audit",
+          "impeccable:polish"
+        ],
+        "design_authority": true,
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "design-specification",
+      "description": "Design specification uses UI UX Pro Max and motion vocabulary beneath the constitution.",
+      "prompt": "Design a premium enterprise management dashboard with charts, responsive behaviour and subtle animations.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "current_phase": "SPECIFY",
+        "skills": [
           "dashboard",
+          "product-specification"
+        ],
+        "strengths": [
+          "design-intelligence:constitution",
+          "ui-ux-pro-max:design-system-generator",
+          "emil:animation-vocabulary"
+        ],
+        "design_authority": true,
+        "maximum_skills": 5,
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "design-implementation",
+      "description": "Frontend and motion implementation are activated only after specification.",
+      "prompt": "Design a premium enterprise management dashboard with charts, responsive behaviour and subtle animations.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "current_phase": "IMPLEMENT",
+        "skills": [
+          "frontend-implementation",
+          "enterprise-ui-review",
+          "dashboard"
+        ],
+        "strengths": [
+          "design-intelligence:constitution",
+          "karpathy:surgical-changes",
+          "frontend-design:implementation",
+          "superpowers:test-driven-development",
+          "emil:emil-design-eng"
+        ],
+        "forbidden_strengths": [
+          "impeccable:polish"
+        ],
+        "design_authority": true,
+        "maximum_skills": 5,
+        "maximum_context_words": 1800,
+        "maximum_skill_context_words": 1200
+      }
+    },
+    {
+      "id": "design-verification",
+      "description": "Impeccable, Emil and browser evidence are verification specialists.",
+      "prompt": "Design a premium enterprise management dashboard with charts, responsive behaviour and subtle animations.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "material": true,
+        "current_phase": "VERIFY",
+        "skills": [
+          "enterprise-ui-review",
+          "dashboard",
+          "quality-engineering"
+        ],
+        "strengths": [
+          "design-intelligence:constitution",
+          "impeccable:audit",
+          "impeccable:harden",
+          "emil:review-animations",
+          "playwright:project-tests",
+          "superpowers:verification-before-completion"
+        ],
+        "forbidden_strengths": [
+          "taste:design-taste-frontend"
+        ],
+        "design_authority": true,
+        "maximum_strengths": 8,
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "design-polish",
+      "description": "Final polish uses Impeccable and motion improvement without changing design authority.",
+      "prompt": "Design a premium enterprise management dashboard with charts, responsive behaviour and subtle animations.",
+      "phase_override": "POLISH",
+      "expected": {
+        "material": true,
+        "current_phase": "POLISH",
+        "skills": [
+          "enterprise-ui-review"
+        ],
+        "strengths": [
+          "design-intelligence:constitution",
+          "impeccable:polish",
+          "impeccable:clarify",
+          "emil:improve-animations"
+        ],
+        "forbidden_strengths": [
+          "taste:design-taste-frontend"
+        ],
+        "design_authority": true,
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "agent-blueprint-research",
+      "description": "Agent catalogue is used for blueprint discovery with current platform research.",
+      "prompt": "Build a new AI agent platform and research existing agent blueprints and current industry trends.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "tier": "PROGRAM",
+        "register": "DUAL",
+        "current_phase": "RESEARCH",
+        "skills": [
+          "agent-blueprint-discovery",
+          "domain-research",
+          "reference-router"
+        ],
+        "strengths": [
+          "500-ai-agents:blueprint-discovery",
+          "agent-reach:platform-research"
+        ],
+        "research_sources": [
+          "agent-reach",
+          "500-ai-agents"
+        ],
+        "external_candidates": [
+          "500-ai-agents-projects",
+          "agent-reach"
+        ],
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "agent-specification",
+      "description": "AI-agent architecture and product behavior are specified together.",
+      "prompt": "Build a new AI agent platform and research existing agent blueprints and current industry trends.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "current_phase": "SPECIFY",
+        "skills": [
+          "ai-agent-engineering",
+          "product-specification"
+        ],
+        "external_candidates": [
+          "github-spec-kit"
+        ],
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "agent-implementation",
+      "description": "AI agents use TDD and subagent development during implementation.",
+      "prompt": "Build a new AI agent platform and research existing agent blueprints and current industry trends.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "current_phase": "IMPLEMENT",
+        "skills": [
+          "ai-agent-engineering",
+          "software-implementation"
+        ],
+        "strengths": [
+          "karpathy:surgical-changes",
+          "superpowers:test-driven-development",
+          "superpowers:subagent-driven-development"
+        ],
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "agent-verification",
+      "description": "AI-agent verification has a native quality procedure and completion evidence.",
+      "prompt": "Build a new AI agent platform and research existing agent blueprints and current industry trends.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "material": true,
+        "current_phase": "VERIFY",
+        "skills": [
+          "ai-agent-engineering",
+          "quality-engineering"
+        ],
+        "strengths": [
+          "superpowers:verification-before-completion",
+          "superpowers:requesting-code-review"
+        ],
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "legal-controls-spec",
+      "description": "Legal obligations are translated into governance and workflow controls.",
+      "prompt": "Review this vendor contract and map compliance obligations into workflow controls.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "register": "DUAL",
+        "current_phase": "SPECIFY",
+        "skills": [
+          "legal-compliance-analysis",
+          "governance-risk-controls",
           "workflow",
+          "product-specification"
+        ],
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "investment-research",
+      "description": "Investment analysis uses finance, domain and source-traceable research.",
+      "prompt": "Analyse this investment portfolio holding, unit economics, valuation and XIRR.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "register": "CONSULTING",
+        "current_phase": "RESEARCH",
+        "skills": [
+          "investment-analysis",
+          "finance-reporting",
+          "domain-research"
+        ],
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "data-pipeline-implementation",
+      "description": "Data engineering and dashboard frontend implementation can coexist in one bounded phase.",
+      "prompt": "Build an ETL pipeline and dashboard for transaction reconciliation.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "current_phase": "IMPLEMENT",
+        "skills": [
+          "data-engineering",
+          "frontend-implementation",
+          "enterprise-ui-review"
+        ],
+        "strengths": [
+          "design-intelligence:constitution",
+          "frontend-design:implementation",
+          "superpowers:test-driven-development"
+        ],
+        "maximum_skills": 5,
+        "maximum_context_words": 1800,
+        "maximum_skill_context_words": 1200
+      }
+    },
+    {
+      "id": "writing-polish",
+      "description": "Stop Slop is a final lint pass beneath native writing and artifact skills.",
+      "prompt": "Polish this management report and remove generic AI wording.",
+      "phase_override": "POLISH",
+      "expected": {
+        "material": true,
+        "register": "ARTIFACT",
+        "current_phase": "POLISH",
+        "skills": [
+          "writing-quality",
+          "artifact-production"
+        ],
+        "strengths": [
+          "stop-slop:final-lint"
+        ],
+        "external_candidates": [
+          "stop-slop"
+        ],
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "browser-verification",
+      "description": "Browser verification selects deterministic tests and design authority for frontend work.",
+      "prompt": "Verify this responsive frontend in Playwright with accessibility and end-to-end tests.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL",
+        "current_phase": "VERIFY",
+        "skills": [
+          "quality-engineering",
+          "enterprise-ui-review"
+        ],
+        "strengths": [
+          "design-intelligence:constitution",
+          "playwright:project-tests",
+          "superpowers:verification-before-completion"
+        ],
+        "external_candidates": [
+          "browser-verification"
+        ],
+        "design_authority": true,
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "explicit-skill-audit",
+      "description": "Skill governance activates only for an explicit overlap and token audit.",
+      "prompt": "Audit skill overlap and token overhead in this harness.",
+      "expected": {
+        "material": true,
+        "current_phase": "DISCOVER",
+        "skills": [
           "skill-governance"
         ],
-        "maximum_skills": 4
+        "forbidden_skills": [
+          "frontend-implementation",
+          "dashboard"
+        ],
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "generic-specification-default",
+      "description": "A new product receives a specification procedure even without naming PRD.",
+      "prompt": "Build a new internal approval module with role-based access and audit history.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "tier": "PROGRAM",
+        "current_phase": "SPECIFY",
+        "skills": [
+          "product-specification"
+        ],
+        "external_candidates": [
+          "github-spec-kit"
+        ],
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "generic-implementation-default",
+      "description": "General implementation receives a native fallback, Karpathy and TDD.",
+      "prompt": "Build a new internal approval module with role-based access and audit history.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "current_phase": "IMPLEMENT",
+        "skills": [
+          "software-implementation"
+        ],
+        "strengths": [
+          "karpathy:surgical-changes",
+          "superpowers:test-driven-development"
+        ],
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "generic-verification-default",
+      "description": "Every technical build receives a native quality procedure.",
+      "prompt": "Build a new internal approval module with role-based access and audit history.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "material": true,
+        "current_phase": "VERIFY",
+        "skills": [
+          "quality-engineering"
+        ],
+        "strengths": [
+          "superpowers:verification-before-completion"
+        ],
+        "maximum_context_words": 1800
       }
     }
   ]

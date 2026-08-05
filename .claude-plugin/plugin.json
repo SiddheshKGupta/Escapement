@@ -1,0 +1,12 @@
+{
+  "name": "escapement",
+  "version": "6.3.0",
+  "description": "Domain-aware decision coaching, phase-specific skills, capability strength orchestration, evidence and delivery gates for AI agents.",
+  "author": {
+    "name": "Escapement Project"
+  },
+  "repository": "https://github.com/SiddheshKGupta/escapement",
+  "license": "See LICENSE.md",
+  "skills": ".claude/skills",
+  "settings": ".claude/settings.json"
+}

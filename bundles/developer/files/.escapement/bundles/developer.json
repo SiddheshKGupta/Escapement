@@ -1,0 +1,10 @@
+{
+  "description": "Implementation, API, UI review, release, and governance setup.",
+  "skills": [
+    "api-integration",
+    "enterprise-ui-review",
+    "release-readiness",
+    "skill-governance"
+  ],
+  "preset": "lean-build"
+}

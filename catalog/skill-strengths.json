@@ -1,0 +1,624 @@
+{
+  "schema_version": "1.0",
+  "version": "6.3.0",
+  "principle": "Route subskills by the problem they solve and the phase where they are strongest.",
+  "capabilities": [
+    {
+      "id": "karpathy:think-before-coding",
+      "parent": "karpathy-guidelines",
+      "family": "engineering-behaviour",
+      "phases": [
+        "DISCOVER",
+        "PLAN",
+        "IMPLEMENT"
+      ],
+      "strength": "Surface assumptions, ambiguity and trade-offs before changing code.",
+      "activation": "baseline"
+    },
+    {
+      "id": "karpathy:simplicity-first",
+      "parent": "karpathy-guidelines",
+      "family": "engineering-behaviour",
+      "phases": [
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY"
+      ],
+      "strength": "Prevent speculative abstractions and unnecessary flexibility.",
+      "activation": "baseline"
+    },
+    {
+      "id": "karpathy:surgical-changes",
+      "parent": "karpathy-guidelines",
+      "family": "engineering-behaviour",
+      "phases": [
+        "IMPLEMENT",
+        "VERIFY"
+      ],
+      "strength": "Keep diffs directly traceable to the approved task.",
+      "activation": "baseline"
+    },
+    {
+      "id": "karpathy:goal-driven-execution",
+      "parent": "karpathy-guidelines",
+      "family": "engineering-behaviour",
+      "phases": [
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY"
+      ],
+      "strength": "Convert vague tasks into verifiable goals and feedback loops.",
+      "activation": "baseline"
+    },
+    {
+      "id": "ponytail:lite",
+      "parent": "ponytail",
+      "family": "engineering-minimalism",
+      "phases": [
+        "PLAN",
+        "IMPLEMENT"
+      ],
+      "strength": "Light YAGNI and native-platform preference.",
+      "activation": "conditional"
+    },
+    {
+      "id": "ponytail:full",
+      "parent": "ponytail",
+      "family": "engineering-minimalism",
+      "phases": [
+        "IMPLEMENT"
+      ],
+      "strength": "Strong standard-library-first and minimum-code pressure.",
+      "activation": "conditional"
+    },
+    {
+      "id": "ponytail:ultra",
+      "parent": "ponytail",
+      "family": "engineering-minimalism",
+      "phases": [
+        "IMPLEMENT"
+      ],
+      "strength": "Extreme simplification when code bloat is the primary defect.",
+      "activation": "explicit-only"
+    },
+    {
+      "id": "superpowers:brainstorming",
+      "parent": "superpowers",
+      "family": "delivery-methodology",
+      "phases": [
+        "BRAINSTORM"
+      ],
+      "strength": "Explore design through structured questions and incremental approval.",
+      "activation": "preferred-when-installed"
+    },
+    {
+      "id": "superpowers:writing-plans",
+      "parent": "superpowers",
+      "family": "delivery-methodology",
+      "phases": [
+        "PLAN"
+      ],
+      "strength": "Create detailed implementation plans with exact files and verification.",
+      "activation": "preferred-when-installed"
+    },
+    {
+      "id": "superpowers:test-driven-development",
+      "parent": "superpowers",
+      "family": "engineering-execution",
+      "phases": [
+        "IMPLEMENT"
+      ],
+      "strength": "Write failing tests first and implement to a precise goal.",
+      "activation": "preferred-when-applicable"
+    },
+    {
+      "id": "superpowers:subagent-driven-development",
+      "parent": "superpowers",
+      "family": "agent-orchestration",
+      "phases": [
+        "IMPLEMENT"
+      ],
+      "strength": "Use fresh sequential contexts with specification and quality review.",
+      "activation": "conditional"
+    },
+    {
+      "id": "superpowers:dispatching-parallel-agents",
+      "parent": "superpowers",
+      "family": "agent-orchestration",
+      "phases": [
+        "IMPLEMENT"
+      ],
+      "strength": "Parallelise independent tasks with explicit contracts.",
+      "activation": "conditional"
+    },
+    {
+      "id": "superpowers:executing-plans",
+      "parent": "superpowers",
+      "family": "engineering-execution",
+      "phases": [
+        "IMPLEMENT"
+      ],
+      "strength": "Execute an approved plan with human checkpoints.",
+      "activation": "conditional"
+    },
+    {
+      "id": "superpowers:requesting-code-review",
+      "parent": "superpowers",
+      "family": "code-review",
+      "phases": [
+        "VERIFY"
+      ],
+      "strength": "Request an independent specification and quality review.",
+      "activation": "conditional"
+    },
+    {
+      "id": "superpowers:verification-before-completion",
+      "parent": "superpowers",
+      "family": "verification",
+      "phases": [
+        "VERIFY",
+        "RELEASE"
+      ],
+      "strength": "Require actual verification evidence before completion claims.",
+      "activation": "preferred-when-installed"
+    },
+    {
+      "id": "superpowers:finishing-a-development-branch",
+      "parent": "superpowers",
+      "family": "release",
+      "phases": [
+        "RELEASE"
+      ],
+      "strength": "Finish branch, checks and integration cleanly.",
+      "activation": "conditional"
+    },
+    {
+      "id": "ui-ux-pro-max:design-system-generator",
+      "parent": "ui-ux-pro-max",
+      "family": "design-research",
+      "phases": [
+        "RESEARCH",
+        "BRAINSTORM",
+        "SPECIFY"
+      ],
+      "strength": "Generate product-type-aware design-system recommendations from a searchable design corpus.",
+      "activation": "conditional"
+    },
+    {
+      "id": "ui-ux-pro-max:style-search",
+      "parent": "ui-ux-pro-max",
+      "family": "design-research",
+      "phases": [
+        "RESEARCH"
+      ],
+      "strength": "Search styles, palettes, fonts, UX guidance, charts and stack-specific rules.",
+      "activation": "conditional"
+    },
+    {
+      "id": "taste:design-taste-frontend",
+      "parent": "taste-skill",
+      "family": "design-art-direction",
+      "phases": [
+        "BRAINSTORM",
+        "IMPLEMENT"
+      ],
+      "strength": "Infer design language and tune variance, motion and density for greenfield interfaces.",
+      "activation": "choose-one-art-director"
+    },
+    {
+      "id": "taste:gpt-taste",
+      "parent": "taste-skill",
+      "family": "design-art-direction",
+      "phases": [
+        "BRAINSTORM",
+        "IMPLEMENT"
+      ],
+      "strength": "Stricter Codex/GPT anti-slop frontend direction.",
+      "activation": "choose-one-art-director"
+    },
+    {
+      "id": "taste:redesign-existing-projects",
+      "parent": "taste-skill",
+      "family": "design-redesign",
+      "phases": [
+        "RESEARCH",
+        "IMPLEMENT"
+      ],
+      "strength": "Audit and surgically upgrade an existing interface without rewriting functionality.",
+      "activation": "conditional"
+    },
+    {
+      "id": "taste:high-end-visual-design",
+      "parent": "taste-skill",
+      "family": "design-art-direction",
+      "phases": [
+        "BRAINSTORM"
+      ],
+      "strength": "Calm premium visual direction with softer contrast and whitespace.",
+      "activation": "explicit-direction"
+    },
+    {
+      "id": "taste:minimalist-ui",
+      "parent": "taste-skill",
+      "family": "design-art-direction",
+      "phases": [
+        "BRAINSTORM"
+      ],
+      "strength": "Restrained editorial/product design with crisp structure.",
+      "activation": "explicit-direction"
+    },
+    {
+      "id": "taste:industrial-brutalist-ui",
+      "parent": "taste-skill",
+      "family": "design-art-direction",
+      "phases": [
+        "BRAINSTORM"
+      ],
+      "strength": "Experimental mechanical visual language.",
+      "activation": "explicit-direction"
+    },
+    {
+      "id": "taste:image-to-code",
+      "parent": "taste-skill",
+      "family": "design-image-pipeline",
+      "phases": [
+        "BRAINSTORM",
+        "IMPLEMENT"
+      ],
+      "strength": "Generate or analyse visual references before implementation.",
+      "activation": "conditional"
+    },
+    {
+      "id": "taste:full-output-enforcement",
+      "parent": "taste-skill",
+      "family": "delivery-quality",
+      "phases": [
+        "IMPLEMENT"
+      ],
+      "strength": "Prevent half-finished or placeholder frontend output.",
+      "activation": "conditional"
+    },
+    {
+      "id": "emil:emil-design-eng",
+      "parent": "emil-kowalski-skill",
+      "family": "motion-design",
+      "phases": [
+        "IMPLEMENT",
+        "POLISH"
+      ],
+      "strength": "Purposeful motion, component craft, perceived speed and design engineering details.",
+      "activation": "motion-justified"
+    },
+    {
+      "id": "emil:review-animations",
+      "parent": "emil-kowalski-skill",
+      "family": "motion-review",
+      "phases": [
+        "VERIFY"
+      ],
+      "strength": "Strict animation review with explicit block/approve criteria.",
+      "activation": "motion-present"
+    },
+    {
+      "id": "emil:improve-animations",
+      "parent": "emil-kowalski-skill",
+      "family": "motion-review",
+      "phases": [
+        "VERIFY",
+        "POLISH"
+      ],
+      "strength": "Audit animation code and produce prioritised fix plans.",
+      "activation": "motion-present"
+    },
+    {
+      "id": "emil:find-animation-opportunities",
+      "parent": "emil-kowalski-skill",
+      "family": "motion-design",
+      "phases": [
+        "BRAINSTORM",
+        "POLISH"
+      ],
+      "strength": "Identify where motion adds comprehension and where it should be deleted.",
+      "activation": "conditional"
+    },
+    {
+      "id": "emil:animation-vocabulary",
+      "parent": "emil-kowalski-skill",
+      "family": "motion-design",
+      "phases": [
+        "SPECIFY"
+      ],
+      "strength": "Describe motion precisely enough for reliable implementation.",
+      "activation": "motion-present"
+    },
+    {
+      "id": "emil:apple-design",
+      "parent": "emil-kowalski-skill",
+      "family": "design-reference",
+      "phases": [
+        "RESEARCH",
+        "BRAINSTORM"
+      ],
+      "strength": "Apply Apple interface and fluid-motion principles when the product direction warrants them.",
+      "activation": "reference-only"
+    },
+    {
+      "id": "emil:pick-ui-library",
+      "parent": "emil-kowalski-skill",
+      "family": "component-selection",
+      "phases": [
+        "SPECIFY",
+        "PLAN"
+      ],
+      "strength": "Choose maintained UI libraries rather than hand-rolling mature components.",
+      "activation": "conditional"
+    },
+    {
+      "id": "impeccable:audit",
+      "parent": "impeccable",
+      "family": "design-verification",
+      "phases": [
+        "VERIFY"
+      ],
+      "strength": "Detect design anti-patterns deterministically and through critique.",
+      "activation": "preferred-when-installed"
+    },
+    {
+      "id": "impeccable:critique",
+      "parent": "impeccable",
+      "family": "design-verification",
+      "phases": [
+        "VERIFY"
+      ],
+      "strength": "Review UX and visual decisions against a high craft bar.",
+      "activation": "conditional"
+    },
+    {
+      "id": "impeccable:harden",
+      "parent": "impeccable",
+      "family": "design-verification",
+      "phases": [
+        "VERIFY"
+      ],
+      "strength": "Add edge cases, error handling, text overflow, i18n and resilience.",
+      "activation": "conditional"
+    },
+    {
+      "id": "impeccable:polish",
+      "parent": "impeccable",
+      "family": "design-polish",
+      "phases": [
+        "POLISH"
+      ],
+      "strength": "Final visual and interaction refinement before release.",
+      "activation": "preferred-when-installed"
+    },
+    {
+      "id": "impeccable:clarify",
+      "parent": "impeccable",
+      "family": "ux-writing",
+      "phases": [
+        "VERIFY",
+        "POLISH"
+      ],
+      "strength": "Improve unclear product microcopy.",
+      "activation": "conditional"
+    },
+    {
+      "id": "impeccable:adapt",
+      "parent": "impeccable",
+      "family": "responsive-design",
+      "phases": [
+        "VERIFY"
+      ],
+      "strength": "Adapt interface behaviour across device classes.",
+      "activation": "conditional"
+    },
+    {
+      "id": "impeccable:optimize",
+      "parent": "impeccable",
+      "family": "frontend-performance",
+      "phases": [
+        "VERIFY"
+      ],
+      "strength": "Improve frontend performance without changing approved design intent.",
+      "activation": "conditional"
+    },
+    {
+      "id": "context7:library-docs",
+      "parent": "context7",
+      "family": "technical-research",
+      "phases": [
+        "RESEARCH",
+        "IMPLEMENT"
+      ],
+      "strength": "Fetch current library and framework documentation.",
+      "activation": "technical-docs-needed"
+    },
+    {
+      "id": "last30days:recent-discourse",
+      "parent": "last30days",
+      "family": "trend-research",
+      "phases": [
+        "RESEARCH"
+      ],
+      "strength": "Find recent practitioner and community signals.",
+      "activation": "current-trends-needed"
+    },
+    {
+      "id": "agent-reach:platform-research",
+      "parent": "agent-reach",
+      "family": "platform-research",
+      "phases": [
+        "RESEARCH"
+      ],
+      "strength": "Reach platform-specific sources, social evidence and transcripts.",
+      "activation": "approved-network"
+    },
+    {
+      "id": "graphify:code-knowledge-graph",
+      "parent": "graphify",
+      "family": "code-knowledge",
+      "phases": [
+        "ORIENT",
+        "PLAN"
+      ],
+      "strength": "Map codebase structures and dependencies when ordinary file inspection is insufficient.",
+      "activation": "large-complex-repository"
+    },
+    {
+      "id": "claude-mem:session-memory",
+      "parent": "claude-mem",
+      "family": "memory",
+      "phases": [
+        "ALL"
+      ],
+      "strength": "Persistent semantic session memory for long-running projects.",
+      "activation": "explicit-memory-decision"
+    },
+    {
+      "id": "task-observer:observe",
+      "parent": "task-observer",
+      "family": "skill-learning",
+      "phases": [
+        "ALL"
+      ],
+      "strength": "Log repeated capability gaps and propose candidate skills.",
+      "activation": "opt-in-observer"
+    },
+    {
+      "id": "playwright:project-tests",
+      "parent": "playwright",
+      "family": "browser-verification",
+      "phases": [
+        "IMPLEMENT",
+        "VERIFY"
+      ],
+      "strength": "Deterministic cross-browser end-to-end testing.",
+      "activation": "project-existing-or-approved"
+    },
+    {
+      "id": "playwright-mcp:exploratory",
+      "parent": "playwright-mcp",
+      "family": "browser-verification",
+      "phases": [
+        "VERIFY"
+      ],
+      "strength": "Persistent accessibility-tree browser interaction for exploratory agent loops.",
+      "activation": "conditional-high-context"
+    },
+    {
+      "id": "agent-browser:agent-snapshots",
+      "parent": "agent-browser",
+      "family": "browser-verification",
+      "phases": [
+        "VERIFY"
+      ],
+      "strength": "Agent-readable browser snapshots and concise CLI interaction.",
+      "activation": "conditional"
+    },
+    {
+      "id": "stagehand:self-healing",
+      "parent": "stagehand",
+      "family": "browser-automation",
+      "phases": [
+        "IMPLEMENT",
+        "VERIFY"
+      ],
+      "strength": "Hybrid natural-language and code browser automation with reusable cached actions.",
+      "activation": "production-browser-automation"
+    },
+    {
+      "id": "cypress:project-tests",
+      "parent": "cypress",
+      "family": "browser-verification",
+      "phases": [
+        "IMPLEMENT",
+        "VERIFY"
+      ],
+      "strength": "Use when Cypress is already the project's browser test framework.",
+      "activation": "project-existing"
+    },
+    {
+      "id": "puppeteer-mcp:legacy",
+      "parent": "puppeteer-mcp",
+      "family": "browser-verification",
+      "phases": [
+        "VERIFY"
+      ],
+      "strength": "Legacy MCP browser automation only when already required.",
+      "activation": "discouraged-legacy"
+    },
+    {
+      "id": "design-intelligence:constitution",
+      "parent": "design-intelligence-constitution",
+      "family": "design-authority",
+      "phases": [
+        "RESEARCH",
+        "BRAINSTORM",
+        "SPECIFY",
+        "IMPLEMENT",
+        "VERIFY",
+        "POLISH"
+      ],
+      "strength": "Governing design authority for product direction, hierarchy, archetypes, tokens, components, states, accessibility and anti-generic-AI rules.",
+      "activation": "mandatory-for-design"
+    },
+    {
+      "id": "frontend-design:implementation",
+      "parent": "frontend-design",
+      "family": "frontend-implementation",
+      "phases": [
+        "IMPLEMENT"
+      ],
+      "strength": "Implement distinctive production-grade interfaces from an approved design specification.",
+      "activation": "conditional"
+    },
+    {
+      "id": "stop-slop:final-lint",
+      "parent": "stop-slop",
+      "family": "writing-quality",
+      "phases": [
+        "VERIFY",
+        "POLISH"
+      ],
+      "strength": "Remove generic AI phrasing and repetitive prose after substantive content is correct.",
+      "activation": "conditional"
+    },
+    {
+      "id": "500-ai-agents:blueprint-discovery",
+      "parent": "500-ai-agents-projects",
+      "family": "agent-blueprint-discovery",
+      "phases": [
+        "RESEARCH",
+        "BRAINSTORM",
+        "PLAN"
+      ],
+      "strength": "Discover linked agent implementations and industry use cases for deeper validation.",
+      "activation": "discovery-only"
+    },
+    {
+      "id": "open-design:workspace",
+      "parent": "open-design",
+      "family": "design-workspace",
+      "phases": [
+        "RESEARCH",
+        "BRAINSTORM",
+        "ARTIFACT"
+      ],
+      "strength": "Local-first design workspace, prototypes, assets, migrations and export workflows.",
+      "activation": "explicit-workspace-decision"
+    },
+    {
+      "id": "ui-ux-pro-max:chart-and-data-viz",
+      "parent": "ui-ux-pro-max",
+      "family": "design-research",
+      "phases": [
+        "RESEARCH",
+        "SPECIFY"
+      ],
+      "strength": "Recommend chart types and data-visualisation patterns appropriate to the product and decision.",
+      "activation": "dashboard-or-data-viz"
+    }
+  ]
+}

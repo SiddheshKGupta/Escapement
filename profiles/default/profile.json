@@ -1,0 +1,20 @@
+{
+  "id": "default",
+  "name": "Escapement Default",
+  "description": "Brand-neutral meta profile.",
+  "doctrine_defaults": [
+    "institutional-judgement"
+  ],
+  "context_budget_words": 1800,
+  "maximum_doctrine_packs": 3,
+  "maximum_native_skills": 4,
+  "writing": {
+    "tone": "clear, professional, implementation-oriented",
+    "avoid": [
+      "generic AI phrasing",
+      "unsupported certainty",
+      "unranked option dumps"
+    ]
+  },
+  "skill_context_budget_words": 1000
+}

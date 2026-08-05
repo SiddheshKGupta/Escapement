@@ -1,0 +1,345 @@
+{
+  "schema_version": "1.0",
+  "version": "6.3.0",
+  "principle": "Fine-grained capability intents are preserved, but routed through canonical families and phase-specific specialists.",
+  "families": [
+    {
+      "id": "business-consulting",
+      "canonical_native_skills": [
+        "decision-coach",
+        "consulting-analysis",
+        "project-discovery"
+      ],
+      "intents": [
+        "business discovery",
+        "stakeholder mapping",
+        "process mapping",
+        "operating-model design",
+        "SOP design",
+        "policy-to-system translation",
+        "governance tracker design",
+        "management MIS",
+        "issue and escalation design",
+        "domain analysis",
+        "board and management communication"
+      ],
+      "phases": [
+        "DISCOVER",
+        "RESEARCH",
+        "BRAINSTORM",
+        "SPECIFY"
+      ]
+    },
+    {
+      "id": "governance-risk-controls",
+      "canonical_native_skills": [
+        "governance-risk-controls",
+        "workflow",
+        "security-review"
+      ],
+      "intents": [
+        "RCSA",
+        "control design",
+        "maker-checker",
+        "approval authority",
+        "compliance",
+        "audit",
+        "exception management",
+        "SLA",
+        "escalation",
+        "privacy",
+        "segregation of duties"
+      ],
+      "phases": [
+        "DISCOVER",
+        "SPECIFY",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "finance-and-private-capital",
+      "canonical_native_skills": [
+        "finance-reporting",
+        "consulting-analysis",
+        "dashboard"
+      ],
+      "intents": [
+        "finance operations",
+        "reconciliation",
+        "financial statements",
+        "variance analysis",
+        "journal entries",
+        "close management",
+        "portfolio monitoring",
+        "returns analysis",
+        "unit economics",
+        "due diligence",
+        "investment committee memo",
+        "portfolio reporting"
+      ],
+      "phases": [
+        "RESEARCH",
+        "SPECIFY",
+        "IMPLEMENT",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "product-management",
+      "canonical_native_skills": [
+        "project-discovery",
+        "solution-brainstorming",
+        "delivery-planning"
+      ],
+      "intents": [
+        "PRD",
+        "BRD",
+        "FRS",
+        "user stories",
+        "acceptance criteria",
+        "feature tickets",
+        "information architecture",
+        "user journey",
+        "role design",
+        "workflow design",
+        "status model",
+        "dashboard specification",
+        "KPI catalogue",
+        "product benchmark",
+        "roadmap",
+        "sprint planning",
+        "release planning",
+        "stakeholder update"
+      ],
+      "phases": [
+        "DISCOVER",
+        "BRAINSTORM",
+        "SPECIFY",
+        "PLAN",
+        "RELEASE"
+      ]
+    },
+    {
+      "id": "data-engineering-and-analytics",
+      "canonical_native_skills": [
+        "finance-reporting",
+        "dashboard",
+        "engineering-review",
+        "api-integration"
+      ],
+      "intents": [
+        "SQL",
+        "Python",
+        "ETL",
+        "ELT",
+        "data pipelines",
+        "API ingestion",
+        "file ingestion",
+        "data validation",
+        "data cleansing",
+        "mapping",
+        "reconciliation",
+        "lineage",
+        "warehousing",
+        "dimensional modelling",
+        "semantic layer",
+        "Power BI",
+        "Excel governance trackers",
+        "analytics",
+        "statistical analysis",
+        "data-quality monitoring"
+      ],
+      "phases": [
+        "SPECIFY",
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "engineering",
+      "canonical_native_skills": [
+        "engineering-review",
+        "api-integration",
+        "security-review",
+        "release-readiness"
+      ],
+      "intents": [
+        "architecture",
+        "system design",
+        "code review",
+        "debugging",
+        "technical debt",
+        "testing strategy",
+        "incident response",
+        "deployment readiness",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Next.js",
+        "Python",
+        "FastAPI",
+        "REST APIs",
+        "SQL databases",
+        "NoSQL",
+        "authentication",
+        "RBAC",
+        "CI/CD",
+        "Docker",
+        "cloud deployment",
+        "logging",
+        "monitoring",
+        "PWA",
+        "accessibility",
+        "performance engineering"
+      ],
+      "phases": [
+        "BRAINSTORM",
+        "SPECIFY",
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY",
+        "RELEASE"
+      ]
+    },
+    {
+      "id": "ai-and-automation",
+      "canonical_native_skills": [
+        "agent-blueprint-discovery",
+        "agent-orchestration",
+        "api-integration",
+        "security-review"
+      ],
+      "intents": [
+        "Codex",
+        "Claude Code",
+        "LangGraph",
+        "LangChain",
+        "agent harness engineering",
+        "RAG",
+        "structured extraction",
+        "tool calling",
+        "n8n",
+        "workflow automation",
+        "prompt engineering",
+        "evaluation",
+        "hallucination control",
+        "human-in-the-loop",
+        "AI governance",
+        "privacy-aware AI",
+        "agent deployment"
+      ],
+      "phases": [
+        "RESEARCH",
+        "BRAINSTORM",
+        "SPECIFY",
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY"
+      ]
+    },
+    {
+      "id": "design-and-experience",
+      "canonical_native_skills": [
+        "design-system",
+        "enterprise-ui-review",
+        "writing-quality"
+      ],
+      "authority": "docs/standards/design-intelligence.md",
+      "intents": [
+        "user research",
+        "information architecture",
+        "design critique",
+        "design system",
+        "accessibility review",
+        "UX copy",
+        "design handoff",
+        "frontend design",
+        "responsive design",
+        "motion",
+        "animation",
+        "component selection",
+        "design benchmark"
+      ],
+      "phases": [
+        "RESEARCH",
+        "BRAINSTORM",
+        "SPECIFY",
+        "IMPLEMENT",
+        "VERIFY",
+        "POLISH"
+      ]
+    },
+    {
+      "id": "documentation-and-artifacts",
+      "canonical_native_skills": [
+        "artifact-production",
+        "writing-quality"
+      ],
+      "intents": [
+        "Markdown repository design",
+        "architecture documents",
+        "data dictionaries",
+        "SOPs",
+        "process notes",
+        "control matrices",
+        "test scripts",
+        "UAT packs",
+        "deployment runbooks",
+        "management decks",
+        "Word documents",
+        "Excel workbooks",
+        "PowerPoint",
+        "PDF",
+        "implementation prompts"
+      ],
+      "phases": [
+        "DISCOVER",
+        "SPECIFY",
+        "PLAN",
+        "VERIFY",
+        "RELEASE"
+      ]
+    },
+    {
+      "id": "connectors-and-platforms",
+      "canonical_native_skills": [
+        "api-integration",
+        "reference-router",
+        "security-review"
+      ],
+      "intents": [
+        "GitHub",
+        "Gmail",
+        "Calendar",
+        "Contacts",
+        "Vercel",
+        "ClickUp",
+        "Supabase",
+        "ERP",
+        "CRM",
+        "accounting platform",
+        "payment gateway",
+        "Power BI",
+        "n8n",
+        "WhatsApp Business API",
+        "email ingestion",
+        "cloud storage",
+        "SFTP",
+        "database views",
+        "Playwright MCP",
+        "Stagehand",
+        "Puppeteer MCP",
+        "Cypress"
+      ],
+      "phases": [
+        "RESEARCH",
+        "SPECIFY",
+        "PLAN",
+        "IMPLEMENT",
+        "VERIFY",
+        "RELEASE"
+      ]
+    }
+  ]
+}

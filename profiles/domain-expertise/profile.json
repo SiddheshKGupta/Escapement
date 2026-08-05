@@ -1,0 +1,39 @@
+{
+  "id": "domain-expertise",
+  "name": "Domain Expertise",
+  "description": "A configurable, industry-neutral profile that strengthens decision quality with domain context, standards, evidence and current market signals.",
+  "extends": "default",
+  "default_register": "DUAL",
+  "context_budget_words": 1800,
+  "maximum_doctrine_packs_per_phase": 3,
+  "maximum_native_skills_per_phase": 5,
+  "decision_support": {
+    "maximum_questions": 5,
+    "recommend_defaults": true,
+    "improve_prompt": true,
+    "research_before_questioning_when_possible": true
+  },
+  "research": {
+    "official_sources_first": true,
+    "industry_standards": "use when they can materially change the design or decision",
+    "current_trends": "use when market practice, technology, regulation or user behaviour may have changed",
+    "community_sources": "supporting signal only; not authoritative evidence"
+  },
+  "brand": {
+    "principle": "The project's approved brand and users take precedence.",
+    "visual_character": "credible, purposeful, accessible and appropriate to the domain"
+  },
+  "writing": {
+    "tone": "clear, professional, decision-oriented and implementation-ready",
+    "avoid": [
+      "generic AI wording",
+      "unsupported certainty",
+      "filler",
+      "unranked option dumps"
+    ]
+  },
+  "artifacts": {
+    "rule": "Use project-specific formatting. When no format exists, recommend an appropriate professional default and record it in the project profile."
+  },
+  "skill_context_budget_words": 1200
+}

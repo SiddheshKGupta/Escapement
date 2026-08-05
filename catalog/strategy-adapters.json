@@ -1,0 +1,312 @@
+{
+  "schema_version": "1.0",
+  "version": "6.3.0",
+  "principle": "Use capabilities where they are strongest in the lifecycle; never load the whole methodology into every phase.",
+  "adapters": [
+    {
+      "id": "superpowers-sdlc",
+      "name": "Superpowers SDLC Adapter",
+      "source": "https://github.com/obra/superpowers",
+      "license": "MIT",
+      "status": "optional-preferred",
+      "overlap_group": "harness-methodology",
+      "phase_mapping": {
+        "BRAINSTORM": [
+          "superpowers:brainstorming"
+        ],
+        "PLAN": [
+          "superpowers:writing-plans"
+        ],
+        "IMPLEMENT": [
+          "superpowers:test-driven-development",
+          "superpowers:subagent-driven-development",
+          "superpowers:executing-plans"
+        ],
+        "PARALLEL_IMPLEMENT": [
+          "superpowers:dispatching-parallel-agents"
+        ],
+        "VERIFY": [
+          "superpowers:requesting-code-review",
+          "superpowers:verification-before-completion"
+        ],
+        "FINISH": [
+          "superpowers:finishing-a-development-branch"
+        ]
+      },
+      "selection_rules": [
+        "brainstorm before coding for PROGRAM work and material product decisions",
+        "use writing-plans only after the solution direction is approved",
+        "choose subagent-driven-development when tasks are sequential but benefit from fresh contexts",
+        "choose dispatching-parallel-agents only for independent tasks",
+        "use executing-plans when the user wants human checkpoints rather than subagent dispatch",
+        "keep Superpowers telemetry disabled when project policy requires no external telemetry"
+      ]
+    },
+    {
+      "id": "github-spec-kit",
+      "name": "GitHub Spec Kit Adapter",
+      "source": "https://github.com/github/spec-kit",
+      "license": "MIT",
+      "status": "optional",
+      "overlap_group": "harness-methodology",
+      "phase_mapping": {
+        "DISCOVER": [
+          "constitution"
+        ],
+        "SPECIFY": [
+          "specify"
+        ],
+        "PLAN": [
+          "plan",
+          "tasks"
+        ],
+        "CONVERGE": [
+          "converge"
+        ]
+      },
+      "selection_rules": [
+        "prefer for PROGRAM work needing explicit specification and traceability",
+        "do not duplicate equivalent approved project artifacts",
+        "Escapement remains the runtime and evidence orchestrator"
+      ]
+    },
+    {
+      "id": "gsd-core",
+      "name": "GSD Phase Execution Adapter",
+      "source": "https://github.com/open-gsd/gsd-core",
+      "license": "MIT",
+      "status": "optional",
+      "overlap_group": "harness-methodology",
+      "phase_mapping": {
+        "DISCOVER": [
+          "discuss"
+        ],
+        "PLAN": [
+          "plan"
+        ],
+        "IMPLEMENT": [
+          "execute"
+        ],
+        "VERIFY": [
+          "verify"
+        ],
+        "FINISH": [
+          "ship"
+        ]
+      },
+      "selection_rules": [
+        "use when fresh-context phase isolation is preferred",
+        "do not activate alongside the complete Superpowers execution methodology",
+        "select one methodology owner for implementation"
+      ]
+    },
+    {
+      "id": "agent-reach",
+      "name": "Agent Reach Research Adapter",
+      "source": "https://github.com/Panniantong/Agent-Reach",
+      "license": "MIT",
+      "status": "optional-network",
+      "overlap_group": "research-freshness",
+      "phase_mapping": {
+        "RESEARCH": [
+          "platform search",
+          "social and community evidence",
+          "video transcripts",
+          "GitHub activity",
+          "research capability doctor"
+        ]
+      },
+      "selection_rules": [
+        "prefer safe mode for installation",
+        "keep tools outside the project workspace",
+        "review cookie, login and credential handling before platform access",
+        "use as supporting evidence rather than authority"
+      ]
+    },
+    {
+      "id": "last30days",
+      "name": "Last30Days Trends Adapter",
+      "source": "https://github.com/mvanhorn/last30days-skill",
+      "license": "verify current repository licence before install",
+      "status": "optional-network",
+      "overlap_group": "research-freshness",
+      "phase_mapping": {
+        "RESEARCH": [
+          "recent practitioner discourse",
+          "community-ranked signals",
+          "emerging tools and practices",
+          "current sentiment"
+        ]
+      },
+      "selection_rules": [
+        "use only when the last 30 days can materially change the decision",
+        "follow the installed skill contract rather than improvising",
+        "separate trend signal from authoritative requirement",
+        "cite the underlying sources"
+      ]
+    },
+    {
+      "id": "500-ai-agents",
+      "name": "500+ AI Agent Blueprint Adapter",
+      "source": "https://github.com/ashishpatel26/500-AI-Agents-Projects",
+      "license": "MIT for catalogue repository; linked projects retain their own licences",
+      "status": "discovery-only-until-validated",
+      "overlap_group": "agent-pattern-catalogue",
+      "phase_mapping": {
+        "RESEARCH": [
+          "industry use-case discovery"
+        ],
+        "BRAINSTORM": [
+          "agent architecture alternatives"
+        ],
+        "PLAN": [
+          "framework and implementation comparison"
+        ]
+      },
+      "selection_rules": [
+        "treat catalogue entries as leads, not deployable components",
+        "inspect the exact linked repository",
+        "verify licence, tests, maintenance, dependencies, data and security",
+        "request approval before cloning, adapting or deploying"
+      ]
+    },
+    {
+      "id": "agent-browser",
+      "name": "Agent Browser Verification Adapter",
+      "source": "https://github.com/vercel-labs/agent-browser",
+      "license": "Apache-2.0",
+      "status": "optional",
+      "overlap_group": "browser-automation",
+      "phase_mapping": {
+        "VERIFY": [
+          "accessibility snapshot",
+          "interaction evidence",
+          "screenshots",
+          "DOM inspection"
+        ]
+      },
+      "selection_rules": [
+        "prefer project Playwright tests when already present",
+        "restrict domains and authenticated sessions",
+        "capture browser evidence"
+      ]
+    },
+    {
+      "id": "engineering-behaviour",
+      "name": "Karpathy + Ponytail Engineering Adapter",
+      "source": [
+        "https://github.com/forrestchang/andrej-karpathy-skills",
+        "https://github.com/DietrichGebert/ponytail"
+      ],
+      "license": "MIT / verify selected Ponytail repository",
+      "status": "preferred",
+      "overlap_group": "engineering-behaviour",
+      "phase_mapping": {
+        "DISCOVER": [
+          "karpathy:think-before-coding"
+        ],
+        "PLAN": [
+          "karpathy:simplicity-first",
+          "karpathy:goal-driven-execution",
+          "ponytail:lite"
+        ],
+        "IMPLEMENT": [
+          "karpathy:surgical-changes",
+          "karpathy:goal-driven-execution",
+          "ponytail:full"
+        ],
+        "VERIFY": [
+          "karpathy:goal-driven-execution",
+          "karpathy:surgical-changes"
+        ]
+      },
+      "selection_rules": [
+        "Karpathy guidance remains the baseline",
+        "Ponytail is an optional implementation intensifier, not a second baseline",
+        "use Ponytail ultra only when code bloat is the explicit defect",
+        "do not let minimalism remove required controls, tests, accessibility or observability"
+      ]
+    },
+    {
+      "id": "design-strength-orchestration",
+      "name": "Design Intelligence Specialist Adapter",
+      "source": [
+        "docs/standards/design-intelligence.md",
+        "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+        "https://github.com/Leonxlnx/taste-skill",
+        "https://github.com/pbakaus/impeccable",
+        "https://github.com/emilkowalski/skills",
+        "https://github.com/nexu-io/open-design"
+      ],
+      "license": "Per component; verify selected specialist",
+      "status": "preferred",
+      "overlap_group": "design-authority",
+      "phase_mapping": {
+        "RESEARCH": [
+          "ui-ux-pro-max:style-search"
+        ],
+        "BRAINSTORM": [
+          "taste:design-taste-frontend"
+        ],
+        "SPECIFY": [
+          "ui-ux-pro-max:design-system-generator",
+          "emil:animation-vocabulary"
+        ],
+        "IMPLEMENT": [
+          "frontend-design",
+          "emil:emil-design-eng"
+        ],
+        "VERIFY": [
+          "impeccable:audit",
+          "impeccable:harden",
+          "emil:review-animations"
+        ],
+        "POLISH": [
+          "impeccable:polish",
+          "impeccable:clarify"
+        ]
+      },
+      "selection_rules": [
+        "design-intelligence.md is supreme and always governs design work",
+        "choose one primary art director in BRAINSTORM",
+        "use UI/UX Pro Max as a research and recommendation engine",
+        "use Impeccable primarily for verification and polish",
+        "use Emil only when motion exists or is justified",
+        "Open Design is an optional workspace or asset/prototype ecosystem, not a default skill stack"
+      ]
+    },
+    {
+      "id": "browser-verification",
+      "name": "Browser Verification Adapter",
+      "source": [
+        "https://github.com/microsoft/playwright",
+        "https://github.com/microsoft/playwright-mcp",
+        "https://github.com/vercel-labs/agent-browser",
+        "https://github.com/browserbase/stagehand",
+        "https://github.com/cypress-io/cypress"
+      ],
+      "license": "Per selected component",
+      "status": "conditional",
+      "overlap_group": "browser-verification",
+      "phase_mapping": {
+        "IMPLEMENT": [
+          "playwright:project-tests",
+          "cypress:project-tests",
+          "stagehand:self-healing"
+        ],
+        "VERIFY": [
+          "playwright:project-tests",
+          "agent-browser:agent-snapshots",
+          "playwright-mcp:exploratory"
+        ]
+      },
+      "selection_rules": [
+        "use the project's existing browser framework first",
+        "prefer CLI and tests for token-efficient deterministic verification",
+        "use MCP only for exploratory or persistent browser loops",
+        "do not select archived Puppeteer MCP for new projects",
+        "restrict domains, credentials and file access"
+      ]
+    }
+  ]
+}

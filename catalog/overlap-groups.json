@@ -1,0 +1,188 @@
+{
+  "schema_version": "2.0",
+  "version": "6.3.0",
+  "principle": "Preserve every capability, route it to its strongest phase, and prevent duplicate authority or execution.",
+  "detailed_matrix": "catalog/overlap-matrix.json",
+  "groups": [
+    {
+      "id": "engineering-behaviour",
+      "canonical": "karpathy-guidelines",
+      "members": [
+        "karpathy-guidelines",
+        "ponytail"
+      ],
+      "relation": "BASELINE_PLUS_INTENSIFIER",
+      "rule": "Karpathy Guidelines remain the baseline for thinking, surgical changes and verifiable goals. Ponytail may intensify implementation minimalism when overengineering risk is high."
+    },
+    {
+      "id": "design-authority",
+      "canonical": "design-intelligence-constitution",
+      "members": [
+        "design-intelligence-constitution",
+        "ui-ux-pro-max",
+        "taste-skill",
+        "impeccable",
+        "emil-kowalski-skill",
+        "open-design",
+        "frontend-design"
+      ],
+      "relation": "SEQUENTIAL",
+      "rule": "The constitution is supreme. Use UI/UX Pro Max for research/specification, one art director for brainstorming, frontend-design for implementation, Impeccable for audit/polish and Emil for motion.",
+      "allowed_pairings": [
+        [
+          "design-intelligence-constitution",
+          "ui-ux-pro-max"
+        ],
+        [
+          "design-intelligence-constitution",
+          "taste-skill"
+        ],
+        [
+          "design-intelligence-constitution",
+          "impeccable"
+        ],
+        [
+          "design-intelligence-constitution",
+          "emil-kowalski-skill"
+        ],
+        [
+          "frontend-design",
+          "emil-kowalski-skill"
+        ],
+        [
+          "impeccable",
+          "emil-review-animations"
+        ]
+      ],
+      "forbidden_same_phase": [
+        [
+          "taste-skill",
+          "open-design",
+          "impeccable"
+        ],
+        [
+          "taste-skill",
+          "ui-ux-pro-max",
+          "open-design"
+        ]
+      ]
+    },
+    {
+      "id": "writing-quality",
+      "canonical": "writing-quality",
+      "members": [
+        "writing-quality",
+        "stop-slop"
+      ],
+      "relation": "BASELINE_PLUS_INTENSIFIER",
+      "rule": "Native writing-quality owns content clarity and business usefulness. Stop Slop is a final anti-AI-pattern lint pass."
+    },
+    {
+      "id": "skill-learning",
+      "canonical": "skill-governance",
+      "members": [
+        "skill-governance",
+        "task-observer"
+      ],
+      "relation": "META_OBSERVER",
+      "rule": "Task Observer may log repeated gaps. Skill governance owns evaluation, promotion, overlap and retirement. Task Observer must not rewrite skills automatically."
+    },
+    {
+      "id": "delivery-methodology",
+      "canonical": "escapement-core",
+      "members": [
+        "escapement-core",
+        "superpowers",
+        "github-spec-kit",
+        "gsd-core",
+        "ecc"
+      ],
+      "relation": "SEQUENTIAL",
+      "rule": "Escapement owns runtime, state and evidence. Use component-level adapters from external methodologies at their strongest phases; do not install competing complete lifecycle hooks together."
+    },
+    {
+      "id": "memory-and-knowledge",
+      "canonical": "escapement-file-state",
+      "members": [
+        "escapement-file-state",
+        "claude-mem",
+        "appflowy",
+        "helixdb",
+        "graphify"
+      ],
+      "relation": "SUBSTITUTE",
+      "rule": "File state is default. Claude Mem, AppFlowy or HelixDB may become the primary external memory substrate only after a demonstrated need. Graphify may complement file state for code relationships."
+    },
+    {
+      "id": "research-freshness",
+      "canonical": "primary-web",
+      "members": [
+        "primary-web",
+        "context7",
+        "perplexity",
+        "last30days",
+        "agent-reach"
+      ],
+      "relation": "COMPLEMENTARY",
+      "rule": "Choose by evidence type: authoritative public facts, technical documentation, grounded research, recent discourse or platform-specific reach. Maximum two supporting channels per research question."
+    },
+    {
+      "id": "browser-verification",
+      "canonical": "project-existing-browser-framework",
+      "members": [
+        "playwright",
+        "agent-browser",
+        "stagehand",
+        "puppeteer-mcp",
+        "cypress"
+      ],
+      "relation": "SUBSTITUTE",
+      "rule": "Use the project's existing browser test framework first. Select one primary driver per run; do not duplicate browser automation stacks."
+    },
+    {
+      "id": "code-review",
+      "canonical": "engineering-review",
+      "members": [
+        "engineering-review",
+        "superpowers-requesting-code-review",
+        "claude-code-review",
+        "gstack-review"
+      ],
+      "relation": "SUBSTITUTE",
+      "rule": "Choose one primary review workflow. Add a second independent reviewer only for material/high-risk changes with a stated reason."
+    },
+    {
+      "id": "component-sources",
+      "canonical": "project-component-system",
+      "members": [
+        "project-component-system",
+        "shadcn-ui",
+        "21st-dev",
+        "open-design"
+      ],
+      "relation": "SUBSTITUTE",
+      "rule": "Use the existing project component system first. External component sources require stack, licence, accessibility and visual-consistency review."
+    },
+    {
+      "id": "security-testing",
+      "canonical": "escapement-security-review",
+      "members": [
+        "escapement-security-review",
+        "perplexity-bumblebee",
+        "strix"
+      ],
+      "rule": "Escapement defensive review remains active. Bumblebee may add read-only inventory. Strix is external, sandboxed, and authorised-only."
+    },
+    {
+      "id": "motion",
+      "canonical": "product-motion-rules",
+      "members": [
+        "product-motion-rules",
+        "emil-kowalski-skill",
+        "gsap",
+        "headroom-js"
+      ],
+      "rule": "Motion rules come from DESIGN.md. Add GSAP or Headroom only when the interaction requires them and dependency approval is granted."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "work_mode_default": "FULL",
+  "approval_gates": [
+    "schema",
+    "rbac",
+    "integration",
+    "production",
+    "confidential-data"
+  ],
+  "required_artifacts": [
+    "decision-log",
+    "audit-model",
+    "control-matrix"
+  ]
+}

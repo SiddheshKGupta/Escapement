@@ -1,0 +1,9 @@
+{
+  "work_mode_default": "EXECUTE",
+  "maximum_active_skills": 3,
+  "required_artifacts": [
+    "acceptance",
+    "checks",
+    "handoff"
+  ]
+}

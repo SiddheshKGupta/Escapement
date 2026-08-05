@@ -1,8 +1,0 @@
-id: AB-005
-scenario: skill-not-triggered
-request: "A skill is available but irrelevant"
-expected:
-  required_outputs:
-    - "NOT_NEEDED record or no invocation"
-forbidden:
-  - "skill invocation without trigger"
