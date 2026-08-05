@@ -1,22 +1,24 @@
 ---
 name: project-discovery
-description: Establish scope, decisions, risks, and build readiness before implementation. Use for a new product, module, or architecture, or when a material change is not yet clear enough to build from.
-trigger: "New product, module, architecture, or unclear material change."
+description: Use for a new product, application, module, architecture, major workflow, executable specification, or material change with unresolved scope. Do not use for an approved isolated bug or copy-only change.
 ---
 
 # Project Discovery
 
-1. Inspect repo.
-2. Pick FULL/DELTA/EXECUTE.
-3. List known, unknown, blockers.
-4. Ask small rounds.
-5. Recommend answers.
-6. Update decisions.
-7. Produce short Discovery Report.
-8. Stop asking when safe to build.
+1. Inspect the repository before asking questions.
+2. Classify `FULL`, `DELTA`, or `EXECUTE`.
+3. List known facts, unknowns, assumptions, decisions, and blockers.
+4. Ask only questions that can change scope, behaviour, data, permissions,
+   integrations, architecture, security, design, or acceptance.
+5. Recommend a default for each material question.
+6. Update constitution/specification/plan/tasks as applicable.
+7. Produce the smallest sufficient `READY CHECK`.
+8. Stop discovery when implementation is safe.
 
-Output:
-- `PROJECT_CONTEXT.md`
-- short BRD/PRD as needed
-- `SKILL_USAGE_PLAN.md`
-- Discovery Report
+Required evidence:
+
+- files inspected;
+- state/spec/decision files changed;
+- readiness status;
+- selected skills;
+- verification commands.

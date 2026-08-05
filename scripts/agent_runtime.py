@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-VERSION = "6.0.0"
+VERSION = "6.3.0"
 
 SKILLS: dict[str, dict[str, Any]] = {
     "project-discovery": {
