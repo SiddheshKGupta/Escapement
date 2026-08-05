@@ -1024,8 +1024,8 @@ Commercial redistribution, resale, white-labelling, and substantial republicatio
 
 See:
 
-- [LICENSE.md](LICENSE.md)
-- [NOTICE.md](NOTICE.md)
+- [LICENSE.md](../LICENSE.md)
+- [NOTICE.md](../NOTICE.md)
 
 ---
 

@@ -1,4 +1,4 @@
-project_name: VLCO Product Build Standard
+project_name: Escapement
 phase: runtime-validation
 work_mode: DELTA
 implementation_authorized: true

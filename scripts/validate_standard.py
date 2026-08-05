@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Unified deterministic validator for VLCO Product Build Standard."""
+"""Unified deterministic validator for the Escapement build standard."""
 
 from __future__ import annotations
 
@@ -21,10 +21,10 @@ LINE_BUDGETS = {
     "SESSION_HANDOFF.md": 40,
 }
 
+# Required in any repository governed by the standard.
 REQUIRED_ROOT = [
     "AGENTS.md",
-    "README.md",
-    "manifest.json",
+    "AGENT_RUNTIME.md",
     "PROJECT_STATE.yaml",
     "PROJECT_CONTEXT.md",
     "CURRENT_PHASE.md",
@@ -33,6 +33,15 @@ REQUIRED_ROOT = [
     "SKILL_USAGE_PLAN.md",
     "AI_REPORT.md",
 ]
+
+# Required only in the standard's own repository. These describe the standard itself,
+# so a consuming project must never be failed for lacking them.
+REQUIRED_ROOT_STANDARD = [
+    "README.md",
+    "manifest.json",
+]
+
+NATIVE_SKILL_DIRS = [".claude/skills", ".agents/skills"]
 
 REQUIRED_BEHAVIOURS = {
     "new-project",
@@ -94,12 +103,62 @@ def load_manifest(report: Report) -> dict:
     return data
 
 
+def is_standard_repo() -> bool:
+    """False when the standard has been installed into a consuming project."""
+    return not (ROOT / ".vlco-build.json").exists()
+
+
 def check_required_root(report: Report) -> None:
-    missing = [p for p in REQUIRED_ROOT if not (ROOT / p).exists()]
+    required = list(REQUIRED_ROOT)
+    if is_standard_repo():
+        required += REQUIRED_ROOT_STANDARD
+    missing = [p for p in required if not (ROOT / p).exists()]
     if missing:
         report.fail(f"required root files missing: {missing}")
     else:
         report.ok("required root files")
+
+
+def check_native_skills(report: Report) -> None:
+    """Native skills are generated from skills/ and must not drift from it."""
+    drift = []
+    for source in sorted((ROOT / "skills").glob("*/SKILL.md")):
+        skill = source.parent.name
+        for native in NATIVE_SKILL_DIRS:
+            target = ROOT / native / skill / "SKILL.md"
+            if not target.exists():
+                drift.append(f"missing {native}/{skill}/SKILL.md")
+            elif target.read_bytes() != source.read_bytes():
+                drift.append(f"stale {native}/{skill}/SKILL.md")
+    if drift:
+        report.fail(f"native skills out of sync (run vlco_build.py sync-skills): {drift}")
+    else:
+        report.ok(f"native skills synced across {len(NATIVE_SKILL_DIRS)} harness directories")
+
+
+def check_versions(report: Report) -> None:
+    """manifest.json, the build CLI, and the runtime must all agree on the version."""
+    if not is_standard_repo():
+        report.ok("version consistency check not applicable to a project install")
+        return
+    found: dict[str, str] = {}
+    try:
+        manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
+        found["manifest.json"] = str(manifest.get("version", ""))
+    except Exception:
+        report.fail("version check could not read manifest.json")
+        return
+    for name in ("vlco_build.py", "agent_runtime.py"):
+        text = (ROOT / "scripts" / name).read_text(encoding="utf-8")
+        match = re.search(r'^VERSION\s*=\s*"([^"]+)"', text, re.MULTILINE)
+        if match:
+            found[name] = match.group(1)
+
+    minors = {v.rsplit(".", 1)[0] if v.count(".") == 2 else v for v in found.values()}
+    if len(minors) > 1:
+        report.fail(f"version drift across sources: {found}")
+    else:
+        report.ok(f"version consistent across {len(found)} sources ({minors.pop()})")
 
 
 def check_manifest_paths(report: Report, manifest: dict) -> None:
@@ -303,11 +362,16 @@ def check_release_placeholders(report: Report) -> None:
 
 def main() -> int:
     report = Report()
-    manifest = load_manifest(report)
     check_required_root(report)
-    check_manifest_paths(report, manifest)
+    if is_standard_repo():
+        manifest = load_manifest(report)
+        check_manifest_paths(report, manifest)
+        check_versions(report)
+    else:
+        report.ok("manifest checks skipped (project profile)")
     check_line_budgets(report)
     check_skills(report)
+    check_native_skills(report)
     check_internal_links(report)
     check_project_state(report)
     check_skill_log(report)

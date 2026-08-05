@@ -1,316 +1,226 @@
-# VLCO Product Build Standard
+# Escapement
 
-**A source-available product engineering standard and executable harness for disciplined AI-assisted software delivery.**
+**A build standard your coding agent actually executes.**
 
-VLCO Product Build Standard helps Claude Code, Codex, Cursor, Cline, Roo Code, and other coding agents understand enough, decide enough, build, test, prove, and hand off enterprise software without unnecessary context or paperwork.
+Escapement is a runtime harness that makes AI coding agents work like disciplined engineers — routing the right skills, holding durable state across sessions, running deterministic checks before claiming success, and refusing to end a turn without evidence.
 
-```text
-Product thinking
-+ Context engineering
-+ Harness engineering
-+ Skill governance
-+ Deterministic validation
-+ Human approval gates
-```
+It runs in Claude Code, Codex, Cursor, Cline, and Roo Code. It is standard library Python only. There is nothing to install.
 
-> Understand enough. Decide enough. Build. Test. Prove. Update.
+> Understand enough. Decide enough. Build. Test. Prove. Persist.
 
-## Status
+---
 
-| Item | Value |
-|---|---|
-| Version | 5.3 |
-| Architecture | Progressive disclosure |
-| Root instruction | `AGENTS.md` |
-| Context model | Selective context packs |
-| Harness model | Deterministic-first validation |
-| Skill model | Evidence-based selection and evaluation |
-| Licence | Source Available — Not Open Source |
+## Agents: read this first
 
-See `LICENSE.md` and `NOTICE.md`.
-
-## Why This Exists
-
-AI coding agents can generate working prototypes quickly, but enterprise delivery also needs:
-
-- clear requirements and workflows;
-- controlled assumptions and decisions;
-- data and KPI traceability;
-- permissions and security;
-- enterprise UI quality;
-- measurable testing;
-- approval gates;
-- reliable handoff;
-- evidence that skills and tools actually helped.
-
-This repository turns those needs into a small operating system and executable validation harness.
-
-## Operating Loop
+If you are an AI agent working in a repository that has Escapement installed, read these three files before anything else, in this order:
 
 ```text
-Inspect
-→ Clarify
-→ Decide
-→ Plan
-→ Build
-→ Test
-→ Review
-→ Prove
-→ Update
-→ Handoff
+AGENTS.md                          # your operating instructions
+PROJECT_STATE.yaml                 # durable project facts
+.agent/runtime/ACTIVE_CONTEXT.md   # this turn's goal, mode, and obligations
 ```
 
-## Work Modes
+Everything else loads on demand. Do not read the whole repository.
 
-| Mode | Use |
-|---|---|
-| `FULL` | New product, module, architecture, or major workflow |
-| `DELTA` | Material change to an existing product |
-| `EXECUTE` | Approved ticket, bug, or small UI change |
+---
 
-`FULL` and `DELTA` work require a readiness check before implementation. `EXECUTE` work should not be slowed down by full discovery.
+## What this is, and what it is not
 
-## Quick Start
+**It is** an enforcement layer. Hooks fire on every session start, every prompt, and every attempted stop. The router picks a minimal skill stack from the prompt. The turn does not close until you record what you changed, which checks you ran, and where the evidence lives.
 
-Clone:
+**It is not** a prompt library, a set of style guidelines, or documentation you hope the model reads. Guidelines get skipped under context pressure. Hooks do not.
+
+The distinction matters because the failure mode of AI-assisted delivery is not bad code — it is confident code with no durable record of what was decided, what was verified, and what was merely asserted.
+
+---
+
+## Why
+
+Agents produce working prototypes fast. Enterprise delivery also needs traceable KPIs, server-side permissions, tested edge states, recorded decisions, approval gates before destructive work, and a handoff the next session can actually use.
+
+Without a harness, each of those depends on the model remembering to care. Escapement makes them structural: the checks run before the model's own judgement, and the turn cannot close while they are outstanding.
+
+---
+
+## Install
+
+Install into an existing project:
 
 ```bash
-git clone https://github.com/SiddheshKGupta/VLCO-Product-Build-Standard.git
-cd VLCO-Product-Build-Standard
+python scripts/vlco_build.py init /path/to/your-project
 ```
 
-Run the environment doctor:
+This copies the instruction set, standards, templates, skills, scripts, schemas, and behaviour tests. It writes `.vlco-build.json` to record the source and version.
+
+Then wire the runtime — this is the step that makes the standard enforced rather than aspirational.
+
+**Claude Code** — `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "python scripts/agent_runtime.py session-start" }] }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [{ "type": "command", "command": "python scripts/agent_runtime.py prompt" }] }
+    ],
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "python scripts/agent_runtime.py stop" }] }
+    ]
+  }
+}
+```
+
+**Codex** — `.codex/hooks.json` follows the same three events.
+
+Verify both layers:
 
 ```bash
 python scripts/vlco_build.py doctor
+python scripts/agent_runtime.py doctor
 ```
 
-Validate the repository:
+Both must reach zero failures. The runtime doctor checks that hook config exists and that all eight native skills are present under `.claude/skills/` and `.agents/skills/`.
+
+### Without hooks
+
+Web chat and GitHub-read integrations do not execute repository hooks. Open the turn manually:
 
 ```bash
-python scripts/vlco_build.py validate
+python scripts/agent_runtime.py manual-start --prompt "Build the management dashboard"
 ```
 
-Create a context pack:
+The close-turn requirement is unchanged.
+
+---
+
+## How a turn works
+
+```text
+SessionStart      →  load durable memory
+UserPromptSubmit  →  classify mode, route skills, write ACTIVE_CONTEXT
+agent work        →  invoke native skills, one bounded step
+deterministic     →  checks run before model judgement
+Stop              →  one-shot gate; blocks a premature stop exactly once
+close-turn        →  persist state, evidence, and handoff
+```
+
+The Stop gate blocks at most once and then permits the stop. It cannot loop.
+
+Closing a turn:
+
+```bash
+python scripts/agent_runtime.py close-turn \
+  --summary "KPI contracts implemented for the dashboard" \
+  --next "Wire the approvals table to the permissions service" \
+  --files "src/kpi.ts,src/dashboard.tsx" \
+  --checks "unit tests;totals reconcile;permission matrix" \
+  --evidence "reports/kpi-run.json"
+```
+
+---
+
+## Work modes
+
+| Mode | Use | Gate |
+|---|---|---|
+| `FULL` | New product, module, architecture, or major workflow | Readiness check before implementation |
+| `DELTA` | Material change to an existing product | Approval on the material change |
+| `EXECUTE` | Approved ticket, isolated bug, copy or bounded UI change | Confirm ticket, files, acceptance, checks |
+
+`EXECUTE` deliberately skips discovery. Slowing down a one-line fix with a readiness gate is how standards get abandoned.
+
+---
+
+## Skills
+
+Eight native skills. The router selects at most four per turn.
+
+| Skill | Owns |
+|---|---|
+| `project-discovery` | New product, module, architecture, unclear material change |
+| `design-system` | Brand, colour, typography, layout, motion, responsive, `DESIGN.md` |
+| `enterprise-ui-review` | New UI, redesign, generic-AI-look detection, usability |
+| `dashboard` | Dashboards, MIS, KPI definition, analytics, management reporting |
+| `workflow` | Operational process, approval, exception handling, SLA, governance |
+| `api-integration` | External APIs, webhooks, file exchange, connectors |
+| `release-readiness` | UAT, deploy, production, handover |
+| `skill-governance` | Selecting, scoring, improving, and retiring skills |
+
+Native skills load from `.claude/skills/<skill>/SKILL.md` and `.agents/skills/<skill>/SKILL.md`. The `skills/` directory is documentation only and does not auto-load.
+
+A skill counts as used only when evidence exists. Each run records its trigger, the alternatives rejected, expected versus actual output, checks planned and skipped, scores, and evidence paths. Passing requires a total at or above 85 with no critical correctness, security, data, or permission failure.
+
+---
+
+## Commands
+
+**Build CLI** — `python scripts/vlco_build.py <command>`
+
+| Command | Purpose |
+|---|---|
+| `init <target>` | Install into a project (`--force` to overwrite) |
+| `update <target>` | Compare an install against this standard (`--apply` to sync) |
+| `doctor` | Environment and repository readiness |
+| `validate` | All deterministic standard checks |
+| `context` | Build a task-scoped context pack |
+| `skill-audit` | Validate and summarise skill evidence |
+| `handoff` | Generate a compact session handoff |
+| `version` | Installed standard version |
+
+**Runtime CLI** — `python scripts/agent_runtime.py <command>`
+
+| Command | Purpose |
+|---|---|
+| `session-start` | Load durable memory (SessionStart hook) |
+| `prompt` | Classify mode and route skills (UserPromptSubmit hook) |
+| `stop` | One-shot gate on premature stop (Stop hook) |
+| `manual-start` | Open a turn without hooks |
+| `close-turn` | Persist state, evidence, handoff |
+| `status` | Inspect the open turn |
+| `reset-turn` | Clear a stale turn |
+| `doctor` | Runtime wiring and native skill presence |
+
+Building a context pack:
 
 ```bash
 python scripts/vlco_build.py context \
   --task T-014 \
-  --goal "Build management dashboard" \
+  --goal "Build the management dashboard" \
   --mode DELTA
 ```
 
-Audit skill usage:
+---
 
-```bash
-python scripts/vlco_build.py skill-audit
-```
+## Progressive disclosure
 
-Create a handoff:
+`AGENTS.md` is a routing layer, not an encyclopaedia. Agents start with the instruction file and project state, then load only what the task needs.
 
-```bash
-python scripts/vlco_build.py handoff \
-  --summary "Dashboard KPI contracts completed" \
-  --next "Implement approved dashboard ticket"
-```
-
-Install the standard into another project:
-
-```bash
-python scripts/vlco_build.py init ../my-project
-```
-
-## CLI Commands
-
-| Command | Purpose |
+| Task | Loads |
 |---|---|
-| `init` | Install the standard into a project |
-| `doctor` | Diagnose environment and repository readiness |
-| `validate` | Run all deterministic standard checks |
-| `context` | Build a task-specific context pack |
-| `skill-audit` | Validate and summarise skill evidence |
-| `handoff` | Generate a compact session handoff |
-| `update` | Compare installed files with this standard |
-| `version` | Show the installed standard version |
-
-## Progressive Disclosure
-
-Agents start with:
-
-```text
-AGENTS.md
-PROJECT_STATE.yaml
-```
-
-They then load only the relevant standard, skill, decision, or checklist.
-
-| Task | Load |
-|---|---|
-| Dashboard | `docs/standards/data-reporting.md` + dashboard skill |
-| UI | `docs/standards/ui.md` + UI review skill |
-| Integration | `docs/standards/integrations.md` + API skill |
+| Dashboard | `docs/standards/data-reporting.md` + `dashboard` |
+| UI or design | `docs/standards/ui.md`, `docs/standards/design-intelligence.md` + `design-system` |
+| Integration | `docs/standards/integrations.md` + `api-integration` |
 | Security | `docs/standards/security.md` |
-| Material task | Context and harness engineering standards |
-| Skill review | Skill governance skill and evidence log |
-| Release | Release-readiness skill and pre-release checklist |
+| Material change | `docs/standards/context-engineering.md`, `harness-engineering.md` |
+| Release | `release-readiness` + `docs/checklists/pre-release.md` |
 
-The root file is a routing layer, not an encyclopedia.
+---
 
-## Context Engineering
-
-Context Engineering supplies the smallest complete context required for the current decision.
-
-```text
-Write durable facts
-→ Select relevant material
-→ Compress completed work
-→ Isolate bounded investigations
-```
-
-Material tasks use `CURRENT_CONTEXT.md`, generated from current project state, phase, decisions, selected skills, and requested goal.
-
-Recommended context-pack target:
-
-```text
-<= 1,000 words
-```
-
-## Harness Engineering
-
-The harness consists of:
-
-```text
-Instructions
-+ Context
-+ State
-+ Skills
-+ Tools
-+ Tests
-+ Approval gates
-+ Feedback
-```
-
-The harness runs deterministic checks before semantic or model review.
-
-Human approval is required for material changes such as schema migrations, authentication, permissions, destructive actions, production deployment, paid services, confidential data access, and new integrations.
-
-## Skill Evidence Loop
-
-A skill counts as used only when evidence exists.
-
-```text
-Route
-→ Declare
-→ Execute
-→ Observe
-→ Validate
-→ Score
-→ Decide
-→ Learn
-```
-
-Each skill run records:
-
-- trigger and selection reason;
-- rejected alternatives;
-- expected and actual outputs;
-- checks planned, run, and skipped;
-- component scores;
-- retries, duration, and impact;
-- evidence paths;
-- critical failures.
-
-Passing rule:
-
-```text
-Total >= 85
-AND no critical correctness, security, data, or permission failure
-```
-
-## Validation
-
-The unified validator checks:
-
-- `manifest.json` completeness;
-- required root files;
-- Markdown line budgets;
-- skill frontmatter;
-- duplicate skill names;
-- broken internal links;
-- project-state structure;
-- skill JSONL schema;
-- evidence-path existence;
-- score consistency;
-- context-pack word budget;
-- release placeholders;
-- behaviour-test coverage.
-
-Run:
-
-```bash
-python scripts/validate_standard.py
-```
-
-or:
+## What gets validated
 
 ```bash
 python scripts/vlco_build.py validate
 ```
 
-GitHub Actions runs the same checks on pushes and pull requests.
+Manifest completeness, required root files, Markdown line budgets, skill frontmatter, duplicate skill names, broken internal links, project-state structure, skill JSONL schema, evidence-path existence, score consistency, context-pack word budget, release placeholders, and coverage of all eleven behaviour tests.
 
-## Repository Structure
+CI runs the same checks on every push and pull request via `.github/workflows/validate-standard.yml`.
 
-```text
-AGENTS.md
-README.md
-manifest.json
-PROJECT_STATE.yaml
-PROJECT_CONTEXT.md
-CURRENT_PHASE.md
-SESSION_HANDOFF.md
-SKILLS_INVENTORY.md
-SKILL_USAGE_PLAN.md
-AI_REPORT.md
+---
 
-docs/
-  standards/
-  templates/
-  decisions/
-  checklists/
-
-skills/
-scripts/
-schemas/
-logs/
-reports/
-tests/
-examples/
-.github/workflows/
-```
-
-## Worked Example
-
-See:
-
-```text
-examples/enterprise-dashboard/
-```
-
-It demonstrates:
-
-```text
-Request
-→ Mode selection
-→ Context pack
-→ Skill routing
-→ KPI contract
-→ Evidence record
-→ Validation
-→ Handoff
-```
-
-## Documentation Limits
+## Budgets
 
 | Document | Maximum |
 |---|---:|
@@ -325,38 +235,63 @@ Request
 
 Stop documenting when scope is clear, material decisions are recorded, acceptance is testable, architecture is safe enough, and blockers are closed.
 
-## Definition of Done
+---
 
-A feature is complete only when:
+## Definition of done
 
-- approved requirements work;
-- permissions and edge states work;
-- tests pass;
-- totals reconcile;
-- accessibility and performance are reviewed;
-- required evidence exists;
-- documents are updated;
-- no critical defect remains;
-- a handoff is written.
+Approved requirements work. Permissions and edge states work. Tests pass. Totals reconcile. Accessibility and performance are reviewed. Required evidence exists. Documents are updated. No critical defect remains. A handoff is written.
 
-## Roadmap
+Checks that were not run are reported as not run. Never as passing.
 
-### v5.4
+---
 
-- packaged executable and optional PyPI release;
-- richer project presets;
-- controlled skill-assisted versus baseline experiments;
-- automatic skill-effectiveness reports.
+## Layout
 
-### v6.0
+```text
+AGENTS.md              # agent instructions (the routing layer)
+AGENT_RUNTIME.md       # turn lifecycle and runtime files
+CLAUDE.md              # Claude Code bootstrap imports
+PROJECT_STATE.yaml     # durable project facts
+manifest.json          # file inventory, validated
 
-- MCP server;
-- organisation-level policy overlays;
-- cross-project health reporting;
-- central standard version registry.
+.claude/               # Claude Code hooks and native skills
+.agents/               # Codex native skills
+.agent/runtime/        # per-turn state (generated)
+
+docs/
+  standards/           # domain standards, loaded on demand
+  templates/           # BRD, PRD, FRD, architecture, security, frontend
+  checklists/          # readiness, discovery, context health, pre-release
+  decisions/           # ADR template and decision log
+skills/                # documentation copies of the native skills
+scripts/               # build CLI, runtime, validator, context packer
+schemas/               # JSON schemas for state and evidence
+tests/                 # behaviour tests and runtime unit tests
+examples/              # worked end-to-end example
+```
+
+---
+
+## Worked example
+
+`examples/enterprise-dashboard/` walks a real request through mode selection, context pack, skill routing, KPI contracts, evidence records, validation, and handoff.
+
+---
+
+## Troubleshooting
+
+**The agent ignores the standard.** Run `python scripts/agent_runtime.py doctor`. If hook config is missing, nothing is enforced and the standard is only advisory.
+
+**`doctor` reports missing native skills.** The `skills/` directory does not auto-load. Skills must exist under `.claude/skills/` and `.agents/skills/`.
+
+**An install has drifted.** `python scripts/vlco_build.py update <target>` reports the difference; `--apply` syncs it.
+
+**A turn is stuck open.** `python scripts/agent_runtime.py reset-turn --reason "Stale session"`.
+
+---
 
 ## Ownership
 
 Developed by **V L & CO**.
 
-This repository is source-available and is not distributed under an open-source licence. Commercial redistribution, white-labelling, or substantial republication requires permission.
+Source-available, not open source. Commercial redistribution, white-labelling, or substantial republication requires permission. See `LICENSE.md` and `NOTICE.md`.

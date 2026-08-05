@@ -13,6 +13,8 @@ coverage/
 .cache/
 .tmp/
 *.log
+__pycache__/
+*.py[cod]
 
 # Editors and OS
 .vscode/
@@ -22,3 +24,6 @@ Thumbs.db
 
 # Local state
 PROJECT_STATE.local.yaml
+
+# Generated runtime state. agent_runtime.ensure() recreates all of it.
+.agent/runtime/
