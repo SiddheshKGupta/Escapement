@@ -551,7 +551,9 @@ def command_component_install(args: argparse.Namespace) -> int:
 
 
 def load_external_catalog() -> dict[str, Any]:
-    value = read_json(SOURCE_ROOT / "catalog" / "external-resources.json", {})
+    # external-resources.json is deprecated (marked so in its own JSON, in favour of
+    # this file) and has fallen behind: 47 resources vs. this file's 54.
+    value = read_json(SOURCE_ROOT / "catalog" / "capability-registry.json", {})
     return value if isinstance(value, dict) else {}
 
 
@@ -566,7 +568,7 @@ def command_catalog_list(args: argparse.Namespace) -> int:
         for item in items:
             print(
                 f"{item.get('id')}: {item.get('name')} | {item.get('license')} | "
-                f"{', '.join(item.get('use_mode', []))}"
+                f"{', '.join(item.get('use_modes', []))}"
             )
     else:
         items = load_agent_catalog().get("patterns", [])
