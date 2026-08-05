@@ -4,35 +4,100 @@
 
 Escapement
 
+## Release
+
+`6.3.0 — Capability Strength Orchestration`
+
 ## Purpose
 
-Provide a runtime-enforced operating layer for disciplined AI-assisted software
-delivery.
+Help users turn rough requests into better decisions and orchestrate domain
+expertise, native procedures, specialist subskills, fresh-context agents and
+external tools across the delivery lifecycle.
+
+## Core behavior
+
+```text
+Ask better questions
+→ recommend defaults
+→ research authoritative standards and current practice
+→ compare materially different approaches
+→ specify behaviour and controls
+→ create bounded tasks
+→ use subagents where justified
+→ implement with specialised skills
+→ verify independently
+→ polish
+→ release with evidence
+```
+
+## Architecture
+
+```text
+Kernel
+→ Domain profile
+→ Doctrine packs
+→ Native skills
+→ Capability strengths
+→ Strategy adapters
+→ Fresh-context agents
+→ External resources
+→ Evidence and handoff
+```
+
+## Design authority
+
+`docs/standards/design-intelligence.md` is the supreme design constitution.
+
+Design specialists operate beneath it:
+
+- UI/UX Pro Max for research and recommendation;
+- Taste for art direction;
+- frontend-design for implementation;
+- Impeccable for verification and polish;
+- Emil Kowalski Skills for motion;
+- Open Design for an optional workspace.
 
 ## Users
 
-- Developers
-- Business analysts
-- Product and engineering leads
-- Security reviewers
-- Teams using Codex or Claude Code
-
-## Intended Outcome
-
-Make project state, specifications, skill routing, verification, security
-controls, evidence, and handoffs structural rather than optional.
+- developers;
+- consultants and business analysts;
+- product and engineering teams;
+- domain experts;
+- governance, legal, finance and security reviewers;
+- teams using Codex or Claude Code.
 
 ## Constraints
 
-- Python standard library only for core runtime
-- Local and privacy-first by default
-- Project-owned state must survive framework updates
-- External capabilities require licence and security review
-- Human approval remains mandatory for material gates
+- Python standard-library-only core;
+- always-loaded kernel below 700 words;
+- automatic phase context below 1,800 words;
+- invoked native skill context below 1,200 words;
+- project-owned state survives updates;
+- authoritative evidence before trend signals;
+- no automatic external installation;
+- no blind deployment of catalogue agent projects;
+- human approval for sensitive or irreversible actions;
+- organisation-neutral public framework.
+
+## Current inventory
+
+```text
+Doctrine packs:         11
+Native skills:          32
+Capability strengths:   58
+Agent patterns:         21
+External resources:     54
+Strategy adapters:      10
+Capability families:    10
+Overlap groups:         12
+```
 
 ## Non-goals
 
-- Replacing coding agents
-- Bundling hundreds of always-loaded agents
-- Autonomous offensive security testing
-- Requiring a cloud account, database, or telemetry service
+- requiring the user to become a prompt engineer;
+- loading every capability into every phase;
+- stacking complete competing harnesses;
+- treating a repository listing as installation;
+- replacing law, standards, policy or domain experts with model inference;
+- autonomous offensive security testing;
+- hidden telemetry or mandatory cloud memory.

@@ -1,52 +1,100 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.3",
   "project": "Escapement",
+  "release": "6.3.0",
   "updated_at": "2026-08-05",
   "features": [
     {
-      "id": "ESC-600-01",
-      "behavior": "Safe installer and updater preserve project-owned state and create backups.",
-      "verification": "python -m unittest tests.v6.test_installer",
-      "state": "active",
+      "id": "ESC-630-01",
+      "behavior": "The 644-word kernel improves rough requests through high-impact questions, recommended defaults and an improved execution prompt.",
+      "verification": "python -m unittest tests.v6_3.test_runtime tests.v6_3.test_domain_capabilities",
+      "state": "passing",
       "required": true,
       "dependencies": [],
-      "evidence": [],
+      "evidence": [
+        "reports/VALIDATION_v6.3.md"
+      ],
       "owner": "maintainer"
     },
     {
-      "id": "ESC-600-02",
-      "behavior": "Open runtime turns survive later prompts and close only with structured evidence.",
-      "verification": "python -m unittest tests.v6.test_runtime",
-      "state": "not_started",
+      "id": "ESC-630-02",
+      "behavior": "Design Intelligence is the supreme design authority and specialised design capabilities operate only in their strongest phases.",
+      "verification": "python -m unittest tests.v6_3.test_design_authority",
+      "state": "passing",
       "required": true,
       "dependencies": [
-        "ESC-600-01"
+        "ESC-630-01"
       ],
-      "evidence": [],
+      "evidence": [
+        "docs/standards/design-intelligence.md",
+        "catalog/design-stack.json",
+        "reports/VALIDATION_v6.3.md"
+      ],
       "owner": "maintainer"
     },
     {
-      "id": "ESC-600-03",
-      "behavior": "Router and harness behaviours execute from resumable evaluation fixtures.",
-      "verification": "python scripts/eval_harness.py run",
-      "state": "not_started",
+      "id": "ESC-630-03",
+      "behavior": "Karpathy, Ponytail, Superpowers and other overlapping capabilities follow explicit baseline, intensifier, substitute, complementary or sequential rules.",
+      "verification": "python -m unittest tests.v6_3.test_overlap",
+      "state": "passing",
       "required": true,
       "dependencies": [
-        "ESC-600-02"
+        "ESC-630-01"
       ],
-      "evidence": [],
+      "evidence": [
+        "catalog/overlap-matrix.json",
+        "catalog/skill-strengths.json",
+        "reports/VALIDATION_v6.3.md"
+      ],
       "owner": "maintainer"
     },
     {
-      "id": "ESC-600-04",
-      "behavior": "Security, observability, plugins, components, and documentation are release-ready.",
+      "id": "ESC-630-04",
+      "behavior": "Every major capability family has a phase-scoped native fallback and optional external specialists are represented as readiness candidates.",
+      "verification": "python -m unittest tests.v6_3.test_registry_and_neutrality tests.v6_3.test_readiness_audit",
+      "state": "passing",
+      "required": true,
+      "dependencies": [
+        "ESC-630-01",
+        "ESC-630-03"
+      ],
+      "evidence": [
+        "catalog/native-skills.json",
+        "catalog/capability-families.json",
+        "catalog/capability-registry.json",
+        "reports/VALIDATION_v6.3.md"
+      ],
+      "owner": "maintainer"
+    },
+    {
+      "id": "ESC-630-05",
+      "behavior": "Domain research uses authoritative sources first and treats Agent Reach, Last30Days and agent catalogues as governed supporting channels.",
+      "verification": "python -m unittest tests.v6_3.test_browser_and_research tests.v6_3.test_domain_capabilities",
+      "state": "passing",
+      "required": true,
+      "dependencies": [
+        "ESC-630-01"
+      ],
+      "evidence": [
+        "catalog/research-policy.json",
+        "DOMAIN_CONTEXT.md",
+        "reports/VALIDATION_v6.3.md"
+      ],
+      "owner": "maintainer"
+    },
+    {
+      "id": "ESC-630-06",
+      "behavior": "The runtime keeps each active context below budget while supporting explicit phase advancement, structured checks and durable handoff.",
       "verification": "python scripts/escapement.py self-test",
-      "state": "not_started",
+      "state": "passing",
       "required": true,
       "dependencies": [
-        "ESC-600-03"
+        "ESC-630-01",
+        "ESC-630-04"
       ],
-      "evidence": [],
+      "evidence": [
+        "reports/VALIDATION_v6.3.md"
+      ],
       "owner": "maintainer"
     }
   ]

@@ -1,29 +1,17 @@
-# Secrets
-.env
-.env.*
-!.env.example
-*.pem
-*.key
-
-# Dependencies and build
-node_modules/
-dist/
-build/
-coverage/
-.cache/
-.tmp/
-*.log
 __pycache__/
-*.py[cod]
+*.pyc
+.venv/
+venv/
+node_modules/
 
-# Editors and OS
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
+.agent/runtime/current-turn.json
+.agent/runtime/turns.jsonl
+.agent/evidence/
+.agent/evals/
+.agent/runs/
+.agent/security/
 
-# Local state
-PROJECT_STATE.local.yaml
-
-# Generated runtime state. agent_runtime.ensure() recreates all of it.
-.agent/runtime/
+.escapement/backups/
+.agent/runtime/ACTIVE_CONTEXT.md
+.agent/runtime/CONTEXT_PACK.md
+.agent/runtime/SESSION_MEMORY.md

@@ -2,127 +2,496 @@
 
 # Escapement
 
-### A runtime harness for disciplined AI-assisted software delivery.
+### Capability-strength orchestration for AI-assisted product delivery.
 
-Escapement turns capable coding agents into a controlled delivery system with
-durable project state, executable specifications, skill routing, approval
-gates, evidence-backed verification, security controls, and clean handoffs.
+Escapement turns rough requests into stronger decisions, researches relevant
+domain standards and current practice, then activates native skills, specialist
+capabilities, agents and external tools at the phase where each is strongest.
 
-[![Version](https://img.shields.io/badge/version-6.0.0-53284F?style=flat-square)](docs/releases/v6.0.0.md)
+[![Version](https://img.shields.io/badge/version-6.3.0-53284F?style=flat-square)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![Codex](https://img.shields.io/badge/Codex-first--class-111111?style=flat-square)](https://developers.openai.com/codex/)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-first--class-D97757?style=flat-square)](https://docs.anthropic.com/en/docs/claude-code/)
-[![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
+[![Kernel](https://img.shields.io/badge/kernel-644%20words-2F855A?style=flat-square)](AGENTS.md)
+[![Evals](https://img.shields.io/badge/routing%20evals-22%2F22-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
+[![Tests](https://img.shields.io/badge/unit%20tests-27%2F27-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
+[![Security](https://img.shields.io/badge/security-0%20findings-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
 
-**Understand enough. Decide enough. Build. Test. Prove. Persist.**
+**Ask better questions. Use each capability at its strongest phase. Build. Test. Prove. Persist.**
 
 [Quick start](#quick-start) ·
-[Workflow](#the-delivery-workflow) ·
-[Skills](#native-skills) ·
-[Components](#extensions-presets-and-bundles) ·
-[Commands](#commands) ·
-[Security](SECURITY.md)
+[Architecture](#architecture) ·
+[Design authority](#design-authority) ·
+[Overlap](#overlap-is-a-first-class-system) ·
+[Capability audit](#skill-and-capability-readiness-audit) ·
+[Full registry](#external-capability-registry)
 
 </div>
 
 ---
 
-## Why “Escapement”?
+## Why Escapement
 
-A mechanical escapement converts stored energy into controlled, measurable
-movement.
-
-Escapement applies the same principle to AI coding agents:
+AI agents usually fail in one of two directions:
 
 ```text
-Unbounded generation
-        ↓
-Specify → Route → Execute → Verify → Persist
-        ↓
-Controlled delivery
+Too little structure
+→ forgotten context, invented behaviour and inconsistent execution
+
+Too much structure
+→ the agent spends its context managing the framework instead of delivering
 ```
 
-Agents can generate code quickly. Reliable delivery also requires a shared
-definition of done, durable decisions, limited scope, explicit permissions,
-runtime evidence, and a handoff the next session can trust.
+Escapement keeps the always-loaded kernel small and moves depth into
+phase-specific layers:
+
+```text
+Decision coaching
+→ Domain research
+→ Structured brainstorming
+→ Product and technical specification
+→ Delivery planning
+→ Focused implementation
+→ Independent verification
+→ Polish
+→ Release
+```
+
+The project can use many capabilities across its lifecycle without loading them
+all into one prompt.
 
 ---
 
-## What Escapement provides
+# Architecture
 
-| Capability | What it enforces |
-|---|---|
-| **Repository as system of record** | State and decisions live in files, not only chat |
-| **Executable specification flow** | Constitution → spec → plan → tasks → implement → converge |
-| **Feature-state gating** | Features reach `passing` only after their verification command passes |
-| **Work-mode routing** | Every material task becomes `FULL`, `DELTA`, or `EXECUTE` |
-| **Native skill routing** | Codex and Claude Code receive the smallest useful skill stack |
-| **Open-turn continuity** | A later prompt continues an open turn instead of silently replacing it |
-| **Structured evidence** | Checks record commands, exit codes, output paths, timestamps, and hashes |
-| **One-shot completion gate** | One premature stop is blocked without creating an infinite loop |
-| **Safe installation and updates** | Framework-owned files update; project-owned files are preserved |
-| **Doctor and repair** | Detects and repairs missing or drifted framework files |
-| **Executable evaluations** | Router and runtime behaviours are tested from fixtures |
-| **Security gate** | Scans hooks, MCP config, secrets, permissions, and risky commands |
-| **Local observability** | Run records and evidence remain local and can be viewed in a browser |
-| **Design intelligence** | Enterprise design standards and product-specific `DESIGN.md` |
-| **Extensions, presets, bundles** | Optional capabilities and role-based setups without bloating core |
-| **Optional research grounding** | Perplexity MCP integration remains separate from the core runtime |
+```mermaid
+flowchart LR
+    A[Rough request] --> B[Decision brief]
+    B --> C[Material questions + defaults]
+    C --> D[Domain standards + current evidence]
+    D --> E[Alternative solutions]
+    E --> F[Specification]
+    F --> G[Plan + agent assignments]
+    G --> H[Implementation]
+    H --> I[Independent verification]
+    I --> J[Polish]
+    J --> K[Release + handoff]
+```
 
-Escapement uses the Python standard library only. Optional extensions may have
-their own requirements.
+## Six operating layers
 
----
-
-## Support matrix
-
-| Runtime | Support | Integration |
+| Layer | Purpose | Loaded |
 |---|---|---|
-| **Codex** | First-class | `AGENTS.md`, `.codex/hooks.json`, `.agents/skills/` |
-| **Claude Code** | First-class | `CLAUDE.md`, `.claude/settings.json`, `.claude/skills/` |
-| **Cursor / Cline / Roo Code / other IDE agents** | Compatibility mode | `AGENTS.md` plus manual runtime start |
-| **Ordinary web chat or GitHub-only access** | Manual mode | Runtime commands must be executed separately |
+| Kernel | Universal doctrine, safety, questions, phase rules | Always |
+| Profile | Domain and project decision conventions | One |
+| Doctrine packs | Compact judgement for the current problem | Phase-routed |
+| Native skills | Executable fallback procedures | Phase-routed |
+| Capability strengths | Specialised subskills used where strongest | Phase-routed |
+| External resources | Plugins, MCPs, tools, repositories and services | Candidate until approved |
+
+## Current inventory
+
+```text
+Kernel words:          644
+Profiles:                2
+Doctrine packs:         11
+Native skills:          32
+Capability strengths:   58
+Agent patterns:         21
+External resources:     54
+Strategy adapters:      10
+Capability families:    10
+Overlap groups:         12
+```
 
 ---
 
-## The most important rule
+# Better decisions before better code
 
-Escapement must be installed inside the repository being built.
+For every `MATERIAL` or `PROGRAM` request, the runtime creates:
 
 ```text
-my-product/
-├── AGENTS.md
-├── CLAUDE.md
-├── PROJECT_STATE.yaml
-├── PROJECT_CONTEXT.md
-├── feature_list.json
-├── .agent/
-├── .agents/
-├── .claude/
-├── .codex/
-├── .escapement/
-├── docs/
-├── scripts/
-└── src/
+Actual decision
+Known facts and assumptions
+Maximum five material questions
+Recommended default for each question
+Consequence of choosing differently
+Improved execution prompt
+Domain-research plan
+Phase plan
+Skill and capability readiness audit
 ```
 
-A separate Escapement checkout does not automatically govern another
-repository.
+The user does not need to become a prompt engineer.
+
+The agent inspects and researches before asking for information that can be
+discovered safely.
+
+---
+
+# Lifecycle
+
+| Phase | Strongest capability examples |
+|---|---|
+| `ORIENT` | Repository state, Karpathy think-before-coding |
+| `DISCOVER` | Decision Coach, Project Discovery |
+| `RESEARCH` | Domain Research, Context7, Agent Reach, Last30Days, UI/UX Pro Max |
+| `BRAINSTORM` | Superpowers Brainstorming, Taste Skill, solution alternatives |
+| `SPECIFY` | Product Specification, domain skills, UI/UX Pro Max design-system recommendations |
+| `PLAN` | Delivery Planning, Superpowers Writing Plans, Karpathy simplicity, Ponytail Lite |
+| `IMPLEMENT` | Specialised native skills, TDD, subagent development, surgical changes |
+| `VERIFY` | Quality Engineering, code review, Impeccable, browser and security evidence |
+| `POLISH` | Impeccable Polish, Emil motion review, Stop Slop final lint |
+| `RELEASE` | Release Readiness, verification-before-completion, branch finishing |
+
+Advance phases explicitly:
+
+```bash
+python scripts/agent_runtime.py advance-phase   --phase RESEARCH   --summary "Discovery decisions resolved"   --skills-used "decision-coach,project-discovery"   --files "PROJECT_CONTEXT.md"   --evidence "PROJECT_CONTEXT.md"
+```
+
+Each transition unloads the previous phase context before loading the next.
+
+---
+
+# Low-token contract
+
+```text
+Always-loaded kernel:          <= 700 words
+Actual kernel:                 644 words
+Automatic phase context:       <= 1,800 words
+Invoked native skill context:  <= 1,200 words
+Normal doctrine packs:         <= 3 per phase
+Normal native skills:          <= 5 per phase
+Specialist strengths:          selected by phase and overlap
+```
+
+Escapement counts automatic context and invoked skill context separately.
+
+A selected skill is referenced in the context pack and loaded by the native
+agent only when invoked.
+
+---
+
+# Design authority
+
+[`docs/standards/design-intelligence.md`](docs/standards/design-intelligence.md)
+is the **supreme design constitution**.
+
+```text
+Approved product requirements and accessibility obligations
+→ Product DESIGN.md and brand configuration
+→ Design Intelligence Constitution
+→ Phase-specific design specialists
+→ External references and component sources
+```
+
+Specialists have distinct responsibilities:
+
+| Specialist | Strongest role |
+|---|---|
+| UI/UX Pro Max | Searchable design research, product patterns, palettes, typography, charts and stack guidance |
+| Taste Skill | Greenfield art direction, anti-slop variance, density and motion dials |
+| Impeccable | Deterministic audit, critique, hardening and final polish |
+| Emil Kowalski Skills | Motion decisions, animation implementation and strict motion review |
+| Open Design | Optional local design workspace, prototypes, assets and export ecosystem |
+| frontend-design | Production frontend implementation from an approved design |
+| Mobbin / Refero / Recent | Bounded pattern research |
+| Penpot | Collaborative design-system and design-to-code workflow |
+
+No specialist may silently override `DESIGN.md` or the design constitution.
+
+See [Design Stack](catalog/design-stack.json).
+
+---
+
+# Overlap is a first-class system
+
+Escapement does not solve overlap by deleting capabilities or loading all of
+them.
+
+It records the relationship:
+
+```text
+BASELINE_PLUS_INTENSIFIER
+SUBSTITUTE
+COMPLEMENTARY
+SEQUENTIAL
+REFERENCE_ONLY
+META_OBSERVER
+```
+
+## Example: Karpathy and Ponytail
+
+```text
+Karpathy Guidelines
+→ baseline engineering behaviour
+→ assumptions, simplicity, surgical changes, verifiable goals
+
+Ponytail
+→ optional implementation intensifier
+→ stronger YAGNI, native-platform and minimum-code pressure
+```
+
+Ponytail does not become a second permanent engineering doctrine.
+
+## Example: design systems
+
+```text
+Design Intelligence
+→ authority
+
+UI/UX Pro Max
+→ research and recommendation
+
+Taste Skill
+→ brainstorming and art direction
+
+frontend-design
+→ implementation
+
+Impeccable
+→ verification and polish
+
+Emil Kowalski
+→ motion specialisation
+```
+
+See:
+
+- [Overlap Analysis](docs/OVERLAP_ANALYSIS.md)
+- [Machine-readable Matrix](catalog/overlap-matrix.json)
+- [Compact Operational Groups](catalog/overlap-groups.json)
+
+---
+
+# Domain expertise
+
+Each installed project contains:
+
+```text
+DOMAIN_CONTEXT.md
+```
+
+It records:
+
+- industry and geography;
+- users and stakeholders;
+- business model and operating reality;
+- laws, regulations and standards;
+- current market and technology practice;
+- comparable systems;
+- domain terminology;
+- approved evidence;
+- confidence and research date.
+
+Evidence order:
+
+```text
+Project evidence
+→ law, regulator or standards body
+→ official documentation
+→ primary disclosures
+→ institutional research
+→ reputable industry research
+→ practitioner and community signals
+```
+
+Agent Reach and Last30Days extend research coverage. They do not replace
+authoritative evidence.
+
+---
+
+# Native skills
+
+Canonical source:
+
+```text
+skills/<skill>/SKILL.md
+```
+
+Native agent copies:
+
+```text
+.agents/skills/<skill>/SKILL.md
+.claude/skills/<skill>/SKILL.md
+```
+
+| Skill | Phases | Registers |
+|---|---|---|
+| [`project-discovery`](skills/project-discovery/SKILL.md) | DISCOVER, SPECIFY | CONSULTING, ENGINEERING, DUAL |
+| [`consulting-analysis`](skills/consulting-analysis/SKILL.md) | DISCOVER, RESEARCH, BRAINSTORM, SPECIFY, VERIFY | CONSULTING, DUAL |
+| [`governance-risk-controls`](skills/governance-risk-controls/SKILL.md) | DISCOVER, SPECIFY, VERIFY | CONSULTING, DUAL |
+| [`finance-reporting`](skills/finance-reporting/SKILL.md) | RESEARCH, SPECIFY, IMPLEMENT, VERIFY | CONSULTING, DUAL |
+| [`dashboard`](skills/dashboard/SKILL.md) | SPECIFY, IMPLEMENT, VERIFY | CONSULTING, DUAL |
+| [`workflow`](skills/workflow/SKILL.md) | DISCOVER, SPECIFY, IMPLEMENT, VERIFY | CONSULTING, DUAL |
+| [`engineering-review`](skills/engineering-review/SKILL.md) | BRAINSTORM, SPECIFY, PLAN, IMPLEMENT, VERIFY | ENGINEERING, DUAL |
+| [`design-system`](skills/design-system/SKILL.md) | BRAINSTORM, SPECIFY | ENGINEERING, DUAL, ARTIFACT |
+| [`enterprise-ui-review`](skills/enterprise-ui-review/SKILL.md) | IMPLEMENT, VERIFY, POLISH | ENGINEERING, DUAL |
+| [`api-integration`](skills/api-integration/SKILL.md) | SPECIFY, PLAN, IMPLEMENT, VERIFY | ENGINEERING, DUAL |
+| [`artifact-production`](skills/artifact-production/SKILL.md) | SPECIFY, IMPLEMENT, VERIFY, POLISH, RELEASE | ARTIFACT, CONSULTING |
+| [`writing-quality`](skills/writing-quality/SKILL.md) | IMPLEMENT, VERIFY, POLISH | ARTIFACT, CONSULTING |
+| [`security-review`](skills/security-review/SKILL.md) | RESEARCH, SPECIFY, PLAN, VERIFY, RELEASE | ENGINEERING, DUAL |
+| [`release-readiness`](skills/release-readiness/SKILL.md) | RELEASE | ENGINEERING, DUAL |
+| [`reference-router`](skills/reference-router/SKILL.md) | DISCOVER, RESEARCH, BRAINSTORM, PLAN | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
+| [`skill-governance`](skills/skill-governance/SKILL.md) | DISCOVER, RESEARCH, PLAN, VERIFY | ENGINEERING, DUAL |
+| [`decision-coach`](skills/decision-coach/SKILL.md) | DISCOVER | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
+| [`domain-research`](skills/domain-research/SKILL.md) | RESEARCH | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
+| [`solution-brainstorming`](skills/solution-brainstorming/SKILL.md) | BRAINSTORM | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
+| [`delivery-planning`](skills/delivery-planning/SKILL.md) | PLAN | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
+| [`agent-orchestration`](skills/agent-orchestration/SKILL.md) | PLAN, IMPLEMENT | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
+| [`agent-blueprint-discovery`](skills/agent-blueprint-discovery/SKILL.md) | RESEARCH, BRAINSTORM, PLAN | CONSULTING, ENGINEERING, DUAL |
+| [`product-specification`](skills/product-specification/SKILL.md) | SPECIFY | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
+| [`data-engineering`](skills/data-engineering/SKILL.md) | SPECIFY, PLAN, IMPLEMENT, VERIFY | ENGINEERING, DUAL, CONSULTING |
+| [`frontend-implementation`](skills/frontend-implementation/SKILL.md) | IMPLEMENT | ENGINEERING, DUAL |
+| [`quality-engineering`](skills/quality-engineering/SKILL.md) | PLAN, IMPLEMENT, VERIFY, RELEASE | ENGINEERING, DUAL, ARTIFACT |
+| [`ai-agent-engineering`](skills/ai-agent-engineering/SKILL.md) | SPECIFY, PLAN, IMPLEMENT, VERIFY | ENGINEERING, DUAL, CONSULTING |
+| [`automation-engineering`](skills/automation-engineering/SKILL.md) | SPECIFY, PLAN, IMPLEMENT, VERIFY | ENGINEERING, DUAL, CONSULTING |
+| [`data-analysis`](skills/data-analysis/SKILL.md) | RESEARCH, SPECIFY, IMPLEMENT, VERIFY | CONSULTING, ENGINEERING, DUAL |
+| [`legal-compliance-analysis`](skills/legal-compliance-analysis/SKILL.md) | RESEARCH, SPECIFY, VERIFY | CONSULTING, DUAL, ARTIFACT |
+| [`investment-analysis`](skills/investment-analysis/SKILL.md) | RESEARCH, BRAINSTORM, SPECIFY, VERIFY | CONSULTING, DUAL, ARTIFACT |
+| [`software-implementation`](skills/software-implementation/SKILL.md) | IMPLEMENT | ENGINEERING, DUAL |
+
+Synchronise:
+
+```bash
+python scripts/escapement.py sync-skills
+```
+
+---
+
+# Skill and capability readiness audit
+
+Run:
+
+```bash
+python scripts/escapement.py capability-audit   "Design a management dashboard with responsive charts and motion"   --markdown
+```
+
+The audit reports:
+
+```text
+Active native skills
+Active specialist strengths
+Detected repository skills
+External install or load candidates
+Lifecycle usage plan
+Overlap decisions
+Design authority
+Licence and activation status
+```
+
+A catalogue entry is not treated as installed.
+
+---
+
+# Strategy adapters
+
+| Adapter | Name | Phases |
+|---|---|---|
+| `superpowers-sdlc` | Superpowers SDLC Adapter | BRAINSTORM, PLAN, IMPLEMENT, PARALLEL_IMPLEMENT, VERIFY, FINISH |
+| `github-spec-kit` | GitHub Spec Kit Adapter | DISCOVER, SPECIFY, PLAN, CONVERGE |
+| `gsd-core` | GSD Phase Execution Adapter | DISCOVER, PLAN, IMPLEMENT, VERIFY, FINISH |
+| `agent-reach` | Agent Reach Research Adapter | RESEARCH |
+| `last30days` | Last30Days Trends Adapter | RESEARCH |
+| `500-ai-agents` | 500+ AI Agent Blueprint Adapter | RESEARCH, BRAINSTORM, PLAN |
+| `agent-browser` | Agent Browser Verification Adapter | VERIFY |
+| `engineering-behaviour` | Karpathy + Ponytail Engineering Adapter | DISCOVER, PLAN, IMPLEMENT, VERIFY |
+| `design-strength-orchestration` | Design Intelligence Specialist Adapter | RESEARCH, BRAINSTORM, SPECIFY, IMPLEMENT, VERIFY, POLISH |
+| `browser-verification` | Browser Verification Adapter | IMPLEMENT, VERIFY |
+
+Superpowers is used component-by-component:
+
+```text
+BRAINSTORM → brainstorming
+PLAN       → writing-plans
+IMPLEMENT  → TDD, subagent-driven-development or executing-plans
+PARALLEL   → dispatching-parallel-agents
+VERIFY     → requesting-code-review + verification-before-completion
+RELEASE    → finishing-a-development-branch
+```
+
+The runtime remains Escapement. External lifecycle hooks are not stacked
+blindly.
+
+---
+
+# Capability families
+
+Fine-grained intents from the original standards are preserved under canonical
+families:
+
+| Family | Native fallbacks | Phases |
+|---|---|---|
+| `business-consulting` | decision-coach, consulting-analysis, project-discovery | DISCOVER, RESEARCH, BRAINSTORM, SPECIFY |
+| `governance-risk-controls` | governance-risk-controls, workflow, security-review | DISCOVER, SPECIFY, VERIFY |
+| `finance-and-private-capital` | finance-reporting, consulting-analysis, dashboard | RESEARCH, SPECIFY, IMPLEMENT, VERIFY |
+| `product-management` | project-discovery, solution-brainstorming, delivery-planning | DISCOVER, BRAINSTORM, SPECIFY, PLAN, RELEASE |
+| `data-engineering-and-analytics` | finance-reporting, dashboard, engineering-review, api-integration | SPECIFY, PLAN, IMPLEMENT, VERIFY |
+| `engineering` | engineering-review, api-integration, security-review, release-readiness | BRAINSTORM, SPECIFY, PLAN, IMPLEMENT, VERIFY, RELEASE |
+| `ai-and-automation` | agent-blueprint-discovery, agent-orchestration, api-integration, security-review | RESEARCH, BRAINSTORM, SPECIFY, PLAN, IMPLEMENT, VERIFY |
+| `design-and-experience` | design-system, enterprise-ui-review, writing-quality | RESEARCH, BRAINSTORM, SPECIFY, IMPLEMENT, VERIFY, POLISH |
+| `documentation-and-artifacts` | artifact-production, writing-quality | DISCOVER, SPECIFY, PLAN, VERIFY, RELEASE |
+| `connectors-and-platforms` | api-integration, reference-router, security-review | RESEARCH, SPECIFY, PLAN, IMPLEMENT, VERIFY, RELEASE |
+
+The detailed intent catalogue includes business analysis, governance, finance,
+private capital, product management, data engineering, analytics, software
+engineering, AI and automation, design, documentation, artifacts and
+connectors.
+
+See [Capability Strength Map](docs/CAPABILITY_STRENGTH_MAP.md).
+
+---
+
+# Parallel and subagent execution
+
+Parallel execution requires:
+
+- genuinely independent tasks;
+- separate files or non-conflicting state;
+- explicit input and output contracts;
+- bounded context;
+- a named integration owner;
+- merge order;
+- whole-system verification after merge.
+
+Use subagent-driven development for sequential tasks that benefit from fresh
+contexts.
+
+Use parallel agents only after the plan proves independence.
+
+---
+
+# Agent blueprint discovery
+
+The 500+ AI Agent Projects repository is a discovery catalogue, not one
+deployable runtime.
+
+For every linked blueprint, Escapement checks:
+
+```text
+Exact repository
+Licence
+Maintenance
+Runnable code
+Framework and model dependencies
+Tests and examples
+Secrets and permissions
+Data handling
+Deployment model
+Evaluation quality
+```
+
+Cloning, adapting or deploying still requires approval.
 
 ---
 
 # Quick start
 
-## 1. Clone Escapement
+## Install
 
 ```bash
 git clone https://github.com/SiddheshKGupta/escapement.git
 cd escapement
-```
 
-## 2. Install into a product repository
-
-```bash
 python scripts/escapement.py init /path/to/your-product
 ```
 
@@ -132,497 +501,37 @@ Windows:
 py -3 scripts/escapement.py init C:\path\to\your-product
 ```
 
-The installer:
+## Configure
 
-- copies framework-managed files;
-- creates safe project seed files only when absent;
-- preserves existing project state;
-- records installed hashes in `.escapement-install.json`;
-- never overwrites evidence logs or runtime history.
+Edit:
 
-## 3. Configure the product
+```text
+PROJECT_STATE.yaml
+PROJECT_CONTEXT.md
+DOMAIN_CONTEXT.md
+```
 
-Edit `PROJECT_STATE.yaml`:
+Safe starting state:
 
 ```yaml
 project_name: My Product
+profile: domain-expertise
 phase: discovery
 work_mode: FULL
 implementation_authorized: false
 approved_ticket: null
-
-blocking_decisions: []
-accepted_assumptions: []
-selected_skills: []
-
-runtime:
-  version: "6.0.0"
-  enabled: true
-  last_closed_turn: null
 ```
 
-Add known product facts to `PROJECT_CONTEXT.md`. Leave unknowns explicit.
-
-## 4. Run the doctor
+## Verify
 
 ```bash
-python scripts/escapement.py doctor
+python scripts/escapement.py doctor --root /path/to/your-product
 ```
 
-Expected:
-
-```text
-Failures: 0
-```
-
-## 5. Approve project hooks
-
-### Codex
-
-```text
-/hooks
-/skills
-```
-
-### Claude Code
-
-Start from the repository root:
+## Start
 
 ```bash
-claude
-```
-
-Review `.claude/settings.json`, then confirm project memory:
-
-```text
-/memory
-```
-
-## 6. Start with orientation
-
-```text
-Read AGENTS.md, PROJECT_STATE.yaml, PROJECT_CONTEXT.md,
-feature_list.json, .agent/runtime/ACTIVE_CONTEXT.md,
-.agent/runtime/ACTIVE_SKILLS.md, and
-.agent/runtime/SESSION_MEMORY.md.
-
-Do not build yet.
-
-Tell me:
-1. the project and phase;
-2. the work mode;
-3. the next active or blocked feature;
-4. the selected skills;
-5. the material unknowns;
-6. the approval gates;
-7. whether the runtime is active.
-```
-
----
-
-# The delivery workflow
-
-Escapement combines specification-driven delivery with runtime enforcement.
-
-```mermaid
-flowchart LR
-    A[Constitution] --> B[Specification]
-    B --> C[Plan]
-    C --> D[Tasks]
-    D --> E[Feature list]
-    E --> F[Runtime route]
-    F --> G[Bounded implementation]
-    G --> H[Structured checks]
-    H --> I{Verification passes?}
-    I -- No --> J[Retry or escalate]
-    J --> G
-    I -- Yes --> K[Feature becomes passing]
-    K --> L[Persist evidence and handoff]
-    L --> M[Converge remaining work]
-```
-
-## Specification commands
-
-Create governing principles:
-
-```bash
-python scripts/escapement.py spec constitution
-```
-
-Create a feature specification:
-
-```bash
-python scripts/escapement.py spec create \
-  --name claim-dashboard \
-  --goal "Give management traceable subvention claim visibility"
-```
-
-Create the implementation plan and task file:
-
-```bash
-python scripts/escapement.py spec plan --name claim-dashboard
-python scripts/escapement.py spec tasks --name claim-dashboard
-```
-
-The agent fills the generated templates. Escapement verifies that the required
-artifacts exist before implementation.
-
----
-
-## Work modes
-
-| Mode | Use | Required behaviour |
-|---|---|---|
-| `FULL` | New product, module, architecture, or major workflow | Discovery and readiness approval |
-| `DELTA` | Material change to an existing product | Impact review and approval |
-| `EXECUTE` | Approved ticket, isolated bug, or bounded change | Confirm acceptance and checks |
-
-```text
-FULL:    Inspect → Discover → Decide → READY CHECK → Approve → Build
-DELTA:   Read state → Assess impact → Approve change → Build
-EXECUTE: Confirm ticket → Change files → Test → Persist
-```
-
----
-
-# Feature-state gating
-
-`feature_list.json` is a machine-readable source of truth for delivery scope.
-
-Every feature includes:
-
-```text
-Behaviour
-Verification command
-Current state
-Evidence
-Dependencies
-Owner
-```
-
-Allowed states:
-
-```text
-not_started → active → blocked
-                     ↘ passing
-```
-
-A feature may move to `passing` only when Escapement executes its verification
-command successfully.
-
-List features:
-
-```bash
-python scripts/feature_list.py list
-```
-
-Activate the next feature:
-
-```bash
-python scripts/feature_list.py activate F-001
-```
-
-Verify and pass it:
-
-```bash
-python scripts/feature_list.py verify F-001
-```
-
-The agent must not edit a state directly to `passing`.
-
----
-
-# Native skills
-
-| Skill | Owns |
-|---|---|
-| `project-discovery` | Scope, unknowns, decisions, risks, and readiness |
-| `dashboard` | KPI contracts, reporting, drill-down, and reconciliation |
-| `workflow` | States, actors, approvals, exceptions, SLA, and audit |
-| `design-system` | Brand, colour, typography, layout, motion, and `DESIGN.md` |
-| `enterprise-ui-review` | Hierarchy, density, states, accessibility, and usability |
-| `api-integration` | Contracts, authentication, retries, idempotency, and monitoring |
-| `release-readiness` | UAT, production, rollback, monitoring, and handover |
-| `security-review` | Secrets, hooks, permissions, MCP, dependency, and attack-surface review |
-| `skill-governance` | Selection, overlap, evidence, scoring, and improvement |
-
-Canonical definitions:
-
-```text
-skills/<skill>/SKILL.md
-```
-
-Native generated copies:
-
-```text
-.agents/skills/<skill>/SKILL.md
-.claude/skills/<skill>/SKILL.md
-```
-
-Synchronise after editing:
-
-```bash
-python scripts/escapement.py sync-skills
-```
-
-Explain routing before running a task:
-
-```bash
-python scripts/escapement.py explain \
-  "Redesign the management dashboard and define KPI drill-down"
-```
-
----
-
-# Evidence-backed checks
-
-Run a command through the evidence recorder:
-
-```bash
-python scripts/run_check.py \
-  --name unit-tests \
-  -- python -m unittest
-```
-
-It writes a content-addressed record containing:
-
-- exact command;
-- start and completion time;
-- exit code;
-- stdout and stderr paths;
-- output hashes;
-- result;
-- repository-relative evidence paths.
-
-A material turn cannot close as `PASS` unless:
-
-- all selected skills are declared used;
-- all listed files and evidence paths exist;
-- at least one structured check record exists;
-- all required structured checks pass;
-- `critical_failure` is false.
-
-Close a turn:
-
-```bash
-python scripts/agent_runtime.py close-turn \
-  --summary "Dashboard specification completed" \
-  --next "Implement the approved shell" \
-  --skills-used "dashboard,design-system,enterprise-ui-review,skill-governance" \
-  --files "DESIGN.md,docs/KPI_CATALOGUE.md" \
-  --check-records ".agent/evidence/checks/<record>.json" \
-  --evidence "DESIGN.md,docs/KPI_CATALOGUE.md"
-```
-
----
-
-# Executable evaluations
-
-Escapement evaluates its router and harness behaviour from fixtures.
-
-```bash
-python scripts/escapement.py eval
-```
-
-Resume an interrupted evaluation:
-
-```bash
-python scripts/eval_harness.py run --resume
-```
-
-Evaluation fixtures define:
-
-```text
-Prompt
-Expected materiality
-Expected work mode
-Expected skills
-Forbidden skills
-Expected approval behaviour
-Expected output conditions
-```
-
-Results are written as append-only NDJSON under `.agent/evals/`.
-
----
-
-# Security gate
-
-Run the local security review:
-
-```bash
-python scripts/escapement.py security
-```
-
-It checks:
-
-- likely secrets and private keys;
-- hook commands and shell-pipe risks;
-- project MCP servers;
-- unsafe permission patterns;
-- untrusted external install commands;
-- files that may expose runtime or evidence data.
-
-Fail CI on high-severity findings:
-
-```bash
-python scripts/security_gate.py --fail-on high
-```
-
-Escapement does not perform autonomous offensive testing. Optional external
-security tools must run in an authorised sandbox and provide structured
-evidence.
-
----
-
-# Local observability
-
-Escapement keeps runtime and process evidence local by default.
-
-```bash
-python scripts/escapement.py view
-```
-
-The viewer:
-
-- binds to `127.0.0.1`;
-- uses a random token;
-- reads run files directly from disk;
-- does not upload project data;
-- shows turns, checks, feature states, and evaluation results.
-
-Telemetry is off by default. Escapement does not require analytics or a cloud
-account.
-
----
-
-# Extensions, presets, and bundles
-
-Escapement keeps the core small.
-
-## Extensions
-
-Extensions add optional capabilities.
-
-Included:
-
-```text
-perplexity-research
-```
-
-Install:
-
-```bash
-python scripts/escapement.py component install \
-  extension perplexity-research /path/to/project
-```
-
-The extension provides an optional research-grounding skill and MCP example.
-The core runtime remains dependency-free and does not require a Perplexity API
-key.
-
-## Presets
-
-Presets change how the core workflow behaves without adding a new capability.
-
-Included:
-
-```text
-enterprise-governance
-lean-build
-```
-
-## Bundles
-
-Bundles install a versioned role-oriented setup.
-
-Included:
-
-```text
-business-analyst
-developer
-security-reviewer
-```
-
-List components:
-
-```bash
-python scripts/escapement.py component list
-```
-
-Inspect before installation:
-
-```bash
-python scripts/escapement.py component info bundle business-analyst
-```
-
-Install:
-
-```bash
-python scripts/escapement.py component install \
-  bundle business-analyst /path/to/project
-```
-
-Installs are idempotent and limited to the project root.
-
----
-
-# Agent-pattern catalogue
-
-Escapement does not bundle hundreds of unverified agents.
-
-Instead, `catalog/agent-patterns.json` provides a curated registry of reusable
-patterns such as:
-
-- planner;
-- evaluator;
-- security reviewer;
-- build-error resolver;
-- research agent;
-- workflow agent;
-- dashboard analyst;
-- migration agent;
-- loop operator;
-- harness optimiser.
-
-Search:
-
-```bash
-python scripts/escapement.py catalog search security
-```
-
-Patterns must earn promotion into a native skill through evidence and repeated
-use.
-
----
-
-# Safe updates
-
-Preview framework drift:
-
-```bash
-python scripts/escapement.py update /path/to/project
-```
-
-Apply:
-
-```bash
-python scripts/escapement.py update /path/to/project --apply
-```
-
-Escapement:
-
-1. reads `.escapement-install.json`;
-2. compares only framework-managed files;
-3. creates a timestamped backup;
-4. updates managed files;
-5. creates missing project seed files;
-6. never overwrites project-owned state, specs, feature lists, logs, or runtime history.
-
-Repair missing framework files:
-
-```bash
-python scripts/escapement.py repair /path/to/project
+python scripts/agent_runtime.py manual-start   --prompt "Build a controlled claims workflow"   --json
 ```
 
 ---
@@ -630,210 +539,209 @@ python scripts/escapement.py repair /path/to/project
 # Commands
 
 ```text
-escapement version
-escapement init <target>
-escapement doctor
-escapement repair <target>
-escapement update <target> [--apply]
-escapement explain "<prompt>"
-escapement sync-skills
-escapement eval
-escapement security
-escapement view
-escapement component list
-escapement component info <type> <name>
-escapement component install <type> <name> <target>
-escapement catalog list
-escapement catalog search <query>
-escapement spec constitution
-escapement spec create --name <name> --goal <goal>
-escapement spec plan --name <name>
-escapement spec tasks --name <name>
+python scripts/escapement.py version
+python scripts/escapement.py init <target>
+python scripts/escapement.py update <target>
+python scripts/escapement.py repair <target>
+python scripts/escapement.py doctor --root <target>
+python scripts/escapement.py explain "<prompt>"
+python scripts/escapement.py capability-audit "<prompt>" --markdown
+python scripts/escapement.py sync-skills
+python scripts/escapement.py eval
+python scripts/escapement.py security
+python scripts/escapement.py view
+python scripts/escapement.py component list
+python scripts/escapement.py catalog search "<query>"
 ```
 
-Use:
+Runtime:
 
-```bash
-python scripts/escapement.py <command>
-```
-
-The old command remains as a compatibility wrapper:
-
-```bash
-python scripts/vlco_build.py <command>
+```text
+python scripts/agent_runtime.py manual-start --prompt "<task>" --json
+python scripts/agent_runtime.py advance-phase --phase <PHASE> ...
+python scripts/agent_runtime.py status
+python scripts/agent_runtime.py close-turn ...
+python scripts/agent_runtime.py reset-turn --reason "<reason>"
 ```
 
 ---
 
-# Project layout
+# External capability registry
+
+Escapement preserves external skills, plugins, tools, repositories, MCP
+servers, services and references without claiming they are installed.
+
+<details>
+<summary><strong>View all 54 external resources</strong></summary>
+
+| ID | Resource | Kind | Status | Overlap group |
+|---|---|---|---|---|
+| `voltagent-awesome-design-md` | [awesome-design-md](https://github.com/VoltAgent/awesome-design-md) | reference-repository | `catalogued` | `design-reference` |
+| `perplexity-org` | [Perplexity AI GitHub organisation](https://github.com/perplexityai) | organisation-index | `catalogued` | `research-freshness` |
+| `perplexity-api-platform-developers` | [api-platform-developers](https://github.com/perplexityai/api-platform-developers) | skills-and-plugin-repository | `catalogued` | `research-freshness` |
+| `perplexity-cli` | [pplx CLI](https://github.com/perplexityai/perplexity-cli) | external-cli | `catalogued` | `research-freshness` |
+| `perplexity-search-evals` | [search_evals](https://github.com/perplexityai/search_evals) | evaluation-framework | `catalogued` | `evaluation` |
+| `perplexity-bumblebee` | [Bumblebee](https://github.com/perplexityai/bumblebee) | security-inventory-tool | `catalogued` | `security-testing` |
+| `perplexity-modelcontextprotocol` | [Perplexity MCP server](https://github.com/perplexityai/modelcontextprotocol) | mcp-repository | `catalogued` | `research-freshness` |
+| `perplexity-codescythe` | [Codescythe](https://github.com/perplexityai/codescythe) | code-analysis-tool | `catalogued` | `code-review` |
+| `appflowy` | [AppFlowy](https://github.com/AppFlowy-IO/AppFlowy) | product-repository | `catalogued` | `session-memory` |
+| `plausible-analytics` | [Plausible Analytics](https://github.com/plausible/analytics) | product-repository | `catalogued` | `observability` |
+| `github-spec-kit` | [Spec Kit](https://github.com/github/spec-kit) | specification-framework | `catalogued` | `harness-methodology` |
+| `500-ai-agents-projects` | [500+ AI Agent Projects & Use Cases](https://github.com/ashishpatel26/500-AI-Agents-Projects) | agent-pattern-catalogue | `catalogued` | `agent-pattern-catalogue` |
+| `walkinglabs-learn-harness-engineering` | [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/en/) | course-and-reference-repository | `catalogued` | `harness-methodology` |
+| `walkinglabs-harness-creator` | [harness-creator skill](https://github.com/walkinglabs/learn-harness-engineering/tree/main/skills/harness-creator) | agent-skill | `catalogued` | `harness-methodology` |
+| `penpot` | [Penpot](https://github.com/penpot/penpot) | design-platform | `catalogued` | `design-reference` |
+| `helixdb` | [HelixDB](https://github.com/HelixDB/helix-db) | database-and-cli | `catalogued` | `session-memory` |
+| `agent-reach` | [Agent Reach](https://github.com/Panniantong/agent-reach) | capability-installer | `catalogued` | `research-freshness` |
+| `agent-browser` | [agent-browser](https://github.com/vercel-labs/agent-browser) | browser-automation-cli | `catalogued` | `browser-automation` |
+| `gsd-core` | [GSD Core](https://github.com/gsd-build/get-shit-done) | context-and-phase-framework | `catalogued` | `harness-methodology` |
+| `anthropic-mcp-builder` | [mcp-builder skill](https://github.com/anthropics/skills/tree/main/skills/mcp-builder) | agent-skill | `catalogued` | `mcp-building` |
+| `vercel-find-skills` | [find-skills skill](https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md) | agent-skill | `catalogued` | `external-discovery` |
+| `ecc` | [ECC](https://github.com/affaan-m/ECC) | agent-harness-ecosystem | `catalogued` | `harness-methodology` |
+| `strix` | [Strix](https://github.com/usestrix/strix) | security-testing-tool | `catalogued` | `security-testing` |
+| `stop-slop` | [Stop Slop](https://github.com/hardikpandya/stop-slop) | agent-skill | `optional` | `writing-quality` |
+| `task-observer` | [Task Observer](https://github.com/rebelytics/one-skill-to-rule-them-all) | meta-skill | `conditional` | `skill-learning` |
+| `taste-skill` | [Taste Skill](https://github.com/Leonxlnx/taste-skill) | agent-skill-suite | `optional` | `design-director` |
+| `open-design` | [Open Design](https://github.com/nexu-io/open-design) | design-platform-and-skill-suite | `optional` | `design-director` |
+| `emil-kowalski-skill` | [Emil Kowalski Design Skills](https://github.com/emilkowalski/skill) | agent-skill-suite | `optional` | `motion` |
+| `impeccable` | [Impeccable](https://github.com/pbakaus/impeccable) | agent-skill-and-cli | `optional` | `design-director` |
+| `superpowers` | [Superpowers](https://github.com/obra/superpowers) | agent-methodology-plugin | `optional` | `harness-methodology` |
+| `claude-mem` | [Claude Mem](https://github.com/thedotmack/claude-mem) | memory-plugin | `conditional` | `session-memory` |
+| `graphify` | [Graphify](https://github.com/Graphify-Labs/graphify) | code-knowledge-skill-and-cli | `conditional` | `code-knowledge` |
+| `gstack` | [gstack](https://github.com/garrytan/gstack) | agent-role-skill-suite | `optional` | `harness-methodology` |
+| `everything-claude-code` | [Everything Claude Code / ECC](https://github.com/affaan-m/everything-claude-code) | harness-ecosystem | `optional` | `harness-methodology` |
+| `context7` | [Context7](https://github.com/upstash/context7) | documentation-mcp | `optional` | `research-freshness` |
+| `last30days` | [Last30Days](https://github.com/mvanhorn/last30days-skill) | research-skill | `optional` | `research-freshness` |
+| `skill-ui` | Skill UI *(source unresolved)* | legacy-capability-reference | `preserved-unresolved` | `external-discovery` |
+| `claude-code-review` | [Claude Code Review](https://code.claude.com/docs/en/code-review) | managed-code-review-service | `optional` | `code-review` |
+| `ponytail` | [Ponytail](https://github.com/DietrichGebert/ponytail) | minimal-code-skill-and-plugin | `optional` | `engineering-minimalism` |
+| `mobbin` | [Mobbin](https://mobbin.com) | commercial-design-reference | `reference-only` | `design-reference` |
+| `refero` | [Refero](https://refero.design) | design-reference | `reference-only` | `design-reference` |
+| `recent-designs` | [Recent](https://recent.design) | design-reference | `reference-only` | `design-reference` |
+| `21st-dev` | [21st.dev](https://21st.dev) | component-reference-and-service | `optional` | `component-source` |
+| `shadcn-ui` | [shadcn/ui](https://github.com/shadcn-ui/ui) | component-system | `optional` | `component-source` |
+| `gsap` | [GSAP](https://github.com/greensock/GSAP) | motion-library | `optional` | `motion` |
+| `headroom-js` | [Headroom.js](https://github.com/WickyNilliams/headroom.js) | interaction-library | `optional` | `motion` |
+| `playwright` | [Playwright](https://github.com/microsoft/playwright) | browser-testing-framework | `preferred-when-existing` | `browser-automation` |
+| `karpathy-guidelines` | [Andrej Karpathy Coding Guidelines](https://github.com/forrestchang/andrej-karpathy-skills) | behavioural-skill | `preferred-policy` | `engineering-behaviour` |
+| `ui-ux-pro-max` | [UI/UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | design-intelligence-skill-and-cli | `optional-preferred-design-research` | `design-authority` |
+| `frontend-design` | [Anthropic Frontend Design](https://github.com/openclaw/skills/tree/main/skills/qrucio/anthropic-frontend-design) | frontend-implementation-skill | `optional` | `design-authority` |
+| `playwright-mcp` | [Playwright MCP](https://github.com/microsoft/playwright-mcp) | browser-automation-mcp | `optional` | `browser-verification` |
+| `stagehand` | [Stagehand](https://github.com/browserbase/stagehand) | ai-browser-automation-framework | `optional` | `browser-verification` |
+| `cypress` | [Cypress](https://github.com/cypress-io/cypress) | browser-testing-framework | `preferred-when-existing` | `browser-verification` |
+| `puppeteer-mcp` | [Puppeteer MCP Server](https://github.com/modelcontextprotocol/servers-archived) | legacy-browser-mcp | `discouraged-legacy` | `browser-verification` |
+
+</details>
+
+Before activation:
+
+```text
+Capability gap
+→ Search registry
+→ Check native fallback
+→ Check strongest phase
+→ Resolve overlap
+→ Verify source and licence
+→ Inspect hooks, network, permissions and credentials
+→ Request approval
+→ Pin version or commit
+→ Record attribution
+→ Validate
+```
+
+See [Reference Catalogue](docs/REFERENCE_CATALOG.md).
+
+---
+
+# Validation
+
+```text
+Routing evaluations:      22 / 22 PASS
+Unit tests:               27 / 27 PASS
+Runtime doctor:            0 failures
+Repository doctor:         0 failures, 0 warnings
+Security gate:             0 findings
+Native skill sync:        32 / 32 PASS
+Fresh-install self-test:  PASS
+```
+
+Run locally:
+
+```bash
+python scripts/eval_harness.py run
+python -m unittest discover -s tests -p "test_*.py"
+python scripts/agent_runtime.py doctor
+python scripts/escapement.py self-test
+python scripts/security_gate.py --fail-on high
+```
+
+---
+
+# Project structure
 
 ```text
 .
 ├── AGENTS.md
 ├── CLAUDE.md
-├── AGENT_RUNTIME.md
 ├── PROJECT_STATE.yaml
 ├── PROJECT_CONTEXT.md
-├── feature_list.json
+├── DOMAIN_CONTEXT.md
 ├── SESSION_HANDOFF.md
 │
-├── .agent/                 # local runtime, evidence, evals, and run data
-├── .agents/                # Codex-native skills
-├── .claude/                # Claude Code settings and skills
-├── .codex/                 # Codex hooks
-├── .escapement/            # managed/seed-file policy
-├── .claude-plugin/         # Claude plugin metadata
-├── .codex-plugin/          # Codex plugin metadata
-│
-├── skills/                 # canonical skills
-├── evals/                  # executable evaluation fixtures
-├── extensions/             # optional capabilities
-├── presets/                # workflow customisations
-├── bundles/                # role-based component sets
-├── catalog/                # curated agent patterns
+├── profiles/
 ├── docs/
-│   ├── specs/
+│   ├── doctrine/
 │   ├── standards/
-│   ├── templates/
+│   │   └── design-intelligence.md
 │   ├── architecture/
-│   └── releases/
+│   ├── specs/
+│   └── decisions/
+│
+├── skills/
+├── .agents/skills/
+├── .claude/skills/
+│
+├── catalog/
+│   ├── native-skills.json
+│   ├── doctrine-packs.json
+│   ├── skill-strengths.json
+│   ├── capability-families.json
+│   ├── design-stack.json
+│   ├── strategy-adapters.json
+│   ├── phase-capabilities.json
+│   ├── capability-registry.json
+│   ├── overlap-matrix.json
+│   └── overlap-groups.json
+│
 ├── scripts/
-├── schemas/
+│   ├── capability_router.py
+│   ├── capability_audit.py
+│   ├── agent_runtime.py
+│   ├── escapement.py
+│   ├── run_check.py
+│   └── eval_harness.py
 └── tests/
 ```
 
 ---
 
-
-# Reference ecosystem
-
-Escapement is informed by a curated set of open-source and public developer
-tools, skills, courses, and product repositories.
-
-The complete agent-readable policy is maintained in:
-
-```text
-docs/REFERENCE_CATALOG.md
-catalog/external-resources.json
-```
-
-> [!IMPORTANT]
-> Public visibility is not the same as an open-source licence. Before copying,
-> modifying, or installing any resource, Escapement requires licence
-> verification at the selected tag or commit, security review, version pinning,
-> attribution, and any applicable approval gate.
-
-| Resource | Type | Licence observed | Use when |
-|---|---|---|---|
-| [awesome-design-md](https://github.com/VoltAgent/awesome-design-md) | reference-repository | MIT | A product needs a design archetype, component language, visual benchmark, or product-specific DESIGN |
-| [Perplexity AI GitHub organisation](https://github.com/perplexityai) | organisation-index | Per-repository | An agent needs current patterns for research tooling, evaluation runners, safe binary distribution, or developer-tool inventory |
-| [api-platform-developers](https://github.com/perplexityai/api-platform-developers) | skills-and-plugin-repository | Apache-2.0 | The project needs official Perplexity Agent Skills, a Claude/Codex plugin example, or live documentation through MCP |
-| [pplx CLI](https://github.com/perplexityai/perplexity-cli) | external-cli | No licence file observed during review | A user explicitly wants Perplexity-backed current web search or snippets and can provide an API key |
-| [search_evals](https://github.com/perplexityai/search_evals) | evaluation-framework | MIT | Escapement needs reproducible eval suites, provider adapters, task traces, resumable runs, or cost/evidence accounting |
-| [Bumblebee](https://github.com/perplexityai/bumblebee) | security-inventory-tool | Apache-2.0 | A security review needs read-only package, skill, editor-extension, or MCP inventory from local metadata |
-| [Perplexity MCP server](https://github.com/perplexityai/modelcontextprotocol) | mcp-repository | Verify current repository licence | A project wants Perplexity search through MCP rather than a CLI |
-| [Codescythe](https://github.com/perplexityai/codescythe) | code-analysis-tool | Verify current repository licence | A TypeScript or JavaScript repository needs deterministic dead-code analysis or dependency-path explanation |
-| [AppFlowy](https://github.com/AppFlowy-IO/AppFlowy) | product-repository | AGPL-3.0 | Designing local-first state, user-owned data, extensible workspace architecture, or self-hosted collaboration |
-| [Plausible Analytics](https://github.com/plausible/analytics) | product-repository | AGPL-3.0-or-later | Designing privacy-first observability, minimal dashboards, transparent metrics, or optional self-hosted analytics |
-| [Spec Kit](https://github.com/github/spec-kit) | specification-framework | MIT | New or material work needs a constitution, executable specification, technical plan, task breakdown, or convergence review |
-| [500+ AI Agent Projects & Use Cases](https://github.com/ashishpatel26/500-AI-Agents-Projects) | agent-pattern-catalogue | MIT | An agent needs to discover relevant implementation patterns or comparable industry use cases |
-| [Learn Harness Engineering](https://github.com/walkinglabs/learn-harness-engineering) | course-and-reference-repository | MIT | Creating, assessing, or teaching the instructions, tools, environment, state, and feedback subsystems of a harness |
-| [harness-creator skill](https://github.com/walkinglabs/learn-harness-engineering/tree/main/skills/harness-creator) | agent-skill | MIT | A project lacks a harness or needs a structured five-subsystem assessment |
-| [Penpot](https://github.com/penpot/penpot) | design-platform | MPL-2.0 | A product needs open design tokens, inspectable design-to-code workflows, or an optional design MCP/API |
-| [HelixDB](https://github.com/HelixDB/helix-db) | database-and-cli | Apache-2.0 | A project genuinely needs graph-vector memory, knowledge graphs, or a local agent data layer |
-| [Agent Reach](https://github.com/Panniantong/agent-reach) | capability-installer | MIT | A user explicitly needs internet/platform access not already available through approved tools |
-| [agent-browser](https://github.com/vercel-labs/agent-browser) | browser-automation-cli | Apache-2.0 | A frontend or end-to-end task needs real browser evidence, accessibility-tree interaction, screenshots, or DOM inspection |
-| [GSD Core](https://github.com/open-gsd/gsd-core) | context-and-phase-framework | MIT | A project needs phase-level context isolation, fresh execution contexts, or a discuss-plan-execute-verify-ship loop |
-| [mcp-builder skill](https://github.com/anthropics/skills/tree/main/skills/mcp-builder) | agent-skill | Apache-2.0 | A project is approved to build an MCP server for an external API or service |
-| [find-skills skill](https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md) | agent-skill | MIT | A task requires a specialised capability that Escapement core does not own |
-| [ECC](https://github.com/affaan-m/ECC) | agent-harness-ecosystem | MIT | Reviewing cross-runtime distribution, doctor/repair, installation conflict detection, skill packaging, or harness security |
-| [Strix](https://github.com/usestrix/strix) | security-testing-tool | Apache-2.0 | The user has explicit authorisation to dynamically assess a local, owned, or approved target in a sandbox |
-
-## How agents use the catalogue
-
-```text
-Capability gap
-→ Search catalog/external-resources.json
-→ Match trigger and task
-→ Verify current licence and maintenance
-→ Check overlap, hooks, permissions, network, and credentials
-→ Prefer integration over copying
-→ Request approval when required
-→ Pin version or commit
-→ Record attribution and evidence
-→ Install or use
-→ Validate
-```
-
-The catalogue includes explicit `use_when`, `how_to_use`, and `do_not` guidance
-for every entry. It also distinguishes:
-
-- `reference` — learn principles without copying substantial source;
-- `adapt` — reuse under the verified licence and attribution obligations;
-- `install` — install a skill after approval and source review;
-- `integrate` — use an external tool, plugin, CLI, service, or MCP;
-- `integrate-authorised-only` — use only with explicit scope and permission.
-
-# Current status
-
-Escapement v6.0.0 consolidates the former safety, evidence/evaluation, and
-distribution roadmaps into one release.
-
-Implemented in this release:
-
-- safe managed-file updates;
-- safe project seed installation;
-- open-turn continuity;
-- structured check records;
-- executable routing evaluations;
-- feature-state gating;
-- explainable routing;
-- doctor, repair, and self-test;
-- exact version consistency;
-- root-safe hook launchers;
-- plugin manifests;
-- optional MCP extension;
-- extensions, presets, and bundles;
-- local observability;
-- privacy-first defaults;
-- defensive security gate;
-- complete Escapement naming.
-
----
-
-# Contributing
-
-Escapement favours a small, enforceable core over a large untested instruction
-library.
-
-Before proposing a change:
-
-1. show a repeated failure or measurable need;
-2. place the change in the smallest correct layer;
-3. add or update an executable evaluation;
-4. preserve safe update boundaries;
-5. update the release notes;
-6. run doctor, security, and tests.
-
-See `CONTRIBUTING.md`.
-
----
-
 # Licence
 
-Escapement is source-available, not open source.
+Escapement is source-available.
 
-Commercial redistribution, resale, white-labelling, and substantial
-republication require permission from V L & CO.
+External capabilities retain their own licences. A registry entry does not
+install a project or grant permission to copy it.
 
-See `LICENSE.md` and `NOTICE.md`.
+See:
+
+- [LICENSE.md](LICENSE.md)
+- [NOTICE.md](NOTICE.md)
+- [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
 
 ---
 
 <div align="center">
 
-Built by **V L & CO**
-
-**Judgement before answers. Evidence before opinion. Verification before confidence.**
+**Low automatic context. Deep capability. Explicit overlap. Verified delivery.**
 
 </div>

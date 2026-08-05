@@ -25,7 +25,7 @@ Security fixes are maintained for the latest tagged release.
 
 ## Reporting a vulnerability
 
-Report privately to the repository owner or V L & CO. Do not include live
+Report privately to the repository owner. Do not include live
 credentials, personal data, exploit payloads against third parties, or customer
 confidential information in a public issue.
 

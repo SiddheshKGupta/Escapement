@@ -1,30 +1,34 @@
 project_name: Escapement
-phase: v6-release
+profile: domain-expertise
+phase: v6.3-capability-strength-orchestration
 work_mode: DELTA
 implementation_authorized: true
-approved_ticket: ESC-V6-ALL-IN-ONE
+approved_ticket: ESC-V63-STRENGTHS
 
 documents:
-  constitution: active
-  project_context: active
-  feature_list: active
-  design_intelligence: active
-  runtime_enforcement: active
-  executable_evals: active
-  security: active
-  release: active
+  kernel: active
+  domain_context: active
+  doctrine_packs: active
+  native_skills: active
+  capability_strengths: active
+  strategy_adapters: active
+  design_constitution: active
+  capability_registry: active
+  overlap_matrix: active
+  runtime: active
+  evaluations: passing
+  security: passing
 
 blocking_decisions: []
 accepted_assumptions:
-  - The source repository is the Escapement standard itself.
-  - Consuming projects receive a safe unauthorised state template.
-selected_skills:
-  - project-discovery
-  - security-review
-  - skill-governance
+  - Escapement remains organisation-neutral and domain-configurable.
+  - Design intelligence is the supreme design authority.
+  - External capabilities are preserved but activated only at their strongest phase.
+  - Automatic context and invoked skill context have separate budgets.
+selected_skills: []
 
 runtime:
-  version: "6.0.0"
+  version: "6.3.0"
   enabled: true
   last_closed_turn: null
 

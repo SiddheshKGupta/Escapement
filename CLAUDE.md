@@ -1,21 +1,17 @@
 # Escapement Claude Code Bootstrap
 
 @AGENTS.md
-@AGENT_RUNTIME.md
-@PROJECT_STATE.yaml
-@PROJECT_CONTEXT.md
-@feature_list.json
 @.agent/runtime/ACTIVE_CONTEXT.md
-@.agent/runtime/ACTIVE_SKILLS.md
-@.agent/runtime/SESSION_MEMORY.md
+@.agent/runtime/CONTEXT_PACK.md
 
-Treat these imports as active project memory.
+The kernel and current phase pack are the only automatic imports.
 
-For every material prompt:
+Use the decision brief to ask only material questions and recommend defaults.
+Follow the phase plan rather than loading every capability at once.
 
-1. continue the current open turn;
-2. invoke each selected `.claude/skills/` skill;
-3. work on one bounded feature;
-4. capture checks through `scripts/run_check.py`;
-5. persist state using `scripts/agent_runtime.py close-turn`;
-6. do not stop with an open turn.
+Open `DOMAIN_CONTEXT.md`, project state, specifications, full skills and
+external references only when the current phase pack points to them.
+
+Invoke each selected `.claude/skills/` skill. External skills, plugins and MCP
+servers remain candidates until their overlap, licence, security and approval
+requirements are satisfied.
