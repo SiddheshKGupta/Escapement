@@ -128,16 +128,16 @@ def safe_target(value: str) -> Path:
     return target
 
 
-def managed_files() -> list[str]:
+def managed_files(source_root: Path = SOURCE_ROOT) -> list[str]:
     files = set(ROOT_FILES)
     for prefix in MANAGED_PREFIXES:
-        path = SOURCE_ROOT / prefix
+        path = source_root / prefix
         if path.is_file():
             files.add(prefix)
         elif path.exists():
             for child in path.rglob("*"):
                 if child.is_file() and "__pycache__" not in child.parts:
-                    files.add(normalize(child.relative_to(SOURCE_ROOT)))
+                    files.add(normalize(child.relative_to(source_root)))
     return sorted(files)
 
 
@@ -226,7 +226,7 @@ def backup_files(target: Path, relatives: Iterable[str]) -> Path | None:
     return backup_root
 
 
-def plan_update(target: Path) -> dict[str, list[str]]:
+def plan_update(target: Path, source_root: Path = SOURCE_ROOT) -> dict[str, list[str]]:
     record = install_record(target)
     if not record:
         raise SystemExit(
@@ -243,11 +243,11 @@ def plan_update(target: Path) -> dict[str, list[str]]:
         "conflict": [],
         "remove_from_framework": [],
     }
-    source_files = set(managed_files())
+    source_files = set(managed_files(source_root))
     installed_files = set(installed)
 
     for relative in sorted(source_files):
-        source = SOURCE_ROOT / relative
+        source = source_root / relative
         destination = target / relative
         source_hash = sha256_file(source)
         if not destination.exists():
@@ -750,6 +750,31 @@ def command_doctor(args: argparse.Namespace) -> int:
     marker = install_record(target)
     if marker:
         print(f"[PASS] install record version {marker.get('version')}")
+
+        # Existence and version-string checks above cannot detect that an installed
+        # copy's managed files (scripts/, catalog/, etc.) have silently drifted from
+        # the source clone's current content -- a fix landing in the source after
+        # this project was installed leaves the old, unpatched bytes here with no
+        # warning. The install record already stores the source path used at
+        # install time; use it to run the same comparison `update` does.
+        source_path = marker.get("source")
+        source_root = Path(source_path).expanduser() if source_path else None
+        if source_root and (source_root / "scripts/escapement.py").exists():
+            plan = plan_update(target, source_root=source_root)
+            stale = len(plan["update"]) + len(plan["conflict"]) + len(plan["add"])
+            if stale:
+                print(f"[WARN] {stale} managed file(s) differ from the source install")
+                for relative in (plan["update"] + plan["add"])[:10]:
+                    print(f"  - {relative}")
+                for relative in plan["conflict"][:10]:
+                    print(f"  - {relative} (locally modified -- needs --force-managed)")
+                print(f"  Run: python {source_root}/scripts/escapement.py update {target} --apply")
+                warnings += 1
+            else:
+                print("[PASS] managed files match the source install")
+        elif source_root:
+            print(f"[WARN] recorded source no longer reachable: {source_root}")
+            warnings += 1
     elif target != SOURCE_ROOT:
         print(f"[WARN] {INSTALL_RECORD} missing")
         warnings += 1
