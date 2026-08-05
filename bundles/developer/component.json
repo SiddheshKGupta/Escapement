@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "type": "bundle",
+  "name": "developer",
+  "version": "1.0.0",
+  "description": "Implementation, API, UI review, release, and governance setup.",
+  "approval_required": false,
+  "files_root": "files",
+  "skills": [
+    "api-integration",
+    "enterprise-ui-review",
+    "release-readiness",
+    "skill-governance"
+  ],
+  "preset": "lean-build"
+}

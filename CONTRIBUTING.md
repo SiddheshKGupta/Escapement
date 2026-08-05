@@ -1,31 +1,19 @@
 # Contributing
 
-## Prime Rule
+Escapement favours a small enforceable core.
 
-Keep the standard compact.
+Before proposing a change:
 
-## Before Adding a Rule
+1. show a repeated failure or measurable need;
+2. identify the smallest correct layer;
+3. add or update an executable evaluation;
+4. preserve project-owned state and safe update boundaries;
+5. update documentation and release notes;
+6. run:
 
-1. Show a real failure, repeated correction, or measurable need.
-2. Choose the correct location:
-   - root `AGENTS.md`;
-   - scoped standard;
-   - skill;
-   - template;
-   - checklist;
-   - automated test.
-3. Check for overlap.
-4. Prefer deletion or consolidation over expansion.
-5. Update the relevant behaviour test.
-6. Update `CHANGELOG.md`.
+```bash
+python scripts/escapement.py self-test
+python scripts/escapement.py security --fail-on high
+```
 
-## Pull Request Checklist
-
-- [ ] Solves a demonstrated problem
-- [ ] Does not duplicate an existing instruction
-- [ ] Keeps the root instruction file compact
-- [ ] Preserves document line budgets
-- [ ] Reviews skill overlap
-- [ ] Updates relevant tests
-- [ ] Updates the changelog
-- [ ] Verifies paths and links
+External resources require licence verification and attribution.

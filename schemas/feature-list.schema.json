@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Escapement Feature List",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "project",
+    "features"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "project": {
+      "type": "string"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "behavior",
+          "verification",
+          "state"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "behavior": {
+            "type": "string"
+          },
+          "verification": {
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "not_started",
+              "active",
+              "blocked",
+              "passing"
+            ]
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

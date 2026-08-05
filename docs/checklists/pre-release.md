@@ -1,14 +1,9 @@
-# Pre-Release
+# Pre-release
 
-- [ ] Functional
-- [ ] Permission
-- [ ] Negative
-- [ ] Reconciliation
-- [ ] Accessibility
-- [ ] Performance
-- [ ] Security
-- [ ] Migration
-- [ ] Monitoring
-- [ ] Rollback
-- [ ] Docs
-- [ ] Handoff
+- [ ] Required features passing
+- [ ] Checks passing
+- [ ] Security reviewed
+- [ ] Rollback defined
+- [ ] Monitoring ready
+- [ ] UAT approved
+- [ ] Handover complete

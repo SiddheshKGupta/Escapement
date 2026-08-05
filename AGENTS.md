@@ -1,83 +1,96 @@
 ---
 owner: V L & CO
-version: "5.4"
+product: Escapement
+version: "6.0.0"
 mode: runtime-enforced
-purpose: "Build correct enterprise software with durable state, explicit skill routing, and evidence."
+purpose: "Deliver enterprise software through executable specifications, bounded work, structured evidence, and durable state."
 ---
 
-# VLCO Agent Instructions
+# Escapement Agent Instructions
 
-## 0. Mandatory Runtime Protocol
+## Prime Rule
 
-For every material user prompt:
+**Understand enough. Decide enough. Build. Test. Prove. Persist.**
+
+The repository is the system of record. Chat is not.
+
+## Mandatory Runtime Protocol
+
+For every material prompt:
 
 1. Read `.agent/runtime/ACTIVE_CONTEXT.md`.
 2. Read `.agent/runtime/ACTIVE_SKILLS.md`.
 3. Read `PROJECT_STATE.yaml`.
-4. Invoke every selected native skill before material work:
-   - Codex: `$skill-name`
-   - Claude Code: `/skill-name`
-5. Work on one bounded step.
-6. Run deterministic checks before model judgement.
-7. Before the final response, close the turn:
+4. Read `feature_list.json`.
+5. Continue an existing open turn rather than replacing it.
+6. Invoke every selected native skill.
+7. Work on one bounded feature or task.
+8. Capture deterministic checks with `scripts/run_check.py`.
+9. Do not mark a feature `passing` directly.
+10. Close the turn with structured evidence before the final response.
 
-```bash
-python scripts/agent_runtime.py close-turn \
-  --summary "What was completed" \
-  --next "Exact next action" \
-  --files "path/a,path/b" \
-  --checks "check one;check two" \
-  --evidence "path/a,path/b"
-```
-
-Do not provide the final response while the runtime turn is open.
-
-The `Stop` hook blocks one premature stop and directs the agent to close the turn. It then allows stopping to prevent an infinite loop.
-
-### Runtime fallback
-
-When hooks are unavailable:
+Manual fallback:
 
 ```bash
 python scripts/agent_runtime.py manual-start --prompt "User request"
 ```
 
-Then follow the same close-turn command.
+## Specification Flow
 
-## 1. Prime Rule
+For material new work:
 
-**Understand enough. Decide enough. Build. Test. Prove. Persist.**
+```text
+Constitution
+→ Specification
+→ Plan
+→ Tasks
+→ Feature list
+→ Implementation
+→ Verification
+→ Convergence
+```
 
-Do not code from guesses, treat chat as the source of truth, claim unrun checks, load every skill, mix overlapping skills without reason, or finish material work without durable state.
+Do not implement `FULL` work without:
 
-## 2. Work Modes
+- an approved readiness gate;
+- a specification;
+- a plan;
+- actionable tasks;
+- at least one feature with a verification command.
+
+## Work Modes
 
 | Mode | Use |
 |---|---|
 | `FULL` | New application, product, module, architecture, or major workflow |
 | `DELTA` | Material change to an existing product |
-| `EXECUTE` | Approved ticket, isolated bug, copy change, or bounded UI improvement |
+| `EXECUTE` | Approved ticket, isolated bug, or bounded change |
 
-`FULL`: Inspect → discover → decide → readiness gate → approve → build.  
-`DELTA`: Read state/decisions → identify impact → approve material change → build.  
-`EXECUTE`: Confirm ticket/files/acceptance/checks → implement → prove → close turn.
+`FULL`: Inspect → discover → specify → plan → approve → build.  
+`DELTA`: Read state → assess impact → update artifacts → approve → build.  
+`EXECUTE`: Confirm ticket/files/acceptance/checks → implement → prove.
 
-## 3. First Actions
+## Feature List Rules
 
-1. Inspect repository state before asking questions.
-2. Determine known, unknown, blocker, mode, selected skills, and checks.
-3. Ask only questions that can change scope, workflow, data/KPI, permissions, integrations, security, architecture, brand/UI, or acceptance.
-4. Do not repeat answered questions.
+- File: `feature_list.json`
+- One feature is active by default.
+- Every feature requires behaviour, verification, state, and evidence.
+- Allowed states: `not_started`, `active`, `blocked`, `passing`.
+- Only `scripts/feature_list.py verify <id>` may move a feature to `passing`.
+- A failed verification keeps the feature active or blocked.
+- Feature scope should be completable in one focused session.
+- Project completion requires zero non-passing required features.
 
-## 4. Readiness Gate
+## Readiness Gate
 
-For `FULL` or `DELTA`:
+For `FULL` and material `DELTA` work:
 
 ```text
 READY CHECK
 Scope:
 Non-goals:
 Users:
+Behaviour:
 Workflow:
 Data/KPIs:
 Permissions:
@@ -85,101 +98,173 @@ Integrations:
 UI direction:
 Security:
 Scale:
+Specification:
+Plan:
+Tasks:
+Active feature:
 Selected skills:
+Required checks:
 Open risks:
 Ready to build: YES/NO
 ```
 
-Proceed only after approval or explicit instruction to proceed with listed assumptions.
+Proceed only after approval or explicit instruction to proceed with listed
+assumptions.
 
-## 5. Skill Rule
+## Skill Rule
 
-The runtime router selects the smallest useful stack:
-
-```text
-Capability → Primary skill → Reason → Artifact → Validation → Overlap rejected
-```
-
-Maximum active material skills: 4 by default.
-
-Native skill directories:
+Use the smallest useful skill stack.
 
 ```text
-Codex: .agents/skills/<skill>/SKILL.md
-Claude Code: .claude/skills/<skill>/SKILL.md
+Capability
+→ Primary skill
+→ Why selected
+→ Required artifact
+→ Verification
+→ Overlap rejected
 ```
 
-The compatibility `skills/` folder is documentation only and must not be assumed to auto-load.
+Maximum active material skills: 4 unless an explicit reason is recorded.
 
-## 6. Design Rule
-
-For design, frontend, UI, brand, colour, typography, layout, animation, or responsive work:
-
-1. Invoke `design-system`.
-2. Invoke `enterprise-ui-review` for implementation/review.
-3. Read `docs/standards/design-intelligence.md`.
-4. Create/update product `DESIGN.md`.
-5. State adopted and rejected reference patterns.
-6. Client brand overrides external references.
-
-Do not copy protected logos, fonts, images, or trade dress.
-
-## 7. Enterprise Product Rules
-
-Always preserve approved behaviour, use server-side permissions, validate inputs, cover loading/empty/error/permission/success, test changed behaviour, report checks not run, and make KPIs traceable.
-
-Ask before dependencies, schema, auth/RBAC, destructive actions, production, paid services, integrations, broad refactors, licence-sensitive reuse, or confidential data.
-
-Never invent business rules/KPIs, expose secrets, disable controls to force success, use generic AI UI, silently change architecture, or claim unrun tests.
-
-## 8. Durable Context
+Canonical skills:
 
 ```text
-PROJECT_STATE.yaml
-PROJECT_CONTEXT.md
-CURRENT_PHASE.md
-CURRENT_CONTEXT.md
-.agent/runtime/ACTIVE_CONTEXT.md
-.agent/runtime/ACTIVE_SKILLS.md
-.agent/runtime/SESSION_MEMORY.md
-SESSION_HANDOFF.md
-docs/decisions/DECISION_LOG.md
+skills/<skill>/SKILL.md
 ```
 
-Use `Write → Select → Compress → Isolate`.
-
-## 9. Evidence
-
-Run deterministic checks first: tests, types, lint, schemas, files, manifest, reconciliation, permissions, and exit codes. Then perform semantic, business, UX, risk, and human review.
-
-## 10. Delivery Loop
+Native generated copies:
 
 ```text
-Bootstrap → Route → Declare → Execute → Observe → Validate → Decide → Persist → Close turn → Handoff
+.agents/skills/<skill>/SKILL.md
+.claude/skills/<skill>/SKILL.md
 ```
 
-## 11. Done Means
 
-Requirements work; permissions and edge states work; checks are truthful; totals reconcile; accessibility/performance are considered; evidence exists; state is updated; the runtime turn is closed; next action is explicit.
+## External Capability Rule
 
-## 12. Read When Relevant
+Before recommending, installing, copying, or invoking an external skill, plugin,
+repository, CLI, MCP server, service, or agent framework:
 
-| Work | Read |
-|---|---|
-| Runtime | `AGENT_RUNTIME.md` |
-| Discovery | native `project-discovery` |
-| Dashboard/MIS | native `dashboard` + `data-reporting.md` |
-| Workflow | native `workflow` |
-| UI | native `enterprise-ui-review` + `ui.md` |
-| Design/brand/motion | native `design-system` + `design-intelligence.md` |
-| API | native `api-integration` |
-| Release | native `release-readiness` |
-| Skill evidence | native `skill-governance` |
-| Context | `context-engineering.md` |
-| Harness | `harness-engineering.md` |
+1. Read `catalog/external-resources.json`.
+2. Match the task to the resource's `triggers` and `use_when`.
+3. Verify the current licence at the exact tag or commit.
+4. Prefer external integration over copying source.
+5. Check maintenance, overlap, hooks, permissions, network access, credentials,
+   destructive behaviour, and data handling.
+6. Request approval for installation, dependencies, MCP registration, network
+   access, credentials, licence-sensitive reuse, or security testing.
+7. Pin the version or commit.
+8. Update `THIRD_PARTY_NOTICES.md` and the decision log.
+9. Capture installation and validation evidence.
 
-## 13. Instruction Precedence
+A public GitHub repository is not automatically open source. When a catalogue
+entry says `must-verify` or `unverified-restrict-copying`, use it only as a
+reference or external integration until the licence is confirmed.
 
-Safety/platform → current user → approved decisions → nearest `AGENTS.md` → root `AGENTS.md` → runtime/project state → loaded skill → references.
+Invoke `reference-router` when the user asks to find, compare, install, or use
+an external capability, or when the current native skill stack cannot safely
+complete the task.
 
-On conflict: stop, state it, recommend resolution.
+## Evidence Rule
+
+Deterministic checks come first.
+
+Required structured evidence includes:
+
+```text
+Command
+Start time
+Completion time
+Exit code
+Stdout path and hash
+Stderr path and hash
+Scope
+Result
+```
+
+A material turn cannot close as `PASS` when:
+
+- a critical failure exists;
+- required output files are missing;
+- required evidence is missing;
+- selected skills are not declared used;
+- no structured check record exists;
+- any required check fails.
+
+Model-entered check labels are declarations, not proof.
+
+## Security Rule
+
+Before approving or committing sensitive work:
+
+- scan for secrets;
+- inspect project hooks;
+- inspect MCP servers;
+- validate inputs and permissions;
+- preserve least privilege;
+- avoid remote `curl | shell` installation inside project hooks;
+- sandbox authorised external security tools;
+- never test a system without permission.
+
+Invoke `security-review` for authentication, permissions, secrets, hooks, MCP,
+payments, confidential data, deployment, or external integrations.
+
+## Design Rule
+
+For UI, brand, layout, typography, colour, motion, or responsive work:
+
+1. invoke `design-system`;
+2. invoke `enterprise-ui-review` for implementation or review;
+3. read `docs/standards/design-intelligence.md`;
+4. create or update product `DESIGN.md`;
+5. state adopted and rejected patterns;
+6. client brand overrides external references.
+
+## Approval Gates
+
+Ask before:
+
+- new dependency;
+- schema migration;
+- authentication or RBAC change;
+- destructive action;
+- production deployment;
+- paid service;
+- external integration;
+- confidential-data access;
+- broad refactor;
+- licence-sensitive reuse;
+- security testing outside an authorised local or sandbox environment.
+
+## Observability Rule
+
+Escapement records both:
+
+- runtime observability: commands, outputs, errors, state transitions;
+- process observability: specification, sprint contract, rubric, decisions.
+
+Do not rely on unstructured narrative logs for acceptance.
+
+## Session Closure
+
+Every session must leave:
+
+- a clean or explicitly blocked feature state;
+- updated shared artifacts;
+- structured check records;
+- `SESSION_HANDOFF.md`;
+- exact next action;
+- no ambiguous “mostly done” status.
+
+## Instruction Precedence
+
+1. Safety and platform rules
+2. Current user instruction
+3. Approved constitution/specification/decisions
+4. Nearest folder `AGENTS.md`
+5. Root `AGENTS.md`
+6. Runtime and project state
+7. Loaded native skill
+8. Reference material
+
+On conflict: stop, describe the conflict, and recommend a resolution.

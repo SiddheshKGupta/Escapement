@@ -1,0 +1,181 @@
+{
+  "schema_version": "1.0",
+  "title": "Escapement Agent Pattern Catalogue",
+  "patterns": [
+    {
+      "id": "planner",
+      "name": "Planner",
+      "category": "delivery",
+      "use_when": "A material feature needs decomposition, dependencies, risks, and verification before implementation.",
+      "native_skills": [
+        "project-discovery",
+        "skill-governance"
+      ],
+      "source_references": [
+        "github-spec-kit",
+        "gsd-core"
+      ],
+      "promotion_rule": "Keep as a pattern unless repeated evidence supports a dedicated native skill."
+    },
+    {
+      "id": "evaluator",
+      "name": "Independent Evaluator",
+      "category": "verification",
+      "use_when": "Implementation needs assessment from a fresh context against explicit acceptance criteria.",
+      "native_skills": [
+        "skill-governance"
+      ],
+      "source_references": [
+        "perplexity-search-evals",
+        "walkinglabs-learn-harness-engineering"
+      ],
+      "promotion_rule": "Must use structured fixtures and deterministic evidence."
+    },
+    {
+      "id": "security-reviewer",
+      "name": "Security Reviewer",
+      "category": "security",
+      "use_when": "Auth, permissions, hooks, MCP, privacy, secrets, or deployment changes are material.",
+      "native_skills": [
+        "security-review"
+      ],
+      "source_references": [
+        "perplexity-bumblebee",
+        "ecc",
+        "strix"
+      ],
+      "promotion_rule": "Offensive tools remain external and authorised-only."
+    },
+    {
+      "id": "browser-verifier",
+      "name": "Browser Verifier",
+      "category": "frontend",
+      "use_when": "A UI change needs accessibility-tree, interaction, screenshot, or responsive evidence.",
+      "native_skills": [
+        "enterprise-ui-review"
+      ],
+      "source_references": [
+        "agent-browser"
+      ],
+      "promotion_rule": "Prefer an external pinned browser CLI over custom browser orchestration."
+    },
+    {
+      "id": "research-agent",
+      "name": "Grounded Research Agent",
+      "category": "research",
+      "use_when": "A task requires current external facts, primary-source discovery, or multi-step research.",
+      "native_skills": [
+        "reference-router"
+      ],
+      "source_references": [
+        "perplexity-api-platform-developers",
+        "perplexity-cli",
+        "agent-reach"
+      ],
+      "promotion_rule": "Network access and credentials require approval."
+    },
+    {
+      "id": "workflow-analyst",
+      "name": "Workflow Analyst",
+      "category": "business-analysis",
+      "use_when": "A process requires states, owners, exceptions, SLA, controls, and audit.",
+      "native_skills": [
+        "workflow"
+      ],
+      "source_references": [
+        "500-ai-agents-projects"
+      ],
+      "promotion_rule": "Business policy must come from approved sources, not agent inference."
+    },
+    {
+      "id": "dashboard-analyst",
+      "name": "Dashboard Analyst",
+      "category": "analytics",
+      "use_when": "Management needs traceable KPIs, drill-down, reconciliation, and decision support.",
+      "native_skills": [
+        "dashboard"
+      ],
+      "source_references": [
+        "plausible-analytics",
+        "voltagent-awesome-design-md"
+      ],
+      "promotion_rule": "No metric is accepted without source and formula."
+    },
+    {
+      "id": "design-system-architect",
+      "name": "Design System Architect",
+      "category": "design",
+      "use_when": "A product needs tokens, components, design-code handoff, or a product DESIGN.md.",
+      "native_skills": [
+        "design-system",
+        "enterprise-ui-review"
+      ],
+      "source_references": [
+        "penpot",
+        "voltagent-awesome-design-md"
+      ],
+      "promotion_rule": "Client brand and accessibility take precedence."
+    },
+    {
+      "id": "mcp-builder",
+      "name": "MCP Builder",
+      "category": "integration",
+      "use_when": "An approved external service should be exposed to agents through MCP.",
+      "native_skills": [
+        "api-integration",
+        "reference-router",
+        "security-review"
+      ],
+      "source_references": [
+        "anthropic-mcp-builder",
+        "perplexity-modelcontextprotocol"
+      ],
+      "promotion_rule": "Use explicit schemas, annotations, pagination, errors, and evals."
+    },
+    {
+      "id": "cleanup-agent",
+      "name": "Deterministic Cleanup Agent",
+      "category": "maintenance",
+      "use_when": "A repository needs dead-code or dependency cleanup with explainable proof.",
+      "native_skills": [
+        "skill-governance",
+        "reference-router"
+      ],
+      "source_references": [
+        "perplexity-codescythe"
+      ],
+      "promotion_rule": "Doctor and explain before destructive fix; verify after every cleanup pass."
+    },
+    {
+      "id": "memory-architect",
+      "name": "Memory Architect",
+      "category": "state",
+      "use_when": "File-based state is insufficient and a project has a justified graph/vector memory requirement.",
+      "native_skills": [
+        "project-discovery",
+        "api-integration"
+      ],
+      "source_references": [
+        "helixdb",
+        "appflowy"
+      ],
+      "promotion_rule": "External storage is optional; file state remains the core default."
+    },
+    {
+      "id": "harness-optimizer",
+      "name": "Harness Optimizer",
+      "category": "harness",
+      "use_when": "Repeated failures show that instructions, tools, environment, state, or feedback need adjustment.",
+      "native_skills": [
+        "skill-governance",
+        "reference-router"
+      ],
+      "source_references": [
+        "walkinglabs-harness-creator",
+        "ecc",
+        "gsd-core"
+      ],
+      "promotion_rule": "Every harness edit needs a predicted effect and a follow-up evaluation."
+    }
+  ]
+}

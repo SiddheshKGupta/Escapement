@@ -1,25 +1,22 @@
 ---
 name: release-readiness
-description: Prove a build is ready to ship by verifying scope, tests, permissions, reconciliation, security, performance, accessibility, migration, monitoring, and rollback. Returns GO or NO-GO with blockers. Use for UAT, deployment, production release, and handover.
-trigger: "UAT, deploy, production, handover."
+description: Use for release, production deployment, go-live, rollout, launch, UAT, handover, or release approval. Do not use during ordinary local implementation.
 ---
 
-# Release
+# Release Readiness
 
-Verify:
+Required gates:
 
-- scope
-- tests
-- permissions
-- reconciliation
-- security
-- performance
-- accessibility
-- migration
-- monitoring
-- rollback
-- docs
-- support
-- handoff
+- acceptance complete;
+- feature list has no required non-passing items;
+- structured checks pass;
+- security and permissions reviewed;
+- migration and rollback defined;
+- monitoring ready;
+- reconciliation complete;
+- performance and accessibility acceptable;
+- known risks accepted;
+- human approval recorded.
 
-Output GO / NO-GO with blockers.
+Output `GO / NO-GO`, evidence, risks, owner, rollback, monitoring, and approval.
+Never deploy silently.

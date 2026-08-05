@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Escapement Check Record",
+  "type": "object",
+  "required": [
+    "record_type",
+    "record_id",
+    "schema_version",
+    "name",
+    "command",
+    "started_at",
+    "completed_at",
+    "exit_code",
+    "result",
+    "stdout_path",
+    "stderr_path"
+  ],
+  "properties": {
+    "record_type": {
+      "const": "check"
+    },
+    "record_id": {
+      "type": "string",
+      "pattern": "^check:"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "command": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "started_at": {
+      "type": "string"
+    },
+    "completed_at": {
+      "type": "string"
+    },
+    "exit_code": {
+      "type": "integer"
+    },
+    "result": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "stdout_path": {
+      "type": "string"
+    },
+    "stderr_path": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,135 +1,612 @@
 {
-  "version": "5.4.1",
-  "files": [
-    ".agents/skills/api-integration/SKILL.md",
-    ".agents/skills/dashboard/SKILL.md",
-    ".agents/skills/design-system/SKILL.md",
-    ".agents/skills/enterprise-ui-review/SKILL.md",
-    ".agents/skills/project-discovery/SKILL.md",
-    ".agents/skills/release-readiness/SKILL.md",
-    ".agents/skills/skill-governance/SKILL.md",
-    ".agents/skills/workflow/SKILL.md",
-    ".claude/rules/README.md",
-    ".claude/settings.json",
-    ".claude/skills/api-integration/SKILL.md",
-    ".claude/skills/dashboard/SKILL.md",
-    ".claude/skills/design-system/SKILL.md",
-    ".claude/skills/enterprise-ui-review/SKILL.md",
-    ".claude/skills/project-discovery/SKILL.md",
-    ".claude/skills/release-readiness/SKILL.md",
-    ".claude/skills/skill-governance/SKILL.md",
-    ".claude/skills/workflow/SKILL.md",
-    ".codex/README.md",
-    ".codex/hooks.json",
-    ".gitattributes",
-    ".github/ISSUE_TEMPLATE/improvement.md",
-    ".github/PULL_REQUEST_TEMPLATE.md",
-    ".github/copilot-instructions.md",
-    ".github/workflows/validate-standard.yml",
-    ".gitignore",
-    "AGENTS.md",
-    "AGENT_RUNTIME.md",
-    "AI_REPORT.md",
-    "CAVEMAN_SINGLE_FILE.md",
-    "CHANGELOG.md",
-    "CLAUDE.md",
-    "CONTRIBUTING.md",
-    "CURRENT_PHASE.md",
-    "LICENSE.md",
-    "NOTICE.md",
-    "PROJECT_CONTEXT.md",
-    "PROJECT_STATE.yaml",
-    "README.md",
-    "RUNTIME_QUICK_TEST.md",
-    "SESSION_HANDOFF.md",
-    "SKILLS_INVENTORY.md",
-    "SKILL_USAGE_PLAN.md",
-    "docs/checklists/build-readiness.md",
-    "docs/checklists/context-health.md",
-    "docs/checklists/discovery-gate.md",
-    "docs/checklists/pre-release.md",
-    "docs/checklists/skill-run.md",
-    "docs/decisions/ADR-000-template.md",
-    "docs/decisions/DECISION_LOG.md",
-    "docs/standards/context-engineering.md",
-    "docs/standards/data-reporting.md",
-    "docs/standards/design-intelligence.md",
-    "docs/standards/harness-engineering.md",
-    "docs/standards/integrations.md",
-    "docs/standards/performance.md",
-    "docs/standards/policy-levels.md",
-    "docs/standards/runtime-enforcement.md",
-    "docs/standards/security.md",
-    "docs/standards/testing.md",
-    "docs/standards/ui.md",
-    "docs/templates/ARCHITECTURE.template.md",
-    "docs/templates/BRD.template.md",
-    "docs/templates/CONTEXT_PACK.template.md",
-    "docs/templates/DESIGN.template.md",
-    "docs/templates/DISCOVERY_REPORT.template.md",
-    "docs/templates/FRD.template.md",
-    "docs/templates/FRONTEND_SPEC.template.md",
-    "docs/templates/PRD.template.md",
-    "docs/templates/PROJECT_STATE.template.yaml",
-    "docs/templates/SECURITY.template.md",
-    "docs/templates/SKILL_HEALTH.template.md",
-    "docs/templates/SKILL_RUN.template.md",
-    "docs/templates/TICKETS.template.md",
-    "examples/enterprise-dashboard/CURRENT_CONTEXT.md",
-    "examples/enterprise-dashboard/CURRENT_PHASE.md",
-    "examples/enterprise-dashboard/KPI_CATALOGUE.md",
-    "examples/enterprise-dashboard/PROJECT_CONTEXT.md",
-    "examples/enterprise-dashboard/PROJECT_STATE.yaml",
-    "examples/enterprise-dashboard/SESSION_HANDOFF.md",
-    "examples/enterprise-dashboard/logs/skill-usage.jsonl",
-    "logs/skill-usage.jsonl",
-    "manifest.json",
-    "reports/SKILL_EFFECTIVENESS.md",
-    "reports/SKILL_HEALTH.md",
-    "schemas/skill-run.schema.json",
-    "scripts/agent_runtime.py",
-    "scripts/build_context_pack.py",
-    "scripts/skill_audit.py",
-    "scripts/validate_standard.py",
-    "scripts/vlco_build.py",
-    "skills/api-integration/SKILL.md",
-    "skills/dashboard/SKILL.md",
-    "skills/design-system/SKILL.md",
-    "skills/enterprise-ui-review/SKILL.md",
-    "skills/project-discovery/SKILL.md",
-    "skills/release-readiness/SKILL.md",
-    "skills/skill-governance/SKILL.md",
-    "skills/workflow/SKILL.md",
-    "tests/agent-behaviour/context-rot.md",
-    "tests/agent-behaviour/context-rot.yaml",
-    "tests/agent-behaviour/dashboard-kpi.md",
-    "tests/agent-behaviour/dashboard-kpi.yaml",
-    "tests/agent-behaviour/harness-improvement.md",
-    "tests/agent-behaviour/harness-improvement.yaml",
-    "tests/agent-behaviour/instruction-conflict.md",
-    "tests/agent-behaviour/instruction-conflict.yaml",
-    "tests/agent-behaviour/material-architecture-change.md",
-    "tests/agent-behaviour/material-architecture-change.yaml",
-    "tests/agent-behaviour/new-project.md",
-    "tests/agent-behaviour/new-project.yaml",
-    "tests/agent-behaviour/production-deployment.md",
-    "tests/agent-behaviour/production-deployment.yaml",
-    "tests/agent-behaviour/skill-not-triggered.md",
-    "tests/agent-behaviour/skill-not-triggered.yaml",
-    "tests/agent-behaviour/skill-overlap.md",
-    "tests/agent-behaviour/skill-overlap.yaml",
-    "tests/agent-behaviour/skill-overuse.md",
-    "tests/agent-behaviour/skill-overuse.yaml",
-    "tests/agent-behaviour/small-bug.md",
-    "tests/agent-behaviour/small-bug.yaml",
-    "tests/runtime/__init__.py",
-    "tests/runtime/test_agent_runtime.py"
+  "schema_version": "1.0",
+  "product": "Escapement",
+  "version": "6.0.0",
+  "release": "All-in-One Enforcement Upgrade",
+  "generated_on": "2026-08-05",
+  "package_type": "upload-ready upgrade package",
+  "validation": {
+    "doctor": "PASS \u2014 0 failures, 0 warnings",
+    "unit_tests": "PASS \u2014 9/9",
+    "router_evaluations": "PASS \u2014 12/12",
+    "security_gate": "PASS \u2014 0 findings at packaging time",
+    "fresh_install_self_test": "PASS"
+  },
+  "capabilities": [
+    "safe managed-file installer and updater",
+    "project-owned state preservation",
+    "open-turn continuity",
+    "structured evidence records",
+    "strict completion semantics",
+    "feature-state verification gates",
+    "executable and resumable evaluations",
+    "native Codex and Claude Code skills",
+    "reference-router skill",
+    "23-resource external catalogue",
+    "12-pattern agent catalogue",
+    "specification workflow",
+    "security gate",
+    "local privacy-first viewer",
+    "extensions, presets, and bundles",
+    "optional Perplexity research extension",
+    "root-safe hook launchers"
   ],
-  "design": "progressive disclosure",
-  "root_instruction_file": "AGENTS.md",
-  "compact_alternative": "CAVEMAN_SINGLE_FILE.md",
-  "governance": "skill evidence loop",
-  "context_engineering": "selective context packs",
-  "harness_engineering": "deterministic-first evaluation",
-  "name": "Escapement"
+  "excluded_local_paths": [
+    ".agent/**",
+    "**/__pycache__/**",
+    "**/*.pyc",
+    ".escapement/backups/**"
+  ],
+  "files": [
+    {
+      "path": ".agents/skills/api-integration/SKILL.md",
+      "size": 881,
+      "sha256": "12c4d7b8ed36754e7e591fed51f170338276b7fa17259ae3c63e9152c102a001"
+    },
+    {
+      "path": ".agents/skills/dashboard/SKILL.md",
+      "size": 909,
+      "sha256": "17ab395c2abd6a6b1dbc3cb64d477530b7cdb644d7bb01bb0d08b6942230f858"
+    },
+    {
+      "path": ".agents/skills/design-system/SKILL.md",
+      "size": 968,
+      "sha256": "7d8e5fed02d8f0432e29a92b6d48fc629b3706fe8fa1ede7c2d610faf959cc82"
+    },
+    {
+      "path": ".agents/skills/enterprise-ui-review/SKILL.md",
+      "size": 722,
+      "sha256": "23c7261800d02a1acd7848eb2c26f98b37fabef5d76555693b2b3ed2a4ceb893"
+    },
+    {
+      "path": ".agents/skills/project-discovery/SKILL.md",
+      "size": 924,
+      "sha256": "616472b7f07494336c72f5dbfacbe0fb6c9a0200179dcfc348915b69e93d1de9"
+    },
+    {
+      "path": ".agents/skills/reference-router/SKILL.md",
+      "size": 2279,
+      "sha256": "73f89874f9d0b3fdc82ed46decb321e8a6cd6926d983450c427a64c9a462d4ad"
+    },
+    {
+      "path": ".agents/skills/release-readiness/SKILL.md",
+      "size": 652,
+      "sha256": "72a27800b373d003c7e6213c860ac3d082d61f27604355459592fb108fbdc1fb"
+    },
+    {
+      "path": ".agents/skills/security-review/SKILL.md",
+      "size": 866,
+      "sha256": "a928803ce5d4137a67fd814e1148132433d1b59caab0ca6ce025d6b2f31555a3"
+    },
+    {
+      "path": ".agents/skills/skill-governance/SKILL.md",
+      "size": 688,
+      "sha256": "33958d3ffe3d225acb288da5fd158325d341a14a5193d25f21ae2f8a807ff2f6"
+    },
+    {
+      "path": ".agents/skills/workflow/SKILL.md",
+      "size": 652,
+      "sha256": "c1d641b7d94a4bf074ee3c70c9ee441b571bbd4151d6f578f3c5830244adf33f"
+    },
+    {
+      "path": ".claude-plugin/plugin.json",
+      "size": 374,
+      "sha256": "9ba44809d79ed4ed78a42c4c1b240bc5b08dcb1de453ca3a7df71b11900fde55"
+    },
+    {
+      "path": ".claude/settings.json",
+      "size": 804,
+      "sha256": "2c8fff9a8ce2ee1a259fcc40c3a9bfdb4a5f60ed9802e534f1cdaf88e58de3cf"
+    },
+    {
+      "path": ".claude/skills/api-integration/SKILL.md",
+      "size": 881,
+      "sha256": "12c4d7b8ed36754e7e591fed51f170338276b7fa17259ae3c63e9152c102a001"
+    },
+    {
+      "path": ".claude/skills/dashboard/SKILL.md",
+      "size": 909,
+      "sha256": "17ab395c2abd6a6b1dbc3cb64d477530b7cdb644d7bb01bb0d08b6942230f858"
+    },
+    {
+      "path": ".claude/skills/design-system/SKILL.md",
+      "size": 968,
+      "sha256": "7d8e5fed02d8f0432e29a92b6d48fc629b3706fe8fa1ede7c2d610faf959cc82"
+    },
+    {
+      "path": ".claude/skills/enterprise-ui-review/SKILL.md",
+      "size": 722,
+      "sha256": "23c7261800d02a1acd7848eb2c26f98b37fabef5d76555693b2b3ed2a4ceb893"
+    },
+    {
+      "path": ".claude/skills/project-discovery/SKILL.md",
+      "size": 924,
+      "sha256": "616472b7f07494336c72f5dbfacbe0fb6c9a0200179dcfc348915b69e93d1de9"
+    },
+    {
+      "path": ".claude/skills/reference-router/SKILL.md",
+      "size": 2279,
+      "sha256": "73f89874f9d0b3fdc82ed46decb321e8a6cd6926d983450c427a64c9a462d4ad"
+    },
+    {
+      "path": ".claude/skills/release-readiness/SKILL.md",
+      "size": 652,
+      "sha256": "72a27800b373d003c7e6213c860ac3d082d61f27604355459592fb108fbdc1fb"
+    },
+    {
+      "path": ".claude/skills/security-review/SKILL.md",
+      "size": 866,
+      "sha256": "a928803ce5d4137a67fd814e1148132433d1b59caab0ca6ce025d6b2f31555a3"
+    },
+    {
+      "path": ".claude/skills/skill-governance/SKILL.md",
+      "size": 688,
+      "sha256": "33958d3ffe3d225acb288da5fd158325d341a14a5193d25f21ae2f8a807ff2f6"
+    },
+    {
+      "path": ".claude/skills/workflow/SKILL.md",
+      "size": 652,
+      "sha256": "c1d641b7d94a4bf074ee3c70c9ee441b571bbd4151d6f578f3c5830244adf33f"
+    },
+    {
+      "path": ".codex-plugin/plugin.json",
+      "size": 314,
+      "sha256": "2ba480da7b54ae5789e4391bff537959cb72ac56f1daac27322ede025234d0e7"
+    },
+    {
+      "path": ".codex/hooks.json",
+      "size": 1313,
+      "sha256": "15376b4f28ac2a56ebc1d04d078c5be660b5ba93d1301398675ef6f3378bdef0"
+    },
+    {
+      "path": ".escapement/policy.json",
+      "size": 1014,
+      "sha256": "dc2f75aaa1b480c6b1599b46e1921c106ff3b44c6badb355629f39f201fc20ac"
+    },
+    {
+      "path": ".github/workflows/validate.yml",
+      "size": 861,
+      "sha256": "8f916f7aedbecc61c2b7c938134a352503491147925925c2fbae67a6151e0868"
+    },
+    {
+      "path": ".gitignore",
+      "size": 190,
+      "sha256": "c7648f94db2a1569e2602a5636ebf80f9ff6bfb586e88be2521c05dd3bd819c5"
+    },
+    {
+      "path": "AGENTS.md",
+      "size": 6841,
+      "sha256": "9b4cc462f076bd7a7bbf6656d2c5c443dc5b538c58556daf99e2ec2ad04ecc03"
+    },
+    {
+      "path": "AGENT_RUNTIME.md",
+      "size": 1101,
+      "sha256": "c93fc58109ff8ed7229976d6ed5acbfa820b78d3a99f356ec44807c4a7639e74"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "size": 662,
+      "sha256": "8f4d7ef669b4254caeb6a951e64b9118c40cf9e327758d5c4442fb14d4bdaa8e"
+    },
+    {
+      "path": "CLAUDE.md",
+      "size": 563,
+      "sha256": "e8d17ba92bf5005900838fa09ba6c33501d8c7d14466699d938204d704c730f1"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "size": 502,
+      "sha256": "adfd45f6a1bf65a436e57c7007edcb6dc5e21279a1f07eb597414cc63b9b1fe2"
+    },
+    {
+      "path": "LICENSE.md",
+      "size": 539,
+      "sha256": "602189af2ae81081f3ffe74140787aa9490dbc1cc5e6f691a1cd8c77d686b833"
+    },
+    {
+      "path": "NOTICE.md",
+      "size": 485,
+      "sha256": "c5faa5435577458f98975a8eb36c74bd12705f0e73b7bbc0b30b6ba275567011"
+    },
+    {
+      "path": "PROJECT_CONTEXT.md",
+      "size": 893,
+      "sha256": "12395b3047b0247f879fca337ad79e31619302553b34e338714eeeb534e7872d"
+    },
+    {
+      "path": "PROJECT_STATE.yaml",
+      "size": 685,
+      "sha256": "c740b01af82ea0b9f4a1cd2540560c2621a31cf51aadb6bef80641893d1f4cb7"
+    },
+    {
+      "path": "README.md",
+      "size": 24243,
+      "sha256": "928aaf3cc3ac8d569938359d66541bccea16f28bd0d338e87a732c830e5ab1f2"
+    },
+    {
+      "path": "SECURITY.md",
+      "size": 2265,
+      "sha256": "d2358fcf4572ea9fec4af5c9a74715f2d79b37b4961585d0e77c4342ec417035"
+    },
+    {
+      "path": "SESSION_HANDOFF.md",
+      "size": 354,
+      "sha256": "dfff4a924d553750270b5ebdffdf6ff876f0d75b9562b5d0c8f4dd70603e1188"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "size": 519,
+      "sha256": "6acc723966e2e68dbce8f23dd4435e87de8a479e061fa02a6cd51f0fc76074ef"
+    },
+    {
+      "path": "VERSION",
+      "size": 6,
+      "sha256": "54ef76332b31df830699e9d4138396885ab72bae260a034a81ff02bf32d8e90a"
+    },
+    {
+      "path": "bundles/business-analyst/component.json",
+      "size": 397,
+      "sha256": "cdf93f41cc232809514406e44691463c83d5a8fc3f12a8ef71488fbd7efaa780"
+    },
+    {
+      "path": "bundles/business-analyst/files/.escapement/bundles/business-analyst.json",
+      "size": 243,
+      "sha256": "24096bd781f569c6de8d06eb490824e61d94af491daaea3f5ca340bb56c99fcb"
+    },
+    {
+      "path": "bundles/developer/component.json",
+      "size": 377,
+      "sha256": "8e5320414d46d4c68d3b1dc2b8ad246f6695068ec74c66d96dea907bfd19a712"
+    },
+    {
+      "path": "bundles/developer/files/.escapement/bundles/developer.json",
+      "size": 230,
+      "sha256": "ee9b74ab0d7c0520784e12576a90b303757e358211c6234fa307ee88e3ded1e2"
+    },
+    {
+      "path": "bundles/security-reviewer/component.json",
+      "size": 391,
+      "sha256": "921da5c53b53a12d4f896ac6230c1d184f39b6333c3c123e5e98448a9c323aff"
+    },
+    {
+      "path": "bundles/security-reviewer/files/.escapement/bundles/security-reviewer.json",
+      "size": 236,
+      "sha256": "1ccf64d5bff5a677346e72d711611a9ede2d293659b765b917358c639fe49262"
+    },
+    {
+      "path": "catalog/agent-patterns.json",
+      "size": 5835,
+      "sha256": "1bbff052abfe91d6f718ea919627fdf28ea036d7d8bd8e2086d1d045d7662e74"
+    },
+    {
+      "path": "catalog/external-resources.json",
+      "size": 24810,
+      "sha256": "5e4fac7a128fd7baa715e2fe01c9cf1296d500b4a763506b74794b61c59422f5"
+    },
+    {
+      "path": "docs/REFERENCE_CATALOG.md",
+      "size": 22984,
+      "sha256": "48cee3b5680d7130e37a6d4c10b789916947a5487cb78d82240fbe0324552f02"
+    },
+    {
+      "path": "docs/checklists/build-readiness.md",
+      "size": 196,
+      "sha256": "518e00037902a2de6e3ce65020e72dc7a5ee37ffd66bd366a046e4e901ca79e6"
+    },
+    {
+      "path": "docs/checklists/discovery-gate.md",
+      "size": 182,
+      "sha256": "4085c8235624498687a10818fe5e53dae061ba1bd794c4166b86be027bbd65ce"
+    },
+    {
+      "path": "docs/checklists/pre-release.md",
+      "size": 181,
+      "sha256": "0e6dd766116eb770847260bece23d353b40fead493c6557e93e395720210caca"
+    },
+    {
+      "path": "docs/decisions/DECISION_LOG.md",
+      "size": 87,
+      "sha256": "507e9f652f13ae70ecd9332ac33a897920a260593cccc6cdf8409f12122cb0fe"
+    },
+    {
+      "path": "docs/releases/v6.0.0.md",
+      "size": 635,
+      "sha256": "f94bdfcba602a57c4eee258a15a38c2b281b9251e0ae02d4ec7a683755f762cf"
+    },
+    {
+      "path": "docs/specs/CONSTITUTION.md",
+      "size": 590,
+      "sha256": "81d4d78baca1699c69556d7d5c722195d33477da12825e180454c6e15b6e0be8"
+    },
+    {
+      "path": "docs/standards/context-engineering.md",
+      "size": 311,
+      "sha256": "0b9d5926793a6f0cd16626ecf9b2cf2b00df886db12a12b63e72877d2fdd0b94"
+    },
+    {
+      "path": "docs/standards/data-reporting.md",
+      "size": 237,
+      "sha256": "2f65db188814ff8bc2895b781f806de148e9559ca49ffaea8029b719d2f54bb2"
+    },
+    {
+      "path": "docs/standards/design-intelligence.md",
+      "size": 42113,
+      "sha256": "246804c8b4dea078b53097d1218939b799774c3b018e6e00ec8ca5e9e9492718"
+    },
+    {
+      "path": "docs/standards/harness-engineering.md",
+      "size": 267,
+      "sha256": "009049f700dda1658258869f8477ff9e397ecfd3a3988883e7e6c48e9251f5ea"
+    },
+    {
+      "path": "docs/standards/integrations.md",
+      "size": 277,
+      "sha256": "3879c3f8d75852320543a4e9dd4e42970dc617613321ddb6d240a4666ab13e6b"
+    },
+    {
+      "path": "docs/standards/performance.md",
+      "size": 250,
+      "sha256": "0b21d614c6472c6d796d5aa9e7081b4b2d5a87d071de2f325cce5c3f6d151c3f"
+    },
+    {
+      "path": "docs/standards/privacy-observability.md",
+      "size": 1621,
+      "sha256": "982d8290f7f5f274034e8027c7b7efd5f803f66da717e406d63f16beefeae177"
+    },
+    {
+      "path": "docs/standards/security.md",
+      "size": 276,
+      "sha256": "306dbca371382ae16da701e205bbf7449169c478be8ac18b676086409ecf7493"
+    },
+    {
+      "path": "docs/standards/testing.md",
+      "size": 260,
+      "sha256": "ce73e25a86cf5536ac6905ebef708400f50cee4a10fde0e2cb2e4b2a47e29fb5"
+    },
+    {
+      "path": "docs/standards/ui.md",
+      "size": 335,
+      "sha256": "79c2e49f1268a4fb158bec40dd3b4956d5bf0b16996893e39da6a3c2baf6c6d5"
+    },
+    {
+      "path": "docs/templates/DESIGN.template.md",
+      "size": 543,
+      "sha256": "61e647f800b88e81036304cc4d37f554a011217c4420968c51cab156b0a9a3ab"
+    },
+    {
+      "path": "docs/templates/PROJECT_CONTEXT.template.md",
+      "size": 237,
+      "sha256": "86edf3a997dbb7c8367ad88dbcececc60f8115e23cc143cea3dbc4377e617ebd"
+    },
+    {
+      "path": "docs/templates/PROJECT_STATE.template.yaml",
+      "size": 435,
+      "sha256": "78dcb9cb33bc4ec02656084bcce3376dad5b13e1903e58b343acd6194f27f5d8"
+    },
+    {
+      "path": "docs/templates/SESSION_HANDOFF.template.md",
+      "size": 179,
+      "sha256": "c7c2e6cf95be9a9c9b20dd8a2a50037c6032784367778ba18e14e01770c3060b"
+    },
+    {
+      "path": "docs/templates/feature-list.template.json",
+      "size": 98,
+      "sha256": "64c3a219aef42ad2c1b6ff2dde8a660565646ddf9ab2ea0b02e82bf618dc2079"
+    },
+    {
+      "path": "docs/templates/spec/CONSTITUTION.template.md",
+      "size": 411,
+      "sha256": "1f9c110901ec8e780e9da918d34137ca5dff7bcded46cd91b13940544660c14c"
+    },
+    {
+      "path": "docs/templates/spec/PLAN.template.md",
+      "size": 380,
+      "sha256": "1ebde057a2c04a78eebadb6a3a2d882e38e412c0620d8eb1ef94e0862cbde5cf"
+    },
+    {
+      "path": "docs/templates/spec/SPEC.template.md",
+      "size": 324,
+      "sha256": "51c7c7df4f00cb84931c2097a7bab6ada7d2518e85c81713ee58c41842c7dcda"
+    },
+    {
+      "path": "docs/templates/spec/TASKS.template.md",
+      "size": 441,
+      "sha256": "3b454b69ccf1dda9adef2c9e16713744604594ada554b8934f4de297dfad6ec4"
+    },
+    {
+      "path": "evals/core-routing/evals.json",
+      "size": 5306,
+      "sha256": "b58cc9c5f058980f4017f9e37d9c9d4dc9c6ebfd4abee6a76165051a56c774bc"
+    },
+    {
+      "path": "extensions/perplexity-research/component.json",
+      "size": 534,
+      "sha256": "3eb37ae71300fbe63837ed310831867825a2632870a545f7e4f64e58cf2b185d"
+    },
+    {
+      "path": "extensions/perplexity-research/files/docs/integrations/perplexity-research.md",
+      "size": 747,
+      "sha256": "61917e29569c18c3aedc4565ddca7790e34b9ac8f03bfad4280a494604348c76"
+    },
+    {
+      "path": "extensions/perplexity-research/files/skills/perplexity-research/SKILL.md",
+      "size": 680,
+      "sha256": "b3e068f8cb4db5a2eaf336398449b1385fb02168feae3df108cbfcd645138abf"
+    },
+    {
+      "path": "feature_list.json",
+      "size": 1519,
+      "sha256": "4522a004ac6ad93dc68592d2a2d7c81ee0574ecf914b62420d07df9f96fe19d0"
+    },
+    {
+      "path": "presets/enterprise-governance/component.json",
+      "size": 244,
+      "sha256": "2acddf998bc8ce86f962882d3deb21c3f833bde5a0e9087ec9679e0364be1600"
+    },
+    {
+      "path": "presets/enterprise-governance/files/.escapement/presets/enterprise-governance.json",
+      "size": 239,
+      "sha256": "967616d00b0ae114c58a8053807be940fdb067a42540df84e0a821b8a7f1d80a"
+    },
+    {
+      "path": "presets/lean-build/component.json",
+      "size": 240,
+      "sha256": "82746932a1fd0532c728e2f3cffac7aa376241a57601339e7be39b7bd79ca79f"
+    },
+    {
+      "path": "presets/lean-build/files/.escapement/presets/lean-build.json",
+      "size": 144,
+      "sha256": "4f1d19fccef767f2b7e75af0ab022d5ec389794b86ccd7b4ed714de8093ba205"
+    },
+    {
+      "path": "reports/VALIDATION.md",
+      "size": 1172,
+      "sha256": "e207d3ebd2d84a5d60ed0aaaeb37796bb8b551dab1e969e4082674bb55e7e1a7"
+    },
+    {
+      "path": "schemas/check-record.schema.json",
+      "size": 1174,
+      "sha256": "e2936ba9296d3aedc21a8637478bc8f893294702876fe4138fe5404ab66f8882"
+    },
+    {
+      "path": "schemas/external-resource.schema.json",
+      "size": 1041,
+      "sha256": "9650fe4225191b6e71493336773d1667e173949be91282df2387b8e8728b0b8e"
+    },
+    {
+      "path": "schemas/feature-list.schema.json",
+      "size": 1205,
+      "sha256": "7bdeb008e7ac0ac4c2b60943b079ebb277d31c51a717372a41d423e268c9b666"
+    },
+    {
+      "path": "scripts/agent_runtime.py",
+      "size": 36055,
+      "sha256": "89599f59db90d1f190bfaf681d6f78dcd07926f270971d36118d1e7ff5febae2"
+    },
+    {
+      "path": "scripts/escapement-hook.ps1",
+      "size": 652,
+      "sha256": "d2177518bde285803bf0271f02ccaa449cf14232a44cc79f57a46cc3b0149bba"
+    },
+    {
+      "path": "scripts/escapement-hook.sh",
+      "size": 533,
+      "sha256": "8afa3c10a8dfee4dbc28d329504bc0b265c37a642990862bcb69679f7719d58d"
+    },
+    {
+      "path": "scripts/escapement.py",
+      "size": 30752,
+      "sha256": "ecdffcdd4bb04e9b0ad0f81d64dd4373ff295b20a8f00c7e619c1d9c229699a8"
+    },
+    {
+      "path": "scripts/eval_harness.py",
+      "size": 7171,
+      "sha256": "bc94dffd8ae95b31cd95729ea2b23c81f6bac0c5f317eeb8d9fefd3ce8cdc819"
+    },
+    {
+      "path": "scripts/feature_list.py",
+      "size": 7746,
+      "sha256": "b485de2af6b84bd761e874bc8491daf84f291ddbbfd0e89b2eac0262697ec4d0"
+    },
+    {
+      "path": "scripts/local_viewer.py",
+      "size": 5701,
+      "sha256": "f4e779f04e45cbd56a51a4dd1a118e67eef59db0e1cfe013d5ad3189535de30b"
+    },
+    {
+      "path": "scripts/run_check.py",
+      "size": 5247,
+      "sha256": "a8eaeade35487c9c7cf6dcd9943e2739acaf05d66f4012a7369f80716f9e1b70"
+    },
+    {
+      "path": "scripts/security_gate.py",
+      "size": 10061,
+      "sha256": "5e8bd5733882a8b015b6c3bd923410512ce3fffdfd51ae227376e5509ed32a80"
+    },
+    {
+      "path": "scripts/vlco_build.py",
+      "size": 398,
+      "sha256": "831024b186189092460b99aa167291e66b3cb93a39499be102a96934351ecbff"
+    },
+    {
+      "path": "skills/api-integration/SKILL.md",
+      "size": 881,
+      "sha256": "12c4d7b8ed36754e7e591fed51f170338276b7fa17259ae3c63e9152c102a001"
+    },
+    {
+      "path": "skills/dashboard/SKILL.md",
+      "size": 909,
+      "sha256": "17ab395c2abd6a6b1dbc3cb64d477530b7cdb644d7bb01bb0d08b6942230f858"
+    },
+    {
+      "path": "skills/design-system/SKILL.md",
+      "size": 968,
+      "sha256": "7d8e5fed02d8f0432e29a92b6d48fc629b3706fe8fa1ede7c2d610faf959cc82"
+    },
+    {
+      "path": "skills/enterprise-ui-review/SKILL.md",
+      "size": 722,
+      "sha256": "23c7261800d02a1acd7848eb2c26f98b37fabef5d76555693b2b3ed2a4ceb893"
+    },
+    {
+      "path": "skills/project-discovery/SKILL.md",
+      "size": 924,
+      "sha256": "616472b7f07494336c72f5dbfacbe0fb6c9a0200179dcfc348915b69e93d1de9"
+    },
+    {
+      "path": "skills/reference-router/SKILL.md",
+      "size": 2279,
+      "sha256": "73f89874f9d0b3fdc82ed46decb321e8a6cd6926d983450c427a64c9a462d4ad"
+    },
+    {
+      "path": "skills/release-readiness/SKILL.md",
+      "size": 652,
+      "sha256": "72a27800b373d003c7e6213c860ac3d082d61f27604355459592fb108fbdc1fb"
+    },
+    {
+      "path": "skills/security-review/SKILL.md",
+      "size": 866,
+      "sha256": "a928803ce5d4137a67fd814e1148132433d1b59caab0ca6ce025d6b2f31555a3"
+    },
+    {
+      "path": "skills/skill-governance/SKILL.md",
+      "size": 688,
+      "sha256": "33958d3ffe3d225acb288da5fd158325d341a14a5193d25f21ae2f8a807ff2f6"
+    },
+    {
+      "path": "skills/workflow/SKILL.md",
+      "size": 652,
+      "sha256": "c1d641b7d94a4bf074ee3c70c9ee441b571bbd4151d6f578f3c5830244adf33f"
+    },
+    {
+      "path": "tests/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tests/v6/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tests/v6/test_catalog.py",
+      "size": 1353,
+      "sha256": "a16a3f9d7842a64a7281980d10d10fec0ccb8a90389362b2611612b2e844cc20"
+    },
+    {
+      "path": "tests/v6/test_feature_list.py",
+      "size": 2382,
+      "sha256": "d7c9ce0ef184a1ddc1ba8c0075719d278baec25cd848fc6af558c8a2591c09fc"
+    },
+    {
+      "path": "tests/v6/test_installer.py",
+      "size": 2799,
+      "sha256": "e5ee60676835f2292dbfbb6d1e808761ba453d7de829a89421866ec6f1129f86"
+    },
+    {
+      "path": "tests/v6/test_runtime.py",
+      "size": 5171,
+      "sha256": "63601d1d77bfcabe19243623de6cb696868154d0582b7a551202c81bb21aa09d"
+    }
+  ]
 }

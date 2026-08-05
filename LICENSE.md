@@ -1,19 +1,14 @@
-# Licence and Usage Terms
+# Source-Available Licence Notice
 
 Copyright © 2026 V L & CO. All rights reserved.
 
-This repository is publicly viewable for reference, evaluation, and learning.
+The Escapement source is publicly available for evaluation, learning,
+non-commercial experimentation, and attributed internal use.
 
-Unless V L & CO provides separate written permission, you may not:
+Commercial redistribution, resale, white-labelling, hosted resale, and
+substantial republication require written permission from V L & CO.
 
-- republish this repository as your own standard or product;
-- sell, sublicense, or commercially distribute substantial portions;
-- remove V L & CO ownership notices;
-- represent that V L & CO endorses a derivative implementation;
-- copy third-party code referenced by this repository without following its licence.
+Third-party resources retain their own licences. See `NOTICE.md`,
+`THIRD_PARTY_NOTICES.md`, and `docs/REFERENCE_CATALOG.md`.
 
-You may use the ideas and templates internally to support your own software-delivery work, provided attribution to V L & CO is retained where the material is substantially reproduced.
-
-This repository is provided without warranty. External repositories, packages, and skills remain governed by their own licences and terms.
-
-For commercial licensing or organisational adoption, contact V L & CO.
+This notice is not an OSI-approved open-source licence.

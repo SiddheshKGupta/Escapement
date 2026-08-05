@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "type": "preset",
+  "name": "lean-build",
+  "version": "1.0.0",
+  "description": "Keeps discovery and documentation minimal for bounded low-risk work.",
+  "approval_required": false,
+  "files_root": "files"
+}

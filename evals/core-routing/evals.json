@@ -1,0 +1,190 @@
+{
+  "name": "core-routing",
+  "version": "1.0",
+  "evals": [
+    {
+      "id": "new-product",
+      "description": "New product invokes discovery and workflow.",
+      "prompt": "Build a new claims management platform with an approval workflow.",
+      "expected": {
+        "material": true,
+        "mode": "FULL",
+        "skills": [
+          "project-discovery",
+          "workflow",
+          "skill-governance"
+        ],
+        "maximum_skills": 4
+      }
+    },
+    {
+      "id": "dashboard-design",
+      "description": "Dashboard redesign selects KPI and design review skills.",
+      "prompt": "Redesign the management dashboard and define KPI drill-down using the client brand.",
+      "expected": {
+        "material": true,
+        "mode": "DELTA",
+        "skills": [
+          "dashboard",
+          "design-system",
+          "enterprise-ui-review",
+          "skill-governance"
+        ],
+        "maximum_skills": 4,
+        "required_reads": [
+          "docs/standards/design-intelligence.md"
+        ]
+      }
+    },
+    {
+      "id": "workflow",
+      "description": "Workflow prompt selects workflow.",
+      "prompt": "Design maker-checker approval states, exceptions, escalations and SLA.",
+      "expected": {
+        "material": true,
+        "mode": "DELTA",
+        "skills": [
+          "workflow",
+          "skill-governance"
+        ],
+        "maximum_skills": 4
+      }
+    },
+    {
+      "id": "api-security",
+      "description": "Sensitive integration selects API and security.",
+      "prompt": "Integrate an OAuth API that processes confidential PII and review permissions.",
+      "expected": {
+        "material": true,
+        "mode": "DELTA",
+        "skills": [
+          "api-integration",
+          "security-review",
+          "skill-governance"
+        ],
+        "maximum_skills": 4
+      }
+    },
+    {
+      "id": "release",
+      "description": "Release prompt selects release readiness.",
+      "prompt": "Prepare the application for production go-live with rollback and monitoring.",
+      "expected": {
+        "material": true,
+        "mode": "DELTA",
+        "skills": [
+          "release-readiness",
+          "skill-governance"
+        ],
+        "maximum_skills": 4
+      }
+    },
+    {
+      "id": "bug",
+      "description": "Bug fix is execute mode.",
+      "prompt": "Fix the isolated pagination bug in the approved ticket.",
+      "expected": {
+        "material": true,
+        "mode": "EXECUTE",
+        "skills": [
+          "skill-governance"
+        ],
+        "maximum_skills": 4
+      }
+    },
+    {
+      "id": "find-skill",
+      "description": "External skill discovery invokes reference router.",
+      "prompt": "Find an open-source skill or plugin for building an MCP server.",
+      "expected": {
+        "material": true,
+        "mode": "DELTA",
+        "skills": [
+          "api-integration",
+          "security-review",
+          "reference-router",
+          "skill-governance"
+        ],
+        "maximum_skills": 4,
+        "required_reads": [
+          "catalog/external-resources.json"
+        ]
+      }
+    },
+    {
+      "id": "security-test",
+      "description": "Pentest request invokes security review.",
+      "prompt": "Review whether we can run an authorised penetration test in a sandbox.",
+      "expected": {
+        "material": true,
+        "mode": "DELTA",
+        "skills": [
+          "security-review",
+          "skill-governance"
+        ],
+        "maximum_skills": 4
+      }
+    },
+    {
+      "id": "informational",
+      "description": "Simple informational question does not open material work.",
+      "prompt": "What is the current project name?",
+      "expected": {
+        "material": false,
+        "mode": "NONE",
+        "skills": [],
+        "maximum_skills": 0
+      }
+    },
+    {
+      "id": "design-only",
+      "description": "Design direction without implementation selects design system.",
+      "prompt": "Create the colour palette, typography and motion direction.",
+      "expected": {
+        "material": true,
+        "mode": "DELTA",
+        "skills": [
+          "design-system",
+          "skill-governance"
+        ],
+        "forbidden_skills": [
+          "enterprise-ui-review"
+        ],
+        "maximum_skills": 4
+      }
+    },
+    {
+      "id": "browser-ui",
+      "description": "UI verification remains under enterprise review rather than external router unless requested.",
+      "prompt": "Review this frontend screen for accessibility and responsive behaviour.",
+      "expected": {
+        "material": true,
+        "mode": "DELTA",
+        "skills": [
+          "enterprise-ui-review",
+          "skill-governance"
+        ],
+        "forbidden_skills": [
+          "reference-router"
+        ],
+        "maximum_skills": 4
+      }
+    },
+    {
+      "id": "skill-budget",
+      "description": "Complex prompt respects four-skill budget.",
+      "prompt": "Build a new enterprise product with a secure dashboard workflow, API integration, client branding and production release planning.",
+      "expected": {
+        "material": true,
+        "mode": "FULL",
+        "skills": [
+          "project-discovery",
+          "dashboard",
+          "workflow",
+          "skill-governance"
+        ],
+        "maximum_skills": 4
+      }
+    }
+  ]
+}

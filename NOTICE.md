@@ -1,23 +1,13 @@
 # Notice
 
-## Ownership
+Escapement is developed by V L & CO.
 
-Developed by V L & CO.
+The project is independently inspired by and may interoperate with external
+open-source and public projects listed in `docs/REFERENCE_CATALOG.md`.
 
-## Purpose
+No reference implies endorsement, partnership, or ownership. Names and
+trademarks remain the property of their respective owners.
 
-Escapement, formerly the VLCO Product Build Standard, is a compact, progressive-disclosure operating framework for disciplined AI-assisted product planning, architecture, engineering, governance, testing, and delivery.
-
-## External References
-
-This repository may reference public tools, repositories, design resources, and agent skills. Each external resource remains governed by its own licence and terms.
-
-Reference does not mean:
-
-- automatic installation;
-- endorsement;
-- transfer of ownership;
-- permission to copy code;
-- approval for production use.
-
-Users must verify the canonical source, maintenance status, permissions, security implications, and licence before use.
+External code, skills, plugins, datasets, and tools are not included merely
+because they are listed. Actual use must be recorded in
+`THIRD_PARTY_NOTICES.md`.

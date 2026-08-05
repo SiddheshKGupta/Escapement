@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "type": "bundle",
+  "name": "business-analyst",
+  "version": "1.0.0",
+  "description": "Discovery, workflow, dashboard, design, and governance setup.",
+  "approval_required": false,
+  "files_root": "files",
+  "skills": [
+    "project-discovery",
+    "workflow",
+    "dashboard",
+    "design-system",
+    "skill-governance"
+  ],
+  "preset": "enterprise-governance"
+}

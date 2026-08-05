@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "type": "extension",
+  "name": "perplexity-research",
+  "version": "1.0.0",
+  "description": "Optional Perplexity-grounded research skill and documentation.",
+  "license": "Escapement wrapper content; external tools retain their own terms.",
+  "source_references": [
+    "https://github.com/perplexityai/api-platform-developers",
+    "https://github.com/perplexityai/perplexity-cli",
+    "https://github.com/perplexityai/modelcontextprotocol"
+  ],
+  "approval_required": true,
+  "files_root": "files"
+}
