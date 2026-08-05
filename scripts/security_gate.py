@@ -27,8 +27,17 @@ SECRET_PATTERNS = [
     ("github-token", "high", re.compile(r"\bgh[pousr]_[A-Za-z0-9_]{30,}\b")),
     ("openai-key", "high", re.compile(r"\bsk-[A-Za-z0-9_-]{20,}\b")),
     ("perplexity-key", "high", re.compile(r"\bpplx-[A-Za-z0-9_-]{20,}\b")),
+    # The keyword is intentionally not \b-bounded on its leading edge: \b requires a
+    # non-word character immediately before the match, but an underscore (as in
+    # admin_password, db_secret, stripe_api_key) IS a word character, so a plain
+    # \bpassword\b silently misses every prefixed identifier -- which is the common
+    # naming convention, not the exception. (?:^|[^a-zA-Z]) accepts start-of-line or
+    # any separator, including underscores, while still requiring a real word to
+    # precede the keyword (so "secretary = ..." can still match; this pattern is
+    # medium severity and does not fail --fail-on high on its own).
     ("generic-secret-assignment", "medium", re.compile(
-        r"(?i)\b(api[_-]?key|secret|password|token)\b\s*[:=]\s*[\"'][^\"'\n]{12,}[\"']"
+        r"(?i)(?:^|[^a-zA-Z])(api[_-]?key|secret|password|token)(?:[a-zA-Z_]*)?"
+        r"\s*[:=]\s*[\"'][^\"'\n]{12,}[\"']"
     )),
 ]
 

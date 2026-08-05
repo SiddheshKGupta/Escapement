@@ -12,7 +12,7 @@ capabilities, agents and external tools at the phase where each is strongest.
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![Kernel](https://img.shields.io/badge/kernel-644%20words-2F855A?style=flat-square)](AGENTS.md)
 [![Evals](https://img.shields.io/badge/routing%20evals-22%2F22-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
-[![Tests](https://img.shields.io/badge/unit%20tests-27%2F27-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
+[![Tests](https://img.shields.io/badge/unit%20tests-34%2F34-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
 [![Security](https://img.shields.io/badge/security-0%20findings-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
 
 **Ask better questions. Use each capability at its strongest phase. Build. Test. Prove. Persist.**
@@ -657,7 +657,7 @@ See [Reference Catalogue](docs/REFERENCE_CATALOG.md).
 
 ```text
 Routing evaluations:      22 / 22 PASS
-Unit tests:               27 / 27 PASS
+Unit tests:               34 / 34 PASS
 Runtime doctor:            0 failures
 Repository doctor:         0 failures, 0 warnings
 Security gate:             0 findings

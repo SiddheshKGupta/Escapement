@@ -15,6 +15,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from capability_router import build_context_pack, find_root, route_prompt  # noqa: E402
+from run_check import sha256_file, stable_record_id  # noqa: E402
 
 VERSION = "6.3.0"
 ROOT = find_root()
@@ -205,7 +206,21 @@ def existing(values: list[str]) -> tuple[list[str], list[str]]:
     return present, missing
 
 
+CHECK_RECORD_REQUIRED_FIELDS = {
+    "record_type", "record_id", "schema_version", "name", "command",
+    "started_at", "completed_at", "exit_code", "result",
+    "stdout_path", "stderr_path", "stdout_sha256", "stderr_sha256",
+}
+
+
 def load_checks(paths: list[str]) -> tuple[list[dict[str, Any]], list[str]]:
+    """Load and authenticate structured check records.
+
+    A record is accepted only if its stdout/stderr output exists on disk with
+    hashes matching the record, and its record_id equals the content hash
+    run_check.py would compute -- so a hand-written record claiming a PASS
+    that never actually ran is rejected. See schemas/check-record.schema.json.
+    """
     records, errors = [], []
     for relative in paths:
         path = (ROOT / relative).resolve()
@@ -222,13 +237,48 @@ def load_checks(paths: list[str]) -> tuple[list[dict[str, Any]], list[str]]:
         except Exception as exc:
             errors.append(f"invalid check record {relative}: {exc}")
             continue
-        required = {"record_type", "name", "command", "exit_code", "result"}
-        if not required.issubset(record):
-            errors.append(f"incomplete check record: {relative}")
+        missing = CHECK_RECORD_REQUIRED_FIELDS - set(record)
+        if missing:
+            errors.append(f"incomplete check record {relative}: missing {sorted(missing)}")
             continue
         if record.get("record_type") != "check":
             errors.append(f"wrong record type: {relative}")
             continue
+
+        stdout_path = (ROOT / record["stdout_path"]).resolve()
+        stderr_path = (ROOT / record["stderr_path"]).resolve()
+        try:
+            stdout_path.relative_to(ROOT.resolve())
+            stderr_path.relative_to(ROOT.resolve())
+        except ValueError:
+            errors.append(f"check record output paths outside repository: {relative}")
+            continue
+        if not stdout_path.exists() or not stderr_path.exists():
+            errors.append(f"check record output missing on disk: {relative}")
+            continue
+
+        actual_stdout_sha256 = sha256_file(stdout_path)
+        actual_stderr_sha256 = sha256_file(stderr_path)
+        if (
+            record["stdout_sha256"] != actual_stdout_sha256
+            or record["stderr_sha256"] != actual_stderr_sha256
+        ):
+            errors.append(f"check record output does not match its recorded hash: {relative}")
+            continue
+
+        identity = {
+            "name": record["name"],
+            "command": record["command"],
+            "started_at": record["started_at"],
+            "completed_at": record["completed_at"],
+            "exit_code": record["exit_code"],
+            "stdout_sha256": actual_stdout_sha256,
+            "stderr_sha256": actual_stderr_sha256,
+        }
+        if record["record_id"] != stable_record_id(identity):
+            errors.append(f"check record does not match its own content -- forged or tampered: {relative}")
+            continue
+
         records.append(record)
     return records, errors
 
@@ -449,8 +499,13 @@ def command_close(args: argparse.Namespace) -> int:
                 errors.append(f"{tier} PASS requires structured checks")
             elif not checks_pass:
                 errors.append("required checks did not pass")
-        elif tier == "MICRO" and not check_records and not args.no_check_reason:
-            errors.append("MICRO closure requires a check or --no-check-reason")
+        elif tier == "MICRO":
+            if check_paths:
+                errors.extend(check_errors)
+            if not check_records and not args.no_check_reason:
+                errors.append("MICRO closure requires a check or --no-check-reason")
+            elif check_records and not checks_pass:
+                errors.append("required checks did not pass")
 
     if errors:
         for error in errors:
