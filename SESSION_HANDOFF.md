@@ -2,11 +2,11 @@
 
 - Release: `Escapement v6.3.0`
 - Status: Capability Strength Orchestration validated
-- Kernel: `651 / 700` words
+- Kernel: `673 / 700` words
 - Automatic context: tested below `1,800` words
 - Invoked skill context: tested below `1,200` words
 - Doctrine packs: `11`
-- Native skills: `32`
+- Native skills: `33`
 - Capability strengths: `58`
 - Agent patterns: `21`
 - External resources: `54`

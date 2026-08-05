@@ -90,12 +90,61 @@ def append_jsonl(path: Path, record: dict[str, Any]) -> None:
         handle.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
+VALID_PHASE_IDS = [
+    "ORIENT", "DISCOVER", "RESEARCH", "BRAINSTORM",
+    "SPECIFY", "PLAN", "IMPLEMENT", "VERIFY", "POLISH", "RELEASE",
+]
+
+
+def load_phase_catalog() -> dict[str, dict[str, Any]]:
+    path = ROOT / "catalog" / "phase-capabilities.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return {item["id"]: item for item in data["phases"]}
+
+
+def build_phase_entry(phase_id: str) -> dict[str, Any]:
+    definition = load_phase_catalog()[phase_id]
+    return {
+        "id": phase_id,
+        "purpose": definition["purpose"],
+        "native_skills": definition.get("native_skills", []),
+        "doctrine_packs": definition.get("doctrine_packs", []),
+        "external_candidates": [],
+        "outputs": definition.get("outputs", []),
+        "capability_strengths": definition.get("capability_strengths", []),
+    }
+
+
+def apply_phase_overrides(route: dict[str, Any], overrides: list[dict[str, Any]]) -> None:
+    """Reapply durable phase-plan revisions after route_prompt recomputes phase_plan.
+
+    route_prompt() always rebuilds phase_plan deterministically from the prompt and
+    tier alone -- it has no memory of prior turns. Without this, a phase added or
+    removed via replan-phases would silently revert on the very next advance-phase
+    call or continued prompt, since both recompute the whole route from scratch.
+    """
+    plan = list(route.get("phase_plan", []))
+    ids = [item["id"] for item in plan]
+    for override in overrides:
+        if override["action"] == "add" and override["phase"] not in ids:
+            plan.append(build_phase_entry(override["phase"]))
+            ids.append(override["phase"])
+        elif override["action"] == "remove" and override["phase"] in ids:
+            plan = [item for item in plan if item["id"] != override["phase"]]
+            ids.remove(override["phase"])
+    route["phase_plan"] = plan
+
+
 def write_context(turn: dict[str, Any]) -> None:
     latest_prompt = turn["prompt_history"][-1]["prompt"]
     route = turn["route"]
     skills = [item["id"] for item in route["native_skills"]]
     packs = [item["id"] for item in route["doctrine_packs"]]
     strengths = [item["id"] for item in route.get("capability_strengths", [])]
+    overrides = turn.get("phase_plan_overrides", [])
+    revisions = "\n".join(
+        f"- {item['action']} `{item['phase']}`: {item['reason']}" for item in overrides
+    ) or "None"
 
     ACTIVE_CONTEXT.write_text(
         f"""# Active Context
@@ -112,6 +161,8 @@ def write_context(turn: dict[str, Any]) -> None:
 - Skills: {', '.join(skills) or 'none'}
 - Capability strengths: {', '.join(strengths) or 'none'}
 - Context estimate: {route['context_cost']['total']} / {route['context_cost']['budget']} words
+- Phase plan revisions: {len(overrides)}
+{revisions}
 
 ## Work Contract
 
@@ -151,6 +202,7 @@ def start_or_continue(prompt: str, data: dict[str, Any] | None = None) -> tuple[
             ),
             phase_override=current_phase,
         )
+        apply_phase_overrides(current["route"], current.get("phase_plan_overrides", []))
         current["continuation_count"] = int(current.get("continuation_count", 0)) + 1
         save_turn(current)
         write_context(current)
@@ -426,6 +478,7 @@ def command_advance(args: argparse.Namespace) -> int:
         item["prompt"] for item in turn.get("prompt_history", [])
     )
     turn["route"] = route_prompt(combined, phase_override=args.phase)
+    apply_phase_overrides(turn["route"], turn.get("phase_plan_overrides", []))
     turn["stop_blocks"] = 0
     save_turn(turn)
     write_context(turn)
@@ -439,6 +492,65 @@ def command_advance(args: argparse.Namespace) -> int:
     )
     print(f"Advanced {turn['turn_id']} from {current_phase} to {args.phase}")
     return 0
+
+
+def command_replan(args: argparse.Namespace) -> int:
+    """Add or remove a phase from the current turn's plan.
+
+    phase_plan() in capability_router.py decides which of the ten phases apply
+    using keyword patterns matched against the prompt, computed once at turn
+    start. It cannot see what DISCOVER's own inspection actually turns up. This
+    command is the lever for when that inspection reveals the default plan is
+    wrong -- e.g. a security-sensitive constraint surfaces that never triggered
+    VERIFY's security-review routing because the prompt never said "security".
+    """
+    ensure()
+    turn = load_turn()
+    if not turn or turn.get("status") != "open":
+        print("FAIL: no open runtime turn.", file=sys.stderr)
+        return 1
+
+    action = "add" if args.add_phase else "remove"
+    phase = args.add_phase or args.remove_phase
+    reason = args.reason.strip()
+    if not reason:
+        print("FAIL: --reason is required.", file=sys.stderr)
+        return 1
+
+    route = turn["route"]
+    plan_ids = [item["id"] for item in route.get("phase_plan", [])]
+    completed_phases = {item["phase"] for item in turn.get("phase_history", [])}
+    current_phase = route["current_phase"]
+
+    if action == "add" and phase in plan_ids:
+        print(f"FAIL: {phase} is already in the phase plan.", file=sys.stderr)
+        return 1
+    if action == "remove":
+        if phase not in plan_ids:
+            print(f"FAIL: {phase} is not in the phase plan.", file=sys.stderr)
+            return 1
+        if phase == current_phase:
+            print(f"FAIL: cannot remove the current phase ({phase}).", file=sys.stderr)
+            return 1
+        if phase in completed_phases:
+            print(
+                f"FAIL: cannot remove {phase} -- already completed with recorded evidence.",
+                file=sys.stderr,
+            )
+            return 1
+
+    override = {"action": action, "phase": phase, "reason": reason, "recorded_at": now()}
+    turn.setdefault("phase_plan_overrides", []).append(override)
+    apply_phase_overrides(route, turn["phase_plan_overrides"])
+    save_turn(turn)
+    write_context(turn)
+    append_jsonl(TURNS_LOG, {"turn_id": turn["turn_id"], "event": "phase-plan-revised", **override})
+
+    verb = "Added" if action == "add" else "Removed"
+    preposition = "to" if action == "add" else "from"
+    print(f"{verb} {phase} {preposition} the phase plan: {reason}")
+    return 0
+
 
 def command_stop(_: argparse.Namespace) -> int:
     data = hook_input()
@@ -663,14 +775,7 @@ def parser() -> argparse.ArgumentParser:
     explain.set_defaults(func=command_explain)
 
     advance = sub.add_parser("advance-phase")
-    advance.add_argument(
-        "--phase",
-        required=True,
-        choices=[
-            "ORIENT", "DISCOVER", "RESEARCH", "BRAINSTORM",
-            "SPECIFY", "PLAN", "IMPLEMENT", "VERIFY", "POLISH", "RELEASE",
-        ],
-    )
+    advance.add_argument("--phase", required=True, choices=VALID_PHASE_IDS)
     advance.add_argument("--summary", required=True)
     advance.add_argument("--skills-used", default="")
     advance.add_argument("--files", default="")
@@ -678,6 +783,13 @@ def parser() -> argparse.ArgumentParser:
     advance.add_argument("--no-check-reason", default="")
     advance.add_argument("--evidence", default="")
     advance.set_defaults(func=command_advance)
+
+    replan = sub.add_parser("replan-phases")
+    replan_target = replan.add_mutually_exclusive_group(required=True)
+    replan_target.add_argument("--add-phase", choices=VALID_PHASE_IDS)
+    replan_target.add_argument("--remove-phase", choices=VALID_PHASE_IDS)
+    replan.add_argument("--reason", required=True)
+    replan.set_defaults(func=command_replan)
 
     close = sub.add_parser("close-turn")
     close.add_argument("--summary", required=True)

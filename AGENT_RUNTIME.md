@@ -39,6 +39,22 @@ python scripts/agent_runtime.py advance-phase \
 Implementation, verification and release phases require structured checks or a
 truthful reason where a check is not applicable.
 
+## Revising the phase plan
+
+The default plan is decided once from the prompt and cannot see what
+inspection during `DISCOVER` turns up. If it no longer fits:
+
+```bash
+python scripts/agent_runtime.py replan-phases \
+  --add-phase VERIFY --reason "Touches stored credentials."
+python scripts/agent_runtime.py replan-phases \
+  --remove-phase POLISH --reason "Backend-only, no user-facing surface."
+```
+
+Only the ten cataloged phases can be added or removed. The current phase and
+any phase already completed with recorded evidence cannot be removed. Every
+revision requires a reason and is permanently recorded on the turn.
+
 ## Manual start
 
 ```bash

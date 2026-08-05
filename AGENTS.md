@@ -88,6 +88,9 @@ ORIENT
 
 Each phase gets a fresh bounded context. Do not load the full lifecycle at once.
 
+The default phase plan cannot see what `DISCOVER` inspection turns up. Revise
+it with `replan-phases` (see `AGENT_RUNTIME.md`) when it no longer fits.
+
 Prefer installed Superpowers capabilities when compatible:
 
 - brainstorming before design approval;

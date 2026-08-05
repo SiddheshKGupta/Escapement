@@ -1128,6 +1128,38 @@
         "engineering-review",
         "security-review"
       ]
+    },
+    {
+      "id": "lifecycle-planning",
+      "overlap_group": "lifecycle-planning",
+      "priority": 90,
+      "triggers": [
+        "replan",
+        "phase plan",
+        "wrong phase",
+        "add phase",
+        "skip phase",
+        "missing phase",
+        "security gap",
+        "reconsider plan"
+      ],
+      "registers": [
+        "CONSULTING",
+        "ENGINEERING",
+        "DUAL",
+        "ARTIFACT"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "DISCOVER"
+      ],
+      "paired_with": [
+        "decision-coach",
+        "project-discovery"
+      ]
     }
   ]
 }
