@@ -28,7 +28,23 @@ capabilities, agents and external tools at the phase where each is strongest.
 
 ---
 
-## Why Escapement
+## Why “Escapement”?
+
+A mechanical escapement converts stored energy into controlled, measurable movement.
+
+Escapement applies the same principle to AI coding agents:
+
+```text
+Unbounded generation
+        ↓
+Specify → Route → Execute → Verify → Persist
+        ↓
+Controlled delivery
+```
+
+Agents can generate code quickly. Reliable delivery also requires a shared definition of done, durable decisions, limited scope, explicit permissions, runtime evidence, and a handoff the next session can trust.
+
+### Why the framework exists
 
 AI agents usually fail in one of two directions:
 
@@ -57,6 +73,28 @@ Decision coaching
 
 The project can use many capabilities across its lifecycle without loading them
 all into one prompt.
+
+---
+
+# What Escapement is
+
+Escapement is a repository-native control system for AI-assisted delivery.
+
+It provides:
+
+- decision coaching before implementation;
+- domain-aware research and evidence routing;
+- phase-specific native skills and specialist capabilities;
+- durable project state and session handoffs;
+- explicit approval gates for sensitive actions;
+- deterministic checks and truthful completion semantics.
+
+Escapement is **not**:
+
+- a bundle that silently installs every listed plugin or skill;
+- a replacement for laws, standards, policy or qualified domain experts;
+- an autonomous permission to deploy, change production data or run security tests;
+- a guarantee that locally generated evidence is equivalent to isolated CI evidence.
 
 ---
 
@@ -145,7 +183,12 @@ discovered safely.
 Advance phases explicitly:
 
 ```bash
-python scripts/agent_runtime.py advance-phase   --phase RESEARCH   --summary "Discovery decisions resolved"   --skills-used "decision-coach,project-discovery"   --files "PROJECT_CONTEXT.md"   --evidence "PROJECT_CONTEXT.md"
+python scripts/agent_runtime.py advance-phase \
+  --phase RESEARCH \
+  --summary "Discovery decisions resolved" \
+  --skills-used "decision-coach,project-discovery" \
+  --files "PROJECT_CONTEXT.md" \
+  --evidence "PROJECT_CONTEXT.md"
 ```
 
 Each transition unloads the previous phase context before loading the next.
@@ -160,7 +203,9 @@ Actual kernel:                 644 words
 Automatic phase context:       <= 1,800 words
 Invoked native skill context:  <= 1,200 words
 Normal doctrine packs:         <= 3 per phase
-Normal native skills:          <= 5 per phase
+Native skills — MICRO:         <= 1 per phase
+Native skills — MATERIAL:      <= 5 per phase
+Native skills — PROGRAM:       <= 6 per phase
 Specialist strengths:          selected by phase and overlap
 ```
 
@@ -168,6 +213,39 @@ Escapement counts automatic context and invoked skill context separately.
 
 A selected skill is referenced in the context pack and loaded by the native
 agent only when invoked.
+
+---
+
+# Evidence and security integrity
+
+Escapement treats completion evidence as part of the runtime contract.
+
+Structured check records bind together:
+
+```text
+Check name
+Command
+Timing
+Exit code
+Standard-output hash
+Standard-error hash
+Record identity
+```
+
+The runtime rejects malformed or edited records whose output hashes or record
+identity do not match their evidence files.
+
+The security gate also checks common compound secret assignments such as:
+
+```text
+admin_password
+db_secret
+stripe_api_key
+```
+
+For high-assurance releases, run checks in isolated CI or a sandboxed runner.
+A local verifier and a local agent sharing the same filesystem cannot provide
+the same assurance as independently controlled execution infrastructure.
 
 ---
 
@@ -363,7 +441,9 @@ python scripts/escapement.py sync-skills
 Run:
 
 ```bash
-python scripts/escapement.py capability-audit   "Design a management dashboard with responsive charts and motion"   --markdown
+python scripts/escapement.py capability-audit \
+  "Design a management dashboard with responsive charts and motion" \
+  --markdown
 ```
 
 The audit reports:
@@ -531,7 +611,9 @@ python scripts/escapement.py doctor --root /path/to/your-product
 ## Start
 
 ```bash
-python scripts/agent_runtime.py manual-start   --prompt "Build a controlled claims workflow"   --json
+python scripts/agent_runtime.py manual-start \
+  --prompt "Build a controlled claims workflow" \
+  --json
 ```
 
 ---
@@ -603,7 +685,7 @@ servers, services and references without claiming they are installed.
 | `task-observer` | [Task Observer](https://github.com/rebelytics/one-skill-to-rule-them-all) | meta-skill | `conditional` | `skill-learning` |
 | `taste-skill` | [Taste Skill](https://github.com/Leonxlnx/taste-skill) | agent-skill-suite | `optional` | `design-director` |
 | `open-design` | [Open Design](https://github.com/nexu-io/open-design) | design-platform-and-skill-suite | `optional` | `design-director` |
-| `emil-kowalski-skill` | [Emil Kowalski Design Skills](https://github.com/emilkowalski/skill) | agent-skill-suite | `optional` | `motion` |
+| `emil-kowalski-skill` | [Emil Kowalski Design Skills](https://github.com/emilkowalski/skills) | agent-skill-suite | `optional` | `motion` |
 | `impeccable` | [Impeccable](https://github.com/pbakaus/impeccable) | agent-skill-and-cli | `optional` | `design-director` |
 | `superpowers` | [Superpowers](https://github.com/obra/superpowers) | agent-methodology-plugin | `optional` | `harness-methodology` |
 | `claude-mem` | [Claude Mem](https://github.com/thedotmack/claude-mem) | memory-plugin | `conditional` | `session-memory` |
@@ -654,6 +736,10 @@ See [Reference Catalogue](docs/REFERENCE_CATALOG.md).
 ---
 
 # Validation
+
+The current repository has been validated through routing evaluations, unit
+tests, runtime and repository doctors, security checks, native-skill
+synchronisation, and a fresh-install lifecycle test.
 
 ```text
 Routing evaluations:      22 / 22 PASS
