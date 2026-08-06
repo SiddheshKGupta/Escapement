@@ -2,27 +2,30 @@
 
 # Escapement
 
-### Capability-strength orchestration for AI-assisted product delivery.
+### Governed, low-token delivery infrastructure for AI coding agents.
 
-Escapement turns rough requests into stronger decisions, researches relevant
-domain standards and current practice, then activates native skills, specialist
-capabilities, agents and external tools at the phase where each is strongest.
+Escapement turns rough requests into better decisions, routes the right expertise
+at the right phase, verifies real outcomes, and preserves trustworthy project
+state across sessions.
 
-[![Version](https://img.shields.io/badge/version-6.3.0-53284F?style=flat-square)](CHANGELOG.md)
-[![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![Kernel](https://img.shields.io/badge/kernel-698%20words-2F855A?style=flat-square)](AGENTS.md)
-[![Evals](https://img.shields.io/badge/routing%20evals-22%2F22-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
-[![Tests](https://img.shields.io/badge/unit%20tests-61%2F61-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
-[![Security](https://img.shields.io/badge/security-0%20findings-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
+[![Version](https://img.shields.io/badge/version-6.3.0-53284F?style=flat-square)](VERSION)
+[![CI](https://github.com/SiddheshKGupta/escapement/actions/workflows/validate-standard.yml/badge.svg)](https://github.com/SiddheshKGupta/escapement/actions/workflows/validate-standard.yml)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square&logo=python&logoColor=white)](.github/workflows/validate-standard.yml)
+[![Kernel](https://img.shields.io/badge/kernel-698%20%2F%20700-2F855A?style=flat-square)](AGENTS.md)
+[![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
+[![Unit tests](https://img.shields.io/badge/unit%20tests-61%20passing-2F855A?style=flat-square)](manifest.json)
+[![Case studies](https://img.shields.io/badge/published%20case%20studies-3-2F855A?style=flat-square)](#proof-from-real-use)
+[![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
 
-**Ask better questions. Use each capability at its strongest phase. Build. Test. Prove. Persist.**
+**Escapement does not upgrade the model. It upgrades how the model works.**
 
+[Why Escapement?](#why-escapement) ·
 [Quick start](#quick-start) ·
+[How it works](#how-it-works) ·
+[Proof](#proof-from-real-use) ·
 [Architecture](#architecture) ·
-[Design authority](#design-authority) ·
-[Overlap](#overlap-is-a-first-class-system) ·
-[Capability audit](#skill-and-capability-readiness-audit) ·
-[Full registry](#external-capability-registry)
+[Validation](#current-validation) ·
+[Contributing](#contributing)
 
 </div>
 
@@ -42,147 +45,247 @@ Specify → Route → Execute → Verify → Persist
 Controlled delivery
 ```
 
-Agents can generate code quickly. Reliable delivery also requires a shared definition of done, durable decisions, limited scope, explicit permissions, runtime evidence, and a handoff the next session can trust.
-
-### Why the framework exists
-
-AI agents usually fail in one of two directions:
-
-```text
-Too little structure
-→ forgotten context, invented behaviour and inconsistent execution
-
-Too much structure
-→ the agent spends its context managing the framework instead of delivering
-```
-
-Escapement keeps the always-loaded kernel small and moves depth into
-phase-specific layers:
-
-```text
-Decision coaching
-→ Domain research
-→ Structured brainstorming
-→ Product and technical specification
-→ Delivery planning
-→ Focused implementation
-→ Independent verification
-→ Polish
-→ Release
-```
-
-The project can use many capabilities across its lifecycle without loading them
-all into one prompt.
+AI agents can produce code quickly. Reliable delivery also requires clear
+decisions, bounded scope, domain context, explicit permissions, real evidence,
+and a handoff that the next session can trust.
 
 ---
 
-# What Escapement is
+## Why it exists
 
-Escapement is a repository-native control system for AI-assisted delivery.
+Escapement was shaped through repeated work on B2B SaaS, enterprise systems,
+governance workflows, reporting products, and AI-assisted builds.
+
+The recurring problem was not only code generation. It was delivery discipline.
+
+| Common failure | Escapement response |
+|---|---|
+| Important decisions disappear between sessions | Persist decisions, evidence, phase history, and the next action in the repository |
+| Agents skip material questions or answer them themselves | Ask no more than five high-impact questions and wait for real answers when a user is present |
+| Familiar technologies become silent defaults | Compare materially different options and record the chosen trade-off |
+| Business rules and controls arrive after implementation | Route domain, governance, security, data, design, and reporting expertise before or during specification |
+| Every skill is loaded into every prompt | Keep the kernel small and load only phase-relevant context |
+| Parallel agents produce individually correct but incompatible work | Require independence, explicit contracts, an integration owner, and whole-system verification |
+| A generated feature is described as complete without proof | Require structured check records and truthful closure |
+| A project grows across several modules and loses shared consistency | Track modules, dependencies, and shared artifacts through a durable PROGRAM registry |
+| Installed framework files drift from their source | Detect exact managed-file drift and provide a safe remediation path |
+
+Escapement began with B2B SaaS and enterprise delivery, but it is not limited to
+those categories. It can support any repository-based project where an AI agent
+must make decisions, use specialist expertise, work across multiple stages,
+verify outcomes, and preserve context.
+
+Typical uses include:
+
+- SaaS products and internal platforms
+- APIs, backend services, and frontend applications
+- data engineering, analytics, and reporting
+- workflow automation and AI-agent systems
+- governance, finance, legal, security, and compliance work
+- consulting deliverables, specifications, SOPs, and structured artifacts
+- research-heavy or domain-specific projects
+
+---
+
+## What Escapement is
+
+Escapement is a repository-native operating layer for AI-assisted delivery.
 
 It provides:
 
-- decision coaching before implementation;
-- domain-aware research and evidence routing;
-- phase-specific native skills and specialist capabilities;
-- durable project state and session handoffs;
-- explicit approval gates for sensitive actions;
-- deterministic checks and truthful completion semantics.
+- a compact always-loaded delivery kernel;
+- task classification for information, micro changes, material work, and programs;
+- phase-specific routing of doctrine, native skills, capability strengths, and tools;
+- real-user question gates and recommended defaults;
+- adaptive lifecycle planning after repository inspection;
+- connected database, schema, and API decisioning;
+- explicit approval gates for sensitive changes;
+- durable project memory and multi-session handoff;
+- managed installation, update, repair, and drift detection;
+- deterministic checks and content-addressed evidence;
+- honest `PASS`, `PARTIAL`, and failure semantics;
+- packaging and hooks for Claude Code and Codex.
 
-Escapement is **not**:
+Escapement is not:
 
-- a bundle that silently installs every listed plugin or skill;
-- a replacement for laws, standards, policy or qualified domain experts;
-- an autonomous permission to deploy, change production data or run security tests;
-- a guarantee that locally generated evidence is equivalent to isolated CI evidence.
+- a replacement for the underlying model;
+- a prompt library that loads everything at once;
+- permission to deploy, change production data, expose credentials, or run
+  security tests;
+- a substitute for laws, standards, policy, or qualified domain experts;
+- a claim that every catalogued external tool is installed;
+- a guarantee that locally produced evidence is equivalent to independently
+  controlled CI evidence.
 
 ---
 
-# Architecture
+## Proof from real use
 
-```mermaid
-flowchart LR
-    A[Rough request] --> B[Decision brief]
-    B --> C[Material questions + defaults]
-    C --> D[Domain standards + current evidence]
-    D --> E[Alternative solutions]
-    E --> F[Specification]
-    F --> G[Plan + agent assignments]
-    G --> H[Implementation]
-    H --> I[Independent verification]
-    I --> J[Polish]
-    J --> K[Release + handoff]
+Escapement is repeatedly exercised through real repository builds, adversarial
+scenarios, regression tests, and end-to-end delivery flows.
+
+Three detailed case studies are published:
+
+1. [Vanilla vs. Governed Implementation](reports/CASE_STUDY_vanilla_vs_governed.md)
+2. [Full PROGRAM-Tier Claims Platform Build](reports/CASE_STUDY_claims_platform_program_build.md)
+3. [Invoice Reconciliation PROGRAM Build](reports/CASE_STUDY_invoice_reconciliation_program_build.md)
+
+Together, they document failures caught in implementation, integration, security
+evidence, design routing, capability visibility, reporting, and release
+readiness. They also show the framework refusing to describe incomplete work as
+production-ready.
+
+Beyond the published reports, Escapement is being used across additional
+completed and ongoing projects. Findings from those projects continue to be
+converted into framework changes, regression tests, standards, and case studies.
+
+“Battle-tested” here means repeatedly used and challenged against real work. It
+does not mean a statistical benchmark or a claim of broad production adoption.
+
+---
+
+## Quick start
+
+### 1. Clone Escapement
+
+```bash
+git clone https://github.com/SiddheshKGupta/escapement.git
+cd escapement
 ```
 
-## Six operating layers
+### 2. Install it into a project
 
-| Layer | Purpose | Loaded |
+```bash
+python scripts/escapement.py init /path/to/your-project
+```
+
+Windows:
+
+```powershell
+py -3 scripts/escapement.py init C:\path\to\your-project
+```
+
+The installer copies framework-managed files and creates project-owned seed
+files without treating them as disposable framework content.
+
+### 3. Configure the project
+
+Edit:
+
+```text
+PROJECT_STATE.yaml
+PROJECT_CONTEXT.md
+DOMAIN_CONTEXT.md
+```
+
+A safe initial state is:
+
+```yaml
+project_name: My Product
+profile: domain-expertise
+phase: discovery
+work_mode: FULL
+implementation_authorized: false
+approved_ticket: null
+```
+
+### 4. Verify the installation
+
+From the installed project:
+
+```bash
+python scripts/escapement.py doctor --root .
+```
+
+### 5. Start a governed turn
+
+```bash
+python scripts/agent_runtime.py manual-start \
+  --prompt "Build a controlled claims workflow" \
+  --json
+```
+
+For an explanation without starting a turn:
+
+```bash
+python scripts/escapement.py explain \
+  "Build a controlled claims workflow"
+```
+
+For a capability-readiness report:
+
+```bash
+python scripts/escapement.py capability-audit \
+  "Build a controlled claims workflow" \
+  --markdown
+```
+
+---
+
+## Host integration
+
+Escapement includes repository packaging for Claude Code and Codex.
+
+### Claude Code
+
+`.claude/settings.json` connects the runtime to:
+
+- session start;
+- user prompt submission;
+- stop.
+
+### Codex
+
+`.codex/hooks.json` provides the same lifecycle hooks through shell and
+PowerShell wrappers.
+
+### Other agents
+
+Other repository-aware agents can follow `AGENTS.md`, read the project state,
+and use the CLI manually. Automatic hook behaviour depends on the host.
+
+---
+
+## How it works
+
+### Task tiers
+
+| Tier | Intended use | Runtime expectation |
 |---|---|---|
-| Kernel | Universal doctrine, safety, questions, phase rules | Always |
-| Profile | Domain and project decision conventions | One |
-| Doctrine packs | Compact judgement for the current problem | Phase-routed |
-| Native skills | Executable fallback procedures | Phase-routed |
-| Capability strengths | Specialised subskills used where strongest | Phase-routed |
-| External resources | Plugins, MCPs, tools, repositories and services | Candidate until approved |
+| `INFO` | Explanation, navigation, or status | No material turn required |
+| `MICRO` | Small, bounded change | Compact context and at most one native skill per phase |
+| `MATERIAL` | Feature or meaningful change | Questions, phase routing, explicit evidence, and durable closure |
+| `PROGRAM` | Product, module, or transformation | Full lifecycle, broader capability routing, and multi-turn governance |
 
-## Current inventory
+### Lifecycle
 
 ```text
-Kernel words:          698
-Profiles:                2
-Doctrine packs:         11
-Native skills:          35
-Capability strengths:   58
-Agent patterns:         21
-External resources:     54
-Strategy adapters:      10
-Capability families:    10
-Overlap groups:         12
+ORIENT
+→ DISCOVER
+→ RESEARCH
+→ BRAINSTORM
+→ SPECIFY
+→ PLAN
+→ IMPLEMENT
+→ VERIFY
+→ POLISH
+→ RELEASE
 ```
 
----
-
-# Better decisions before better code
-
-For every `MATERIAL` or `PROGRAM` request, the runtime creates:
-
-```text
-Actual decision
-Known facts and assumptions
-Maximum five material questions
-Recommended default for each question
-Consequence of choosing differently
-Improved execution prompt
-Domain-research plan
-Phase plan
-Skill and capability readiness audit
-```
-
-The user does not need to become a prompt engineer.
-
-The agent inspects and researches before asking for information that can be
-discovered safely. Showing the skill/capability readiness audit before
-implementing is a required step, not an optional courtesy -- a mechanism
-nobody is told to use is the same as not having it.
-
----
-
-# Lifecycle
-
-| Phase | Strongest capability examples |
+| Phase | Primary responsibility |
 |---|---|
-| `ORIENT` | Repository state, Karpathy think-before-coding |
-| `DISCOVER` | Decision Coach, Project Discovery |
-| `RESEARCH` | Domain Research, Context7, Agent Reach, Last30Days, UI/UX Pro Max |
-| `BRAINSTORM` | Superpowers Brainstorming, Taste Skill, solution alternatives |
-| `SPECIFY` | Product Specification, domain skills, UI/UX Pro Max design-system recommendations |
-| `PLAN` | Delivery Planning, Superpowers Writing Plans, Karpathy simplicity, Ponytail Lite |
-| `IMPLEMENT` | Specialised native skills, TDD, subagent development, surgical changes |
-| `VERIFY` | Quality Engineering, code review, Impeccable, browser and security evidence |
-| `POLISH` | Impeccable Polish, Emil motion review, Stop Slop final lint |
-| `RELEASE` | Release Readiness, verification-before-completion, branch finishing |
+| `ORIENT` | Read the repository, state, constraints, and active work |
+| `DISCOVER` | Identify the real decision, inspect before asking, and resolve material questions |
+| `RESEARCH` | Gather authoritative domain, regulatory, product, and technical evidence |
+| `BRAINSTORM` | Compare materially different approaches |
+| `SPECIFY` | Define behaviour, controls, architecture, data, reporting, design, and acceptance criteria |
+| `PLAN` | Create bounded tasks, dependencies, ownership, and verification steps |
+| `IMPLEMENT` | Build through approved, phase-routed skills |
+| `VERIFY` | Test behaviour, integration seams, security, accessibility, and evidence |
+| `POLISH` | Improve usability, language, responsiveness, and motion where relevant |
+| `RELEASE` | Apply readiness gates and issue a truthful verdict and handoff |
 
-Advance phases explicitly:
+Advance explicitly:
 
 ```bash
 python scripts/agent_runtime.py advance-phase \
@@ -193,159 +296,199 @@ python scripts/agent_runtime.py advance-phase \
   --evidence "PROJECT_CONTEXT.md"
 ```
 
-Each transition unloads the previous phase context before loading the next.
+### Adaptive phase planning
 
-## Revising the phase plan
-
-`phase_plan` is a default, decided once at turn start by matching keywords
-in the prompt -- it has no way to see what `DISCOVER`'s own repository
-inspection actually turns up. `lifecycle-planning`, routed alongside
-`decision-coach` and `project-discovery` at every `DISCOVER` phase, checks
-whether the default plan still fits once real inspection has happened, and
-revises it when it does not:
+The initial phase plan is a default created before full repository inspection.
+After `DISCOVER`, it can be revised:
 
 ```bash
 python scripts/agent_runtime.py replan-phases \
   --add-phase VERIFY \
-  --reason "Touches stored credentials; the prompt never said 'security'."
+  --reason "Stored credentials require explicit security verification."
+
 python scripts/agent_runtime.py replan-phases \
   --remove-phase POLISH \
-  --reason "Backend-only change, no user-facing surface."
+  --reason "Backend-only change with no user-facing surface."
 ```
 
-Only the ten cataloged phases can be added or removed -- this revises
-sequence, not invents new phases. A phase already completed with recorded
-evidence, or the current phase, cannot be removed. Every revision requires a
-reason and is permanently recorded on the turn and in `turns.jsonl`.
+A revision:
+
+- can use only the ten catalogued phases;
+- cannot remove the current phase;
+- cannot remove a phase already completed with evidence;
+- requires a reason;
+- is persisted in the turn record and `turns.jsonl`.
+
+---
+
+## Better decisions before better code
+
+For `MATERIAL` and `PROGRAM` work, the runtime requires:
+
+```text
+Actual decision
+Known facts and assumptions
+Maximum five material questions
+Recommended default for each question
+Consequence of choosing differently
+Improved execution brief
+Domain-research plan
+Phase plan
+Skill and capability readiness audit
+```
+
+When a user is present, the agent must wait for real answers to material
+questions. Recommended defaults make the decision easier to review. They are not
+permission to silently proceed.
+
+Defaults may be used automatically only for a genuinely unattended run.
+
+The capability-readiness audit must be shown before implementation so users can
+see:
+
+- active native skills;
+- active specialist strengths;
+- detected repository capabilities;
+- external candidates and their readiness;
+- overlap decisions;
+- lifecycle usage;
+- licence and activation status.
+
+---
+
+## Data architecture as one decision
+
+Database choice, schema, and API shape are treated as one connected decision.
+
+The `data-architecture` skill requires the agent to:
+
+1. inspect `PROJECT_CONTEXT.md` and `DOMAIN_CONTEXT.md`;
+2. assess data shape, consistency, query patterns, write volume, concurrency,
+   and operational reality;
+3. compare at least two materially different options;
+4. present the recommendation and wait for approval;
+5. design the schema for the chosen technology’s actual model;
+6. design the API against that schema;
+7. record the selected option and rejected alternatives durably.
+
+This prevents a database, schema, and API from being designed independently and
+then forcing one another to be rebuilt.
+
+---
 
 ## Multi-module PROGRAMs
 
-A turn's phase plan covers one piece of work. A `PROGRAM` with several
-modules (billing, CRM core, admin portal) runs each module through its own
-`DISCOVER` → `RELEASE` cycle across many turns -- `program_modules.py` is
-the durable registry that tracks the modules exist and whether they agree
-on the artifacts they share (schema, `DESIGN.md`, `DOMAIN_CONTEXT.md`):
+A single turn governs one bounded piece of work. A large program may span many
+modules and many turns.
+
+`scripts/program_modules.py` provides a durable registry for:
+
+- modules;
+- dependencies;
+- current module status;
+- shared artifacts such as `DESIGN.md`, schema definitions, and
+  `DOMAIN_CONTEXT.md`;
+- cross-module consistency checks.
+
+Example:
 
 ```bash
 python scripts/program_modules.py set-program --name "CRM Platform"
 python scripts/program_modules.py add-shared --path DESIGN.md
-python scripts/program_modules.py add-module --id billing --name "Billing"
-python scripts/program_modules.py add-module --id portal --name "Customer Portal" \
+python scripts/program_modules.py add-module \
+  --id billing \
+  --name "Billing"
+python scripts/program_modules.py add-module \
+  --id portal \
+  --name "Customer Portal" \
   --depends-on billing
-python scripts/program_modules.py set-status --id billing --status plan \
+python scripts/program_modules.py set-status \
+  --id billing \
+  --status plan \
   --checked-shared DESIGN.md
+python scripts/program_modules.py list
 ```
 
-A module cannot move past `SPECIFY` until it has checked every registered
-shared artifact, and not while a declared dependency isn't `done`. State
-lives in `docs/PROGRAM_MODULES.json`, project-owned, untouched by
-`update`/`repair`.
+A module cannot move beyond `SPECIFY` until every registered shared artifact has
+been checked. It also cannot advance while a declared dependency remains
+incomplete.
+
+The registry lives in `docs/PROGRAM_MODULES.json` and is project-owned.
 
 ---
 
-# Low-token contract
+## Architecture
+
+```mermaid
+flowchart LR
+    A[Rough request] --> B[Decision brief]
+    B --> C[Material questions]
+    C --> D[Authoritative evidence]
+    D --> E[Alternative approaches]
+    E --> F[Approved specification]
+    F --> G[Phase plan]
+    G --> H[Implementation]
+    H --> I[Independent verification]
+    I --> J[Release verdict]
+    J --> K[Durable handoff]
+```
+
+### Operating layers
+
+| Layer | Purpose | Loading model |
+|---|---|---|
+| Kernel | Universal delivery doctrine, safety, approvals, and phase rules | Always loaded |
+| Profile | Project and domain decision conventions | One selected profile |
+| Doctrine packs | Compact judgement for the current problem | Phase-routed |
+| Native skills | Executable procedures available without an external dependency | Phase-routed |
+| Capability strengths | Specialist subskills used where they are strongest | Phase-routed |
+| Strategy adapters | Bounded methods from compatible delivery approaches | Selected, not stacked blindly |
+| Fresh-context agents | Isolated work for justified subproblems | Planned and contract-bound |
+| External resources | Tools, plugins, MCP servers, services, and repositories | Candidates until reviewed and approved |
+| Evidence and handoff | Checks, decisions, turn history, and next actions | Persisted in the repository |
+
+### Current inventory
+
+```text
+Version:                 6.3.0
+Repository files:        231
+Kernel:                  698 / 700 words
+Profiles:                  2
+Doctrine packs:           11
+Native skills:            35
+Capability strengths:     58
+Agent patterns:           21
+External resources:       54
+Strategy adapters:        10
+Capability families:      10
+Overlap groups:           12
+Published case studies:    3
+```
+
+### Low-token contract
 
 ```text
 Always-loaded kernel:          <= 700 words
-Actual kernel:                 698 words
+Current kernel:                 698 words
 Automatic phase context:       <= 1,800 words
-Invoked native skill context:  <= 1,200 words
+Invoked native-skill context:  <= 1,200 words
 Normal doctrine packs:         <= 3 per phase
-Native skills — MICRO:         <= 1 per phase
-Native skills — MATERIAL:      <= 5 per phase
-Native skills — PROGRAM:       <= 6 per phase
-Specialist strengths:          selected by phase and overlap
+Native skills for MICRO:       <= 1 per phase
+Native skills for MATERIAL:    <= 5 per phase
+Native skills for PROGRAM:     <= 6 per phase
 ```
 
-Escapement counts automatic context and invoked skill context separately.
-
-A selected skill is referenced in the context pack and loaded by the native
-agent only when invoked.
+Escapement uses more capabilities across the lifecycle, not more context inside
+one prompt.
 
 ---
 
-# Evidence and security integrity
+## Capability orchestration
 
-Escapement treats completion evidence as part of the runtime contract.
+Escapement does not resolve overlap by loading every capability or deleting
+useful alternatives.
 
-Structured check records bind together:
-
-```text
-Check name
-Command
-Timing
-Exit code
-Standard-output hash
-Standard-error hash
-Record identity
-```
-
-The runtime rejects malformed or edited records whose output hashes or record
-identity do not match their evidence files.
-
-The security gate also checks common compound secret assignments such as:
-
-```text
-admin_password
-db_secret
-stripe_api_key
-```
-
-For high-assurance releases, run checks in isolated CI or a sandboxed runner.
-A local verifier and a local agent sharing the same filesystem cannot provide
-the same assurance as independently controlled execution infrastructure.
-
----
-
-# Design authority
-
-[`docs/standards/design-intelligence.md`](docs/standards/design-intelligence.md)
-is the **supreme design constitution**.
-
-```text
-Approved product requirements and accessibility obligations
-→ Product DESIGN.md and brand configuration
-→ Design Intelligence Constitution
-→ Phase-specific design specialists
-→ External references and component sources
-```
-
-Specialists have distinct responsibilities:
-
-| Specialist | Strongest role |
-|---|---|
-| UI/UX Pro Max | Searchable design research, product patterns, palettes, typography, charts and stack guidance |
-| Taste Skill | Greenfield art direction, anti-slop variance, density and motion dials |
-| Impeccable | Deterministic audit, critique, hardening and final polish |
-| Emil Kowalski Skills | Motion decisions, animation implementation and strict motion review |
-| Open Design | Optional local design workspace, prototypes, assets and export ecosystem |
-| frontend-design | Production frontend implementation from an approved design |
-| Mobbin / Refero / Recent | Bounded pattern research |
-| Penpot | Collaborative design-system and design-to-code workflow |
-
-No specialist may silently override `DESIGN.md` or the design constitution.
-
-See [Design Stack](catalog/design-stack.json).
-
-## Reporting and KPI standard
-
-Design Intelligence governs what a dashboard or KPI tile *looks like*.
-[`docs/standards/reporting-intelligence.md`](docs/standards/reporting-intelligence.md),
-read by the `reporting-standard` skill, governs whether its numbers are
-*correct*: the ten-point KPI-breakdown completeness check, the three-layer
-reporting model (Management Summary → Analytical Breakdown → Record-Level
-Evidence), and locale-correct currency/number formatting -- symbol, digit
-grouping and unit-scale convention matching the business locale confirmed
-in `DOMAIN_CONTEXT.md`, applied uniformly across every surface.
-
----
-
-# Overlap is a first-class system
-
-Escapement does not solve overlap by deleting capabilities or loading all of
-them.
-
-It records the relationship:
+It records explicit relationships:
 
 ```text
 BASELINE_PLUS_INTENSIFIER
@@ -356,21 +499,15 @@ REFERENCE_ONLY
 META_OBSERVER
 ```
 
-## Example: Karpathy and Ponytail
+Examples:
 
 ```text
 Karpathy Guidelines
 → baseline engineering behaviour
-→ assumptions, simplicity, surgical changes, verifiable goals
 
 Ponytail
 → optional implementation intensifier
-→ stronger YAGNI, native-platform and minimum-code pressure
 ```
-
-Ponytail does not become a second permanent engineering doctrine.
-
-## Example: design systems
 
 ```text
 Design Intelligence
@@ -380,7 +517,7 @@ UI/UX Pro Max
 → research and recommendation
 
 Taste Skill
-→ brainstorming and art direction
+→ art direction
 
 frontend-design
 → implementation
@@ -394,37 +531,120 @@ Emil Kowalski
 
 See:
 
+- [Capability Strength Map](docs/CAPABILITY_STRENGTH_MAP.md)
 - [Overlap Analysis](docs/OVERLAP_ANALYSIS.md)
-- [Machine-readable Matrix](catalog/overlap-matrix.json)
-- [Compact Operational Groups](catalog/overlap-groups.json)
+- [Overlap Matrix](catalog/overlap-matrix.json)
+- [Capability Registry](catalog/capability-registry.json)
+- [Reference Catalogue](docs/REFERENCE_CATALOG.md)
+
+A registry entry is not treated as an installation.
 
 ---
 
-# Domain expertise
+## Native skills
 
-Each installed project contains:
+The canonical source for each skill is:
 
 ```text
-DOMAIN_CONTEXT.md
+skills/<skill>/SKILL.md
 ```
 
-It records:
+The installer maintains native mirrors for supported hosts:
+
+```text
+.agents/skills/<skill>/SKILL.md
+.claude/skills/<skill>/SKILL.md
+```
+
+<details>
+<summary><strong>View all 35 native skills</strong></summary>
+
+### Decision, discovery, research, and planning
+
+- [`decision-coach`](skills/decision-coach/SKILL.md)
+- [`project-discovery`](skills/project-discovery/SKILL.md)
+- [`lifecycle-planning`](skills/lifecycle-planning/SKILL.md)
+- [`domain-research`](skills/domain-research/SKILL.md)
+- [`solution-brainstorming`](skills/solution-brainstorming/SKILL.md)
+- [`product-specification`](skills/product-specification/SKILL.md)
+- [`delivery-planning`](skills/delivery-planning/SKILL.md)
+- [`reference-router`](skills/reference-router/SKILL.md)
+
+### Consulting, governance, finance, and domain work
+
+- [`consulting-analysis`](skills/consulting-analysis/SKILL.md)
+- [`governance-risk-controls`](skills/governance-risk-controls/SKILL.md)
+- [`finance-reporting`](skills/finance-reporting/SKILL.md)
+- [`dashboard`](skills/dashboard/SKILL.md)
+- [`reporting-standard`](skills/reporting-standard/SKILL.md)
+- [`workflow`](skills/workflow/SKILL.md)
+- [`data-analysis`](skills/data-analysis/SKILL.md)
+- [`legal-compliance-analysis`](skills/legal-compliance-analysis/SKILL.md)
+- [`investment-analysis`](skills/investment-analysis/SKILL.md)
+
+### Engineering, data, AI, and automation
+
+- [`engineering-review`](skills/engineering-review/SKILL.md)
+- [`data-architecture`](skills/data-architecture/SKILL.md)
+- [`data-engineering`](skills/data-engineering/SKILL.md)
+- [`api-integration`](skills/api-integration/SKILL.md)
+- [`software-implementation`](skills/software-implementation/SKILL.md)
+- [`frontend-implementation`](skills/frontend-implementation/SKILL.md)
+- [`ai-agent-engineering`](skills/ai-agent-engineering/SKILL.md)
+- [`automation-engineering`](skills/automation-engineering/SKILL.md)
+- [`agent-orchestration`](skills/agent-orchestration/SKILL.md)
+- [`agent-blueprint-discovery`](skills/agent-blueprint-discovery/SKILL.md)
+
+### Design, quality, security, and artifacts
+
+- [`design-system`](skills/design-system/SKILL.md)
+- [`enterprise-ui-review`](skills/enterprise-ui-review/SKILL.md)
+- [`quality-engineering`](skills/quality-engineering/SKILL.md)
+- [`security-review`](skills/security-review/SKILL.md)
+- [`release-readiness`](skills/release-readiness/SKILL.md)
+- [`artifact-production`](skills/artifact-production/SKILL.md)
+- [`writing-quality`](skills/writing-quality/SKILL.md)
+- [`skill-governance`](skills/skill-governance/SKILL.md)
+
+</details>
+
+Synchronise the native mirrors:
+
+```bash
+python scripts/escapement.py sync-skills
+```
+
+Check without modifying:
+
+```bash
+python scripts/escapement.py sync-skills --check
+```
+
+---
+
+## Domain, design, and reporting authority
+
+Escapement separates domain correctness from visual execution.
+
+### Domain context
+
+Every installed project receives `DOMAIN_CONTEXT.md`, which can record:
 
 - industry and geography;
 - users and stakeholders;
 - business model and operating reality;
-- laws, regulations and standards;
-- current market and technology practice;
+- laws, regulations, and standards;
+- current market and technical practice;
 - comparable systems;
-- domain terminology;
+- terminology;
 - approved evidence;
 - confidence and research date.
 
-Evidence order:
+Evidence priority is:
 
 ```text
 Project evidence
-→ law, regulator or standards body
+→ law, regulator, or standards body
 → official documentation
 → primary disclosures
 → institutional research
@@ -432,158 +652,38 @@ Project evidence
 → practitioner and community signals
 ```
 
-Agent Reach and Last30Days extend research coverage. They do not replace
-authoritative evidence.
+### Design authority
+
+[`docs/standards/design-intelligence.md`](docs/standards/design-intelligence.md)
+is the supreme design constitution.
+
+A generic frontend request must still surface design direction before
+implementation. Specialists may research, propose, implement, verify, or polish.
+They may not silently override approved product requirements, accessibility
+obligations, `DESIGN.md`, or the constitution.
+
+### Reporting authority
+
+[`docs/standards/reporting-intelligence.md`](docs/standards/reporting-intelligence.md)
+governs whether dashboards, KPI tiles, tables, and exports are correct,
+traceable, and honestly formatted.
+
+It requires:
+
+- a definition, formula, source, freshness, filters, comparison, breakdown,
+  owner, and exception status for each KPI;
+- management summary, analytical breakdown, and record-level evidence;
+- absolute numbers before percentages for management views;
+- visible reporting periods and relevant comparisons;
+- reconciliation between dashboards, tables, exports, and source records;
+- locale-correct currency, digit grouping, and unit scale.
+
+Design Intelligence governs appearance. Reporting Intelligence governs the
+meaning and integrity of the numbers.
 
 ---
 
-# Native skills
-
-Canonical source:
-
-```text
-skills/<skill>/SKILL.md
-```
-
-Native agent copies:
-
-```text
-.agents/skills/<skill>/SKILL.md
-.claude/skills/<skill>/SKILL.md
-```
-
-| Skill | Phases | Registers |
-|---|---|---|
-| [`project-discovery`](skills/project-discovery/SKILL.md) | DISCOVER, SPECIFY | CONSULTING, ENGINEERING, DUAL |
-| [`consulting-analysis`](skills/consulting-analysis/SKILL.md) | DISCOVER, RESEARCH, BRAINSTORM, SPECIFY, VERIFY | CONSULTING, DUAL |
-| [`governance-risk-controls`](skills/governance-risk-controls/SKILL.md) | DISCOVER, SPECIFY, VERIFY | CONSULTING, DUAL |
-| [`finance-reporting`](skills/finance-reporting/SKILL.md) | RESEARCH, SPECIFY, IMPLEMENT, VERIFY | CONSULTING, DUAL |
-| [`dashboard`](skills/dashboard/SKILL.md) | SPECIFY, IMPLEMENT, VERIFY | CONSULTING, DUAL |
-| [`workflow`](skills/workflow/SKILL.md) | DISCOVER, SPECIFY, IMPLEMENT, VERIFY | CONSULTING, DUAL |
-| [`engineering-review`](skills/engineering-review/SKILL.md) | BRAINSTORM, SPECIFY, PLAN, IMPLEMENT, VERIFY | ENGINEERING, DUAL |
-| [`design-system`](skills/design-system/SKILL.md) | BRAINSTORM, SPECIFY | ENGINEERING, DUAL, ARTIFACT |
-| [`enterprise-ui-review`](skills/enterprise-ui-review/SKILL.md) | IMPLEMENT, VERIFY, POLISH | ENGINEERING, DUAL |
-| [`api-integration`](skills/api-integration/SKILL.md) | SPECIFY, PLAN, IMPLEMENT, VERIFY | ENGINEERING, DUAL |
-| [`artifact-production`](skills/artifact-production/SKILL.md) | SPECIFY, IMPLEMENT, VERIFY, POLISH, RELEASE | ARTIFACT, CONSULTING |
-| [`writing-quality`](skills/writing-quality/SKILL.md) | IMPLEMENT, VERIFY, POLISH | ARTIFACT, CONSULTING |
-| [`security-review`](skills/security-review/SKILL.md) | RESEARCH, SPECIFY, PLAN, VERIFY, RELEASE | ENGINEERING, DUAL |
-| [`release-readiness`](skills/release-readiness/SKILL.md) | RELEASE | ENGINEERING, DUAL |
-| [`reference-router`](skills/reference-router/SKILL.md) | DISCOVER, RESEARCH, BRAINSTORM, PLAN | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
-| [`skill-governance`](skills/skill-governance/SKILL.md) | DISCOVER, RESEARCH, PLAN, VERIFY | ENGINEERING, DUAL |
-| [`decision-coach`](skills/decision-coach/SKILL.md) | DISCOVER | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
-| [`lifecycle-planning`](skills/lifecycle-planning/SKILL.md) | DISCOVER | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
-| [`domain-research`](skills/domain-research/SKILL.md) | RESEARCH | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
-| [`solution-brainstorming`](skills/solution-brainstorming/SKILL.md) | BRAINSTORM | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
-| [`delivery-planning`](skills/delivery-planning/SKILL.md) | PLAN | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
-| [`agent-orchestration`](skills/agent-orchestration/SKILL.md) | PLAN, IMPLEMENT | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
-| [`agent-blueprint-discovery`](skills/agent-blueprint-discovery/SKILL.md) | RESEARCH, BRAINSTORM, PLAN | CONSULTING, ENGINEERING, DUAL |
-| [`product-specification`](skills/product-specification/SKILL.md) | SPECIFY | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
-| [`data-architecture`](skills/data-architecture/SKILL.md) | SPECIFY | ENGINEERING, DUAL |
-| [`data-engineering`](skills/data-engineering/SKILL.md) | SPECIFY, PLAN, IMPLEMENT, VERIFY | ENGINEERING, DUAL, CONSULTING |
-| [`frontend-implementation`](skills/frontend-implementation/SKILL.md) | IMPLEMENT | ENGINEERING, DUAL |
-| [`quality-engineering`](skills/quality-engineering/SKILL.md) | PLAN, IMPLEMENT, VERIFY, RELEASE | ENGINEERING, DUAL, ARTIFACT |
-| [`ai-agent-engineering`](skills/ai-agent-engineering/SKILL.md) | SPECIFY, PLAN, IMPLEMENT, VERIFY | ENGINEERING, DUAL, CONSULTING |
-| [`automation-engineering`](skills/automation-engineering/SKILL.md) | SPECIFY, PLAN, IMPLEMENT, VERIFY | ENGINEERING, DUAL, CONSULTING |
-| [`data-analysis`](skills/data-analysis/SKILL.md) | RESEARCH, SPECIFY, IMPLEMENT, VERIFY | CONSULTING, ENGINEERING, DUAL |
-| [`legal-compliance-analysis`](skills/legal-compliance-analysis/SKILL.md) | RESEARCH, SPECIFY, VERIFY | CONSULTING, DUAL, ARTIFACT |
-| [`investment-analysis`](skills/investment-analysis/SKILL.md) | RESEARCH, BRAINSTORM, SPECIFY, VERIFY | CONSULTING, DUAL, ARTIFACT |
-| [`software-implementation`](skills/software-implementation/SKILL.md) | IMPLEMENT | ENGINEERING, DUAL |
-| [`reporting-standard`](skills/reporting-standard/SKILL.md) | SPECIFY | ENGINEERING, DUAL, CONSULTING |
-
-Synchronise:
-
-```bash
-python scripts/escapement.py sync-skills
-```
-
----
-
-# Skill and capability readiness audit
-
-Run:
-
-```bash
-python scripts/escapement.py capability-audit \
-  "Design a management dashboard with responsive charts and motion" \
-  --markdown
-```
-
-The audit reports:
-
-```text
-Active native skills
-Active specialist strengths
-Detected repository skills
-External install or load candidates
-Lifecycle usage plan
-Overlap decisions
-Design authority
-Licence and activation status
-```
-
-A catalogue entry is not treated as installed.
-
----
-
-# Strategy adapters
-
-| Adapter | Name | Phases |
-|---|---|---|
-| `superpowers-sdlc` | Superpowers SDLC Adapter | BRAINSTORM, PLAN, IMPLEMENT, PARALLEL_IMPLEMENT, VERIFY, FINISH |
-| `github-spec-kit` | GitHub Spec Kit Adapter | DISCOVER, SPECIFY, PLAN, CONVERGE |
-| `gsd-core` | GSD Phase Execution Adapter | DISCOVER, PLAN, IMPLEMENT, VERIFY, FINISH |
-| `agent-reach` | Agent Reach Research Adapter | RESEARCH |
-| `last30days` | Last30Days Trends Adapter | RESEARCH |
-| `500-ai-agents` | 500+ AI Agent Blueprint Adapter | RESEARCH, BRAINSTORM, PLAN |
-| `agent-browser` | Agent Browser Verification Adapter | VERIFY |
-| `engineering-behaviour` | Karpathy + Ponytail Engineering Adapter | DISCOVER, PLAN, IMPLEMENT, VERIFY |
-| `design-strength-orchestration` | Design Intelligence Specialist Adapter | RESEARCH, BRAINSTORM, SPECIFY, IMPLEMENT, VERIFY, POLISH |
-| `browser-verification` | Browser Verification Adapter | IMPLEMENT, VERIFY |
-
-Superpowers is used component-by-component:
-
-```text
-BRAINSTORM → brainstorming
-PLAN       → writing-plans
-IMPLEMENT  → TDD, subagent-driven-development or executing-plans
-PARALLEL   → dispatching-parallel-agents
-VERIFY     → requesting-code-review + verification-before-completion
-RELEASE    → finishing-a-development-branch
-```
-
-The runtime remains Escapement. External lifecycle hooks are not stacked
-blindly.
-
----
-
-# Capability families
-
-Fine-grained intents from the original standards are preserved under canonical
-families:
-
-| Family | Native fallbacks | Phases |
-|---|---|---|
-| `business-consulting` | decision-coach, consulting-analysis, project-discovery | DISCOVER, RESEARCH, BRAINSTORM, SPECIFY |
-| `governance-risk-controls` | governance-risk-controls, workflow, security-review | DISCOVER, SPECIFY, VERIFY |
-| `finance-and-private-capital` | finance-reporting, consulting-analysis, dashboard | RESEARCH, SPECIFY, IMPLEMENT, VERIFY |
-| `product-management` | project-discovery, solution-brainstorming, delivery-planning | DISCOVER, BRAINSTORM, SPECIFY, PLAN, RELEASE |
-| `data-engineering-and-analytics` | finance-reporting, dashboard, engineering-review, api-integration | SPECIFY, PLAN, IMPLEMENT, VERIFY |
-| `engineering` | engineering-review, api-integration, security-review, release-readiness | BRAINSTORM, SPECIFY, PLAN, IMPLEMENT, VERIFY, RELEASE |
-| `ai-and-automation` | agent-blueprint-discovery, agent-orchestration, api-integration, security-review | RESEARCH, BRAINSTORM, SPECIFY, PLAN, IMPLEMENT, VERIFY |
-| `design-and-experience` | design-system, enterprise-ui-review, writing-quality | RESEARCH, BRAINSTORM, SPECIFY, IMPLEMENT, VERIFY, POLISH |
-| `documentation-and-artifacts` | artifact-production, writing-quality | DISCOVER, SPECIFY, PLAN, VERIFY, RELEASE |
-| `connectors-and-platforms` | api-integration, reference-router, security-review | RESEARCH, SPECIFY, PLAN, IMPLEMENT, VERIFY, RELEASE |
-
-The detailed intent catalogue includes business analysis, governance, finance,
-private capital, product management, data engineering, analytics, software
-engineering, AI and automation, design, documentation, artifacts and
-connectors.
-
-See [Capability Strength Map](docs/CAPABILITY_STRENGTH_MAP.md).
-
----
-
-# Parallel and subagent execution
+## Parallel and fresh-context agents
 
 Parallel execution requires:
 
@@ -592,95 +692,175 @@ Parallel execution requires:
 - explicit input and output contracts;
 - bounded context;
 - a named integration owner;
-- merge order;
-- whole-system verification after merge.
+- a defined merge order;
+- whole-system verification after integration.
 
-Use subagent-driven development for sequential tasks that benefit from fresh
-contexts.
+Use fresh-context agents for sequential work that benefits from isolation.
 
-Use parallel agents only after the plan proves independence.
-
----
-
-# Agent blueprint discovery
-
-The 500+ AI Agent Projects repository is a discovery catalogue, not one
-deployable runtime.
-
-For every linked blueprint, Escapement checks:
-
-```text
-Exact repository
-Licence
-Maintenance
-Runnable code
-Framework and model dependencies
-Tests and examples
-Secrets and permissions
-Data handling
-Deployment model
-Evaluation quality
-```
-
-Cloning, adapting or deploying still requires approval.
+The availability of actual parallel dispatch depends on the host. The planning,
+contract, ownership, and verification rules remain applicable even when work is
+performed sequentially.
 
 ---
 
-# Quick start
+## Evidence and truthful closure
 
-## Install
+Escapement treats evidence as part of the runtime contract.
+
+Run a deterministic check:
 
 ```bash
-git clone https://github.com/SiddheshKGupta/escapement.git
-cd escapement
-
-python scripts/escapement.py init /path/to/your-product
+python scripts/run_check.py \
+  --name "unit-tests" \
+  --scope tests \
+  -- \
+  python -m unittest discover -s tests -p "test_*.py"
 ```
 
-Windows:
+The resulting record includes:
 
-```powershell
-py -3 scripts/escapement.py init C:\path\to\your-product
+```text
+Check name
+Command
+Working directory
+Scope
+Start and completion time
+Duration
+Exit code
+Result
+Standard-output path and hash
+Standard-error path and hash
+Content-derived record identity
 ```
 
-## Configure
+Before accepting a record, the runtime verifies that:
 
-Edit:
+- required fields are present;
+- referenced output files exist;
+- output hashes match;
+- the record identity can be recomputed;
+- the check actually passed.
+
+Closure rules:
+
+- a critical failed check cannot become a `PASS`;
+- `MATERIAL` and `PROGRAM` work require structured evidence;
+- missing production evidence requires `PARTIAL` or failure;
+- the handoff must state what was built, checked, deferred, and approved.
+
+Local content-addressed evidence raises the cost of accidental or casual
+fabrication. It is not a substitute for independently controlled CI or a
+sandbox when stronger assurance is required.
+
+---
+
+## Security and approval gates
+
+Sensitive actions require explicit approval, including:
+
+- adding dependencies;
+- using credentials or confidential data;
+- changing schemas or role-based access control;
+- installing external skills, plugins, or MCP servers;
+- running security tests;
+- performing destructive operations;
+- deploying to production;
+- reusing licence-sensitive external material.
+
+The security gate scans for high-risk patterns, including compound secret
+assignments such as:
+
+```text
+admin_password
+db_secret
+stripe_api_key
+```
+
+Run it directly:
+
+```bash
+python scripts/escapement.py security --fail-on high
+```
+
+See [SECURITY.md](SECURITY.md).
+
+---
+
+## Durable project memory
+
+The repository, not chat, is the system of record.
+
+An installed project maintains:
 
 ```text
 PROJECT_STATE.yaml
 PROJECT_CONTEXT.md
 DOMAIN_CONTEXT.md
+SESSION_HANDOFF.md
+feature_list.json
+docs/decisions/DECISION_LOG.md
+.agent/runtime/ACTIVE_CONTEXT.md
+.agent/runtime/CONTEXT_PACK.md
+.agent/runtime/SESSION_MEMORY.md
+.agent/runtime/current-turn.json
+.agent/runtime/turns.jsonl
 ```
 
-Safe starting state:
+These files preserve:
 
-```yaml
-project_name: My Product
-profile: domain-expertise
-phase: discovery
-work_mode: FULL
-implementation_authorized: false
-approved_ticket: null
-```
+- approved decisions and rejected alternatives;
+- task tier and lifecycle phase;
+- phase-plan revisions;
+- domain context and evidence;
+- implementation status;
+- executed checks;
+- open risks and deferred work;
+- the exact next action for a future session.
 
-## Verify
+---
+
+## Safe installation and updates
+
+Escapement distinguishes three classes of files.
+
+| Class | Behaviour |
+|---|---|
+| Framework-managed | Installed and updated by Escapement |
+| Project-owned seed files | Created when missing, then preserved as project state |
+| Generated local runtime files | Created during work and excluded from framework replacement |
+
+Preview an update:
 
 ```bash
-python scripts/escapement.py doctor --root /path/to/your-product
+python scripts/escapement.py update /path/to/your-project
 ```
 
-## Start
+Apply safe managed-file updates:
 
 ```bash
-python scripts/agent_runtime.py manual-start \
-  --prompt "Build a controlled claims workflow" \
-  --json
+python scripts/escapement.py update /path/to/your-project --apply
+```
+
+Conflicts are reported rather than silently overwritten. Managed files selected
+for replacement are backed up first.
+
+Repair missing managed files:
+
+```bash
+python scripts/escapement.py repair /path/to/your-project
+```
+
+Detect drift:
+
+```bash
+python scripts/escapement.py doctor --root /path/to/your-project
 ```
 
 ---
 
-# Commands
+## Commands
+
+### Framework
 
 ```text
 python scripts/escapement.py version
@@ -692,218 +872,183 @@ python scripts/escapement.py explain "<prompt>"
 python scripts/escapement.py capability-audit "<prompt>" --markdown
 python scripts/escapement.py sync-skills
 python scripts/escapement.py eval
-python scripts/escapement.py security
+python scripts/escapement.py security --fail-on high
 python scripts/escapement.py view
 python scripts/escapement.py component list
 python scripts/escapement.py catalog search "<query>"
 ```
 
-Runtime:
+### Runtime
 
 ```text
+python scripts/agent_runtime.py session-start
 python scripts/agent_runtime.py manual-start --prompt "<task>" --json
-python scripts/agent_runtime.py advance-phase --phase <PHASE> ...
 python scripts/agent_runtime.py status
+python scripts/agent_runtime.py advance-phase --phase <PHASE> ...
+python scripts/agent_runtime.py replan-phases --add-phase <PHASE> --reason "<reason>"
+python scripts/agent_runtime.py replan-phases --remove-phase <PHASE> --reason "<reason>"
 python scripts/agent_runtime.py close-turn ...
 python scripts/agent_runtime.py reset-turn --reason "<reason>"
 ```
 
----
-
-# External capability registry
-
-Escapement preserves external skills, plugins, tools, repositories, MCP
-servers, services and references without claiming they are installed.
-
-<details>
-<summary><strong>View all 54 external resources</strong></summary>
-
-| ID | Resource | Kind | Status | Overlap group |
-|---|---|---|---|---|
-| `voltagent-awesome-design-md` | [awesome-design-md](https://github.com/VoltAgent/awesome-design-md) | reference-repository | `catalogued` | `design-reference` |
-| `perplexity-org` | [Perplexity AI GitHub organisation](https://github.com/perplexityai) | organisation-index | `catalogued` | `research-freshness` |
-| `perplexity-api-platform-developers` | [api-platform-developers](https://github.com/perplexityai/api-platform-developers) | skills-and-plugin-repository | `catalogued` | `research-freshness` |
-| `perplexity-cli` | [pplx CLI](https://github.com/perplexityai/perplexity-cli) | external-cli | `catalogued` | `research-freshness` |
-| `perplexity-search-evals` | [search_evals](https://github.com/perplexityai/search_evals) | evaluation-framework | `catalogued` | `evaluation` |
-| `perplexity-bumblebee` | [Bumblebee](https://github.com/perplexityai/bumblebee) | security-inventory-tool | `catalogued` | `security-testing` |
-| `perplexity-modelcontextprotocol` | [Perplexity MCP server](https://github.com/perplexityai/modelcontextprotocol) | mcp-repository | `catalogued` | `research-freshness` |
-| `perplexity-codescythe` | [Codescythe](https://github.com/perplexityai/codescythe) | code-analysis-tool | `catalogued` | `code-review` |
-| `appflowy` | [AppFlowy](https://github.com/AppFlowy-IO/AppFlowy) | product-repository | `catalogued` | `session-memory` |
-| `plausible-analytics` | [Plausible Analytics](https://github.com/plausible/analytics) | product-repository | `catalogued` | `observability` |
-| `github-spec-kit` | [Spec Kit](https://github.com/github/spec-kit) | specification-framework | `catalogued` | `harness-methodology` |
-| `500-ai-agents-projects` | [500+ AI Agent Projects & Use Cases](https://github.com/ashishpatel26/500-AI-Agents-Projects) | agent-pattern-catalogue | `catalogued` | `agent-pattern-catalogue` |
-| `walkinglabs-learn-harness-engineering` | [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/en/) | course-and-reference-repository | `catalogued` | `harness-methodology` |
-| `walkinglabs-harness-creator` | [harness-creator skill](https://github.com/walkinglabs/learn-harness-engineering/tree/main/skills/harness-creator) | agent-skill | `catalogued` | `harness-methodology` |
-| `penpot` | [Penpot](https://github.com/penpot/penpot) | design-platform | `catalogued` | `design-reference` |
-| `helixdb` | [HelixDB](https://github.com/HelixDB/helix-db) | database-and-cli | `catalogued` | `session-memory` |
-| `agent-reach` | [Agent Reach](https://github.com/Panniantong/agent-reach) | capability-installer | `catalogued` | `research-freshness` |
-| `agent-browser` | [agent-browser](https://github.com/vercel-labs/agent-browser) | browser-automation-cli | `catalogued` | `browser-automation` |
-| `gsd-core` | [GSD Core](https://github.com/gsd-build/get-shit-done) | context-and-phase-framework | `catalogued` | `harness-methodology` |
-| `anthropic-mcp-builder` | [mcp-builder skill](https://github.com/anthropics/skills/tree/main/skills/mcp-builder) | agent-skill | `catalogued` | `mcp-building` |
-| `vercel-find-skills` | [find-skills skill](https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md) | agent-skill | `catalogued` | `external-discovery` |
-| `ecc` | [ECC](https://github.com/affaan-m/ECC) | agent-harness-ecosystem | `catalogued` | `harness-methodology` |
-| `strix` | [Strix](https://github.com/usestrix/strix) | security-testing-tool | `catalogued` | `security-testing` |
-| `stop-slop` | [Stop Slop](https://github.com/hardikpandya/stop-slop) | agent-skill | `optional` | `writing-quality` |
-| `task-observer` | [Task Observer](https://github.com/rebelytics/one-skill-to-rule-them-all) | meta-skill | `conditional` | `skill-learning` |
-| `taste-skill` | [Taste Skill](https://github.com/Leonxlnx/taste-skill) | agent-skill-suite | `optional` | `design-director` |
-| `open-design` | [Open Design](https://github.com/nexu-io/open-design) | design-platform-and-skill-suite | `optional` | `design-director` |
-| `emil-kowalski-skill` | [Emil Kowalski Design Skills](https://github.com/emilkowalski/skills) | agent-skill-suite | `optional` | `motion` |
-| `impeccable` | [Impeccable](https://github.com/pbakaus/impeccable) | agent-skill-and-cli | `optional` | `design-director` |
-| `superpowers` | [Superpowers](https://github.com/obra/superpowers) | agent-methodology-plugin | `optional` | `harness-methodology` |
-| `claude-mem` | [Claude Mem](https://github.com/thedotmack/claude-mem) | memory-plugin | `conditional` | `session-memory` |
-| `graphify` | [Graphify](https://github.com/Graphify-Labs/graphify) | code-knowledge-skill-and-cli | `conditional` | `code-knowledge` |
-| `gstack` | [gstack](https://github.com/garrytan/gstack) | agent-role-skill-suite | `optional` | `harness-methodology` |
-| `everything-claude-code` | [Everything Claude Code / ECC](https://github.com/affaan-m/everything-claude-code) | harness-ecosystem | `optional` | `harness-methodology` |
-| `context7` | [Context7](https://github.com/upstash/context7) | documentation-mcp | `optional` | `research-freshness` |
-| `last30days` | [Last30Days](https://github.com/mvanhorn/last30days-skill) | research-skill | `optional` | `research-freshness` |
-| `skill-ui` | Skill UI *(source unresolved)* | legacy-capability-reference | `preserved-unresolved` | `external-discovery` |
-| `claude-code-review` | [Claude Code Review](https://code.claude.com/docs/en/code-review) | managed-code-review-service | `optional` | `code-review` |
-| `ponytail` | [Ponytail](https://github.com/DietrichGebert/ponytail) | minimal-code-skill-and-plugin | `optional` | `engineering-minimalism` |
-| `mobbin` | [Mobbin](https://mobbin.com) | commercial-design-reference | `reference-only` | `design-reference` |
-| `refero` | [Refero](https://refero.design) | design-reference | `reference-only` | `design-reference` |
-| `recent-designs` | [Recent](https://recent.design) | design-reference | `reference-only` | `design-reference` |
-| `21st-dev` | [21st.dev](https://21st.dev) | component-reference-and-service | `optional` | `component-source` |
-| `shadcn-ui` | [shadcn/ui](https://github.com/shadcn-ui/ui) | component-system | `optional` | `component-source` |
-| `gsap` | [GSAP](https://github.com/greensock/GSAP) | motion-library | `optional` | `motion` |
-| `headroom-js` | [Headroom.js](https://github.com/WickyNilliams/headroom.js) | interaction-library | `optional` | `motion` |
-| `playwright` | [Playwright](https://github.com/microsoft/playwright) | browser-testing-framework | `preferred-when-existing` | `browser-automation` |
-| `karpathy-guidelines` | [Andrej Karpathy Coding Guidelines](https://github.com/forrestchang/andrej-karpathy-skills) | behavioural-skill | `preferred-policy` | `engineering-behaviour` |
-| `ui-ux-pro-max` | [UI/UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | design-intelligence-skill-and-cli | `optional-preferred-design-research` | `design-authority` |
-| `frontend-design` | [Anthropic Frontend Design](https://github.com/openclaw/skills/tree/main/skills/qrucio/anthropic-frontend-design) | frontend-implementation-skill | `optional` | `design-authority` |
-| `playwright-mcp` | [Playwright MCP](https://github.com/microsoft/playwright-mcp) | browser-automation-mcp | `optional` | `browser-verification` |
-| `stagehand` | [Stagehand](https://github.com/browserbase/stagehand) | ai-browser-automation-framework | `optional` | `browser-verification` |
-| `cypress` | [Cypress](https://github.com/cypress-io/cypress) | browser-testing-framework | `preferred-when-existing` | `browser-verification` |
-| `puppeteer-mcp` | [Puppeteer MCP Server](https://github.com/modelcontextprotocol/servers-archived) | legacy-browser-mcp | `discouraged-legacy` | `browser-verification` |
-
-</details>
-
-Before activation:
+### Program registry
 
 ```text
-Capability gap
-→ Search registry
-→ Check native fallback
-→ Check strongest phase
-→ Resolve overlap
-→ Verify source and licence
-→ Inspect hooks, network, permissions and credentials
-→ Request approval
-→ Pin version or commit
-→ Record attribution
-→ Validate
+python scripts/program_modules.py set-program --name "<name>"
+python scripts/program_modules.py add-shared --path <path>
+python scripts/program_modules.py add-module --id <id> --name "<name>"
+python scripts/program_modules.py set-status --id <id> --status <status>
+python scripts/program_modules.py list
 ```
-
-See [Reference Catalogue](docs/REFERENCE_CATALOG.md).
 
 ---
 
-# Validation
+## Current validation
 
-The current repository has been validated through routing evaluations, unit
-tests, runtime and repository doctors, security checks, native-skill
-synchronisation, and a fresh-install lifecycle test.
+The current status is recorded in [`manifest.json`](manifest.json), exercised by
+the [Validate Escapement workflow](.github/workflows/validate-standard.yml), and
+summarised in [`SESSION_HANDOFF.md`](SESSION_HANDOFF.md).
 
 ```text
-Routing evaluations:      22 / 22 PASS
-Unit tests:               61 / 61 PASS
-Runtime doctor:            0 failures
-Repository doctor:         0 failures, 0 warnings
-Security gate:             0 findings
-Native skill sync:        35 / 35 PASS
-Fresh-install self-test:  PASS
+Routing evaluations:       22 / 22 PASS
+Unit tests:                 61 / 61 PASS
+Runtime doctor:              0 failures
+Repository doctor:           0 failures, 0 warnings
+Security gate:               0 findings
+Fresh-install self-test:    PASS
+Python CI matrix:           3.10, 3.12, 3.13
+Native skills:              35
+Published case studies:      3
 ```
 
-Run locally:
+Run the same checks locally:
 
 ```bash
+python -m py_compile scripts/*.py
+python scripts/agent_runtime.py doctor
+python scripts/escapement.py doctor --root .
 python scripts/eval_harness.py run
 python -m unittest discover -s tests -p "test_*.py"
-python scripts/agent_runtime.py doctor
-python scripts/escapement.py self-test
 python scripts/security_gate.py --fail-on high
+python scripts/escapement.py self-test
 ```
-
-These checks prove the framework's own code is healthy. For what the
-governed lifecycle catches on an actual feature that a fast, ungoverned
-implementation does not, see
-[Case Study: Vanilla vs. Governed Implementation](reports/CASE_STUDY_vanilla_vs_governed.md).
-For what it catches on a full `PROGRAM`-tier build with genuine parallel
-subagent work, see
-[Case Study: A Full PROGRAM-Tier Build](reports/CASE_STUDY_claims_platform_program_build.md).
-For what a real build surfaced about the framework's *own* gaps -- and the
-four fixes that came from it -- see
-[Case Study: A GST-Shaped Reconciliation Build](reports/CASE_STUDY_invoice_reconciliation_program_build.md).
 
 ---
 
-# Project structure
+## Honest boundaries
+
+Escapement currently has several host or infrastructure boundaries:
+
+- execution of external capabilities depends on the host;
+- live network research depends on available tools and permissions;
+- real parallel-agent dispatch depends on the host;
+- production deployment still requires real infrastructure and human approval;
+- local evidence is not equivalent to independently controlled execution;
+- strict per-skill evidence mapping remains a future hardening opportunity;
+- one catalogued legacy capability, `skill-ui`, still has an unresolved exact
+  source.
+
+These boundaries are stated rather than hidden behind a completion claim.
+
+---
+
+## Project structure
 
 ```text
 .
 ├── AGENTS.md
+├── AGENT_RUNTIME.md
 ├── CLAUDE.md
 ├── PROJECT_STATE.yaml
 ├── PROJECT_CONTEXT.md
 ├── DOMAIN_CONTEXT.md
 ├── SESSION_HANDOFF.md
+├── manifest.json
 │
+├── .claude/
+├── .codex/
+├── .agents/
+├── .escapement/
+├── .github/workflows/
+│
+├── skills/
 ├── profiles/
 ├── docs/
+│   ├── architecture/
 │   ├── doctrine/
 │   ├── standards/
-│   │   ├── design-intelligence.md
-│   │   └── reporting-intelligence.md
-│   ├── architecture/
+│   ├── templates/
 │   ├── specs/
 │   └── decisions/
 │
-├── skills/
-├── .agents/skills/
-├── .claude/skills/
-│
 ├── catalog/
-│   ├── native-skills.json
-│   ├── doctrine-packs.json
-│   ├── skill-strengths.json
-│   ├── capability-families.json
-│   ├── design-stack.json
-│   ├── strategy-adapters.json
-│   ├── phase-capabilities.json
-│   ├── capability-registry.json
-│   ├── overlap-matrix.json
-│   └── overlap-groups.json
-│
+├── schemas/
 ├── scripts/
-│   ├── capability_router.py
-│   ├── capability_audit.py
-│   ├── agent_runtime.py
-│   ├── program_modules.py
-│   ├── escapement.py
-│   ├── run_check.py
-│   └── eval_harness.py
 ├── tests/
-└── docs/PROGRAM_MODULES.json      (project-owned, generated on first use)
+├── evals/
+├── reports/
+├── extensions/
+├── presets/
+└── bundles/
 ```
 
 ---
 
-# Licence
+## Contributing
 
-Escapement is source-available.
+Contributions should strengthen the smallest correct layer rather than expand
+the always-loaded core without evidence.
 
-External capabilities retain their own licences. A registry entry does not
-install a project or grant permission to copy it.
+Before proposing a change:
+
+1. show a repeated failure or measurable need;
+2. identify the smallest correct layer;
+3. add or update an executable test or evaluation;
+4. preserve project-owned state and safe update boundaries;
+5. update relevant documentation and release notes;
+6. run the self-test and security gate.
+
+```bash
+python scripts/escapement.py self-test
+python scripts/escapement.py security --fail-on high
+```
+
+Useful contribution areas include:
+
+- new regression cases from real projects;
+- integrations and host adapters;
+- routing evaluations;
+- domain and reporting skills;
+- security and evidence hardening;
+- additional case studies;
+- documentation and installation improvements.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+## Licence
+
+Escapement is source-available for evaluation, learning, non-commercial
+experimentation, and attributed internal use.
+
+Commercial redistribution, resale, white-labelling, hosted resale, and
+substantial republication require written permission.
+
+Third-party capabilities retain their own licences. A registry entry does not
+grant permission to copy or deploy the referenced project.
 
 See:
 
 - [LICENSE.md](LICENSE.md)
 - [NOTICE.md](NOTICE.md)
 - [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+- [Reference Catalogue](docs/REFERENCE_CATALOG.md)
 
 ---
 
 <div align="center">
 
-**Low automatic context. Deep capability. Explicit overlap. Verified delivery.**
+**Ask better questions. Route the right expertise. Verify the result. Preserve the truth.**
 
 </div>
