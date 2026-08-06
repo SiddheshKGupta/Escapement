@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
-from security_gate import SECRET_PATTERNS  # noqa: E402
+from security_gate import SECRET_PATTERNS, is_candidate  # noqa: E402
 
 GENERIC_SECRET_PATTERN = next(p for name, _, p in SECRET_PATTERNS if name == "generic-secret-assignment")
 
@@ -45,6 +45,24 @@ class GenericSecretPatternTest(unittest.TestCase):
         for line in cases:
             with self.subTest(line=line):
                 self.assertIsNone(GENERIC_SECRET_PATTERN.search(line), f"false positive: {line}")
+
+
+class BackupExclusionTest(unittest.TestCase):
+    """Found via real-world use: update/repair --force-managed back up the
+    previous file under .escapement/backups/<timestamp>/ before overwriting.
+    security_gate.py contains its own detection regexes as literal string
+    content, so a backup copy of security_gate.py always matched its own
+    powershell-download-exec pattern -- a deterministic false positive on
+    every backup of this file, in every project that has ever run update or
+    repair."""
+
+    def test_backup_paths_are_excluded_from_scanning(self) -> None:
+        path = Path(".escapement/backups/20260806T055347Z/scripts/security_gate.py")
+        self.assertFalse(is_candidate(path))
+
+    def test_ordinary_paths_are_still_scanned(self) -> None:
+        path = Path("src/auth.py")
+        self.assertTrue(is_candidate(path))
 
 
 if __name__ == "__main__":

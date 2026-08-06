@@ -19,6 +19,13 @@ TEXT_SUFFIXES = {
 IGNORED_PARTS = {
     ".git", "node_modules", ".venv", "venv", "dist", "build", ".agent",
     "__pycache__", ".pytest_cache",
+    # update/repair --force-managed back up the previous file under
+    # .escapement/backups/<timestamp>/ before overwriting it. security_gate.py
+    # itself contains its own detection regexes as literal string content, so
+    # a backup copy of security_gate.py matches its own patterns (e.g.
+    # powershell-download-exec) -- a deterministic false positive on every
+    # backup of this file, in every project that has ever run update/repair.
+    "backups",
 }
 
 SECRET_PATTERNS = [
