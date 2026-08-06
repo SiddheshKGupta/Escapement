@@ -4,7 +4,7 @@
 - Status: Capability Strength Orchestration validated
 - Kernel: `770 / 1000` words
 - Automatic context: tested below `1,800` words
-- Invoked skill context: tested below `1,200` words
+- Invoked skill context: tested below `1,000` words
 - Doctrine packs: `11`
 - Native skills: `35`
 - Capability strengths: `58`
@@ -14,7 +14,7 @@
 - Capability families: `10`
 - Overlap groups: `12`
 - Routing evaluations: `22 / 22 PASS`
-- Unit tests: `72 / 72 PASS`
+- Unit tests: `75 / 75 PASS`
 - Runtime doctor: `0 failures`
 - Repository doctor: `0 failures, 0 warnings`
 - Security findings: `0`
