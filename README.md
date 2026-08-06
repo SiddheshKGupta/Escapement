@@ -161,7 +161,9 @@ Skill and capability readiness audit
 The user does not need to become a prompt engineer.
 
 The agent inspects and researches before asking for information that can be
-discovered safely.
+discovered safely. Showing the skill/capability readiness audit before
+implementing is a required step, not an optional courtesy -- a mechanism
+nobody is told to use is the same as not having it.
 
 ---
 
@@ -215,6 +217,29 @@ Only the ten cataloged phases can be added or removed -- this revises
 sequence, not invents new phases. A phase already completed with recorded
 evidence, or the current phase, cannot be removed. Every revision requires a
 reason and is permanently recorded on the turn and in `turns.jsonl`.
+
+## Multi-module PROGRAMs
+
+A turn's phase plan covers one piece of work. A `PROGRAM` with several
+modules (billing, CRM core, admin portal) runs each module through its own
+`DISCOVER` → `RELEASE` cycle across many turns -- `program_modules.py` is
+the durable registry that tracks the modules exist and whether they agree
+on the artifacts they share (schema, `DESIGN.md`, `DOMAIN_CONTEXT.md`):
+
+```bash
+python scripts/program_modules.py set-program --name "CRM Platform"
+python scripts/program_modules.py add-shared --path DESIGN.md
+python scripts/program_modules.py add-module --id billing --name "Billing"
+python scripts/program_modules.py add-module --id portal --name "Customer Portal" \
+  --depends-on billing
+python scripts/program_modules.py set-status --id billing --status plan \
+  --checked-shared DESIGN.md
+```
+
+A module cannot move past `SPECIFY` until it has checked every registered
+shared artifact, and not while a declared dependency isn't `done`. State
+lives in `docs/PROGRAM_MODULES.json`, project-owned, untouched by
+`update`/`repair`.
 
 ---
 
@@ -301,6 +326,17 @@ Specialists have distinct responsibilities:
 No specialist may silently override `DESIGN.md` or the design constitution.
 
 See [Design Stack](catalog/design-stack.json).
+
+## Reporting and KPI standard
+
+Design Intelligence governs what a dashboard or KPI tile *looks like*.
+[`docs/standards/reporting-intelligence.md`](docs/standards/reporting-intelligence.md),
+read by the `reporting-standard` skill, governs whether its numbers are
+*correct*: the ten-point KPI-breakdown completeness check, the three-layer
+reporting model (Management Summary → Analytical Breakdown → Record-Level
+Evidence), and locale-correct currency/number formatting -- symbol, digit
+grouping and unit-scale convention matching the business locale confirmed
+in `DOMAIN_CONTEXT.md`, applied uniformly across every surface.
 
 ---
 
@@ -452,6 +488,7 @@ Native agent copies:
 | [`legal-compliance-analysis`](skills/legal-compliance-analysis/SKILL.md) | RESEARCH, SPECIFY, VERIFY | CONSULTING, DUAL, ARTIFACT |
 | [`investment-analysis`](skills/investment-analysis/SKILL.md) | RESEARCH, BRAINSTORM, SPECIFY, VERIFY | CONSULTING, DUAL, ARTIFACT |
 | [`software-implementation`](skills/software-implementation/SKILL.md) | IMPLEMENT | ENGINEERING, DUAL |
+| [`reporting-standard`](skills/reporting-standard/SKILL.md) | SPECIFY | ENGINEERING, DUAL, CONSULTING |
 
 Synchronise:
 
@@ -814,7 +851,8 @@ four fixes that came from it -- see
 ├── docs/
 │   ├── doctrine/
 │   ├── standards/
-│   │   └── design-intelligence.md
+│   │   ├── design-intelligence.md
+│   │   └── reporting-intelligence.md
 │   ├── architecture/
 │   ├── specs/
 │   └── decisions/
@@ -839,10 +877,12 @@ four fixes that came from it -- see
 │   ├── capability_router.py
 │   ├── capability_audit.py
 │   ├── agent_runtime.py
+│   ├── program_modules.py
 │   ├── escapement.py
 │   ├── run_check.py
 │   └── eval_harness.py
-└── tests/
+├── tests/
+└── docs/PROGRAM_MODULES.json      (project-owned, generated on first use)
 ```
 
 ---
