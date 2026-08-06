@@ -779,7 +779,7 @@ def select_skills(
             ranked.append({**item, "score": score, "matched": matched})
 
     phase_defaults = {
-        "DISCOVER": ["decision-coach", "project-discovery"],
+        "DISCOVER": ["decision-coach", "project-discovery", "lifecycle-planning"],
         "RESEARCH": ["domain-research", "reference-router"],
         "BRAINSTORM": ["solution-brainstorming"],
         "SPECIFY": (

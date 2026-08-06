@@ -10,7 +10,7 @@ capabilities, agents and external tools at the phase where each is strongest.
 
 [![Version](https://img.shields.io/badge/version-6.3.0-53284F?style=flat-square)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![Kernel](https://img.shields.io/badge/kernel-651%20words-2F855A?style=flat-square)](AGENTS.md)
+[![Kernel](https://img.shields.io/badge/kernel-673%20words-2F855A?style=flat-square)](AGENTS.md)
 [![Evals](https://img.shields.io/badge/routing%20evals-22%2F22-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
 [![Tests](https://img.shields.io/badge/unit%20tests-41%2F41-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
 [![Security](https://img.shields.io/badge/security-0%20findings-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
@@ -128,10 +128,10 @@ flowchart LR
 ## Current inventory
 
 ```text
-Kernel words:          651
+Kernel words:          673
 Profiles:                2
 Doctrine packs:         11
-Native skills:          32
+Native skills:          33
 Capability strengths:   58
 Agent patterns:         21
 External resources:     54
@@ -193,13 +193,36 @@ python scripts/agent_runtime.py advance-phase \
 
 Each transition unloads the previous phase context before loading the next.
 
+## Revising the phase plan
+
+`phase_plan` is a default, decided once at turn start by matching keywords
+in the prompt -- it has no way to see what `DISCOVER`'s own repository
+inspection actually turns up. `lifecycle-planning`, routed alongside
+`decision-coach` and `project-discovery` at every `DISCOVER` phase, checks
+whether the default plan still fits once real inspection has happened, and
+revises it when it does not:
+
+```bash
+python scripts/agent_runtime.py replan-phases \
+  --add-phase VERIFY \
+  --reason "Touches stored credentials; the prompt never said 'security'."
+python scripts/agent_runtime.py replan-phases \
+  --remove-phase POLISH \
+  --reason "Backend-only change, no user-facing surface."
+```
+
+Only the ten cataloged phases can be added or removed -- this revises
+sequence, not invents new phases. A phase already completed with recorded
+evidence, or the current phase, cannot be removed. Every revision requires a
+reason and is permanently recorded on the turn and in `turns.jsonl`.
+
 ---
 
 # Low-token contract
 
 ```text
 Always-loaded kernel:          <= 700 words
-Actual kernel:                 651 words
+Actual kernel:                 673 words
 Automatic phase context:       <= 1,800 words
 Invoked native skill context:  <= 1,200 words
 Normal doctrine packs:         <= 3 per phase
@@ -412,6 +435,7 @@ Native agent copies:
 | [`reference-router`](skills/reference-router/SKILL.md) | DISCOVER, RESEARCH, BRAINSTORM, PLAN | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
 | [`skill-governance`](skills/skill-governance/SKILL.md) | DISCOVER, RESEARCH, PLAN, VERIFY | ENGINEERING, DUAL |
 | [`decision-coach`](skills/decision-coach/SKILL.md) | DISCOVER | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
+| [`lifecycle-planning`](skills/lifecycle-planning/SKILL.md) | DISCOVER | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
 | [`domain-research`](skills/domain-research/SKILL.md) | RESEARCH | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
 | [`solution-brainstorming`](skills/solution-brainstorming/SKILL.md) | BRAINSTORM | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
 | [`delivery-planning`](skills/delivery-planning/SKILL.md) | PLAN | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
@@ -747,7 +771,7 @@ Unit tests:               41 / 41 PASS
 Runtime doctor:            0 failures
 Repository doctor:         0 failures, 0 warnings
 Security gate:             0 findings
-Native skill sync:        32 / 32 PASS
+Native skill sync:        33 / 33 PASS
 Fresh-install self-test:  PASS
 ```
 
