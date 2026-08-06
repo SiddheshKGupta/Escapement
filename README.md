@@ -14,7 +14,7 @@ preserves project decisions and handoffs across sessions.
 [![Kernel](https://img.shields.io/badge/kernel-698%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
 [![Unit tests](https://img.shields.io/badge/unit%20tests-61%20passing-2F855A?style=flat-square)](manifest.json)
-[![Case studies](https://img.shields.io/badge/published%20case%20studies-3-2F855A?style=flat-square)](#proof-from-real-use)
+[![Case studies](https://img.shields.io/badge/published%20case%20studies-4-2F855A?style=flat-square)](#proof-from-real-use)
 [![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
 
 **Escapement does not upgrade the model. It upgrades how the model works.**
@@ -124,11 +124,12 @@ Escapement is not:
 Escapement is repeatedly exercised through real repository builds, adversarial
 scenarios, regression tests, and end-to-end delivery flows.
 
-Three detailed case studies are published:
+Four detailed case studies are published:
 
 1. [Vanilla vs. Governed Implementation](reports/CASE_STUDY_vanilla_vs_governed.md)
 2. [Full PROGRAM-Tier Claims Platform Build](reports/CASE_STUDY_claims_platform_program_build.md)
 3. [Invoice Reconciliation PROGRAM Build](reports/CASE_STUDY_invoice_reconciliation_program_build.md)
+4. [Four-Module CRM PROGRAM Build](reports/CASE_STUDY_crm_platform_multi_module_program.md)
 
 Together, they document failures caught in implementation, integration, security
 evidence, design routing, capability visibility, reporting, and release
@@ -374,6 +375,13 @@ The `data-architecture` skill requires the agent to:
 This prevents a database, schema, and API from being designed independently and
 then forcing one another to be rebuilt.
 
+Common fields have a sane baseline shape even when nothing project-specific
+overrides it -- name, phone, email, money, and date each have a stated
+default (letters-only names, country-code-qualified phone numbers, real
+email shape, non-negative amounts, real calendar dates), enforced
+server-side. Absence of a stated domain rule is not permission to accept
+anything.
+
 ---
 
 ## Multi-module PROGRAMs
@@ -451,7 +459,7 @@ flowchart LR
 
 ```text
 Version:                 6.3.0
-Repository files:        231
+Repository files:        253
 Kernel:                  698 / 1000 words
 Profiles:                  2
 Doctrine packs:           11
@@ -462,7 +470,7 @@ External resources:       54
 Strategy adapters:        10
 Capability families:      10
 Overlap groups:           12
-Published case studies:    3
+Published case studies:    4
 ```
 
 ### Low-token contract
@@ -901,6 +909,18 @@ python scripts/program_modules.py set-status --id <id> --status <status>
 python scripts/program_modules.py list
 ```
 
+### UI quality
+
+```text
+python scripts/ui_quality_gate.py <frontend-src-dir>
+python scripts/ui_quality_gate.py <frontend-src-dir> --fail-on-warn
+```
+
+Scans for responsive breakpoints, motion transitions,
+`prefers-reduced-motion`, `:focus-visible`, and loading/error-state
+handling -- concrete signals, not a substitute for looking at the
+interface.
+
 ---
 
 ## Current validation
@@ -918,7 +938,7 @@ Security gate:               0 findings
 Fresh-install self-test:    PASS
 Python CI matrix:           3.10, 3.12, 3.13
 Native skills:              35
-Published case studies:      3
+Published case studies:      4
 ```
 
 Run the same checks locally:
