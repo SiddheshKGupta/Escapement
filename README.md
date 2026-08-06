@@ -790,6 +790,9 @@ These checks prove the framework's own code is healthy. For what the
 governed lifecycle catches on an actual feature that a fast, ungoverned
 implementation does not, see
 [Case Study: Vanilla vs. Governed Implementation](reports/CASE_STUDY_vanilla_vs_governed.md).
+For what it catches on a full `PROGRAM`-tier build with genuine parallel
+subagent work, see
+[Case Study: A Full PROGRAM-Tier Build](reports/CASE_STUDY_claims_platform_program_build.md).
 
 ---
 
