@@ -100,7 +100,8 @@
         "project-discovery",
         "consulting-analysis",
         "workflow",
-        "engineering-review"
+        "engineering-review",
+        "data-architecture"
       ],
       "external_candidates": [
         "github-spec-kit"

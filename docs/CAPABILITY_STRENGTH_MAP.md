@@ -17,7 +17,7 @@ phase.
 ## Counts
 
 ```text
-Native skills:          33
+Native skills:          34
 Capability strengths:   58
 Capability families:    10
 Strategy adapters:      10

@@ -33,8 +33,8 @@ For every MATERIAL or PROGRAM request:
 1. identify the actual decision and desired outcome;
 2. inspect the repository and available evidence;
 3. identify only the unknowns that can materially change the solution;
-4. ask no more than five high-impact questions;
-5. recommend a sensible default for each question;
+4. ask no more than five high-impact questions and wait for real answers when a user is present;
+5. use recommended defaults only for unattended runs;
 6. explain the consequence of choosing differently;
 7. improve the execution brief without requiring the user to write a perfect prompt;
 8. stop questioning when safe planning can begin.
