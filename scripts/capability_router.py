@@ -770,6 +770,7 @@ def select_skills(
     limit: int,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     items = load_json("catalog/native-skills.json")["skills"]
+    by_id_all = {item["id"]: item for item in items}
     ranked = []
     for item in items:
         if not eligible(item, tier, register, phase):
@@ -777,6 +778,32 @@ def select_skills(
         score, matched = trigger_score(item.get("triggers", []), prompt)
         if score:
             ranked.append({**item, "score": score, "matched": matched})
+
+    # design-system and enterprise-ui-review/frontend-implementation declare
+    # each other in "paired_with", but that field is documentation only --
+    # nothing enforced it. A prompt using generic UI vocabulary ("frontend",
+    # "React", "page", "component") without any design-specific word ("design",
+    # "brand", "colour") triggered UI implementation skills with no design
+    # decision ever surfaced to the user. design_system is only eligible at
+    # BRAINSTORM/SPECIFY (before implementation exists to review), so the fix
+    # has to run there, checking the same prompt UI-implementation skills will
+    # later match on, not design_system's own (deliberately narrower) triggers.
+    if phase in ("BRAINSTORM", "SPECIFY") and not any(item["id"] == "design-system" for item in ranked):
+        ui_impl_triggers = set()
+        for ui_skill_id in ("enterprise-ui-review", "frontend-implementation"):
+            ui_skill = by_id_all.get(ui_skill_id)
+            if ui_skill:
+                ui_impl_triggers.update(ui_skill.get("triggers", []))
+        _, ui_matched = trigger_score(sorted(ui_impl_triggers), prompt)
+        if ui_matched:
+            design_system_item = by_id_all.get("design-system")
+            if design_system_item and eligible(design_system_item, tier, register, phase):
+                ranked.append({
+                    **design_system_item,
+                    "score": 1,
+                    "priority": 999,  # must survive the skill-budget cut, not merely compete for it
+                    "matched": ["ui-implementation-requires-design-system"],
+                })
 
     phase_defaults = {
         "DISCOVER": ["decision-coach", "project-discovery", "lifecycle-planning"],
