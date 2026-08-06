@@ -13,7 +13,7 @@ preserves project decisions and handoffs across sessions.
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square&logo=python&logoColor=white)](.github/workflows/validate-standard.yml)
 [![Kernel](https://img.shields.io/badge/kernel-770%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
-[![Unit tests](https://img.shields.io/badge/unit%20tests-75%20passing-2F855A?style=flat-square)](manifest.json)
+[![Unit tests](https://img.shields.io/badge/unit%20tests-82%20passing-2F855A?style=flat-square)](manifest.json)
 [![Case studies](https://img.shields.io/badge/published%20case%20studies-4-2F855A?style=flat-square)](#proof-from-real-use)
 [![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
 
@@ -466,7 +466,7 @@ flowchart LR
 
 ```text
 Version:                 6.3.0
-Repository files:        255
+Repository files:        258
 Kernel:                  770 / 1000 words
 Profiles:                  2
 Doctrine packs:           11
@@ -767,6 +767,18 @@ Local content-addressed evidence raises the cost of accidental or casual
 fabrication. It is not a substitute for independently controlled CI or a
 sandbox when stronger assurance is required.
 
+Every closed turn already writes to `.agent/runtime/turns.jsonl` and
+`logs/skill-usage.jsonl` -- nothing read them back as a trend until asked:
+
+```bash
+python scripts/escapement.py observability --root <target>
+```
+
+Reports closure-result distribution, phase-replan frequency, skills routed
+but never used, and why packs/skills got rejected (overlap, phase limit,
+context budget). An empty report means turns aren't being closed, not
+that the harness is healthy.
+
 ---
 
 ## Security and approval gates
@@ -888,6 +900,7 @@ python scripts/escapement.py capability-audit "<prompt>" --markdown
 python scripts/escapement.py sync-skills
 python scripts/escapement.py eval
 python scripts/escapement.py security --fail-on high
+python scripts/escapement.py observability --root <target>
 python scripts/escapement.py view
 python scripts/escapement.py component list
 python scripts/escapement.py catalog search "<query>"
@@ -938,7 +951,7 @@ summarised in [`SESSION_HANDOFF.md`](SESSION_HANDOFF.md).
 
 ```text
 Routing evaluations:       22 / 22 PASS
-Unit tests:                 75 / 75 PASS
+Unit tests:                 82 / 82 PASS
 Runtime doctor:              0 failures
 Repository doctor:           0 failures, 0 warnings
 Security gate:               0 findings

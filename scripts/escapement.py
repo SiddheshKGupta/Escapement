@@ -458,6 +458,18 @@ def command_security(args: argparse.Namespace) -> int:
     return subprocess.run(command, cwd=SOURCE_ROOT, check=False).returncode
 
 
+def command_observability(args: argparse.Namespace) -> int:
+    command = [
+        sys.executable,
+        str(SOURCE_ROOT / "scripts" / "harness_observability.py"),
+        "--root",
+        args.root,
+    ]
+    if args.json:
+        command.append("--json")
+    return subprocess.run(command, check=False).returncode
+
+
 def command_view(args: argparse.Namespace) -> int:
     command = [sys.executable, str(SOURCE_ROOT / "scripts" / "local_viewer.py")]
     if args.no_open:
@@ -874,6 +886,11 @@ def build_parser() -> argparse.ArgumentParser:
     doctor = sub.add_parser("doctor")
     doctor.add_argument("--root", default=".")
     doctor.set_defaults(func=command_doctor)
+
+    observability = sub.add_parser("observability")
+    observability.add_argument("--root", default=".")
+    observability.add_argument("--json", action="store_true")
+    observability.set_defaults(func=command_observability)
 
     sync = sub.add_parser("sync-skills")
     sync.add_argument("--check", action="store_true")

@@ -101,3 +101,20 @@ python scripts/agent_runtime.py reset-turn --reason "Reason"
 ```
 
 The Stop gate blocks at most once and cannot create an infinite loop.
+
+## Harness observability
+
+`close-turn` already writes to `.agent/runtime/turns.jsonl` and
+`logs/skill-usage.jsonl` on every closure -- nothing reads them back as a
+trend until asked:
+
+```bash
+python scripts/escapement.py observability --root .
+```
+
+Reports closed-turn counts, tier/closure-result distribution, phase-replan
+frequency and reasons, skills routed but never marked used, and why
+packs/skills got rejected (overlap, phase-skill-limit, context budget --
+the same signal that would have flagged a bloating skill file the day it
+happened). An empty report means turns aren't being closed, not that the
+harness is healthy -- `close-turn` is what populates this.
