@@ -55,6 +55,37 @@ Only the ten cataloged phases can be added or removed. The current phase and
 any phase already completed with recorded evidence cannot be removed. Every
 revision requires a reason and is permanently recorded on the turn.
 
+## Multi-module PROGRAMs
+
+A turn's phase plan covers one piece of work. A PROGRAM with several
+modules (e.g. billing, CRM core, admin portal) runs each module through
+its own `DISCOVER` -> `RELEASE` cycle across many turns -- nothing else
+tracks that the modules exist, or that they agree on the artifacts they
+share (schema, `DESIGN.md`, `DOMAIN_CONTEXT.md`).
+
+```bash
+python scripts/program_modules.py set-program --name "CRM Platform"
+python scripts/program_modules.py add-shared --path docs/specs/SCHEMA.md
+python scripts/program_modules.py add-shared --path DESIGN.md
+python scripts/program_modules.py add-module --id billing --name "Billing"
+python scripts/program_modules.py add-module --id portal --name "Customer Portal" \
+  --depends-on billing
+python scripts/program_modules.py list
+```
+
+A module cannot move past `SPECIFY` (`--status plan`/`implement`/`verify`/
+`polish`/`release`/`done`) until it has checked every registered shared
+artifact:
+
+```bash
+python scripts/program_modules.py set-status --id billing --status plan \
+  --checked-shared docs/specs/SCHEMA.md,DESIGN.md
+```
+
+A module also cannot pass that gate while a declared dependency isn't
+`done`. State lives in `docs/PROGRAM_MODULES.json`, owned by the project,
+not overwritten by `update`/`repair`.
+
 ## Manual start
 
 ```bash
