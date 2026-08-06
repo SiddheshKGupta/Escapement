@@ -793,6 +793,9 @@ implementation does not, see
 For what it catches on a full `PROGRAM`-tier build with genuine parallel
 subagent work, see
 [Case Study: A Full PROGRAM-Tier Build](reports/CASE_STUDY_claims_platform_program_build.md).
+For what a real build surfaced about the framework's *own* gaps -- and the
+four fixes that came from it -- see
+[Case Study: A GST-Shaped Reconciliation Build](reports/CASE_STUDY_invoice_reconciliation_program_build.md).
 
 ---
 
