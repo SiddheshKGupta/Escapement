@@ -41,6 +41,7 @@ ROOT_FILES = [
     "SECURITY.md",
     "VERSION",
     ".claude/settings.json",
+    ".github/copilot-instructions.md",
 ]
 
 MANAGED_PREFIXES = [
@@ -698,6 +699,7 @@ def command_doctor(args: argparse.Namespace) -> int:
         "DOMAIN_CONTEXT.md",
         ".codex/hooks.json",
         ".claude/settings.json",
+        ".github/copilot-instructions.md",
         "scripts/agent_runtime.py",
         "scripts/run_check.py",
         "scripts/feature_list.py",

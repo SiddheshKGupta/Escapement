@@ -6,7 +6,7 @@
   "features": [
     {
       "id": "ESC-630-01",
-      "behavior": "The 698-word kernel improves rough requests through high-impact questions, recommended defaults, an improved execution prompt, and a mandatory capability-readiness audit before implementing.",
+      "behavior": "The 770-word kernel improves rough requests through high-impact questions, recommended defaults, an improved execution prompt, and a mandatory capability-readiness audit before implementing.",
       "verification": "python -m unittest tests.v6_3.test_runtime tests.v6_3.test_domain_capabilities",
       "state": "passing",
       "required": true,
