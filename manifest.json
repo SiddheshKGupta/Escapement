@@ -6,7 +6,7 @@
   "validated_on": "2026-08-05",
   "validation": {
     "routing_evaluations": "PASS \u2014 22/22",
-    "unit_tests": "PASS \u2014 61/61",
+    "unit_tests": "PASS \u2014 72/72",
     "runtime_doctor": "PASS \u2014 0 failures",
     "repository_doctor": "PASS \u2014 0 failures, 0 warnings",
     "security_gate": "PASS \u2014 0 findings",
@@ -14,11 +14,11 @@
     "real_project_lifecycle": "PASS \u2014 fresh install through RELEASE and truthful PARTIAL closure"
   },
   "counts": {
-    "kernel_words": 698,
+    "kernel_words": 770,
     "native_skills": 35,
     "capability_strengths": 58,
     "external_resources": 54,
-    "files": 253
+    "files": 255
   },
   "traceability_report": "reports/ORIGINAL_INTENT_TRACEABILITY.md",
   "remaining_boundaries": [

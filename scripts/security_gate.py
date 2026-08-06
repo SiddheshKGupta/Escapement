@@ -32,7 +32,14 @@ SECRET_PATTERNS = [
     ("private-key", "critical", re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")),
     ("aws-access-key", "high", re.compile(r"\bAKIA[0-9A-Z]{16}\b")),
     ("github-token", "high", re.compile(r"\bgh[pousr]_[A-Za-z0-9_]{30,}\b")),
-    ("openai-key", "high", re.compile(r"\bsk-[A-Za-z0-9_-]{20,}\b")),
+    # anthropic-key must be checked before openai-key: both start "sk-", so an
+    # Anthropic key (sk-ant-...) already matched openai-key's bare \bsk-...\b
+    # pattern and was reported under the wrong provider's label -- caught, but
+    # misleadingly, on a framework built primarily for Claude Code/Anthropic's
+    # own tooling. openai-key now excludes the ant- prefix so each secret gets
+    # exactly one correct label, not a double or mislabeled report.
+    ("anthropic-key", "high", re.compile(r"\bsk-ant-[A-Za-z0-9_-]{20,}\b")),
+    ("openai-key", "high", re.compile(r"\bsk-(?!ant-)[A-Za-z0-9_-]{20,}\b")),
     ("perplexity-key", "high", re.compile(r"\bpplx-[A-Za-z0-9_-]{20,}\b")),
     # The keyword is intentionally not \b-bounded on its leading edge: \b requires a
     # non-word character immediately before the match, but an underscore (as in

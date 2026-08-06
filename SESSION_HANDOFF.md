@@ -2,7 +2,7 @@
 
 - Release: `Escapement v6.3.0`
 - Status: Capability Strength Orchestration validated
-- Kernel: `698 / 1000` words
+- Kernel: `770 / 1000` words
 - Automatic context: tested below `1,800` words
 - Invoked skill context: tested below `1,200` words
 - Doctrine packs: `11`
@@ -14,7 +14,7 @@
 - Capability families: `10`
 - Overlap groups: `12`
 - Routing evaluations: `22 / 22 PASS`
-- Unit tests: `61 / 61 PASS`
+- Unit tests: `72 / 72 PASS`
 - Runtime doctor: `0 failures`
 - Repository doctor: `0 failures, 0 warnings`
 - Security findings: `0`
