@@ -1,21 +1,21 @@
 # Escapement v6.3 Validation Report
 
-Validated: 2026-08-05  
+Validated: 2026-08-06  
 Release: `6.3.0 — Capability Strength Orchestration`
 
 ## Results
 
 | Check | Result |
 |---|---|
-| Python syntax | PASS — 9 scripts |
-| Kernel budget | PASS — 644 / 700 words |
+| Python syntax | PASS — 10 scripts |
+| Kernel budget | PASS — 698 / 700 words |
 | Automatic context | PASS — tested packs below 1,800 words |
 | Invoked skill context | PASS — tested routes below 1,200 words |
 | Routing evaluations | PASS — 22 / 22 |
-| Unit tests | PASS — 27 / 27 |
+| Unit tests | PASS — 61 / 61 |
 | Runtime doctor | PASS — 0 failures |
 | Repository doctor | PASS — 0 failures, 0 warnings |
-| Native skill synchronisation | PASS — 32 / 32 |
+| Native skill synchronisation | PASS — 35 / 35 |
 | Security gate | PASS — 0 findings |
 | Fresh installation | PASS |
 | Full self-test | PASS — 0 failures |

@@ -2,11 +2,11 @@
 
 # Escapement
 
-### Governed, low-token delivery infrastructure for AI coding agents.
+### A governed, low-token harness for context-aware AI-assisted delivery.
 
-Escapement turns rough requests into better decisions, routes the right expertise
-at the right phase, verifies real outcomes, and preserves trustworthy project
-state across sessions.
+Escapement helps turn rough requests into clearer decisions, structures context
+across delivery phases, supports capability routing and verification, and
+preserves project decisions and handoffs across sessions.
 
 [![Version](https://img.shields.io/badge/version-6.3.0-53284F?style=flat-square)](VERSION)
 [![CI](https://github.com/SiddheshKGupta/escapement/actions/workflows/validate-standard.yml/badge.svg)](https://github.com/SiddheshKGupta/escapement/actions/workflows/validate-standard.yml)
