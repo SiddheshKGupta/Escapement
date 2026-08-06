@@ -101,7 +101,8 @@
         "consulting-analysis",
         "workflow",
         "engineering-review",
-        "data-architecture"
+        "data-architecture",
+        "reporting-standard"
       ],
       "external_candidates": [
         "github-spec-kit"
