@@ -6,7 +6,7 @@
 - Automatic context: tested below `1,800` words
 - Invoked skill context: tested below `1,200` words
 - Doctrine packs: `11`
-- Native skills: `34`
+- Native skills: `35`
 - Capability strengths: `58`
 - Agent patterns: `21`
 - External resources: `54`
@@ -14,7 +14,7 @@
 - Capability families: `10`
 - Overlap groups: `12`
 - Routing evaluations: `22 / 22 PASS`
-- Unit tests: `58 / 58 PASS`
+- Unit tests: `61 / 61 PASS`
 - Runtime doctor: `0 failures`
 - Repository doctor: `0 failures, 0 warnings`
 - Security findings: `0`

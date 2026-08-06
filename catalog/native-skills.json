@@ -1196,6 +1196,43 @@
         "api-integration",
         "security-review"
       ]
+    },
+    {
+      "id": "reporting-standard",
+      "overlap_group": "reporting-standard",
+      "priority": 115,
+      "triggers": [
+        "dashboard",
+        "kpi",
+        "report",
+        "reporting",
+        "reconciliation",
+        "management information",
+        "mis",
+        "currency",
+        "rupee",
+        "lakh",
+        "lacs",
+        "crore",
+        "locale",
+        "number format"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL",
+        "CONSULTING"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "SPECIFY"
+      ],
+      "paired_with": [
+        "design-system",
+        "data-architecture"
+      ]
     }
   ]
 }
