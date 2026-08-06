@@ -10,9 +10,9 @@ capabilities, agents and external tools at the phase where each is strongest.
 
 [![Version](https://img.shields.io/badge/version-6.3.0-53284F?style=flat-square)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![Kernel](https://img.shields.io/badge/kernel-673%20words-2F855A?style=flat-square)](AGENTS.md)
+[![Kernel](https://img.shields.io/badge/kernel-683%20words-2F855A?style=flat-square)](AGENTS.md)
 [![Evals](https://img.shields.io/badge/routing%20evals-22%2F22-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
-[![Tests](https://img.shields.io/badge/unit%20tests-41%2F41-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
+[![Tests](https://img.shields.io/badge/unit%20tests-51%2F51-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
 [![Security](https://img.shields.io/badge/security-0%20findings-2F855A?style=flat-square)](reports/VALIDATION_v6.3.md)
 
 **Ask better questions. Use each capability at its strongest phase. Build. Test. Prove. Persist.**
@@ -128,10 +128,10 @@ flowchart LR
 ## Current inventory
 
 ```text
-Kernel words:          673
+Kernel words:          683
 Profiles:                2
 Doctrine packs:         11
-Native skills:          33
+Native skills:          34
 Capability strengths:   58
 Agent patterns:         21
 External resources:     54
@@ -222,7 +222,7 @@ reason and is permanently recorded on the turn and in `turns.jsonl`.
 
 ```text
 Always-loaded kernel:          <= 700 words
-Actual kernel:                 673 words
+Actual kernel:                 683 words
 Automatic phase context:       <= 1,800 words
 Invoked native skill context:  <= 1,200 words
 Normal doctrine packs:         <= 3 per phase
@@ -442,6 +442,7 @@ Native agent copies:
 | [`agent-orchestration`](skills/agent-orchestration/SKILL.md) | PLAN, IMPLEMENT | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
 | [`agent-blueprint-discovery`](skills/agent-blueprint-discovery/SKILL.md) | RESEARCH, BRAINSTORM, PLAN | CONSULTING, ENGINEERING, DUAL |
 | [`product-specification`](skills/product-specification/SKILL.md) | SPECIFY | CONSULTING, ENGINEERING, DUAL, ARTIFACT |
+| [`data-architecture`](skills/data-architecture/SKILL.md) | SPECIFY | ENGINEERING, DUAL |
 | [`data-engineering`](skills/data-engineering/SKILL.md) | SPECIFY, PLAN, IMPLEMENT, VERIFY | ENGINEERING, DUAL, CONSULTING |
 | [`frontend-implementation`](skills/frontend-implementation/SKILL.md) | IMPLEMENT | ENGINEERING, DUAL |
 | [`quality-engineering`](skills/quality-engineering/SKILL.md) | PLAN, IMPLEMENT, VERIFY, RELEASE | ENGINEERING, DUAL, ARTIFACT |
@@ -767,11 +768,11 @@ synchronisation, and a fresh-install lifecycle test.
 
 ```text
 Routing evaluations:      22 / 22 PASS
-Unit tests:               41 / 41 PASS
+Unit tests:               51 / 51 PASS
 Runtime doctor:            0 failures
 Repository doctor:         0 failures, 0 warnings
 Security gate:             0 findings
-Native skill sync:        33 / 33 PASS
+Native skill sync:        34 / 34 PASS
 Fresh-install self-test:  PASS
 ```
 

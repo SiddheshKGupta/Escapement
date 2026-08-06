@@ -1160,6 +1160,42 @@
         "decision-coach",
         "project-discovery"
       ]
+    },
+    {
+      "id": "data-architecture",
+      "overlap_group": "data-architecture",
+      "priority": 120,
+      "triggers": [
+        "database",
+        "schema",
+        "data model",
+        "persist",
+        "persistence",
+        "postgres",
+        "postgresql",
+        "mysql",
+        "sqlite",
+        "mongodb",
+        "table design",
+        "which database",
+        "data store"
+      ],
+      "registers": [
+        "ENGINEERING",
+        "DUAL"
+      ],
+      "tiers": [
+        "MATERIAL",
+        "PROGRAM"
+      ],
+      "phases": [
+        "SPECIFY"
+      ],
+      "paired_with": [
+        "product-specification",
+        "api-integration",
+        "security-review"
+      ]
     }
   ]
 }

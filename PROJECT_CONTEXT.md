@@ -83,7 +83,7 @@ Design specialists operate beneath it:
 
 ```text
 Doctrine packs:         11
-Native skills:          33
+Native skills:          34
 Capability strengths:   58
 Agent patterns:         21
 External resources:     54
