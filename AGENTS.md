@@ -92,6 +92,9 @@ Each phase gets a fresh bounded context. Do not load the full lifecycle at once.
 The default phase plan cannot see what `DISCOVER` inspection turns up. Revise
 it with `replan-phases` (see `AGENT_RUNTIME.md`) when it no longer fits.
 
+A multi-module PROGRAM registers modules/artifacts in `program_modules.py`; a
+module cannot leave `SPECIFY` unchecked.
+
 Prefer installed Superpowers capabilities when compatible:
 
 - brainstorming before design approval;
@@ -133,7 +136,7 @@ Parallel execution requires:
 - named integration owner;
 - deterministic verification after merge.
 
-A catalogue entry from 500+ AI Agent Projects is a blueprint lead, not a deployable production agent. Inspect the exact linked repository, licence, tests, dependencies, data handling and deployment model before reuse.
+A catalogue entry from 500+ AI Agent Projects is a lead, not a deployable agent -- inspect its repository, licence, tests and deployment model first.
 
 ## Approval Gates
 
