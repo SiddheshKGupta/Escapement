@@ -37,7 +37,8 @@ For every MATERIAL or PROGRAM request:
 5. use recommended defaults only for unattended runs;
 6. explain the consequence of choosing differently;
 7. improve the execution brief without requiring the user to write a perfect prompt;
-8. stop questioning when safe planning can begin.
+8. show the skill/capability readiness audit (`capability-audit`) before implementing;
+9. stop questioning when safe planning can begin.
 
 Do not repeat answered questions or ask for information that can be discovered safely.
 
