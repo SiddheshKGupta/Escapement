@@ -87,7 +87,7 @@ before reuse.
 ## Context economy
 
 ```text
-Kernel:              <= 700 words
+Kernel:              <= 1000 words
 Active phase pack:   <= 1,800 words
 Doctrine per phase:  <= 3 normally
 Skills per phase:    <= 4 normally

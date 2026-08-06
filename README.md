@@ -11,7 +11,7 @@ preserves project decisions and handoffs across sessions.
 [![Version](https://img.shields.io/badge/version-6.3.0-53284F?style=flat-square)](VERSION)
 [![CI](https://github.com/SiddheshKGupta/escapement/actions/workflows/validate-standard.yml/badge.svg)](https://github.com/SiddheshKGupta/escapement/actions/workflows/validate-standard.yml)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square&logo=python&logoColor=white)](.github/workflows/validate-standard.yml)
-[![Kernel](https://img.shields.io/badge/kernel-698%20%2F%20700-2F855A?style=flat-square)](AGENTS.md)
+[![Kernel](https://img.shields.io/badge/kernel-698%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
 [![Unit tests](https://img.shields.io/badge/unit%20tests-61%20passing-2F855A?style=flat-square)](manifest.json)
 [![Case studies](https://img.shields.io/badge/published%20case%20studies-3-2F855A?style=flat-square)](#proof-from-real-use)
@@ -452,7 +452,7 @@ flowchart LR
 ```text
 Version:                 6.3.0
 Repository files:        231
-Kernel:                  698 / 700 words
+Kernel:                  698 / 1000 words
 Profiles:                  2
 Doctrine packs:           11
 Native skills:            35
@@ -468,7 +468,7 @@ Published case studies:    3
 ### Low-token contract
 
 ```text
-Always-loaded kernel:          <= 700 words
+Always-loaded kernel:          <= 1000 words
 Current kernel:                 698 words
 Automatic phase context:       <= 1,800 words
 Invoked native-skill context:  <= 1,200 words

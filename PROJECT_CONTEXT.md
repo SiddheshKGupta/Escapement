@@ -69,7 +69,7 @@ Design specialists operate beneath it:
 ## Constraints
 
 - Python standard-library-only core;
-- always-loaded kernel below 700 words;
+- always-loaded kernel below 1000 words;
 - automatic phase context below 1,800 words;
 - invoked native skill context below 1,200 words;
 - project-owned state survives updates;

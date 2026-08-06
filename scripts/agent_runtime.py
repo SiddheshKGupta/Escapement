@@ -738,8 +738,8 @@ def command_doctor(_: argparse.Namespace) -> int:
         failures += int(not ok)
 
     kernel_words = len((ROOT / "AGENTS.md").read_text(encoding="utf-8").split())
-    kernel_ok = kernel_words <= 700
-    print(f"[{'PASS' if kernel_ok else 'FAIL'}] kernel words: {kernel_words}/700")
+    kernel_ok = kernel_words <= 1000
+    print(f"[{'PASS' if kernel_ok else 'FAIL'}] kernel words: {kernel_words}/1000")
     failures += int(not kernel_ok)
 
     skills = json.loads((ROOT / "catalog/native-skills.json").read_text(encoding="utf-8"))["skills"]

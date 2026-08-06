@@ -73,3 +73,27 @@ Do not introduce a new database technology as a silent default when the
 project already has one established; that is a material architecture
 change requiring the same approval gate as adopting one for the first
 time.
+
+## 6. Baseline field validation, unless the domain overrides it
+
+Common fields have a sane default shape even when nothing in
+`DOMAIN_CONTEXT.md` says so explicitly -- absence of a stated rule is not
+permission to accept anything:
+
+```text
+Name           | letters, spaces, hyphens, apostrophes; reject bare digits/symbols
+Phone          | fixed digit count for the target country, explicit country-code
+               | field/selector rather than assuming one
+Email          | standard address shape (local@domain), not just "contains @"
+Money/quantity | non-negative unless the domain genuinely has credits/refunds
+Date           | a real calendar date, not an unconstrained string
+```
+
+Only replace a baseline with a domain-specific rule when
+`DOMAIN_CONTEXT.md` states one (e.g. a GSTIN/PAN format for an India/GST
+domain) -- do not skip validation just because the domain didn't specify
+a *different* rule than the baseline above.
+
+Enforce server-side; a client-side check is a UX convenience, not the
+control -- the same "UI visibility alone is not security" principle
+applies to input shape, not only to permissions.

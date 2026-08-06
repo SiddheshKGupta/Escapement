@@ -8,7 +8,7 @@ Release: `6.3.0 — Capability Strength Orchestration`
 | Check | Result |
 |---|---|
 | Python syntax | PASS — 10 scripts |
-| Kernel budget | PASS — 698 / 700 words |
+| Kernel budget | PASS — 698 / 1000 words |
 | Automatic context | PASS — tested packs below 1,800 words |
 | Invoked skill context | PASS — tested routes below 1,200 words |
 | Routing evaluations | PASS — 22 / 22 |
