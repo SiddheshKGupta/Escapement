@@ -116,7 +116,7 @@ Prefer installed Superpowers capabilities when compatible:
 ## Context Budget
 
 ```text
-Kernel:            <= 700 words
+Kernel:            <= 1000 words
 Active phase pack: <= 1,800 words
 Doctrine packs:    <= 3 per phase
 Native skills:     <= 1 (MICRO), <= 5 (MATERIAL), <= 6 (PROGRAM)

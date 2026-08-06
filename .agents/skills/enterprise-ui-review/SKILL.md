@@ -25,3 +25,21 @@ Read `docs/standards/design-intelligence.md` as the governing design authority. 
 
 Use real browser evidence when available. Capture screenshots and commands as
 structured evidence.
+
+## This checklist gets skipped in real use -- check for it, don't just trust it
+
+This skill routes correctly at IMPLEMENT/VERIFY/POLISH for UI work, but
+routing only puts the checklist in front of an agent -- it doesn't force
+the agent to actually apply it before calling the work done. Run:
+
+```bash
+python scripts/ui_quality_gate.py <frontend-src-dir>
+```
+
+before closing a POLISH phase on UI-touching work. It scans for concrete,
+detectable signals -- responsive breakpoints, motion transitions,
+`prefers-reduced-motion`, `:focus-visible`, loading-state and error-state
+handling -- the same items 3/4/7/8 above already name. A clean
+report is not proof of good UX; it is proof those items were not silently
+skipped the way frontend-implementation's own doctrine was, in practice,
+skipped before this existed.

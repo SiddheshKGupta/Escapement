@@ -116,7 +116,7 @@ Ponytail is not a second permanent doctrine.
 ## Context budgets
 
 ```text
-Kernel:                       <= 700 words
+Kernel:                       <= 1000 words
 Automatic phase context:      <= 1,800 words
 Invoked native skill context: <= 1,200 words
 Native skills:                <= 5 normal / 6 programme
