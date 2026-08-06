@@ -71,7 +71,7 @@ Design specialists operate beneath it:
 - Python standard-library-only core;
 - always-loaded kernel below 1000 words;
 - automatic phase context below 1,800 words;
-- invoked native skill context below 1,200 words;
+- invoked native skill context below 1,000 words;
 - project-owned state survives updates;
 - authoritative evidence before trend signals;
 - no automatic external installation;

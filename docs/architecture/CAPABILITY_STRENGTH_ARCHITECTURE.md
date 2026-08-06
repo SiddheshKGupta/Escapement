@@ -118,7 +118,7 @@ Ponytail is not a second permanent doctrine.
 ```text
 Kernel:                       <= 1000 words
 Automatic phase context:      <= 1,800 words
-Invoked native skill context: <= 1,200 words
+Invoked native skill context: <= 1,000 words
 Native skills:                <= 5 normal / 6 programme
 Capability strengths:         <= 8 per active phase
 ```
