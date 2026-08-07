@@ -86,10 +86,10 @@ Doctrine packs:         11
 Native skills:          35
 Capability strengths:   58
 Agent patterns:         21
-External resources:     54
+External resources:     61
 Strategy adapters:      10
 Capability families:    10
-Overlap groups:         12
+Overlap groups:         14
 ```
 
 ## Non-goals

@@ -161,6 +161,13 @@ RESOURCE_PHASES = {
     "perplexity-api-platform-developers": {"RESEARCH", "IMPLEMENT"},
     "perplexity-cli": {"RESEARCH"},
     "perplexity-modelcontextprotocol": {"RESEARCH", "IMPLEMENT"},
+    "prime-intellect-prime-agent": {"PLAN", "IMPLEMENT"},
+    "egonex-understand-anything": {"ORIENT", "DISCOVER", "RESEARCH", "VERIFY"},
+    "evomap-evolver": {"VERIFY", "RELEASE"},
+    "agency-agents": {"DISCOVER", "BRAINSTORM", "PLAN"},
+    "nidhinjs-prompt-master": {"SPECIFY", "PLAN", "RELEASE"},
+    "mattpocock-grilling": {"DISCOVER", "SPECIFY"},
+    "cloudflare-os": {"RESEARCH", "SPECIFY"},
 }
 
 

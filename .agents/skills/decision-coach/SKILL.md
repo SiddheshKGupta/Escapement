@@ -42,3 +42,31 @@ When a live user is present in the conversation:
 
 Silently self-answering and moving on is only correct when no user is
 available to ask at all.
+
+## Grilling Intensifier
+
+An explicit request to be "grilled," to "stress-test" a plan, or to have
+every assumption "challenged" activates a deeper round of this same
+procedure rather than a different one. decision-coach remains canonical;
+grilling never activates on an ordinary feature request (see
+`catalog/overlap-matrix.json`, group `decision-interview`).
+
+1. Build a short decision tree of the plan's real branch points --
+   architecture choice, data model, external dependency, irreversible
+   action -- instead of one flat list of questions.
+2. Walk it branch by branch. For each branch, inspect the repository first;
+   only ask what inspection could not answer.
+3. Still cap the round at five material questions. If the tree has more
+   branches than that, ask the five with the largest blast radius and name
+   the rest as deferred, not dropped.
+4. State the hidden assumption behind each branch explicitly -- an
+   assumption surfaced and confirmed is the point of grilling, not a side
+   effect.
+5. Stop once the plan's real branch points have been named and confirmed or
+   defaulted; grilling is a deeper pass over the same plan, not a second
+   plan.
+
+Inspired by the design-tree/question-frontier method in Matt Pocock's
+`grilling` skill (`https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling`,
+MIT). This section is original wording adapted for Escapement's own rules,
+not a copy of that skill's text.

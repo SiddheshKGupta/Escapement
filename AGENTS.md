@@ -30,11 +30,13 @@ The repository is the system of record. Chat is not.
 
 Claude Code and Codex trigger `agent_runtime.py` automatically via
 `.claude/settings.json`/`.codex/hooks.json`. Any other host (Copilot,
-Cursor, Gemini, or a manual session) has no such wiring and must invoke
-it itself: `session-start` once per session, `prompt` after reading each
-new request, `stop` before ending a turn. Reading this kernel as static
-text without running these is reading the doctrine, not following it --
-treat their JSON output as required context, not optional.
+Cursor, Gemini CLI, Google Antigravity, or a manual session) has no such
+wiring and must invoke it itself: `session-start` once per session,
+`prompt` after reading each new request, `stop` before ending a turn.
+Reading this kernel as static text without running these is reading the
+doctrine, not following it -- treat their JSON output as required context,
+not optional. Antigravity reads this file directly; Gemini CLI's default
+context filename is `GEMINI.md`, so a pointer file exists at the repo root.
 
 ## Help the User Think Better
 
