@@ -2,7 +2,6 @@
   "id": "domain-expertise",
   "name": "Domain Expertise",
   "description": "A configurable, industry-neutral profile that strengthens decision quality with domain context, standards, evidence and current market signals.",
-  "extends": "default",
   "default_register": "DUAL",
   "context_budget_words": 1800,
   "maximum_doctrine_packs_per_phase": 3,
@@ -35,5 +34,5 @@
   "artifacts": {
     "rule": "Use project-specific formatting. When no format exists, recommend an appropriate professional default and record it in the project profile."
   },
-  "skill_context_budget_words": 1200
+  "skill_context_budget_words": 1000
 }

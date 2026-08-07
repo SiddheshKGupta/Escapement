@@ -17,12 +17,12 @@ Kernel
 
 ```text
 Doctrine packs:         11
-Native skills:          32
+Native skills:          35
 Capability strengths:   58
 Agent patterns:         21
-External resources:     54
+External resources:     61
 Capability families:    10
-Overlap groups:         10
+Overlap groups:         14
 Strategy adapters:      10
 ```
 
