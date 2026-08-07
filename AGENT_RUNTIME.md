@@ -118,3 +118,36 @@ packs/skills got rejected (overlap, phase-skill-limit, context budget --
 the same signal that would have flagged a bloating skill file the day it
 happened). An empty report means turns aren't being closed, not that the
 harness is healthy -- `close-turn` is what populates this.
+
+## Harness ablation
+
+Observability shows what the harness did. Ablation asks whether a
+component was worth having at all:
+
+```bash
+python scripts/escapement.py ablate                  # list ablatable components
+python scripts/escapement.py ablate decision-coach   # control vs ablated
+```
+
+Components are declared in `catalog/harness-components.json` with a
+hypothesis, a declared context cost, and how to remove them. A run copies
+the repository to a throwaway directory, removes the component's registry
+entry *there*, and runs the existing corpus under `evals/` twice. Canonical
+source files are never modified.
+
+The report is a factual diff -- which cases changed result, which skills or
+strengths were lost, how many context words were freed. It deliberately
+computes no score or significance figure: 22 routing cases cannot support
+one, and a fabricated number is worse than none.
+
+Read the output carefully in one respect. "No measurable difference" means
+the corpus does not exercise that component -- a statement about corpus
+coverage, not proof the component is useless. The current corpus is
+routing-only: it can see skills, strengths, packs, questions and context
+words, but not retries, tool activity, turn closure or final task quality.
+Measuring those needs a live-execution corpus that does not exist yet.
+
+When that corpus is built, extend the suites under `evals/` rather than
+starting a second benchmark system. Ablation compares harness
+configurations on one host; host conformance compares hosts on one harness.
+Both need the same tasks, or neither result is comparable.

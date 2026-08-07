@@ -7,12 +7,12 @@ Release: `6.3.0 — Capability Strength Orchestration`
 
 | Check | Result |
 |---|---|
-| Python syntax | PASS — 12 scripts |
+| Python syntax | PASS — 13 scripts |
 | Kernel budget | PASS — 795 / 1000 words |
 | Automatic context | PASS — tested packs below 1,800 words |
 | Invoked skill context | PASS — tested routes below 1,000 words |
 | Routing evaluations | PASS — 22 / 22 |
-| Unit tests | PASS — 124 / 124 |
+| Unit tests | PASS — 143 / 143 |
 | Runtime doctor | PASS — 0 failures |
 | Repository doctor | PASS — 0 failures, 0 warnings |
 | Native skill synchronisation | PASS — 35 / 35 |
