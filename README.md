@@ -13,7 +13,7 @@ preserves project decisions and handoffs across sessions.
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square&logo=python&logoColor=white)](.github/workflows/validate-standard.yml)
 [![Kernel](https://img.shields.io/badge/kernel-795%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
-[![Unit tests](https://img.shields.io/badge/unit%20tests-147%20passing-2F855A?style=flat-square)](manifest.json)
+[![Unit tests](https://img.shields.io/badge/unit%20tests-148%20passing-2F855A?style=flat-square)](manifest.json)
 [![Case studies](https://img.shields.io/badge/published%20case%20studies-4-2F855A?style=flat-square)](#proof-from-real-use)
 [![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
 
@@ -989,7 +989,7 @@ summarised in [`SESSION_HANDOFF.md`](SESSION_HANDOFF.md).
 
 ```text
 Routing evaluations:       22 / 22 PASS
-Unit tests:                 147 / 147 PASS
+Unit tests:                 148 / 148 PASS
 Runtime doctor:              0 failures
 Repository doctor:           0 failures, 0 warnings
 Security gate:               0 findings
