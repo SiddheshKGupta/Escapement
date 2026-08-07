@@ -62,7 +62,6 @@ MANAGED_PREFIXES = [
     "docs/ORIGINS.md",
     "docs/architecture",
     "docs/releases",
-    "docs/CAPABILITY_MAP.md",
     "docs/REFERENCE_CATALOG.md",
     "profiles",
     "schemas",

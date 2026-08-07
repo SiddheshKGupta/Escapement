@@ -6,8 +6,6 @@
     "institutional-judgement"
   ],
   "context_budget_words": 1800,
-  "maximum_doctrine_packs": 3,
-  "maximum_native_skills": 4,
   "writing": {
     "tone": "clear, professional, implementation-oriented",
     "avoid": [
@@ -16,5 +14,7 @@
       "unranked option dumps"
     ]
   },
-  "skill_context_budget_words": 1000
+  "skill_context_budget_words": 1000,
+  "maximum_doctrine_packs_per_phase": 3,
+  "maximum_native_skills_per_phase": 4
 }
