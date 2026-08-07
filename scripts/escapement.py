@@ -471,6 +471,19 @@ def command_observability(args: argparse.Namespace) -> int:
     return subprocess.run(command, check=False).returncode
 
 
+def command_ablate(args: argparse.Namespace) -> int:
+    command = [sys.executable, str(SOURCE_ROOT / "scripts" / "ablation_harness.py")]
+    if args.component:
+        command += ["run", args.component]
+        if args.json:
+            command.append("--json")
+        if args.keep:
+            command.append("--keep")
+    else:
+        command.append("list")
+    return subprocess.run(command, check=False).returncode
+
+
 def command_view(args: argparse.Namespace) -> int:
     command = [sys.executable, str(SOURCE_ROOT / "scripts" / "local_viewer.py")]
     if args.no_open:
@@ -924,6 +937,12 @@ def build_parser() -> argparse.ArgumentParser:
     observability.add_argument("--root", default=".")
     observability.add_argument("--json", action="store_true")
     observability.set_defaults(func=command_observability)
+
+    ablate = sub.add_parser("ablate")
+    ablate.add_argument("component", nargs="?", help="omit to list ablatable components")
+    ablate.add_argument("--json", action="store_true")
+    ablate.add_argument("--keep", action="store_true")
+    ablate.set_defaults(func=command_ablate)
 
     sync = sub.add_parser("sync-skills")
     sync.add_argument("--check", action="store_true")

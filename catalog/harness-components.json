@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "version": "6.3.0",
+  "principle": "A harness component should earn the context and complexity it consumes. This registry makes that testable rather than assumed.",
+  "corpus": "evals/",
+  "corpus_note": "Ablation and host conformance share one evaluation corpus. Do not add a second benchmark system; extend the suites under evals/ instead.",
+  "ablation_methods": {
+    "remove-catalog-entry": "Remove one object from a named collection in a catalog JSON file, in a throwaway copy of the repository. Canonical source files are never modified."
+  },
+  "components": [
+    {
+      "id": "design-intelligence-constitution",
+      "kind": "capability-strength",
+      "hypothesis": "Routing a supreme design authority into every design-register phase is what keeps design work from falling back to generic styling.",
+      "cost": {
+        "context_words": 0,
+        "note": "The strength itself is a routing pointer; the document it points at (docs/standards/design-intelligence.md) is read on demand, not loaded into every turn."
+      },
+      "expected_effect": [
+        "design_authority true on design-register cases",
+        "specialist design strengths routed beneath the constitution rather than competing with it"
+      ],
+      "ablation": {
+        "method": "remove-catalog-entry",
+        "file": "catalog/skill-strengths.json",
+        "collection": "capabilities",
+        "match_field": "id",
+        "match_value": "design-intelligence:constitution"
+      }
+    },
+    {
+      "id": "decision-coach",
+      "kind": "native-skill",
+      "hypothesis": "Asking material questions before planning reduces silent assumptions on MATERIAL and PROGRAM work.",
+      "cost": {
+        "context_words": 451,
+        "note": "Largest single skill in the invoked-skill budget after data-architecture; measured with capability_router.word_count()."
+      },
+      "expected_effect": [
+        "material questions raised before planning proceeds",
+        "matched-but-uninstalled capabilities surfaced during the question round"
+      ],
+      "ablation": {
+        "method": "remove-catalog-entry",
+        "file": "catalog/native-skills.json",
+        "collection": "skills",
+        "match_field": "id",
+        "match_value": "decision-coach"
+      }
+    }
+  ]
+}

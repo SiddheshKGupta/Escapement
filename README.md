@@ -13,7 +13,7 @@ preserves project decisions and handoffs across sessions.
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square&logo=python&logoColor=white)](.github/workflows/validate-standard.yml)
 [![Kernel](https://img.shields.io/badge/kernel-795%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
-[![Unit tests](https://img.shields.io/badge/unit%20tests-124%20passing-2F855A?style=flat-square)](manifest.json)
+[![Unit tests](https://img.shields.io/badge/unit%20tests-143%20passing-2F855A?style=flat-square)](manifest.json)
 [![Case studies](https://img.shields.io/badge/published%20case%20studies-4-2F855A?style=flat-square)](#proof-from-real-use)
 [![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
 
@@ -484,7 +484,7 @@ flowchart LR
 
 ```text
 Version:                 6.3.0
-Repository files:        262
+Repository files:        267
 Kernel:                  795 / 1000 words
 Profiles:                  2
 Doctrine packs:           11
@@ -797,6 +797,25 @@ but never used, and why packs/skills got rejected (overlap, phase limit,
 context budget). An empty report means turns aren't being closed, not
 that the harness is healthy.
 
+Observability shows what the harness did. Ablation asks whether a component
+earned its place:
+
+```bash
+python scripts/escapement.py ablate                  # list ablatable components
+python scripts/escapement.py ablate decision-coach   # control vs ablated
+```
+
+A run copies the repository to a throwaway directory, removes the
+component's registry entry there, and runs the corpus under `evals/` twice.
+Canonical files are never modified. The output is a factual diff -- cases
+changed, skills or strengths lost, context words freed -- and deliberately
+no score: 22 routing cases cannot support one.
+
+"No measurable difference" means the corpus does not exercise that
+component, not that the component is useless. Today's corpus is
+routing-only; retries, tool activity and task quality need a live-execution
+corpus that does not exist yet.
+
 ---
 
 ## Security and approval gates
@@ -919,6 +938,7 @@ python scripts/escapement.py sync-skills
 python scripts/escapement.py eval
 python scripts/escapement.py security --fail-on high
 python scripts/escapement.py observability --root <target>
+python scripts/escapement.py ablate <component>
 python scripts/escapement.py view
 python scripts/escapement.py component list
 python scripts/escapement.py catalog search "<query>"
@@ -969,7 +989,7 @@ summarised in [`SESSION_HANDOFF.md`](SESSION_HANDOFF.md).
 
 ```text
 Routing evaluations:       22 / 22 PASS
-Unit tests:                 124 / 124 PASS
+Unit tests:                 143 / 143 PASS
 Runtime doctor:              0 failures
 Repository doctor:           0 failures, 0 warnings
 Security gate:               0 findings
