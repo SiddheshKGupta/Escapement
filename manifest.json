@@ -18,7 +18,7 @@
     "native_skills": 35,
     "capability_strengths": 58,
     "external_resources": 61,
-    "files": 265
+    "files": 267
   },
   "traceability_report": "reports/ORIGINAL_INTENT_TRACEABILITY.md",
   "remaining_boundaries": [

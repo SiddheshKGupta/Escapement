@@ -484,7 +484,7 @@ flowchart LR
 
 ```text
 Version:                 6.3.0
-Repository files:        265
+Repository files:        267
 Kernel:                  795 / 1000 words
 Profiles:                  2
 Doctrine packs:           11
