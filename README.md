@@ -11,9 +11,9 @@ preserves project decisions and handoffs across sessions.
 [![Version](https://img.shields.io/badge/version-6.3.0-53284F?style=flat-square)](VERSION)
 [![CI](https://github.com/SiddheshKGupta/escapement/actions/workflows/validate-standard.yml/badge.svg)](https://github.com/SiddheshKGupta/escapement/actions/workflows/validate-standard.yml)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square&logo=python&logoColor=white)](.github/workflows/validate-standard.yml)
-[![Kernel](https://img.shields.io/badge/kernel-794%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
+[![Kernel](https://img.shields.io/badge/kernel-795%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
-[![Unit tests](https://img.shields.io/badge/unit%20tests-112%20passing-2F855A?style=flat-square)](manifest.json)
+[![Unit tests](https://img.shields.io/badge/unit%20tests-124%20passing-2F855A?style=flat-square)](manifest.json)
 [![Case studies](https://img.shields.io/badge/published%20case%20studies-4-2F855A?style=flat-square)](#proof-from-real-use)
 [![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
 
@@ -198,7 +198,25 @@ From the installed project:
 python scripts/escapement.py doctor --root .
 ```
 
-### 5. Start a governed turn
+### 5. Discover what's available
+
+A first-time user does not automatically know what Escapement can already
+do. Browse before you ask for anything:
+
+```bash
+python scripts/escapement.py catalog list --catalog skills      # 35 native skills
+python scripts/escapement.py catalog list --catalog resources   # 61 governed external candidates
+python scripts/escapement.py catalog list --catalog patterns    # agent patterns
+python scripts/escapement.py catalog search "browser test"      # search any of the above
+```
+
+Being catalogued is not being installed or active by default -- see
+[docs/REFERENCE_CATALOG.md](docs/REFERENCE_CATALOG.md). You do not need to
+browse manually every time: `decision-coach` also surfaces matched,
+not-yet-installed capabilities as part of its own question round for
+MATERIAL/PROGRAM work (see [How it works](#how-it-works)).
+
+### 6. Start a governed turn
 
 ```bash
 python scripts/agent_runtime.py manual-start \
@@ -467,7 +485,7 @@ flowchart LR
 ```text
 Version:                 6.3.0
 Repository files:        262
-Kernel:                  794 / 1000 words
+Kernel:                  795 / 1000 words
 Profiles:                  2
 Doctrine packs:           11
 Native skills:            35
@@ -484,7 +502,7 @@ Published case studies:    4
 
 ```text
 Always-loaded kernel:          <= 1000 words
-Current kernel:                 794 words
+Current kernel:                 795 words
 Automatic phase context:       <= 1,800 words
 Invoked native-skill context:  <= 1,000 words
 Normal doctrine packs:         <= 3 per phase
@@ -951,7 +969,7 @@ summarised in [`SESSION_HANDOFF.md`](SESSION_HANDOFF.md).
 
 ```text
 Routing evaluations:       22 / 22 PASS
-Unit tests:                 112 / 112 PASS
+Unit tests:                 124 / 124 PASS
 Runtime doctor:              0 failures
 Repository doctor:           0 failures, 0 warnings
 Security gate:               0 findings

@@ -21,52 +21,51 @@ Do not ask the user to rewrite their prompt from scratch.
 
 ## A recommended default is a proposal, not a substitute for asking
 
-A recommended default exists so a genuinely unattended run (CI, a batch
-job, no human in the loop) has something reasonable to proceed on, and so
-an interactive user has less work to do when they *do* answer -- confirming
-a default is faster than answering from nothing. It is not permission to
-skip asking.
+A default exists for unattended runs (CI, no human in the loop) and to
+make an interactive answer faster to give -- it is not permission to skip
+asking.
 
-When a live user is present in the conversation:
+When a live user is present:
 
-- Present the material questions to them directly, in your response, with
-  each recommended default and its consequence stated -- do not silently
-  substitute the default and continue as if they had answered.
-- Wait for their actual answer, or their explicit instruction to proceed
-  with the stated defaults, before advancing past `DISCOVER` on `MATERIAL`
-  or `PROGRAM` work.
-- The bigger the decision's blast radius -- an architecture choice, a
-  compliance-sensitive rule, anything hard to reverse once code exists --
-  the less acceptable it is to have decided it without them, even under
-  time pressure or mid-demo.
+- Present the material questions directly, with each default and its
+  consequence stated -- do not silently substitute the default and
+  continue as if they had answered.
+- Wait for a real answer, or explicit instruction to proceed with the
+  stated defaults, before advancing past `DISCOVER` on `MATERIAL` or
+  `PROGRAM` work.
+- The bigger the blast radius -- an architecture choice, a compliance
+  rule, anything hard to reverse -- the less acceptable it is to have
+  decided it without them, even under time pressure.
 
-Silently self-answering and moving on is only correct when no user is
-available to ask at all.
+Silently self-answering is only correct when no user is available at all.
+
+## Surface Relevant Capabilities
+
+Name matched, not-yet-installed capabilities in the same response as the
+material questions, not a separate report (`AGENTS.md`, step 8).
+
+1. Check `capability-audit` for the actual request; name each match in one
+   line -- what it is, why it matched, and a recommended yes/use-it or
+   no/skip-it.
+2. "Yes" is an explicit approval gate (`AGENTS.md`, Approval Gates) -- a
+   registry name is a reviewed candidate, never an installed default.
+3. No strong match: offer, do not silently perform, a research pass via
+   `reference-router` for current external options; wait for go-ahead.
+
+Skip this section for MICRO work.
 
 ## Grilling Intensifier
 
-An explicit request to be "grilled," to "stress-test" a plan, or to have
-every assumption "challenged" activates a deeper round of this same
-procedure rather than a different one. decision-coach remains canonical;
-grilling never activates on an ordinary feature request (see
-`catalog/overlap-matrix.json`, group `decision-interview`).
+Explicit "grill me" / "stress-test this plan" / "challenge every
+assumption" deepens this same procedure -- decision-coach stays canonical,
+never activates on an ordinary feature request
+(`catalog/overlap-matrix.json`, group `decision-interview`).
 
-1. Build a short decision tree of the plan's real branch points --
-   architecture choice, data model, external dependency, irreversible
-   action -- instead of one flat list of questions.
-2. Walk it branch by branch. For each branch, inspect the repository first;
-   only ask what inspection could not answer.
-3. Still cap the round at five material questions. If the tree has more
-   branches than that, ask the five with the largest blast radius and name
-   the rest as deferred, not dropped.
-4. State the hidden assumption behind each branch explicitly -- an
-   assumption surfaced and confirmed is the point of grilling, not a side
-   effect.
-5. Stop once the plan's real branch points have been named and confirmed or
-   defaulted; grilling is a deeper pass over the same plan, not a second
-   plan.
+1. Map the plan's real branch points; inspect the repository per branch
+   before asking.
+2. Still cap at five material questions -- highest blast radius first,
+   defer the rest.
+3. State each branch's hidden assumption explicitly.
 
-Inspired by the design-tree/question-frontier method in Matt Pocock's
-`grilling` skill (`https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling`,
-MIT). This section is original wording adapted for Escapement's own rules,
-not a copy of that skill's text.
+Adapted, original wording, from Matt Pocock's MIT `grilling` skill
+(`github.com/mattpocock/skills/tree/main/skills/productivity/grilling`).

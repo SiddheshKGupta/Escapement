@@ -576,16 +576,48 @@ def load_agent_catalog() -> dict[str, Any]:
     return value if isinstance(value, dict) else {}
 
 
+def load_native_skill_catalog() -> dict[str, Any]:
+    value = read_json(SOURCE_ROOT / "catalog" / "native-skills.json", {})
+    return value if isinstance(value, dict) else {}
+
+
+def skill_description(skill_id: str) -> str:
+    """The one-line human description lives in the skill's own SKILL.md
+    frontmatter -- native-skills.json only carries routing data (triggers,
+    phases, overlap group), so a browsing user needs this, not that."""
+    path = SOURCE_ROOT / "skills" / skill_id / "SKILL.md"
+    if not path.exists():
+        return ""
+    parts = path.read_text(encoding="utf-8").split("---", 2)
+    if len(parts) < 3:
+        return ""
+    for line in parts[1].splitlines():
+        if line.startswith("description:"):
+            return line.split(":", 1)[1].strip()
+    return ""
+
+
+def catalog_items(catalog: str) -> list[dict[str, Any]]:
+    if catalog == "resources":
+        return load_external_catalog().get("resources", [])
+    if catalog == "skills":
+        return load_native_skill_catalog().get("skills", [])
+    return load_agent_catalog().get("patterns", [])
+
+
 def command_catalog_list(args: argparse.Namespace) -> int:
+    items = catalog_items(args.catalog)
     if args.catalog == "resources":
-        items = load_external_catalog().get("resources", [])
         for item in items:
             print(
                 f"{item.get('id')}: {item.get('name')} | {item.get('license')} | "
                 f"{', '.join(item.get('use_modes', []))}"
             )
+    elif args.catalog == "skills":
+        for item in items:
+            phases = ", ".join(item.get("phases", []))
+            print(f"{item['id']}: {skill_description(item['id'])} | phases: {phases}")
     else:
-        items = load_agent_catalog().get("patterns", [])
         for item in items:
             print(f"{item.get('id')}: {item.get('name')} | {item.get('category')}")
     return 0
@@ -597,10 +629,9 @@ def search_item(item: dict[str, Any], query: str) -> bool:
 
 
 def command_catalog_search(args: argparse.Namespace) -> int:
-    if args.catalog == "resources":
-        items = load_external_catalog().get("resources", [])
-    else:
-        items = load_agent_catalog().get("patterns", [])
+    items = catalog_items(args.catalog)
+    if args.catalog == "skills":
+        items = [{**item, "description": skill_description(item["id"])} for item in items]
     matches = [item for item in items if search_item(item, args.query)]
     for item in matches:
         print(json.dumps(item, indent=2, ensure_ascii=False))
@@ -949,7 +980,7 @@ def build_parser() -> argparse.ArgumentParser:
     catalog_list = catalog_sub.add_parser("list")
     catalog_list.add_argument(
         "--catalog",
-        choices=["resources", "patterns"],
+        choices=["resources", "patterns", "skills"],
         default="resources",
     )
     catalog_list.set_defaults(func=command_catalog_list)
@@ -957,7 +988,7 @@ def build_parser() -> argparse.ArgumentParser:
     catalog_search.add_argument("query")
     catalog_search.add_argument(
         "--catalog",
-        choices=["resources", "patterns"],
+        choices=["resources", "patterns", "skills"],
         default="resources",
     )
     catalog_search.set_defaults(func=command_catalog_search)
