@@ -235,18 +235,36 @@ def simple_yaml(relative: str) -> dict[str, str]:
     return values
 
 
+def enumerated_scope_areas(prompt: str) -> int:
+    """Count enumerated functional areas, without depending on vocabulary.
+
+    The technical-noun list below only fires for prompts written in IT
+    vocabulary. A product described in its own domain's language -- clinical
+    (registration, encounters, consent, prescriptions), legal, logistics --
+    scores near zero and under-classifies as MATERIAL, which silently drops
+    POLISH and RELEASE from the phase plan and never triggers the PROGRAM
+    module registry. Enumeration is the domain-neutral signal for "this
+    describes several distinct areas of work".
+    """
+    listed = re.split(r",|\band\b", prompt, flags=re.IGNORECASE)
+    return sum(1 for segment in listed if segment.strip())
+
+
 def classify_tier(prompt: str) -> str:
     if not matches(MATERIAL_WORDS, prompt):
         return "INFO"
     if matches(PROGRAM_WORDS, prompt):
         return "PROGRAM"
-    if re.search(r"\b(build|create|design|implement)\b", prompt, re.IGNORECASE) and re.search(
-        r"\b(platform|application|system|suite)\b", prompt, re.IGNORECASE
-    ) and len(re.findall(
+    builds_a_product = bool(
+        re.search(r"\b(build|create|design|implement)\b", prompt, re.IGNORECASE)
+        and re.search(r"\b(platform|application|system|suite)\b", prompt, re.IGNORECASE)
+    )
+    technical_areas = len(re.findall(
         r"\b(workflow|dashboard|integration|rbac|audit|api|agent|automation|module|approval|document|reporting)\w*\b",
         prompt,
         re.IGNORECASE,
-    )) >= 3:
+    ))
+    if builds_a_product and (technical_areas >= 3 or enumerated_scope_areas(prompt) >= 4):
         return "PROGRAM"
     if matches(MICRO_WORDS, prompt) and not matches(MATERIAL_RISK_WORDS, prompt):
         return "MICRO"
@@ -339,6 +357,21 @@ def decision_questions(prompt: str, tier: str, register: str) -> list[dict[str, 
             "why": "Standards, workflows, controls and terminology vary materially by domain and jurisdiction.",
             "recommended_default": "Use the organisation's primary operating industry and legal jurisdiction.",
             "consequence": "A generic design may conflict with local practice or mandatory requirements.",
+        })
+
+    if (
+        re.search(r"\b(PHI|PII|patient|health record|medical record|consent|GDPR|HIPAA|DPDP|biometric|financial account|passport|personal data)\b", prompt, re.IGNORECASE)
+        # Guard on the answer being specified, not on "withdrawal"/"consent" merely
+        # being named as a feature to build -- those words describe the feature
+        # this question exists to ask about, not an answer to it.
+        and not re.search(r"\b(retention polic\w*|retain existing|erasure polic\w*|anonymi[sz]e)\b", lower)
+    ):
+        questions.append({
+            "id": "data_handling",
+            "question": "When a data subject withdraws consent or requests deletion, what must happen to records already created, and how long must they be retained regardless?",
+            "why": "Regulated personal data (health, financial, biometric or PII) carries consent, retention and erasure obligations that shape the schema and audit design before code is written.",
+            "recommended_default": "Block further use of consent-linked data, retain existing records to satisfy statutory retention, and log the consent-state change itself as an auditable event.",
+            "consequence": "Deciding this after implementation risks unlawful retention of data that should be blocked, or unlawful deletion of records a regulator requires kept.",
         })
 
     if matches(BUILD_WORDS, prompt) and not re.search(r"\b(existing|current|legacy|stack|system|repository|integration|constraint)\b", lower):
@@ -766,7 +799,14 @@ def select_doctrine(
                 ranked.append({**item, "score": 0, "matched": ["phase-default"]})
 
     ranked.sort(key=lambda item: (-item["score"], -item.get("priority", 0), item["id"]))
-    return ranked[:limit], ranked[limit:]
+    # Label the rejection like select_skills() does. Returning a bare tail slice
+    # left rejected_because unset, so harness_observability.py -- which skips
+    # falsy reasons -- silently dropped every budget-rejected pack from its
+    # trend, the one report meant to surface exactly that.
+    rejected = [
+        {**item, "rejected_because": "phase-pack-budget"} for item in ranked[limit:]
+    ]
+    return ranked[:limit], rejected
 
 
 def select_skills(
