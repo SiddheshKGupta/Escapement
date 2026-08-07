@@ -121,5 +121,28 @@ class PhaseReplanningTest(unittest.TestCase):
         self.assertIn("polish pass", overrides[0]["reason"])
 
 
+    def test_added_phases_land_in_canonical_lifecycle_order(self) -> None:
+        """apply_phase_overrides() appended, so adding RELEASE and then POLISH
+        produced `VERIFY -> RELEASE -> POLISH` -- a plan that releases before it
+        polishes, inverting the lifecycle AGENTS.md defines. Found while running
+        a real multi-module clinical build that classified MATERIAL and so had
+        no POLISH or RELEASE in its default plan."""
+        self.open_material_turn("Add a user login endpoint that stores credentials in the database.")
+
+        for phase in ("RELEASE", "POLISH"):
+            result = self.run_runtime(
+                "replan-phases", "--add-phase", phase, "--reason", f"needs {phase}",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+        plan = [item["id"] for item in self.route()["phase_plan"]]
+        canonical = [
+            "ORIENT", "DISCOVER", "RESEARCH", "BRAINSTORM",
+            "SPECIFY", "PLAN", "IMPLEMENT", "VERIFY", "POLISH", "RELEASE",
+        ]
+        self.assertEqual(plan, sorted(plan, key=canonical.index))
+        self.assertLess(plan.index("POLISH"), plan.index("RELEASE"))
+
+
 if __name__ == "__main__":
     unittest.main()

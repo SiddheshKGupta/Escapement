@@ -447,6 +447,8 @@
         "secret",
         "vulnerability",
         "PII",
+        "PHI",
+        "consent",
         "payment",
         "pentest",
         "hook",

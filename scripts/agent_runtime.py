@@ -122,13 +122,19 @@ def apply_phase_overrides(route: dict[str, Any], overrides: list[dict[str, Any]]
     tier alone -- it has no memory of prior turns. Without this, a phase added or
     removed via replan-phases would silently revert on the very next advance-phase
     call or continued prompt, since both recompute the whole route from scratch.
+
+    Added phases are inserted at their canonical lifecycle position, not
+    appended. Appending let `--add-phase RELEASE` then `--add-phase POLISH`
+    produce `VERIFY -> RELEASE -> POLISH`, i.e. a plan that releases before it
+    polishes -- inverting the lifecycle the kernel defines.
     """
     plan = list(route.get("phase_plan", []))
     ids = [item["id"] for item in plan]
     for override in overrides:
         if override["action"] == "add" and override["phase"] not in ids:
             plan.append(build_phase_entry(override["phase"]))
-            ids.append(override["phase"])
+            plan.sort(key=lambda item: VALID_PHASE_IDS.index(item["id"]))
+            ids = [item["id"] for item in plan]
         elif override["action"] == "remove" and override["phase"] in ids:
             plan = [item for item in plan if item["id"] != override["phase"]]
             ids.remove(override["phase"])
