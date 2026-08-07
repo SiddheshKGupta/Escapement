@@ -35,8 +35,7 @@ wiring and must invoke it itself: `session-start` once per session,
 `prompt` after reading each new request, `stop` before ending a turn.
 Reading this kernel as static text without running these is reading the
 doctrine, not following it -- treat their JSON output as required context,
-not optional. Antigravity reads this file directly; Gemini CLI's default
-context filename is `GEMINI.md`, so a pointer file exists at the repo root.
+not optional. Gemini CLI reads `GEMINI.md`.
 
 ## Help the User Think Better
 
@@ -49,7 +48,7 @@ For every MATERIAL or PROGRAM request:
 5. use recommended defaults only for unattended runs;
 6. explain the consequence of choosing differently;
 7. improve the execution brief without requiring the user to write a perfect prompt;
-8. show the skill/capability readiness audit (`capability-audit`) before implementing;
+8. run `capability-audit` during this round, not only before implementing; name uninstalled matches as an optional lever with recommended yes/no, and offer -- never auto-run -- research;
 9. stop questioning when safe planning can begin.
 
 Do not repeat answered questions or ask for information that can be discovered safely.
