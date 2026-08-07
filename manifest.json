@@ -2,16 +2,16 @@
   "schema_version": "3.0",
   "product": "Escapement",
   "version": "6.3.0",
-  "release": "Capability Strength Orchestration \u2014 Real Project Validated",
+  "release": "Capability Strength Orchestration — Real Project Validated",
   "validated_on": "2026-08-07",
   "validation": {
-    "routing_evaluations": "PASS \u2014 22/22",
-    "unit_tests": "PASS \u2014 147/147",
-    "runtime_doctor": "PASS \u2014 0 failures",
-    "repository_doctor": "PASS \u2014 0 failures, 0 warnings",
-    "security_gate": "PASS \u2014 0 findings",
-    "self_test": "PASS \u2014 0 failures",
-    "real_project_lifecycle": "PASS \u2014 fresh install through RELEASE and truthful PARTIAL closure"
+    "routing_evaluations": "PASS — 22/22",
+    "unit_tests": "PASS — 148/148",
+    "runtime_doctor": "PASS — 0 failures",
+    "repository_doctor": "PASS — 0 failures, 0 warnings",
+    "security_gate": "PASS — 0 findings",
+    "self_test": "PASS — 0 failures",
+    "real_project_lifecycle": "PASS — fresh install through RELEASE and truthful PARTIAL closure"
   },
   "counts": {
     "kernel_words": 795,
