@@ -4,30 +4,114 @@
 
 ### A governed, low-token harness for context-aware AI-assisted delivery.
 
-Escapement helps turn rough requests into clearer decisions, structures context
-across delivery phases, supports capability routing and verification, and
-preserves project decisions and handoffs across sessions.
+Escapement adds an executable delivery layer around coding agents: decision gates,
+phase-scoped context, capability routing, durable project state, structured
+verification, truthful closure, and measurement of the harness itself.
 
 [![Version](https://img.shields.io/badge/version-6.3.0-53284F?style=flat-square)](VERSION)
-[![CI](https://github.com/SiddheshKGupta/escapement/actions/workflows/validate-standard.yml/badge.svg)](https://github.com/SiddheshKGupta/escapement/actions/workflows/validate-standard.yml)
+[![CI](https://github.com/SiddheshKGupta/Escapement/actions/workflows/validate-standard.yml/badge.svg)](https://github.com/SiddheshKGupta/Escapement/actions/workflows/validate-standard.yml)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square&logo=python&logoColor=white)](.github/workflows/validate-standard.yml)
 [![Kernel](https://img.shields.io/badge/kernel-795%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
-[![Unit tests](https://img.shields.io/badge/unit%20tests-147%20passing-2F855A?style=flat-square)](manifest.json)
-[![Case studies](https://img.shields.io/badge/published%20case%20studies-4-2F855A?style=flat-square)](#proof-from-real-use)
+[![Unit tests](https://img.shields.io/badge/unit%20tests-143%20passing-2F855A?style=flat-square)](manifest.json)
+[![Routing evals](https://img.shields.io/badge/routing%20evals-22%20%2F%2022-2F855A?style=flat-square)](evals/)
+[![Case studies](https://img.shields.io/badge/case%20studies-4-2F855A?style=flat-square)](#evidence-from-real-use)
 [![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
 
 **Escapement does not upgrade the model. It upgrades how the model works.**
 
-[Why Escapement?](#why-escapement) ·
+[60-second overview](#escapement-in-60-seconds) ·
 [Quick start](#quick-start) ·
 [How it works](#how-it-works) ·
-[Proof](#proof-from-real-use) ·
-[Architecture](#architecture) ·
+[Capabilities](#capability-orchestration) ·
+[Evidence](#evidence-from-real-use) ·
 [Validation](#current-validation) ·
-[Contributing](#contributing)
+[v2 roadmap](#v20-roadmap)
 
 </div>
+
+---
+
+## Escapement in 60 seconds
+
+A capable model can still make poor delivery decisions: assume instead of ask,
+load too much context, forget prior decisions, skip a specialist capability,
+declare work complete without evidence, or lose consistency across a long
+multi-module build.
+
+Escapement is a repository-native harness designed to reduce those failure modes.
+
+It is **more than an instruction file**. The repository includes an executable
+runtime, capability router, context budgets, lifecycle state, approval gates,
+evidence records, observability, ablation testing, managed installation, and
+host packaging.
+
+### What changes when Escapement is active
+
+| Agent behavior without a delivery harness | Escapement mechanism |
+|---|---|
+| One growing context accumulates across the task | Fresh, bounded context is composed for the active phase |
+| Material choices are silently assumed | `MATERIAL` and `PROGRAM` work surfaces high-impact decisions and waits for the user |
+| The same instructions are carried through every stage | Skills, doctrine, strengths, agents, and external candidates are routed by phase |
+| A capability exists but the user never discovers it | Capability audit and catalogue search surface relevant native and optional capabilities |
+| Chat history becomes project memory | Decisions, evidence, phase history, and the next action persist in the repository |
+| "Looks done" becomes "done" | Closure is tied to executed checks and explicit `PASS`, `PARTIAL`, or failure semantics |
+| Large builds drift across modules | A PROGRAM registry tracks dependencies, shared artifacts, and module state |
+| External tools become ambient authority | External resources remain governed candidates until reviewed and approved |
+| Harness rules grow without proof they help | Observability and ablation expose routing behavior and test selected components against the evaluation corpus |
+
+### What is actually inside
+
+```text
+User request
+    ↓
+Task classification
+    ↓
+Decision + question gate
+    ↓
+Capability readiness
+    ↓
+Adaptive phase plan
+    ↓
+Bounded context composition
+    ├── compact kernel
+    ├── project + domain context
+    ├── doctrine packs
+    ├── native skills
+    ├── specialist strengths
+    └── approved external candidates
+    ↓
+Implementation
+    ↓
+Executed verification
+    ↓
+Truthful closure
+    ↓
+Durable handoff
+```
+
+Current inventory:
+
+```text
+Version:                   6.3.0
+Repository files:          267
+Kernel:                    795 / 1000 words
+Profiles:                    2
+Doctrine packs:             11
+Native skills:              35
+Capability strengths:       58
+Agent patterns:             21
+Governed external resources: 61
+Strategy adapters:          10
+Capability families:        10
+Overlap groups:             14
+Published case studies:      4
+Unit tests:                 143
+Routing evaluations:        22
+```
+
+Escapement deliberately uses **more capabilities across the lifecycle, not more
+context inside one prompt**.
 
 ---
 
@@ -45,84 +129,60 @@ Specify → Route → Execute → Verify → Persist
 Controlled delivery
 ```
 
-AI agents can produce code quickly. Reliable delivery also requires clear
-decisions, bounded scope, domain context, explicit permissions, real evidence,
-and a handoff that the next session can trust.
-
----
-
-## Why it exists
-
-Escapement was shaped through repeated work on B2B SaaS, enterprise systems,
-governance workflows, reporting products, and AI-assisted builds.
-
-The recurring problem was not only code generation. It was delivery discipline.
-
-| Common failure | Escapement response |
-|---|---|
-| Important decisions disappear between sessions | Persist decisions, evidence, phase history, and the next action in the repository |
-| Agents skip material questions or answer them themselves | Ask no more than five high-impact questions and wait for real answers when a user is present |
-| Familiar technologies become silent defaults | Compare materially different options and record the chosen trade-off |
-| Business rules and controls arrive after implementation | Route domain, governance, security, data, design, and reporting expertise before or during specification |
-| Every skill is loaded into every prompt | Keep the kernel small and load only phase-relevant context |
-| Parallel agents produce individually correct but incompatible work | Require independence, explicit contracts, an integration owner, and whole-system verification |
-| A generated feature is described as complete without proof | Require structured check records and truthful closure |
-| A project grows across several modules and loses shared consistency | Track modules, dependencies, and shared artifacts through a durable PROGRAM registry |
-| Installed framework files drift from their source | Detect exact managed-file drift and provide a safe remediation path |
-
-Escapement began with B2B SaaS and enterprise delivery, but it is not limited to
-those categories. It can support any repository-based project where an AI agent
-must make decisions, use specialist expertise, work across multiple stages,
-verify outcomes, and preserve context.
-
-Typical uses include:
-
-- SaaS products and internal platforms
-- APIs, backend services, and frontend applications
-- data engineering, analytics, and reporting
-- workflow automation and AI-agent systems
-- governance, finance, legal, security, and compliance work
-- consulting deliverables, specifications, SOPs, and structured artifacts
-- research-heavy or domain-specific projects
+AI agents can generate code quickly. Reliable delivery also requires decisions
+to be explicit, context to remain usable, specialist capabilities to appear at
+the right time, sensitive actions to remain bounded, verification to be
+executed, and the next session to inherit trustworthy state.
 
 ---
 
 ## What Escapement is
 
-Escapement is a repository-native operating layer for AI-assisted delivery.
+Escapement is a **repository-native operating layer for AI-assisted delivery**.
 
 It provides:
 
-- a compact always-loaded delivery kernel;
-- task classification for information, micro changes, material work, and programs;
-- phase-specific routing of doctrine, native skills, capability strengths, and tools;
-- real-user question gates and recommended defaults;
-- adaptive lifecycle planning after repository inspection;
-- connected database, schema, and API decisioning;
-- explicit approval gates for sensitive changes;
+- an always-loaded kernel with an enforced word budget;
+- runtime classification into `INFO`, `MICRO`, `MATERIAL`, and `PROGRAM`;
+- a ten-phase lifecycle with adaptive replanning;
+- real-user question gates for material decisions;
+- phase-specific capability routing;
+- 35 native executable skill procedures;
+- 58 specialist capability strengths;
+- governed external capability discovery with overlap and licence controls;
+- domain, design, reporting, engineering, data, governance, finance, legal,
+  security, AI-agent, automation, and artifact-production procedures;
 - durable project memory and multi-session handoff;
-- managed installation, update, repair, and drift detection;
-- deterministic checks and content-addressed evidence;
-- honest `PASS`, `PARTIAL`, and failure semantics;
-- packaging and hooks for Claude Code and Codex.
+- multi-module PROGRAM dependency governance;
+- structured, content-addressed check evidence;
+- `PASS`, `PARTIAL`, and failure closure semantics;
+- deterministic security and UI-quality gates;
+- harness observability;
+- harness ablation against a shared evaluation corpus;
+- managed install, update, repair, backup, and drift detection;
+- automatic runtime hook packaging for Claude Code and Codex;
+- bootstrap guidance for other repository-aware hosts.
 
-Escapement is not:
+Escapement is **not**:
 
 - a replacement for the underlying model;
-- a prompt library that loads everything at once;
-- permission to deploy, change production data, expose credentials, or run
-  security tests;
-- a substitute for laws, standards, policy, or qualified domain experts;
-- a claim that every catalogued external tool is installed;
-- a guarantee that locally produced evidence is equivalent to independently
-  controlled CI evidence.
+- a guarantee of correct software;
+- a giant prompt that loads every capability at once;
+- an autonomous permission to deploy, modify production data, expose
+  credentials, install dependencies, or run security tests;
+- a claim that every catalogued external resource is installed;
+- a substitute for law, regulation, policy, standards, or qualified domain
+  experts;
+- a claim that local evidence is equivalent to independently controlled CI;
+- an MCP server today;
+- the provider-agnostic execution control plane described in the v2 roadmap.
 
 ---
 
-## Proof from real use
+# Evidence from real use
 
-Escapement is repeatedly exercised through real repository builds, adversarial
-scenarios, regression tests, and end-to-end delivery flows.
+Escapement has been repeatedly exercised through real repository builds,
+adversarial scenarios, regression tests, and end-to-end delivery flows.
 
 Four detailed case studies are published:
 
@@ -131,30 +191,118 @@ Four detailed case studies are published:
 3. [Invoice Reconciliation PROGRAM Build](reports/CASE_STUDY_invoice_reconciliation_program_build.md)
 4. [Four-Module CRM PROGRAM Build](reports/CASE_STUDY_crm_platform_multi_module_program.md)
 
-Together, they document failures caught in implementation, integration, security
-evidence, design routing, capability visibility, reporting, and release
-readiness. They also show the framework refusing to describe incomplete work as
-production-ready.
+Those builds did more than confirm happy paths. They surfaced problems that
+became framework changes and regression tests, including:
 
-Beyond the published reports, Escapement is being used across additional
-completed and ongoing projects. Findings from those projects continue to be
-converted into framework changes, regression tests, standards, and case studies.
+- sequencing drift between PROGRAM modules;
+- a declared business dependency missing from the module registry;
+- a verified standalone module that failed when integrated into a broader
+  compliance workflow;
+- a stale development server that returned plausible but wrong runtime data;
+- UI doctrine that existed but was skipped in practice, leading to a
+  deterministic UI-quality gate;
+- missing baseline field validation;
+- a browser-only validation failure that unit tests did not expose;
+- context-budget regressions caused by adding too much kernel or skill prose;
+- host bootstrap behavior that could leave the runtime inactive even when an
+  agent had read the instructions.
 
-“Battle-tested” here means repeatedly used and challenged against real work. It
-does not mean a statistical benchmark or a claim of broad production adoption.
+The operating pattern is:
+
+```text
+Real build
+    ↓
+Observed failure or gap
+    ↓
+Identify the smallest correct harness layer
+    ↓
+Implement the mechanism
+    ↓
+Add regression evidence
+```
+
+"Battle-tested" in this repository means repeatedly used and challenged against
+real work. It does **not** mean a statistical benchmark or broad production
+adoption.
+
+Current real-use evidence is strongest on Claude Code. Codex has automatic
+runtime-hook packaging in the repository, but equivalent cross-host conformance
+and quota-aware execution validation remain future work.
 
 ---
 
-## Quick start
+## The harness measures itself
 
-### 1. Clone Escapement
+Escapement does not treat more doctrine as automatically better.
+
+### Observability
+
+Every formally closed turn can contribute to harness-health trends:
 
 ```bash
-git clone https://github.com/SiddheshKGupta/escapement.git
-cd escapement
+python scripts/escapement.py observability --root <target>
 ```
 
-### 2. Install it into a project
+The report can surface:
+
+- turn and closure-result distribution;
+- task-tier distribution;
+- phase-replan frequency and reasons;
+- skills selected but never marked used;
+- rejection causes such as overlap, phase limits, and context budget.
+
+An empty observability report is **not** treated as proof of a healthy harness.
+It may mean work happened without formal `close-turn` records.
+
+### Ablation Harness v0
+
+Escapement can also ask a harder question:
+
+> Does this harness component change anything this corpus can measure?
+
+```bash
+python scripts/escapement.py ablate
+python scripts/escapement.py ablate design-intelligence-constitution
+python scripts/escapement.py ablate decision-coach
+```
+
+An ablation run:
+
+1. copies the repository to a throwaway workspace;
+2. removes one declared component from that copy only;
+3. runs the same evaluation corpus as a control;
+4. runs it again with the component removed;
+5. reports factual differences.
+
+Canonical source files are not modified.
+
+One current example is clearly exercised by the routing corpus:
+removing `design-intelligence:constitution` changed the routing result from
+22/22 passing cases to 13/22.
+
+The counter-example is equally important. A routing-only corpus cannot determine
+whether `decision-coach` actually prevents bad human decisions during live
+delivery. A null result is therefore reported as **not exercised by this
+corpus**, not as evidence that the component is useless.
+
+Escapement deliberately does not invent a composite "harness score" or
+statistical significance from 22 routing cases.
+
+The current ablation corpus measures routing behavior. It does not yet measure
+live retries, tool activity, turn closure, or final task quality.
+
+---
+
+# Quick start
+
+## 1. Clone
+
+```bash
+git clone https://github.com/SiddheshKGupta/Escapement.git
+cd Escapement
+```
+
+## 2. Install into a project
 
 ```bash
 python scripts/escapement.py init /path/to/your-project
@@ -166,12 +314,12 @@ Windows:
 py -3 scripts/escapement.py init C:\path\to\your-project
 ```
 
-The installer copies framework-managed files and creates project-owned seed
-files without treating them as disposable framework content.
+Escapement copies framework-managed files while creating project-owned state
+that is not treated as disposable framework content.
 
-### 3. Configure the project
+## 3. Configure the project
 
-Edit:
+Start with:
 
 ```text
 PROJECT_STATE.yaml
@@ -179,7 +327,7 @@ PROJECT_CONTEXT.md
 DOMAIN_CONTEXT.md
 ```
 
-A safe initial state is:
+Example:
 
 ```yaml
 project_name: My Product
@@ -190,7 +338,7 @@ implementation_authorized: false
 approved_ticket: null
 ```
 
-### 4. Verify the installation
+## 4. Verify the installation
 
 From the installed project:
 
@@ -198,25 +346,31 @@ From the installed project:
 python scripts/escapement.py doctor --root .
 ```
 
-### 5. Discover what's available
-
-A first-time user does not automatically know what Escapement can already
-do. Browse before you ask for anything:
+## 5. See what Escapement can already do
 
 ```bash
-python scripts/escapement.py catalog list --catalog skills      # 35 native skills
-python scripts/escapement.py catalog list --catalog resources   # 61 governed external candidates
-python scripts/escapement.py catalog list --catalog patterns    # agent patterns
-python scripts/escapement.py catalog search "browser test"      # search any of the above
+python scripts/escapement.py catalog list --catalog skills
+python scripts/escapement.py catalog list --catalog resources
+python scripts/escapement.py catalog list --catalog patterns
+python scripts/escapement.py catalog search "browser test"
 ```
 
-Being catalogued is not being installed or active by default -- see
-[docs/REFERENCE_CATALOG.md](docs/REFERENCE_CATALOG.md). You do not need to
-browse manually every time: `decision-coach` also surfaces matched,
-not-yet-installed capabilities as part of its own question round for
-MATERIAL/PROGRAM work (see [How it works](#how-it-works)).
+The current catalogue exposes:
 
-### 6. Start a governed turn
+```text
+35 native skills
+21 agent patterns
+61 governed external resources
+```
+
+A catalogue entry is **not** an installation. External capabilities retain
+their own activation, approval, overlap, and licence boundaries.
+
+For `MATERIAL` and `PROGRAM` work, `decision-coach` also surfaces relevant
+not-yet-installed candidates during the question round and recommends whether
+to use or skip them.
+
+## 6. Start a governed turn
 
 ```bash
 python scripts/agent_runtime.py manual-start \
@@ -224,14 +378,14 @@ python scripts/agent_runtime.py manual-start \
   --json
 ```
 
-For an explanation without starting a turn:
+Explain routing without starting a turn:
 
 ```bash
 python scripts/escapement.py explain \
   "Build a controlled claims workflow"
 ```
 
-For a capability-readiness report:
+Inspect capability readiness:
 
 ```bash
 python scripts/escapement.py capability-audit \
@@ -241,49 +395,21 @@ python scripts/escapement.py capability-audit \
 
 ---
 
-## Host integration
+# How it works
 
-Escapement includes repository packaging for Claude Code and Codex.
-
-### Claude Code
-
-`.claude/settings.json` connects the runtime to:
-
-- session start;
-- user prompt submission;
-- stop.
-
-### Codex
-
-`.codex/hooks.json` provides the same lifecycle hooks through shell and
-PowerShell wrappers.
-
-### Other agents (GitHub Copilot, Cursor, Gemini, manual sessions)
-
-GitHub Copilot already reads `AGENTS.md` natively, and
-`.github/copilot-instructions.md` points to it for surfaces that
-prioritize that file specifically (VS Code). What these hosts lack is
-Claude Code/Codex's automatic hook wiring to `agent_runtime.py` -- without
-it, a host reads the kernel as static prose and never activates routing,
-phase-gating, or evidence. `AGENTS.md`'s "Host Bootstrap" section makes
-this explicit: any host without hook support must invoke `session-start`,
-`prompt`, and `stop` itself, and treat their JSON output as required
-context, not optional reading.
-
----
-
-## How it works
-
-### Task tiers
+## Task tiers
 
 | Tier | Intended use | Runtime expectation |
 |---|---|---|
-| `INFO` | Explanation, navigation, or status | No material turn required |
-| `MICRO` | Small, bounded change | Compact context and at most one native skill per phase |
-| `MATERIAL` | Feature or meaningful change | Questions, phase routing, explicit evidence, and durable closure |
-| `PROGRAM` | Product, module, or transformation | Full lifecycle, broader capability routing, and multi-turn governance |
+| `INFO` | Explanation, navigation, or status | No material runtime turn required |
+| `MICRO` | Small bounded change | Compact context and at most one native skill per phase |
+| `MATERIAL` | Feature or meaningful change | Decisions, phase routing, evidence, and durable closure |
+| `PROGRAM` | Product, module, or transformation | Full lifecycle, broader orchestration, and multi-turn governance |
 
-### Lifecycle
+The tier changes the amount of ceremony and context. A typo should not be
+treated like a platform build.
+
+## Lifecycle
 
 ```text
 ORIENT
@@ -300,56 +426,51 @@ ORIENT
 
 | Phase | Primary responsibility |
 |---|---|
-| `ORIENT` | Read the repository, state, constraints, and active work |
-| `DISCOVER` | Identify the real decision, inspect before asking, and resolve material questions |
+| `ORIENT` | Read the repository, current state, constraints, and active work |
+| `DISCOVER` | Identify the real decision, inspect first, and resolve material unknowns |
 | `RESEARCH` | Gather authoritative domain, regulatory, product, and technical evidence |
 | `BRAINSTORM` | Compare materially different approaches |
-| `SPECIFY` | Define behaviour, controls, architecture, data, reporting, design, and acceptance criteria |
-| `PLAN` | Create bounded tasks, dependencies, ownership, and verification steps |
-| `IMPLEMENT` | Build through approved, phase-routed skills |
-| `VERIFY` | Test behaviour, integration seams, security, accessibility, and evidence |
+| `SPECIFY` | Define behavior, controls, architecture, data, reporting, design, and acceptance criteria |
+| `PLAN` | Create bounded tasks, dependencies, ownership, and verification |
+| `IMPLEMENT` | Build through approved, phase-relevant capabilities |
+| `VERIFY` | Test behavior, seams, security, accessibility, and evidence |
 | `POLISH` | Improve usability, language, responsiveness, and motion where relevant |
 | `RELEASE` | Apply readiness gates and issue a truthful verdict and handoff |
 
-Advance explicitly:
-
-```bash
-python scripts/agent_runtime.py advance-phase \
-  --phase RESEARCH \
-  --summary "Discovery decisions resolved" \
-  --skills-used "decision-coach,project-discovery" \
-  --files "PROJECT_CONTEXT.md" \
-  --evidence "PROJECT_CONTEXT.md"
-```
-
 ### Adaptive phase planning
 
-The initial phase plan is a default created before full repository inspection.
-After `DISCOVER`, it can be revised:
+The initial lifecycle is a starting plan, not a rigid ceremony.
+
+After repository inspection, a turn can revise future phases:
 
 ```bash
 python scripts/agent_runtime.py replan-phases \
   --add-phase VERIFY \
   --reason "Stored credentials require explicit security verification."
+```
 
+or:
+
+```bash
 python scripts/agent_runtime.py replan-phases \
   --remove-phase POLISH \
   --reason "Backend-only change with no user-facing surface."
 ```
 
-A revision:
+A replan:
 
-- can use only the ten catalogued phases;
+- can use only the catalogued lifecycle phases;
 - cannot remove the current phase;
-- cannot remove a phase already completed with evidence;
+- cannot erase a phase already completed with evidence;
 - requires a reason;
-- is persisted in the turn record and `turns.jsonl`.
+- is persisted in the turn history.
 
 ---
 
 ## Better decisions before better code
 
-For `MATERIAL` and `PROGRAM` work, the runtime requires:
+For `MATERIAL` and `PROGRAM` work, the runtime expects a decision brief that
+contains:
 
 ```text
 Actual decision
@@ -360,111 +481,76 @@ Consequence of choosing differently
 Improved execution brief
 Domain-research plan
 Phase plan
-Skill and capability readiness audit
+Capability-readiness audit
 ```
 
-When a user is present, the agent must wait for real answers to material
-questions. Recommended defaults make the decision easier to review. They are not
-permission to silently proceed.
+When a user is present, the agent is expected to wait for real answers to
+material questions rather than silently using defaults.
 
-Defaults may be used automatically only for a genuinely unattended run.
+Defaults exist to reduce user effort and support genuinely unattended work.
+They are not permission to self-answer an interactive decision.
 
-The capability-readiness audit must be shown before implementation so users can
-see:
-
-- active native skills;
-- active specialist strengths;
-- detected repository capabilities;
-- external candidates and their readiness;
-- overlap decisions;
-- lifecycle usage;
-- licence and activation status.
+An explicit request such as "grill me", "stress-test this plan", or "challenge
+every assumption" activates a deeper decision-tree pass inside
+`decision-coach`. It does not silently activate on an ordinary feature request.
 
 ---
 
-## Data architecture as one decision
+# Bounded context engineering
 
-Database choice, schema, and API shape are treated as one connected decision.
+Escapement's low-token design is not based only on having a short `AGENTS.md`.
 
-The `data-architecture` skill requires the agent to:
+The runtime separates:
 
-1. inspect `PROJECT_CONTEXT.md` and `DOMAIN_CONTEXT.md`;
-2. assess data shape, consistency, query patterns, write volume, concurrency,
-   and operational reality;
-3. compare at least two materially different options;
-4. present the recommendation and wait for approval;
-5. design the schema for the chosen technology’s actual model;
-6. design the API against that schema;
-7. record the selected option and rejected alternatives durably.
+```text
+Always loaded
+└── compact kernel
 
-This prevents a database, schema, and API from being designed independently and
-then forcing one another to be rebuilt.
+Project-relevant
+├── project state
+├── project context
+└── domain context
 
-Common fields have a sane baseline shape even when nothing project-specific
-overrides it -- name, phone, email, money, and date each have a stated
-default (letters-only names, country-code-qualified phone numbers, real
-email shape, non-negative amounts, real calendar dates), enforced
-server-side. Absence of a stated domain rule is not permission to accept
-anything.
+Phase-relevant
+├── doctrine packs
+├── native skills
+├── capability strengths
+├── fresh-context agents
+└── approved external candidates
+
+Persisted afterward
+├── decisions
+├── phase history
+├── artifacts
+├── evidence
+└── next action
+```
+
+Current enforced budgets:
+
+```text
+Always-loaded kernel:          <= 1,000 words
+Current kernel:                   795 words
+Automatic phase context:       <= 1,800 words
+Invoked native-skill context:  <= 1,000 words
+Doctrine packs:                <= 3 per phase
+Native skills for MICRO:       <= 1 per phase
+Native skills for MATERIAL:    <= 5 per phase
+Native skills for PROGRAM:     <= 6 per phase
+```
+
+The budgets are active constraints, not decorative documentation.
+
+Recent changes demonstrated this directly: adding capability-surfacing prose
+initially pushed the kernel and `decision-coach` far enough to break unrelated
+routing evaluations. The change was trimmed to fit instead of raising the
+budgets.
 
 ---
 
-## Multi-module PROGRAMs
+# Capability orchestration
 
-A single turn governs one bounded piece of work. A large program may span many
-modules and many turns.
-
-`scripts/program_modules.py` provides a durable registry for:
-
-- modules;
-- dependencies;
-- current module status;
-- shared artifacts such as `DESIGN.md`, schema definitions, and
-  `DOMAIN_CONTEXT.md`;
-- cross-module consistency checks.
-
-Example:
-
-```bash
-python scripts/program_modules.py set-program --name "CRM Platform"
-python scripts/program_modules.py add-shared --path DESIGN.md
-python scripts/program_modules.py add-module \
-  --id billing \
-  --name "Billing"
-python scripts/program_modules.py add-module \
-  --id portal \
-  --name "Customer Portal" \
-  --depends-on billing
-python scripts/program_modules.py set-status \
-  --id billing \
-  --status plan \
-  --checked-shared DESIGN.md
-python scripts/program_modules.py list
-```
-
-A module cannot move beyond `SPECIFY` until every registered shared artifact has
-been checked. It also cannot advance while a declared dependency remains
-incomplete.
-
-The registry lives in `docs/PROGRAM_MODULES.json` and is project-owned.
-
----
-
-## Architecture
-
-```mermaid
-flowchart LR
-    A[Rough request] --> B[Decision brief]
-    B --> C[Material questions]
-    C --> D[Authoritative evidence]
-    D --> E[Alternative approaches]
-    E --> F[Approved specification]
-    F --> G[Phase plan]
-    G --> H[Implementation]
-    H --> I[Independent verification]
-    I --> J[Release verdict]
-    J --> K[Durable handoff]
-```
+Escapement separates **what exists** from **what should be active now**.
 
 ### Operating layers
 
@@ -474,54 +560,18 @@ flowchart LR
 | Profile | Project and domain decision conventions | One selected profile |
 | Doctrine packs | Compact judgement for the current problem | Phase-routed |
 | Native skills | Executable procedures available without an external dependency | Phase-routed |
-| Capability strengths | Specialist subskills used where they are strongest | Phase-routed |
-| Strategy adapters | Bounded methods from compatible delivery approaches | Selected, not stacked blindly |
-| Fresh-context agents | Isolated work for justified subproblems | Planned and contract-bound |
+| Capability strengths | Specialist subskills used where strongest | Phase-routed |
+| Strategy adapters | Bounded methods from compatible delivery approaches | Selected, not blindly stacked |
+| Fresh-context agents | Isolated work for justified subproblems | Contract-bound |
 | External resources | Tools, plugins, MCP servers, services, and repositories | Candidates until reviewed and approved |
-| Evidence and handoff | Checks, decisions, turn history, and next actions | Persisted in the repository |
+| Evidence and handoff | Checks, decisions, history, and next action | Persisted |
 
-### Current inventory
+### Overlap is explicit
 
-```text
-Version:                 6.3.0
-Repository files:        267
-Kernel:                  795 / 1000 words
-Profiles:                  2
-Doctrine packs:           11
-Native skills:            35
-Capability strengths:     58
-Agent patterns:           21
-External resources:       61
-Strategy adapters:        10
-Capability families:      10
-Overlap groups:           14
-Published case studies:    4
-```
+Escapement does not resolve overlap by loading everything or deleting every
+alternative.
 
-### Low-token contract
-
-```text
-Always-loaded kernel:          <= 1000 words
-Current kernel:                 795 words
-Automatic phase context:       <= 1,800 words
-Invoked native-skill context:  <= 1,000 words
-Normal doctrine packs:         <= 3 per phase
-Native skills for MICRO:       <= 1 per phase
-Native skills for MATERIAL:    <= 5 per phase
-Native skills for PROGRAM:     <= 6 per phase
-```
-
-Escapement uses more capabilities across the lifecycle, not more context inside
-one prompt.
-
----
-
-## Capability orchestration
-
-Escapement does not resolve overlap by loading every capability or deleting
-useful alternatives.
-
-It records explicit relationships:
+Relationships include:
 
 ```text
 BASELINE_PLUS_INTENSIFIER
@@ -535,31 +585,27 @@ META_OBSERVER
 Examples:
 
 ```text
-Karpathy Guidelines
-→ baseline engineering behaviour
+decision-coach
+→ canonical material-decision procedure
 
-Ponytail
-→ optional implementation intensifier
+Grilling
+→ explicit intensifier only when requested
 ```
 
 ```text
-Design Intelligence
-→ authority
+product-specification
+→ owns the approved specification
 
-UI/UX Pro Max
-→ research and recommendation
+Prompt Master
+→ optional sequential export after specification
+```
 
-Taste Skill
-→ art direction
+```text
+skill-governance
+→ owns evaluation and promotion
 
-frontend-design
-→ implementation
-
-Impeccable
-→ verification and polish
-
-Emil Kowalski
-→ motion specialisation
+Task Observer / Evolver
+→ may observe or propose, not mutate the harness automatically
 ```
 
 See:
@@ -570,19 +616,17 @@ See:
 - [Capability Registry](catalog/capability-registry.json)
 - [Reference Catalogue](docs/REFERENCE_CATALOG.md)
 
-A registry entry is not treated as an installation.
-
 ---
 
 ## Native skills
 
-The canonical source for each skill is:
+The canonical skill source is:
 
 ```text
 skills/<skill>/SKILL.md
 ```
 
-The installer maintains native mirrors for supported hosts:
+Native mirrors are maintained for supported host layouts:
 
 ```text
 .agents/skills/<skill>/SKILL.md
@@ -641,7 +685,7 @@ The installer maintains native mirrors for supported hosts:
 
 </details>
 
-Synchronise the native mirrors:
+Synchronize host mirrors:
 
 ```bash
 python scripts/escapement.py sync-skills
@@ -655,25 +699,70 @@ python scripts/escapement.py sync-skills --check
 
 ---
 
-## Domain, design, and reporting authority
+## Governed external capabilities
 
-Escapement separates domain correctness from visual execution.
+Escapement currently preserves 61 external skills, tools, plugins, MCP servers,
+repositories, services, and reference systems as governed candidates.
 
-### Domain context
+Being catalogued means:
 
-Every installed project receives `DOMAIN_CONTEXT.md`, which can record:
+```text
+reviewed enough to classify
+        ≠
+installed
+        ≠
+active
+        ≠
+authorized
+```
+
+Each candidate can carry:
+
+- source and publisher;
+- licence and licence-review status;
+- activation status;
+- trigger cues;
+- permitted use modes;
+- overlap group;
+- `use_when`;
+- `do_not`;
+- notes and authority boundaries.
+
+Recent examples include:
+
+| Candidate | Escapement treatment |
+|---|---|
+| Understand Anything | On-demand code-knowledge candidate for large unfamiliar repositories |
+| Grilling / Grill Me | Explicit decision-interview intensifier adapted into `decision-coach` |
+| Prompt Master | Optional post-specification prompt-export reference |
+| Agency Agents | Specialist-role discovery catalogue |
+| Prime Agent | Separate external runtime candidate with explicit authority boundary |
+| Evolver | Review-only meta-observer candidate |
+| Cloudflare OS | Security and agent-workspace architecture reference |
+
+See [External Candidates Review, 2026-08](docs/decisions/EXTERNAL_CANDIDATES_2026_08.md).
+
+---
+
+# Domain, design, reporting, and data authority
+
+Escapement does not treat all specialist work as generic software engineering.
+
+## Domain evidence
+
+`DOMAIN_CONTEXT.md` can record:
 
 - industry and geography;
+- business model;
 - users and stakeholders;
-- business model and operating reality;
-- laws, regulations, and standards;
-- current market and technical practice;
-- comparable systems;
+- operational reality;
+- laws, regulation, and standards;
 - terminology;
+- market and technical practice;
 - approved evidence;
 - confidence and research date.
 
-Evidence priority is:
+Evidence priority:
 
 ```text
 Project evidence
@@ -685,60 +774,114 @@ Project evidence
 → practitioner and community signals
 ```
 
-### Design authority
+Community popularity is not treated as authoritative evidence.
+
+## Design authority
 
 [`docs/standards/design-intelligence.md`](docs/standards/design-intelligence.md)
-is the supreme design constitution.
+is the governing design constitution.
 
-A generic frontend request must still surface design direction before
-implementation. Specialists may research, propose, implement, verify, or polish.
-They may not silently override approved product requirements, accessibility
-obligations, `DESIGN.md`, or the constitution.
+Specialists can research, recommend, implement, verify, or polish beneath that
+authority. They do not silently override approved requirements,
+accessibility obligations, or project design decisions.
 
-### Reporting authority
+## Reporting authority
 
 [`docs/standards/reporting-intelligence.md`](docs/standards/reporting-intelligence.md)
-governs whether dashboards, KPI tiles, tables, and exports are correct,
-traceable, and honestly formatted.
+governs the meaning and traceability of dashboards, KPIs, tables, and exports.
 
-It requires:
+It expects reporting logic such as:
 
-- a definition, formula, source, freshness, filters, comparison, breakdown,
-  owner, and exception status for each KPI;
-- management summary, analytical breakdown, and record-level evidence;
-- absolute numbers before percentages for management views;
-- visible reporting periods and relevant comparisons;
-- reconciliation between dashboards, tables, exports, and source records;
-- locale-correct currency, digit grouping, and unit scale.
+- definition;
+- formula;
+- source;
+- freshness;
+- filter context;
+- comparison;
+- breakdown;
+- owner;
+- exception status;
+- reconciliation to underlying records.
 
-Design Intelligence governs appearance. Reporting Intelligence governs the
-meaning and integrity of the numbers.
+Design Intelligence governs presentation. Reporting Intelligence governs the
+integrity of the numbers.
+
+## Data architecture as one decision
+
+Database choice, schema, and API shape are treated as a connected decision.
+
+The `data-architecture` procedure expects the agent to:
+
+1. inspect project and domain context;
+2. assess data shape, consistency, query patterns, write volume, concurrency,
+   and operational reality;
+3. compare materially different options;
+4. wait for approval on the selected architecture;
+5. design the schema for the chosen model;
+6. design the API against that schema;
+7. persist selected and rejected alternatives.
+
+Baseline field-shape rules exist unless the domain overrides them:
+
+```text
+Name           letters, spaces, hyphens, apostrophes
+Phone          target-country digit rules + explicit country code
+Email          standard local@domain shape
+Money/quantity non-negative unless the domain genuinely permits otherwise
+Date           real calendar date
+```
+
+Server-side validation remains the control. Client-side validation is a UX
+layer.
 
 ---
 
-## Parallel and fresh-context agents
+# Multi-module PROGRAMs
 
-Parallel execution requires:
+A single turn should govern one bounded slice. A PROGRAM may span many modules
+and many turns.
 
-- genuinely independent tasks;
-- separate files or non-conflicting state;
-- explicit input and output contracts;
-- bounded context;
-- a named integration owner;
-- a defined merge order;
-- whole-system verification after integration.
+`scripts/program_modules.py` maintains project-owned state for:
 
-Use fresh-context agents for sequential work that benefits from isolation.
+- modules;
+- dependencies;
+- current module status;
+- shared artifacts;
+- cross-module consistency checks.
 
-The availability of actual parallel dispatch depends on the host. The planning,
-contract, ownership, and verification rules remain applicable even when work is
-performed sequentially.
+Example:
+
+```bash
+python scripts/program_modules.py set-program --name "CRM Platform"
+python scripts/program_modules.py add-shared --path DESIGN.md
+python scripts/program_modules.py add-module \
+  --id billing \
+  --name "Billing"
+python scripts/program_modules.py add-module \
+  --id portal \
+  --name "Customer Portal" \
+  --depends-on billing
+python scripts/program_modules.py set-status \
+  --id billing \
+  --status plan \
+  --checked-shared DESIGN.md
+python scripts/program_modules.py list
+```
+
+A module cannot move beyond `SPECIFY` until registered shared artifacts have
+been checked. It cannot advance through a declared incomplete dependency.
+
+The registry lives in:
+
+```text
+docs/PROGRAM_MODULES.json
+```
 
 ---
 
-## Evidence and truthful closure
+# Evidence and truthful closure
 
-Escapement treats evidence as part of the runtime contract.
+Escapement treats executed evidence as part of the runtime contract.
 
 Run a deterministic check:
 
@@ -750,111 +893,102 @@ python scripts/run_check.py \
   python -m unittest discover -s tests -p "test_*.py"
 ```
 
-The resulting record includes:
+A check record can contain:
 
 ```text
 Check name
 Command
 Working directory
 Scope
-Start and completion time
+Start time
+Completion time
 Duration
 Exit code
 Result
-Standard-output path and hash
-Standard-error path and hash
+stdout path + hash
+stderr path + hash
 Content-derived record identity
 ```
 
-Before accepting a record, the runtime verifies that:
+Before accepting evidence, the runtime verifies:
 
-- required fields are present;
-- referenced output files exist;
-- output hashes match;
-- the record identity can be recomputed;
-- the check actually passed.
+- required fields;
+- referenced output files;
+- output hashes;
+- record identity;
+- successful check result.
 
-Closure rules:
+Closure rules include:
 
-- a critical failed check cannot become a `PASS`;
+- a critical failed check cannot become `PASS`;
 - `MATERIAL` and `PROGRAM` work require structured evidence;
-- missing production evidence requires `PARTIAL` or failure;
-- the handoff must state what was built, checked, deferred, and approved.
+- missing required production evidence must remain `PARTIAL` or failed;
+- the handoff states what was built, checked, deferred, and approved.
 
-Local content-addressed evidence raises the cost of accidental or casual
-fabrication. It is not a substitute for independently controlled CI or a
-sandbox when stronger assurance is required.
-
-Every closed turn already writes to `.agent/runtime/turns.jsonl` and
-`logs/skill-usage.jsonl` -- nothing read them back as a trend until asked:
-
-```bash
-python scripts/escapement.py observability --root <target>
-```
-
-Reports closure-result distribution, phase-replan frequency, skills routed
-but never used, and why packs/skills got rejected (overlap, phase limit,
-context budget). An empty report means turns aren't being closed, not
-that the harness is healthy.
-
-Observability shows what the harness did. Ablation asks whether a component
-earned its place:
-
-```bash
-python scripts/escapement.py ablate                  # list ablatable components
-python scripts/escapement.py ablate decision-coach   # control vs ablated
-```
-
-A run copies the repository to a throwaway directory, removes the
-component's registry entry there, and runs the corpus under `evals/` twice.
-Canonical files are never modified. The output is a factual diff -- cases
-changed, skills or strengths lost, context words freed -- and deliberately
-no score: 22 routing cases cannot support one.
-
-"No measurable difference" means the corpus does not exercise that
-component, not that the component is useless. Today's corpus is
-routing-only; retries, tool activity and task quality need a live-execution
-corpus that does not exist yet.
+Content-addressed local evidence makes accidental or casual fabrication harder.
+It is not a substitute for independently controlled CI, external attestations,
+or a security sandbox.
 
 ---
 
-## Security and approval gates
+# Deterministic quality gates
 
-Sensitive actions require explicit approval, including:
+Escapement increasingly converts recurring failures into mechanical checks
+instead of adding more prose.
 
-- adding dependencies;
-- using credentials or confidential data;
-- changing schemas or role-based access control;
-- installing external skills, plugins, or MCP servers;
-- running security tests;
-- performing destructive operations;
-- deploying to production;
-- reusing licence-sensitive external material.
-
-The security gate scans for high-risk patterns, including compound secret
-assignments such as:
-
-```text
-admin_password
-db_secret
-stripe_api_key
-```
-
-Run it directly:
+## Security gate
 
 ```bash
 python scripts/escapement.py security --fail-on high
 ```
 
+The scanner checks high-risk patterns including private keys and supported
+provider-secret formats. Sensitive actions still require approval.
+
+## UI-quality gate
+
+```bash
+python scripts/ui_quality_gate.py <frontend-src-dir>
+python scripts/ui_quality_gate.py <frontend-src-dir> --fail-on-warn
+```
+
+It checks for detectable signals such as:
+
+- responsive breakpoints;
+- motion transitions;
+- reduced-motion handling;
+- `:focus-visible`;
+- loading-state handling;
+- error-state handling.
+
+This is a heuristic. A clean report is not proof of good UX.
+
+---
+
+# Security and approval gates
+
+Explicit approval is expected before actions such as:
+
+- adding dependencies;
+- installing external skills, plugins, or MCP servers;
+- using credentials or confidential data;
+- changing schemas or role-based access control;
+- destructive actions;
+- production deployment;
+- security testing;
+- licence-sensitive reuse.
+
+Authority precedence is defined by the kernel rather than left implicit.
+
 See [SECURITY.md](SECURITY.md).
 
 ---
 
-## Durable project memory
+# Durable project memory
 
-The repository, not chat, is the system of record.
+The repository, not the chat transcript, is the durable source of project state.
 
-An installed project maintains:
+An installed project can maintain:
 
 ```text
 PROJECT_STATE.yaml
@@ -870,28 +1004,110 @@ docs/decisions/DECISION_LOG.md
 .agent/runtime/turns.jsonl
 ```
 
-These files preserve:
+These files can preserve:
 
-- approved decisions and rejected alternatives;
+- approved decisions;
+- rejected alternatives;
 - task tier and lifecycle phase;
 - phase-plan revisions;
 - domain context and evidence;
 - implementation status;
 - executed checks;
-- open risks and deferred work;
-- the exact next action for a future session.
+- open risks;
+- deferred work;
+- exact next action.
 
 ---
 
-## Safe installation and updates
+# Parallel and fresh-context work
 
-Escapement distinguishes three classes of files.
+Fresh-context agents are used where isolation is justified.
 
-| Class | Behaviour |
+Parallel work requires:
+
+- genuinely independent tasks;
+- separate files or non-conflicting state;
+- explicit input and output contracts;
+- bounded context;
+- a named integration owner;
+- merge order;
+- whole-system verification after integration.
+
+Actual parallel dispatch remains host-dependent.
+
+---
+
+# Host integration
+
+Escapement separates **having instructions available** from **actually activating
+the runtime**.
+
+| Host | Current repository integration | Evidence boundary |
+|---|---|---|
+| Claude Code | `.claude/settings.json`, native skill mirror, Claude plugin manifest | Strongest current real-use evidence |
+| Codex | `.codex/hooks.json`, `.agents/skills`, Codex plugin manifest | Automatic runtime packaging exists; equivalent cross-host conformance is not yet established |
+| Gemini CLI | `GEMINI.md` points to the authoritative kernel | Runtime bootstrap remains manual |
+| GitHub Copilot | `.github/copilot-instructions.md` points to the kernel where applicable | Runtime bootstrap remains host-dependent/manual |
+| Cursor / Antigravity / other repository-aware agents | Kernel can be followed where supported | Runtime activation depends on host capability |
+
+### Claude Code
+
+`.claude/settings.json` wires the Escapement runtime into:
+
+- session start;
+- user prompt submission;
+- stop.
+
+The repository also includes:
+
+```text
+.claude-plugin/plugin.json
+```
+
+as Claude plugin packaging metadata.
+
+### Codex
+
+`.codex/hooks.json` provides runtime hook packaging through shell and PowerShell
+wrappers.
+
+The repository also includes:
+
+```text
+.codex-plugin/plugin.json
+```
+
+with skills and hook metadata.
+
+These manifests are packaging surfaces. Their presence is not a claim of
+marketplace publication or full host conformance.
+
+### Other hosts
+
+A host that only reads `AGENTS.md` sees the doctrine but may not automatically
+run `agent_runtime.py`.
+
+For hosts without automatic wiring, the kernel requires the equivalent of:
+
+```text
+session-start
+prompt
+stop
+```
+
+and treats the runtime output as required context.
+
+---
+
+# Safe installation, updates, and drift detection
+
+Escapement distinguishes:
+
+| File class | Behavior |
 |---|---|
 | Framework-managed | Installed and updated by Escapement |
-| Project-owned seed files | Created when missing, then preserved as project state |
-| Generated local runtime files | Created during work and excluded from framework replacement |
+| Project-owned seed | Created when missing, then preserved as project state |
+| Generated runtime | Created during work and not treated as disposable framework content |
 
 Preview an update:
 
@@ -899,16 +1115,16 @@ Preview an update:
 python scripts/escapement.py update /path/to/your-project
 ```
 
-Apply safe managed-file updates:
+Apply safe managed-file changes:
 
 ```bash
 python scripts/escapement.py update /path/to/your-project --apply
 ```
 
-Conflicts are reported rather than silently overwritten. Managed files selected
-for replacement are backed up first.
+Conflicts are reported instead of silently overwritten. Managed replacements
+are backed up first.
 
-Repair missing managed files:
+Repair missing framework-managed files:
 
 ```bash
 python scripts/escapement.py repair /path/to/your-project
@@ -922,9 +1138,9 @@ python scripts/escapement.py doctor --root /path/to/your-project
 
 ---
 
-## Commands
+# Commands
 
-### Framework
+## Framework
 
 ```text
 python scripts/escapement.py version
@@ -934,6 +1150,10 @@ python scripts/escapement.py repair <target>
 python scripts/escapement.py doctor --root <target>
 python scripts/escapement.py explain "<prompt>"
 python scripts/escapement.py capability-audit "<prompt>" --markdown
+python scripts/escapement.py catalog list --catalog skills
+python scripts/escapement.py catalog list --catalog resources
+python scripts/escapement.py catalog list --catalog patterns
+python scripts/escapement.py catalog search "<query>"
 python scripts/escapement.py sync-skills
 python scripts/escapement.py eval
 python scripts/escapement.py security --fail-on high
@@ -941,10 +1161,9 @@ python scripts/escapement.py observability --root <target>
 python scripts/escapement.py ablate <component>
 python scripts/escapement.py view
 python scripts/escapement.py component list
-python scripts/escapement.py catalog search "<query>"
 ```
 
-### Runtime
+## Runtime
 
 ```text
 python scripts/agent_runtime.py session-start
@@ -957,7 +1176,7 @@ python scripts/agent_runtime.py close-turn ...
 python scripts/agent_runtime.py reset-turn --reason "<reason>"
 ```
 
-### Program registry
+## PROGRAM registry
 
 ```text
 python scripts/program_modules.py set-program --name "<name>"
@@ -967,39 +1186,32 @@ python scripts/program_modules.py set-status --id <id> --status <status>
 python scripts/program_modules.py list
 ```
 
-### UI quality
-
-```text
-python scripts/ui_quality_gate.py <frontend-src-dir>
-python scripts/ui_quality_gate.py <frontend-src-dir> --fail-on-warn
-```
-
-Scans for responsive breakpoints, motion transitions,
-`prefers-reduced-motion`, `:focus-visible`, and loading/error-state
-handling -- concrete signals, not a substitute for looking at the
-interface.
-
 ---
 
-## Current validation
+# Current validation
 
-The current status is recorded in [`manifest.json`](manifest.json), exercised by
-the [Validate Escapement workflow](.github/workflows/validate-standard.yml), and
-summarised in [`SESSION_HANDOFF.md`](SESSION_HANDOFF.md).
+Current repository status is recorded in [`manifest.json`](manifest.json) and
+exercised through the standard CI workflow.
 
 ```text
-Routing evaluations:       22 / 22 PASS
-Unit tests:                 147 / 147 PASS
-Runtime doctor:              0 failures
-Repository doctor:           0 failures, 0 warnings
-Security gate:               0 findings
-Fresh-install self-test:    PASS
-Python CI matrix:           3.10, 3.12, 3.13
-Native skills:              35
-Published case studies:      4
+Validated:                   2026-08-07
+Routing evaluations:         22 / 22 PASS
+Unit tests:                  143 / 143 PASS
+Runtime doctor:               0 failures
+Repository doctor:            0 failures, 0 warnings
+Security gate:                0 findings
+Self-test:                    PASS
+Fresh-install lifecycle:      PASS
+Python CI matrix:             3.10, 3.12, 3.13
+Latest main validation run:   SUCCESS
+Kernel:                       795 / 1000 words
+Native skills:                35
+Capability strengths:         58
+Governed external resources:  61
+Published case studies:        4
 ```
 
-Run the same checks locally:
+Run the main checks locally:
 
 ```bash
 python -m py_compile scripts/*.py
@@ -1013,44 +1225,109 @@ python scripts/escapement.py self-test
 
 ---
 
-## Honest boundaries
+# Honest boundaries
 
-Escapement currently has several host or infrastructure boundaries:
+Current boundaries include:
 
-- execution of external capabilities depends on the host;
+- external capability execution depends on host support;
 - live network research depends on available tools and permissions;
 - real parallel-agent dispatch depends on the host;
-- production deployment still requires real infrastructure and human approval;
 - local evidence is not equivalent to independently controlled execution;
+- the current ablation corpus measures routing, not final task quality;
+- cross-host conformance is not yet established at the same level as current
+  Claude Code real-use evidence;
+- quota-aware model routing and execution-budget enforcement are not current
+  v6.3 capabilities;
+- MCP exposure is future scope;
 - strict per-skill evidence mapping remains a future hardening opportunity;
-- one catalogued legacy capability, `skill-ui`, still has an unresolved exact
+- one legacy catalogued capability, `skill-ui`, still has an unresolved exact
   source.
 
-These boundaries are stated rather than hidden behind a completion claim.
+These are boundaries, not hidden completion claims.
 
 ---
 
-## Project structure
+# v2.0 roadmap
+
+[`ESCAPEMENT_V2_FUTURE_SCOPE.md`](ESCAPEMENT_V2_FUTURE_SCOPE.md) is a future
+roadmap, not a description of the current product.
+
+The proposed direction is to evolve the repository-native harness toward a
+**provider-agnostic execution control plane for AI-assisted software delivery**.
+
+Major future work includes:
+
+```text
+Stable Escapement Core API
+        ↓
+Host / Provider / Gateway / Local Runtime adapters
+        ↓
+Execution Governor
+        ↓
+Model + budget + quota policy
+        ↓
+Local MCP interface
+        ↓
+Host Conformance Lab
+        ↓
+Context + Tool Trust Firewall
+        ↓
+Context health, worktree isolation, tracing, and optional team surfaces
+```
+
+The roadmap explicitly distinguishes:
+
+```text
+HostAdapter
+ProviderAdapter
+GatewayAdapter
+LocalRuntimeAdapter
+```
+
+and plans for environments such as:
+
+- Claude Code, Codex, Gemini CLI;
+- Cursor, Kiro, GitHub Copilot, Kimi Code/CLI, OpenCode, Cline, Windsurf,
+  Antigravity, and Aider;
+- Anthropic, OpenAI, Google, Moonshot/Kimi, and other model providers;
+- OpenRouter, LiteLLM, and enterprise gateways;
+- Ollama, LM Studio, vLLM, and other local inference runtimes.
+
+v2 is deliberately **not** defined as "turn Escapement into an MCP server".
+MCP is intended to be one portable interface into a stable core.
+
+No v2 roadmap item should be described as integrated until it is implemented
+and tested.
+
+---
+
+# Project structure
 
 ```text
 .
 ├── AGENTS.md
 ├── AGENT_RUNTIME.md
 ├── CLAUDE.md
+├── GEMINI.md
 ├── PROJECT_STATE.yaml
 ├── PROJECT_CONTEXT.md
 ├── DOMAIN_CONTEXT.md
 ├── SESSION_HANDOFF.md
 ├── manifest.json
+├── ESCAPEMENT_V2_FUTURE_SCOPE.md
 │
 ├── .claude/
+├── .claude-plugin/
 ├── .codex/
+├── .codex-plugin/
 ├── .agents/
 ├── .escapement/
-├── .github/workflows/
+├── .github/
 │
 ├── skills/
 ├── profiles/
+├── catalog/
+│   └── harness-components.json
 ├── docs/
 │   ├── architecture/
 │   ├── doctrine/
@@ -1058,10 +1335,15 @@ These boundaries are stated rather than hidden behind a completion claim.
 │   ├── templates/
 │   ├── specs/
 │   └── decisions/
-│
-├── catalog/
 ├── schemas/
 ├── scripts/
+│   ├── agent_runtime.py
+│   ├── escapement.py
+│   ├── eval_harness.py
+│   ├── ablation_harness.py
+│   ├── harness_observability.py
+│   ├── security_gate.py
+│   └── ui_quality_gate.py
 ├── tests/
 ├── evals/
 ├── reports/
@@ -1072,49 +1354,46 @@ These boundaries are stated rather than hidden behind a completion claim.
 
 ---
 
-## Contributing
+# Contributing
 
-Contributions should strengthen the smallest correct layer rather than expand
-the always-loaded core without evidence.
+Contributions should strengthen the smallest correct layer instead of expanding
+the always-loaded kernel by default.
 
 Before proposing a change:
 
-1. show a repeated failure or measurable need;
-2. identify the smallest correct layer;
-3. add or update an executable test or evaluation;
-4. preserve project-owned state and safe update boundaries;
-5. update relevant documentation and release notes;
-6. run the self-test and security gate.
+1. identify the observed failure or missing capability;
+2. decide whether deterministic tooling can solve it before adding doctrine;
+3. place the change at the narrowest correct layer;
+4. preserve context budgets;
+5. add or extend evaluation evidence;
+6. update generated/catalogued state where required;
+7. run the validation suite;
+8. keep current capability claims separate from future scope.
 
-```bash
-python scripts/escapement.py self-test
-python scripts/escapement.py security --fail-on high
+For harness components, prefer a measurable hypothesis where practical:
+
+```text
+What failure should this component prevent?
+What context or complexity does it cost?
+Which evaluation can exercise it?
+What would happen if it were removed?
 ```
-
-Useful contribution areas include:
-
-- new regression cases from real projects;
-- integrations and host adapters;
-- routing evaluations;
-- domain and reporting skills;
-- security and evidence hardening;
-- additional case studies;
-- documentation and installation improvements.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
-## Licence
+# Licence
 
-Escapement is source-available for evaluation, learning, non-commercial
+Escapement is **source-available**, not OSI open source.
+
+The source is publicly available for evaluation, learning, non-commercial
 experimentation, and attributed internal use.
 
 Commercial redistribution, resale, white-labelling, hosted resale, and
-substantial republication require written permission.
+substantial republication require written permission from the copyright owner.
 
-Third-party capabilities retain their own licences. A registry entry does not
-grant permission to copy or deploy the referenced project.
+Third-party skills, plugins, tools, and references retain their own licences.
 
 See:
 
@@ -1127,6 +1406,6 @@ See:
 
 <div align="center">
 
-**Ask better questions. Route the right expertise. Verify the result. Preserve the truth.**
+**Understand enough. Improve the decision. Build. Test. Prove. Persist.**
 
 </div>
