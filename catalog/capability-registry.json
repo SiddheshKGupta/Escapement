@@ -1401,6 +1401,198 @@
       ],
       "use_when": "An existing approved project depends on the archived Puppeteer MCP server and migration is not immediate.",
       "do_not": "Do not select for new projects; prefer maintained Playwright CLI/MCP or project-native tests."
+    },
+    {
+      "id": "prime-intellect-prime-agent",
+      "name": "Prime Agent",
+      "kind": "external-agent-runtime",
+      "source": "https://github.com/PrimeIntellect-ai/prime-agent",
+      "publisher": "Prime Intellect",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "conditional",
+      "activation": "integrate-separately-or-adapter",
+      "overlap_group": "harness-methodology",
+      "use_modes": [
+        "reference",
+        "integrate-separately",
+        "adapter"
+      ],
+      "triggers": [
+        "run a long-lived background coding agent",
+        "persistent REPL",
+        "recursive subagents",
+        "detachable agent sessions",
+        "JSON RPC",
+        "Prime Agent"
+      ],
+      "use_when": "A project explicitly needs a separate long-running agent runtime, background or detachable sessions, persistent REPL execution, recursive subagents, or retained goals, schedules and heartbeats.",
+      "do_not": "Do not classify it as a skill, let it and Escapement co-own lifecycle phase, task state, memory, permissions, skill promotion, verification or closure, or describe its processes as a security sandbox.",
+      "notes": "A self-improving RLM coding-agent harness where sub-agents are function calls inside a persistent IPython kernel. A future adapter would have Escapement own specification, governance, approvals, evidence and closure, with Prime Agent as the approved execution host for a bounded task."
+    },
+    {
+      "id": "egonex-understand-anything",
+      "name": "Understand Anything",
+      "kind": "code-knowledge-plugin",
+      "source": "https://github.com/Egonex-AI/Understand-Anything",
+      "publisher": "Egonex AI",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "on-demand-read-only-analysis",
+      "overlap_group": "code-knowledge",
+      "use_modes": [
+        "install",
+        "integrate",
+        "reference"
+      ],
+      "triggers": [
+        "understand this codebase",
+        "architecture map",
+        "unfamiliar codebase",
+        "dependency map",
+        "business-domain flows",
+        "impact of this diff",
+        "knowledge graph",
+        "codebase tour"
+      ],
+      "use_when": "Onboarding into a large or unfamiliar codebase, creating an architecture or dependency map, extracting business-domain flows, performing guided codebase tours, or analysing change impact -- when ordinary repository inspection is no longer sufficient.",
+      "do_not": "Do not run full indexing automatically, index confidential repositories without approval, enable automatic commit hooks without approval, or treat the generated graph as the only source of truth instead of supporting evidence.",
+      "notes": "The strongest immediate integration candidate in this batch. A multi-agent pipeline builds an interactive knowledge graph (.ua/knowledge-graph.json) and supports a local model provider for privacy or enterprise use. Disclose likely token, storage and processing cost before a full scan; prefer ordinary repository inspection for small projects."
+    },
+    {
+      "id": "evomap-evolver",
+      "name": "Evolver",
+      "kind": "agent-evolution-meta-observer",
+      "source": "https://github.com/EvoMap/evolver",
+      "publisher": "EvoMap",
+      "license": "GPL-3.0-or-later for the current published release",
+      "license_status": "verified-review-required-per-release",
+      "status": "conditional",
+      "activation": "review-mode-only",
+      "overlap_group": "skill-learning",
+      "use_modes": [
+        "reference",
+        "integrate-separately"
+      ],
+      "triggers": [
+        "analyse the harness logs",
+        "recurring failures",
+        "auditable improvement to our agent workflow",
+        "repeated routing failures",
+        "self-evolution",
+        "skill evolution"
+      ],
+      "use_when": "A project has meaningful runtime history, logs, repeated failure patterns, or closed-turn evidence (see scripts/harness_observability.py) that a self-improvement pass could act on.",
+      "do_not": "Do not allow automatic modification of AGENTS.md, automatic mutation of native skills, automatic edits to policy or project state, a continuous loop by default, or sending repository logs to a network service without approval. Do not copy GPL code into Escapement's source-available core without a deliberate licence decision.",
+      "notes": "A GEP (Genome Evolution Protocol)-powered self-evolution engine for AI agents (Genes, Capsules, Events). The publisher has announced that future releases will move from fully open source to source-available; already-published MIT/GPL-3.0 versions are unaffected. Evolver may propose; Escapement skill-governance owns review, testing, approval, promotion and retirement -- the same META_OBSERVER relation as Task Observer."
+    },
+    {
+      "id": "agency-agents",
+      "name": "Agency Agents",
+      "kind": "agent-role-catalogue",
+      "source": "https://github.com/msitarzewski/agency-agents",
+      "publisher": "msitarzewski",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "reference-only",
+      "activation": "selective-reference",
+      "overlap_group": "agent-pattern-catalogue",
+      "use_modes": [
+        "reference",
+        "adapt-selectively"
+      ],
+      "triggers": [
+        "specialist agent role",
+        "fresh-context reviewer",
+        "domain persona for this review",
+        "agent persona"
+      ],
+      "use_when": "Identifying a missing specialist reviewer, drafting a fresh-context agent contract, comparing role definitions, or discovering deliverable structures.",
+      "do_not": "Do not install the complete roster, load multiple personas into a single phase, or treat personality wording or persona success metrics as verified expertise or independent evidence.",
+      "notes": "A large personality-driven persona library (engineering, design, marketing, product, GIS, game development, finance and more) with a companion desktop installer for several coding tools. Native Escapement skills remain the default; select one role at a time and convert it into a bounded input/output/evidence/stop-condition contract."
+    },
+    {
+      "id": "nidhinjs-prompt-master",
+      "name": "Prompt Master",
+      "kind": "prompt-export-skill",
+      "source": "https://github.com/nidhinjs/prompt-master",
+      "publisher": "Nidhin Joseph Nelson",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional-reference",
+      "activation": "explicit-cross-tool-prompt-export",
+      "overlap_group": "prompt-shaping",
+      "use_modes": [
+        "reference",
+        "adapt",
+        "install-explicitly"
+      ],
+      "triggers": [
+        "convert this approved specification into a",
+        "write a prompt for",
+        "export this brief for",
+        "export this Escapement brief"
+      ],
+      "use_when": "A user wants an approved Escapement brief converted into a prompt for another tool: Claude Code, Codex, Cursor, Copilot, an image or video generation tool, n8n, Zapier, Make, or another specialised AI system.",
+      "do_not": "Do not make it part of every coding turn or let it replace Escapement-owned discovery, material questions, business or domain context, architecture decisions, approval gates, scope, acceptance criteria or verification requirements. Do not repeat unverified promotional claims such as zero wasted tokens, perfect prompt, universal accuracy or full memory retention.",
+      "notes": "A Claude Skill that carries prior decisions forward as a memory block and formats an approved brief for a target tool. Sequenced strictly after Escapement's own specification stage; Escapement continues to own discovery, decisions, specification and acceptance criteria."
+    },
+    {
+      "id": "mattpocock-grilling",
+      "name": "Matt Pocock Grilling / Grill Me",
+      "kind": "decision-interview-skill",
+      "source": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling",
+      "publisher": "Matt Pocock",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "explicit-user-invocation",
+      "overlap_group": "decision-interview",
+      "use_modes": [
+        "adapt",
+        "install-explicitly",
+        "reference"
+      ],
+      "triggers": [
+        "grill me",
+        "stress-test my plan",
+        "stress-test this plan",
+        "challenge every assumption",
+        "challenge this architecture",
+        "find the hidden assumptions",
+        "interview me before implementation"
+      ],
+      "use_when": "The user explicitly asks to be grilled, stress-tested, or challenged on a plan or design before implementation begins.",
+      "do_not": "Do not activate implicitly for an ordinary feature request. Do not let it skip Escapement's own rules: inspect the repository before asking, ask no more than five material questions per round, always give a recommended default and consequence, and wait for confirmation before implementing.",
+      "notes": "grill-me is a thin wrapper; the substantive design-tree/question-frontier method lives in the grilling skill it calls. decision-coach remains the default and canonical skill for this overlap group -- this is an explicit intensifier, adapted with original wording as the Grilling Intensifier section of skills/decision-coach/SKILL.md, not an installed copy of the external skill text."
+    },
+    {
+      "id": "cloudflare-os",
+      "name": "Cloudflare OS",
+      "kind": "agent-workspace-and-security-architecture",
+      "source": "https://github.com/cloudflare/cloudflare-os",
+      "publisher": "Cloudflare",
+      "license": "Apache-2.0",
+      "license_status": "verified",
+      "status": "reference-only",
+      "activation": "architecture-reference",
+      "overlap_group": "agent-workspace-platform",
+      "use_modes": [
+        "reference",
+        "integrate-separately"
+      ],
+      "triggers": [
+        "secure enterprise agent workspace",
+        "narrow access to company systems",
+        "sandboxed AI-generated internal apps",
+        "approval layer for agent side effects",
+        "Cloudflare OS",
+        "Gatekeeper"
+      ],
+      "use_when": "A task concerns agent workspace design, capability-based security, sandboxed AI-built apps, human approval of side-effecting actions, or narrow resource introduction to agents.",
+      "do_not": "Do not present it as a drop-in skill, add Cloudflare Workers dependencies to Escapement core, copy its full application architecture, or imply Escapement currently provides Cloudflare OS-style sandboxing or that Gatekeepers have been integrated rather than only referenced.",
+      "notes": "Open-sourced 2026-08-05. Capability-based Gatekeeper Worker mediation where credentials never reach the agent or agent-generated code. The code is Apache-2.0, but production runtime depends on Cloudflare Workers -- open source here does not mean portable."
     }
   ],
   "agents": [

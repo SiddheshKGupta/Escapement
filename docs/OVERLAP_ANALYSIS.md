@@ -94,17 +94,18 @@ authority
 
 - Relation: `META_OBSERVER`
 - Canonical capability: `skill-governance`
-- Rule: Task Observer may log repeated gaps. Skill governance owns evaluation, promotion, overlap and retirement. Task Observer must not rewrite skills automatically.
+- Rule: Task Observer and Evolver may log repeated gaps or propose an improvement from runtime history. Skill governance owns evaluation, promotion, overlap and retirement. Neither may rewrite skills, AGENTS.md or project state automatically.
 
 ### Members
 
 - `skill-governance`
 - `task-observer`
+- `evomap-evolver`
 ## `delivery-methodology`
 
 - Relation: `SEQUENTIAL`
 - Canonical capability: `escapement-core`
-- Rule: Escapement owns runtime, state and evidence. Use component-level adapters from external methodologies at their strongest phases; do not install competing complete lifecycle hooks together.
+- Rule: Escapement owns runtime, state and evidence. Use component-level adapters from external methodologies at their strongest phases; do not install competing complete lifecycle hooks together. Prime Agent is a separate long-running runtime, not a methodology adapter: do not let it and Escapement co-own lifecycle phase, task state, memory, permissions or closure -- a future adapter must define the authority boundary.
 
 ### Members
 
@@ -113,11 +114,12 @@ authority
 - `github-spec-kit`
 - `gsd-core`
 - `ecc`
+- `prime-intellect-prime-agent`
 ## `memory-and-knowledge`
 
 - Relation: `SUBSTITUTE`
 - Canonical capability: `escapement-file-state`
-- Rule: File state is default. Claude Mem, AppFlowy or HelixDB may become the primary external memory substrate only after a demonstrated need. Graphify may complement file state for code relationships.
+- Rule: File state is default. Claude Mem, AppFlowy or HelixDB may become the primary external memory substrate only after a demonstrated need. Graphify or Understand Anything may complement file state for code relationships -- choose one code-knowledge/graph system per repository and prefer ordinary repository inspection for small projects.
 
 ### Members
 
@@ -126,6 +128,28 @@ authority
 - `appflowy`
 - `helixdb`
 - `graphify`
+- `egonex-understand-anything`
+## `decision-interview`
+
+- Relation: `BASELINE_PLUS_INTENSIFIER`
+- Canonical capability: `decision-coach`
+- Rule: decision-coach remains the default for every MATERIAL or PROGRAM request. Grilling activates only after an explicit request to stress-test, grill, or challenge a plan or design, and still obeys decision-coach's rules: inspect the repository first, ask no more than five material questions per round, give a recommended default and consequence, and wait for confirmation before implementing.
+
+### Members
+
+- `decision-coach`
+- `mattpocock-grilling`
+## `prompt-shaping`
+
+- Relation: `SEQUENTIAL`
+- Canonical capability: `product-specification`
+- Rule: Escapement owns discovery, decisions, specification and acceptance criteria. Prompt Master activates only after a specification is approved, to format or adapt the approved result for a named target tool -- it does not replace normal discovery for an ordinary build/design/fix request.
+
+### Members
+
+- `product-specification`
+- `decision-coach`
+- `nidhinjs-prompt-master`
 ## `research-freshness`
 
 - Relation: `COMPLEMENTARY`
@@ -177,6 +201,30 @@ authority
 - `21st-dev`
 - `open-design`
 
+
+## External candidates without a dedicated group
+
+Agency Agents and Cloudflare OS are catalogued as `reference-only` with a
+descriptive `overlap_group` tag on their registry entry, but neither has a
+dedicated group here -- matching the existing precedent for
+`500-ai-agents-projects`, which also has a descriptive tag with no matrix
+group. A matrix group exists to arbitrate a genuine conflict between
+capabilities competing for the same job; a reference-only catalogue that
+nothing else in Escapement currently competes with does not need one.
+
+## Recommended use, seven candidates reviewed 2026-08-07
+
+| Candidate | Recommended Escapement use |
+|---|---|
+| Understand Anything | On-demand code-knowledge integration candidate |
+| Grilling / Grill Me | Explicit decision-interview mode, implemented in `skills/decision-coach/SKILL.md` |
+| Prompt Master | Post-specification prompt-export adapter |
+| Agency Agents | Specialist-role discovery catalogue |
+| Prime Agent | Separate runtime or future execution adapter |
+| Evolver | Review-only meta-observer |
+| Cloudflare OS | Security and workspace architecture reference |
+
+See `docs/decisions/EXTERNAL_CANDIDATES_2026_08.md` for the full review.
 
 # Enforcement
 

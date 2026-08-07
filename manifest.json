@@ -3,10 +3,10 @@
   "product": "Escapement",
   "version": "6.3.0",
   "release": "Capability Strength Orchestration \u2014 Real Project Validated",
-  "validated_on": "2026-08-05",
+  "validated_on": "2026-08-07",
   "validation": {
     "routing_evaluations": "PASS \u2014 22/22",
-    "unit_tests": "PASS \u2014 82/82",
+    "unit_tests": "PASS \u2014 112/112",
     "runtime_doctor": "PASS \u2014 0 failures",
     "repository_doctor": "PASS \u2014 0 failures, 0 warnings",
     "security_gate": "PASS \u2014 0 findings",
@@ -14,11 +14,11 @@
     "real_project_lifecycle": "PASS \u2014 fresh install through RELEASE and truthful PARTIAL closure"
   },
   "counts": {
-    "kernel_words": 770,
+    "kernel_words": 794,
     "native_skills": 35,
     "capability_strengths": 58,
-    "external_resources": 54,
-    "files": 258
+    "external_resources": 61,
+    "files": 262
   },
   "traceability_report": "reports/ORIGINAL_INTENT_TRACEABILITY.md",
   "remaining_boundaries": [

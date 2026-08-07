@@ -42,6 +42,7 @@ ROOT_FILES = [
     "VERSION",
     ".claude/settings.json",
     ".github/copilot-instructions.md",
+    "GEMINI.md",
 ]
 
 MANAGED_PREFIXES = [
@@ -712,6 +713,7 @@ def command_doctor(args: argparse.Namespace) -> int:
         ".codex/hooks.json",
         ".claude/settings.json",
         ".github/copilot-instructions.md",
+        "GEMINI.md",
         "scripts/agent_runtime.py",
         "scripts/run_check.py",
         "scripts/feature_list.py",

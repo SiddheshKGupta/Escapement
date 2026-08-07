@@ -95,11 +95,12 @@
       "id": "skill-learning",
       "members": [
         "skill-governance",
-        "task-observer"
+        "task-observer",
+        "evomap-evolver"
       ],
       "relation": "META_OBSERVER",
       "canonical": "skill-governance",
-      "rule": "Task Observer may log repeated gaps. Skill governance owns evaluation, promotion, overlap and retirement. Task Observer must not rewrite skills automatically."
+      "rule": "Task Observer and Evolver may log repeated gaps or propose an improvement from runtime history. Skill governance owns evaluation, promotion, overlap and retirement. Neither may rewrite skills, AGENTS.md or project state automatically."
     },
     {
       "id": "delivery-methodology",
@@ -108,11 +109,12 @@
         "superpowers",
         "github-spec-kit",
         "gsd-core",
-        "ecc"
+        "ecc",
+        "prime-intellect-prime-agent"
       ],
       "relation": "SEQUENTIAL",
       "canonical": "escapement-core",
-      "rule": "Escapement owns runtime, state and evidence. Use component-level adapters from external methodologies at their strongest phases; do not install competing complete lifecycle hooks together."
+      "rule": "Escapement owns runtime, state and evidence. Use component-level adapters from external methodologies at their strongest phases; do not install competing complete lifecycle hooks together. Prime Agent is a separate long-running runtime, not a methodology adapter: do not let it and Escapement co-own lifecycle phase, task state, memory, permissions or closure -- a future adapter must define the authority boundary."
     },
     {
       "id": "memory-and-knowledge",
@@ -121,11 +123,33 @@
         "claude-mem",
         "appflowy",
         "helixdb",
-        "graphify"
+        "graphify",
+        "egonex-understand-anything"
       ],
       "relation": "SUBSTITUTE",
       "canonical": "escapement-file-state",
-      "rule": "File state is default. Claude Mem, AppFlowy or HelixDB may become the primary external memory substrate only after a demonstrated need. Graphify may complement file state for code relationships."
+      "rule": "File state is default. Claude Mem, AppFlowy or HelixDB may become the primary external memory substrate only after a demonstrated need. Graphify or Understand Anything may complement file state for code relationships -- choose one code-knowledge/graph system per repository and prefer ordinary repository inspection for small projects."
+    },
+    {
+      "id": "decision-interview",
+      "members": [
+        "decision-coach",
+        "mattpocock-grilling"
+      ],
+      "relation": "BASELINE_PLUS_INTENSIFIER",
+      "canonical": "decision-coach",
+      "rule": "decision-coach remains the default for every MATERIAL or PROGRAM request. Grilling activates only after an explicit request to stress-test, grill, or challenge a plan or design, and still obeys decision-coach's rules: inspect the repository first, ask no more than five material questions per round, give a recommended default and consequence, and wait for confirmation before implementing."
+    },
+    {
+      "id": "prompt-shaping",
+      "members": [
+        "product-specification",
+        "decision-coach",
+        "nidhinjs-prompt-master"
+      ],
+      "relation": "SEQUENTIAL",
+      "canonical": "product-specification",
+      "rule": "Escapement owns discovery, decisions, specification and acceptance criteria. Prompt Master activates only after a specification is approved, to format or adapt the approved result for a named target tool -- it does not replace normal discovery for an ordinary build/design/fix request."
     },
     {
       "id": "research-freshness",
@@ -176,6 +200,29 @@
       "relation": "SUBSTITUTE",
       "canonical": "project-component-system",
       "rule": "Use the existing project component system first. External component sources require stack, licence, accessibility and visual-consistency review."
+    },
+    {
+      "id": "security-testing",
+      "members": [
+        "escapement-security-review",
+        "perplexity-bumblebee",
+        "strix"
+      ],
+      "relation": "COMPLEMENTARY",
+      "canonical": "escapement-security-review",
+      "rule": "Escapement defensive review remains active. Bumblebee may add read-only inventory. Strix is external, sandboxed, and authorised-only."
+    },
+    {
+      "id": "motion",
+      "members": [
+        "product-motion-rules",
+        "emil-kowalski-skill",
+        "gsap",
+        "headroom-js"
+      ],
+      "relation": "COMPLEMENTARY",
+      "canonical": "product-motion-rules",
+      "rule": "Motion rules come from DESIGN.md. Add GSAP or Headroom only when the interaction requires them and dependency approval is granted."
     }
   ]
 }

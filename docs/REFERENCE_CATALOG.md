@@ -1,7 +1,13 @@
 # External Reference Catalogue
 
-Escapement currently preserves **54** external skills, plugins,
+Escapement currently preserves **61** external skills, plugins,
 tools, repositories, MCP servers, services and reference systems.
+
+A catalogue entry is a reviewed candidate, not an installed capability. A
+resource may be `reference-only`, an `optional` skill, a `conditional`
+integration, an external runtime integrated separately, an architecture
+reference, or a `META_OBSERVER` -- see [Status meanings](#status-meanings)
+below. Being catalogued here never means being active by default.
 
 Machine-readable source:
 
@@ -1242,6 +1248,160 @@ An existing approved project depends on the archived Puppeteer MCP server and mi
 ### Do not
 
 Do not select for new projects; prefer maintained Playwright CLI/MCP or project-native tests.
+
+## Prime Agent
+
+- ID: `prime-intellect-prime-agent`
+- Kind: `external-agent-runtime`
+- Source: https://github.com/PrimeIntellect-ai/prime-agent
+- Publisher: Prime Intellect
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `conditional`
+- Activation: `integrate-separately-or-adapter`
+- Overlap group: `harness-methodology`
+- Permitted modes: `reference`, `integrate-separately`, `adapter`
+- Trigger cues: `run a long-lived background coding agent`, `persistent REPL`, `recursive subagents`, `detachable agent sessions`, `JSON RPC`, `Prime Agent`
+
+### Core strength
+
+A project explicitly needs a separate long-running agent runtime, background or detachable sessions, persistent REPL execution, recursive subagents, or retained goals, schedules and heartbeats.
+
+### Do not
+
+Do not classify it as a skill, let it and Escapement co-own lifecycle phase, task state, memory, permissions, skill promotion, verification or closure, or describe its processes as a security sandbox.
+
+## Understand Anything
+
+- ID: `egonex-understand-anything`
+- Kind: `code-knowledge-plugin`
+- Source: https://github.com/Egonex-AI/Understand-Anything
+- Publisher: Egonex AI
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `on-demand-read-only-analysis`
+- Overlap group: `code-knowledge`
+- Permitted modes: `install`, `integrate`, `reference`
+- Trigger cues: `understand this codebase`, `architecture map`, `unfamiliar codebase`, `dependency map`, `business-domain flows`, `impact of this diff`, `knowledge graph`, `codebase tour`
+
+### Core strength
+
+Onboarding into a large or unfamiliar codebase, creating an architecture or dependency map, extracting business-domain flows, performing guided codebase tours, or analysing change impact -- when ordinary repository inspection is no longer sufficient. The strongest immediate integration candidate reviewed in this batch.
+
+### Do not
+
+Do not run full indexing automatically, index confidential repositories without approval, enable automatic commit hooks without approval, or treat the generated graph as the only source of truth instead of supporting evidence.
+
+## Evolver
+
+- ID: `evomap-evolver`
+- Kind: `agent-evolution-meta-observer`
+- Source: https://github.com/EvoMap/evolver
+- Publisher: EvoMap
+- Licence: **GPL-3.0-or-later for the current published release**
+- Licence status: `verified-review-required-per-release`
+- Registry status: `conditional`
+- Activation: `review-mode-only`
+- Overlap group: `skill-learning`
+- Permitted modes: `reference`, `integrate-separately`
+- Trigger cues: `analyse the harness logs`, `recurring failures`, `auditable improvement to our agent workflow`, `repeated routing failures`, `self-evolution`, `skill evolution`
+
+### Core strength
+
+A project has meaningful runtime history, logs, repeated failure patterns, or closed-turn evidence (see `scripts/harness_observability.py`) that a self-improvement pass could act on.
+
+### Do not
+
+Do not allow automatic modification of AGENTS.md, automatic mutation of native skills, automatic edits to policy or project state, a continuous loop by default, or sending repository logs to a network service without approval. Do not copy GPL code into Escapement's source-available core without a deliberate licence decision.
+
+## Agency Agents
+
+- ID: `agency-agents`
+- Kind: `agent-role-catalogue`
+- Source: https://github.com/msitarzewski/agency-agents
+- Publisher: msitarzewski
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `reference-only`
+- Activation: `selective-reference`
+- Overlap group: `agent-pattern-catalogue`
+- Permitted modes: `reference`, `adapt-selectively`
+- Trigger cues: `specialist agent role`, `fresh-context reviewer`, `domain persona for this review`, `agent persona`
+
+### Core strength
+
+Identifying a missing specialist reviewer, drafting a fresh-context agent contract, comparing role definitions, or discovering deliverable structures.
+
+### Do not
+
+Do not install the complete roster, load multiple personas into a single phase, or treat personality wording or persona success metrics as verified expertise or independent evidence.
+
+## Prompt Master
+
+- ID: `nidhinjs-prompt-master`
+- Kind: `prompt-export-skill`
+- Source: https://github.com/nidhinjs/prompt-master
+- Publisher: Nidhin Joseph Nelson
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `optional-reference`
+- Activation: `explicit-cross-tool-prompt-export`
+- Overlap group: `prompt-shaping`
+- Permitted modes: `reference`, `adapt`, `install-explicitly`
+- Trigger cues: `convert this approved specification into a`, `write a prompt for`, `export this brief for`, `export this Escapement brief`
+
+### Core strength
+
+A user wants an approved Escapement brief converted into a prompt for another tool: Claude Code, Codex, Cursor, Copilot, an image or video generation tool, n8n, Zapier, Make, or another specialised AI system.
+
+### Do not
+
+Do not make it part of every coding turn or let it replace Escapement-owned discovery, material questions, business or domain context, architecture decisions, approval gates, scope, acceptance criteria or verification requirements. Do not repeat unverified promotional claims such as zero wasted tokens, perfect prompt, universal accuracy or full memory retention.
+
+## Matt Pocock Grilling / Grill Me
+
+- ID: `mattpocock-grilling`
+- Kind: `decision-interview-skill`
+- Source: https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling
+- Publisher: Matt Pocock
+- Licence: **MIT**
+- Licence status: `verified`
+- Registry status: `optional`
+- Activation: `explicit-user-invocation`
+- Overlap group: `decision-interview`
+- Permitted modes: `adapt`, `install-explicitly`, `reference`
+- Trigger cues: `grill me`, `stress-test my plan`, `stress-test this plan`, `challenge every assumption`, `challenge this architecture`, `find the hidden assumptions`, `interview me before implementation`
+
+### Core strength
+
+The user explicitly asks to be grilled, stress-tested, or challenged on a plan or design before implementation begins. Adapted with original wording as the Grilling Intensifier section of `skills/decision-coach/SKILL.md` -- see [OVERLAP_ANALYSIS.md](OVERLAP_ANALYSIS.md).
+
+### Do not
+
+Do not activate implicitly for an ordinary feature request. Do not let it skip Escapement's own rules: inspect the repository before asking, ask no more than five material questions per round, always give a recommended default and consequence, and wait for confirmation before implementing.
+
+## Cloudflare OS
+
+- ID: `cloudflare-os`
+- Kind: `agent-workspace-and-security-architecture`
+- Source: https://github.com/cloudflare/cloudflare-os
+- Publisher: Cloudflare
+- Licence: **Apache-2.0**
+- Licence status: `verified`
+- Registry status: `reference-only`
+- Activation: `architecture-reference`
+- Overlap group: `agent-workspace-platform`
+- Permitted modes: `reference`, `integrate-separately`
+- Trigger cues: `secure enterprise agent workspace`, `narrow access to company systems`, `sandboxed AI-generated internal apps`, `approval layer for agent side effects`, `Cloudflare OS`, `Gatekeeper`
+
+### Core strength
+
+A task concerns agent workspace design, capability-based security, sandboxed AI-built apps, human approval of side-effecting actions, or narrow resource introduction to agents.
+
+### Do not
+
+Do not present it as a drop-in skill, add Cloudflare Workers dependencies to Escapement core, copy its full application architecture, or imply Escapement currently provides Cloudflare OS-style sandboxing or that Gatekeepers have been integrated rather than only referenced.
 
 
 
