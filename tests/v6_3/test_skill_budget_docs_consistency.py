@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 DOCUMENTED_SKILL_BUDGET = 1000
 
 DOC_CLAIMS = {
-    "README.md": "Invoked native-skill context:  <= 1,000 words",
+    "README.md": "Invoked skill context:    <= 1,000 words",
     "PROJECT_CONTEXT.md": "invoked native skill context below 1,000 words",
     "SESSION_HANDOFF.md": "Invoked skill context: tested below `1,000` words",
     "reports/VALIDATION_v6.3.md": "Invoked skill context | PASS — tested routes below 1,000 words",
