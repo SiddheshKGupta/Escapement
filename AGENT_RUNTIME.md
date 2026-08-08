@@ -23,6 +23,36 @@ Prompt
 
 The context pack contains only the current phase.
 
+## Codex rate limits and token activity
+
+Escapement can read the signed-in Codex account through the documented Codex
+App Server JSONL interface:
+
+```bash
+python scripts/escapement.py codex-resources read
+python scripts/escapement.py codex-resources status
+```
+
+The adapter calls `account/rateLimits/read` and `account/usage/read`, handles a
+`account/rateLimits/updated` notification observed during the read, and writes a
+source-labelled snapshot to `.agent/runtime/codex-resources.json`. A
+`windowDurationMins` value of `300` is the five-hour window. Token activity is
+separate telemetry; it is never presented as tokens remaining.
+
+The latest unexpired five-hour window governs new runtime work:
+
+| Used | Runtime policy |
+|---:|---|
+| below 75% | normal execution |
+| 75–89% | conserve breadth |
+| 90–99% | converge and checkpoint |
+| 100% or more | block a new material turn until a fresh post-reset read |
+
+An already-open turn may converge and close truthfully. Resource policy never
+removes required verification. Expired state is `STALE`, does not block work,
+and requires a refresh. If App Server cannot be reached, report
+`NOT_OBSERVABLE`; never substitute fixture data for live account data.
+
 ## Phase transition
 
 Complete the phase artifact, then run:

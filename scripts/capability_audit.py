@@ -31,8 +31,10 @@ def audit(prompt: str) -> dict[str, Any]:
     phase_plan = []
     required_external: list[str] = []
     for phase in route["phase_plan"]:
+        phase_route = route_prompt(prompt, phase_override=phase["id"])
         phase_strengths = []
-        for strength_id in phase.get("capability_strengths", []):
+        for selected in phase_route.get("capability_strengths", []):
+            strength_id = selected["id"]
             item = strength_index.get(strength_id, {"id": strength_id})
             parent = item.get("parent")
             status = "internal"
@@ -54,9 +56,13 @@ def audit(prompt: str) -> dict[str, Any]:
         phase_plan.append({
             "phase": phase["id"],
             "purpose": phase["purpose"],
-            "native_skills": phase.get("native_skills", []),
+            "native_skills": [
+                item["id"] for item in phase_route.get("native_skills", [])
+            ],
             "capability_strengths": phase_strengths,
-            "external_candidates": phase.get("external_candidates", []),
+            "external_candidates": [
+                item["id"] for item in phase_route.get("external_candidates", [])
+            ],
         })
 
     overlap_relevant = []

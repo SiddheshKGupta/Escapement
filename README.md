@@ -13,7 +13,7 @@ verification, truthful closure, and measurement of the harness itself.
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square&logo=python&logoColor=white)](.github/workflows/validate-standard.yml)
 [![Kernel](https://img.shields.io/badge/kernel-795%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
-[![Unit tests](https://img.shields.io/badge/unit%20tests-172%20passing-2F855A?style=flat-square)](manifest.json)
+[![Unit tests](https://img.shields.io/badge/unit%20tests-183%20passing-2F855A?style=flat-square)](manifest.json)
 [![Routing evals](https://img.shields.io/badge/routing%20evals-122%20%2F%20122-2F855A?style=flat-square)](evals/)
 [![Case studies](https://img.shields.io/badge/case%20studies-4-2F855A?style=flat-square)](#evidence-from-real-use)
 [![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
@@ -94,7 +94,7 @@ Current inventory:
 
 ```text
 Version:                   6.3.0
-Repository files:          273
+Repository files:          278
 Kernel:                    795 / 1000 words
 Profiles:                    2
 Doctrine packs:             11
@@ -106,7 +106,7 @@ Strategy adapters:          10
 Capability families:        10
 Overlap groups:             14
 Published case studies:      4
-Unit tests:                 172
+Unit tests:                 183
 Routing evaluations:        122
 ```
 
@@ -161,6 +161,8 @@ It provides:
 - harness ablation against a shared evaluation corpus;
 - managed install, update, repair, backup, and drift detection;
 - automatic runtime hook packaging for Claude Code and Codex;
+- Codex App Server rate-limit and token-activity reads with a five-hour-window
+  execution policy;
 - bootstrap guidance for other repository-aware hosts.
 
 Escapement is **not**:
@@ -225,9 +227,11 @@ Add regression evidence
 real work. It does **not** mean a statistical benchmark or broad production
 adoption.
 
-Current real-use evidence is strongest on Claude Code. Codex has automatic
-runtime-hook packaging in the repository, but equivalent cross-host conformance
-and quota-aware execution validation remain future work.
+Current real-use evidence is strongest on Claude Code. Codex now has repository
+hook packaging, offline App Server contract tests, source-labelled resource
+state, and deterministic five-hour-window policy tests. Live account telemetry
+and automatic hook execution still require validation on each trusted Codex
+installation.
 
 ---
 
@@ -1045,7 +1049,7 @@ the runtime**.
 | Host | Current repository integration | Evidence boundary |
 |---|---|---|
 | Claude Code | `.claude/settings.json`, native skill mirror, Claude plugin manifest | Strongest current real-use evidence |
-| Codex | `.codex/hooks.json`, `.agents/skills`, Codex plugin manifest | Automatic runtime packaging exists; equivalent cross-host conformance is not yet established |
+| Codex | `.codex/hooks.json`, `.agents/skills`, Codex plugin manifest, App Server resource adapter | Runtime and offline resource contracts are tested; live host/account validation remains environment-specific |
 | Gemini CLI | `GEMINI.md` points to the authoritative kernel | Runtime bootstrap remains manual |
 | GitHub Copilot | `.github/copilot-instructions.md` points to the kernel where applicable | Runtime bootstrap remains host-dependent/manual |
 | Cursor / Antigravity / other repository-aware agents | Kernel can be followed where supported | Runtime activation depends on host capability |
@@ -1070,6 +1074,25 @@ as Claude plugin packaging metadata.
 
 `.codex/hooks.json` provides runtime hook packaging through shell and PowerShell
 wrappers.
+
+Codex requires project hooks to be reviewed and trusted by exact hash. In the
+Codex CLI, run `/hooks`, inspect the commands, and approve them before expecting
+automatic SessionStart, UserPromptSubmit, or Stop execution. A changed hook is
+untrusted until reviewed again.
+
+Read live resource state and inspect the resulting policy with:
+
+```bash
+python scripts/escapement.py codex-resources read
+python scripts/escapement.py codex-resources status
+```
+
+This invokes the installed `codex app-server`, reads rate limits and token
+activity, and persists `.agent/runtime/codex-resources.json`. The runtime treats
+a returned 300-minute rate window as the five-hour window. It conserves breadth
+at 75%, converges at 90%, and blocks only a new material turn at 100%. Expired
+state cannot block work. Token activity is reported separately and is not
+treated as a remaining-token balance.
 
 The repository also includes:
 
@@ -1197,7 +1220,7 @@ exercised through the standard CI workflow.
 ```text
 Validated:                   2026-08-07
 Routing evaluations:         122 / 122 PASS
-Unit tests:                  172 / 172 PASS
+Unit tests:                  183 / 183 PASS
 Runtime doctor:               0 failures
 Repository doctor:            0 failures, 0 warnings
 Security gate:                0 findings
@@ -1237,8 +1260,10 @@ Current boundaries include:
 - the current ablation corpus measures routing, not final task quality;
 - cross-host conformance is not yet established at the same level as current
   Claude Code real-use evidence;
-- quota-aware model routing and execution-budget enforcement are not current
-  v6.3 capabilities;
+- live Codex resource reads depend on an accessible, authenticated local App
+  Server and remain `NOT_OBSERVABLE` when the host does not expose one;
+- the current policy reduces execution breadth but does not automatically
+  switch the Codex model or spend credits;
 - MCP exposure is future scope;
 - strict per-skill evidence mapping remains a future hardening opportunity;
 - one legacy catalogued capability, `skill-ui`, still has an unresolved exact

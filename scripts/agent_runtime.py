@@ -15,6 +15,12 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from capability_router import build_context_pack, find_root, route_prompt  # noqa: E402
+from codex_resources import (  # noqa: E402
+    STATE_RELATIVE,
+    apply_resource_policy,
+    assess_resource_policy,
+    load_resource_state,
+)
 from run_check import sha256_file, stable_record_id  # noqa: E402
 
 VERSION = "6.3.0"
@@ -26,6 +32,7 @@ CONTEXT_PACK = RUNTIME / "CONTEXT_PACK.md"
 SESSION_MEMORY = RUNTIME / "SESSION_MEMORY.md"
 TURNS_LOG = RUNTIME / "turns.jsonl"
 SKILL_LOG = ROOT / "logs" / "skill-usage.jsonl"
+RESOURCE_STATE = ROOT / STATE_RELATIVE
 
 
 def now() -> str:
@@ -90,6 +97,37 @@ def append_jsonl(path: Path, record: dict[str, Any]) -> None:
         handle.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
+def durable_recovery_context() -> str:
+    sections: list[str] = []
+    handoff = ROOT / "SESSION_HANDOFF.md"
+    if handoff.exists():
+        text = handoff.read_text(encoding="utf-8").strip()
+        if text and "No completed turn" not in text and "No active handoff" not in text:
+            sections.extend(["### Session Handoff", text])
+
+    modules = ROOT / "docs" / "PROGRAM_MODULES.json"
+    if modules.exists():
+        try:
+            value = json.loads(modules.read_text(encoding="utf-8"))
+            sections.extend([
+                "### Program Modules",
+                json.dumps(value, indent=2, ensure_ascii=False),
+            ])
+        except (OSError, json.JSONDecodeError):
+            sections.extend(["### Program Modules", "Present but unreadable; inspect the file directly."])
+    return "\n\n".join(sections)
+
+
+def route_with_resources(
+    prompt: str,
+    phase_override: str | None = None,
+) -> dict[str, Any]:
+    route = route_prompt(prompt, phase_override=phase_override)
+    state = load_resource_state(RESOURCE_STATE)
+    policy = assess_resource_policy(state)
+    return apply_resource_policy(route, policy)
+
+
 VALID_PHASE_IDS = [
     "ORIENT", "DISCOVER", "RESEARCH", "BRAINSTORM",
     "SPECIFY", "PLAN", "IMPLEMENT", "VERIFY", "POLISH", "RELEASE",
@@ -152,6 +190,11 @@ def write_context(turn: dict[str, Any]) -> None:
         f"- {item['action']} `{item['phase']}`: {item['reason']}" for item in overrides
     ) or "None"
 
+    pack = build_context_pack(
+        latest_prompt,
+        route,
+        durable_context=durable_recovery_context(),
+    )
     ACTIVE_CONTEXT.write_text(
         f"""# Active Context
 
@@ -182,7 +225,7 @@ def write_context(turn: dict[str, Any]) -> None:
 """,
         encoding="utf-8",
     )
-    CONTEXT_PACK.write_text(build_context_pack(latest_prompt, route), encoding="utf-8")
+    CONTEXT_PACK.write_text(pack, encoding="utf-8")
 
 
 def combine_prompts(turn: dict[str, Any], prompt: str) -> str:
@@ -201,7 +244,7 @@ def start_or_continue(prompt: str, data: dict[str, Any] | None = None) -> tuple[
             "sha256": hashlib.sha256(prompt.encode()).hexdigest(),
         })
         current_phase = current.get("route", {}).get("current_phase")
-        current["route"] = route_prompt(
+        current["route"] = route_with_resources(
             combine_prompts(
                 {**current, "prompt_history": current["prompt_history"][:-1]},
                 prompt,
@@ -210,11 +253,11 @@ def start_or_continue(prompt: str, data: dict[str, Any] | None = None) -> tuple[
         )
         apply_phase_overrides(current["route"], current.get("phase_plan_overrides", []))
         current["continuation_count"] = int(current.get("continuation_count", 0)) + 1
-        save_turn(current)
         write_context(current)
+        save_turn(current)
         return current, True
 
-    route = route_prompt(prompt)
+    route = route_with_resources(prompt)
     if route["tier"] == "INFO":
         value = {
             "runtime_version": VERSION,
@@ -224,7 +267,36 @@ def start_or_continue(prompt: str, data: dict[str, Any] | None = None) -> tuple[
             "prompt_history": [{"timestamp": now(), "prompt": prompt.strip()}],
         }
         ACTIVE_CONTEXT.write_text("# Active Context\n\nInformational request; no runtime turn.\n", encoding="utf-8")
-        CONTEXT_PACK.write_text(build_context_pack(prompt, route), encoding="utf-8")
+        CONTEXT_PACK.write_text(
+            build_context_pack(
+                prompt,
+                route,
+                durable_context=durable_recovery_context(),
+            ),
+            encoding="utf-8",
+        )
+        return value, False
+
+    if route.get("resource_policy", {}).get("block_new_turn"):
+        value = {
+            "runtime_version": VERSION,
+            "turn_id": None,
+            "status": "resource-blocked",
+            "route": route,
+            "prompt_history": [{"timestamp": now(), "prompt": prompt.strip()}],
+        }
+        ACTIVE_CONTEXT.write_text(
+            "# Active Context\n\nNew material work blocked by the persisted Codex resource policy.\n",
+            encoding="utf-8",
+        )
+        CONTEXT_PACK.write_text(
+            build_context_pack(
+                prompt,
+                route,
+                durable_context=durable_recovery_context(),
+            ),
+            encoding="utf-8",
+        )
         return value, False
 
     value = {
@@ -243,8 +315,8 @@ def start_or_continue(prompt: str, data: dict[str, Any] | None = None) -> tuple[
         "route": route,
         "closure": None,
     }
-    save_turn(value)
     write_context(value)
+    save_turn(value)
     return value, False
 
 
@@ -359,6 +431,16 @@ def command_prompt(_: argparse.Namespace) -> int:
         return 0
     turn, continued = start_or_continue(prompt, data)
     route = turn["route"]
+    if turn.get("status") == "resource-blocked":
+        print(json.dumps({
+            "decision": "block",
+            "reason": (
+                "Escapement blocked a new material turn because the latest "
+                "Codex rate-limit window is exhausted. Refresh resource state "
+                "after the reported reset before starting new work."
+            ),
+        }))
+        return 0
     if route["tier"] == "INFO":
         emit("UserPromptSubmit", "Informational request: no material runtime turn.")
         return 0
@@ -399,15 +481,16 @@ def command_manual(args: argparse.Namespace) -> int:
         "capability_readiness": route.get("capability_readiness", {}),
         "external_candidates": [item["id"] for item in route["external_candidates"]],
         "context_cost": route["context_cost"],
+        "resource_policy": route.get("resource_policy"),
     }
     print(json.dumps(payload, indent=2) if args.json else "\n".join(
         f"{key}: {value}" for key, value in payload.items()
     ))
-    return 0
+    return 75 if turn.get("status") == "resource-blocked" else 0
 
 
 def command_explain(args: argparse.Namespace) -> int:
-    route = route_prompt(args.prompt)
+    route = route_with_resources(args.prompt)
     print(json.dumps(route, indent=2))
     return 0
 
@@ -483,7 +566,7 @@ def command_advance(args: argparse.Namespace) -> int:
     combined = "\n".join(
         item["prompt"] for item in turn.get("prompt_history", [])
     )
-    turn["route"] = route_prompt(combined, phase_override=args.phase)
+    turn["route"] = route_with_resources(combined, phase_override=args.phase)
     apply_phase_overrides(turn["route"], turn.get("phase_plan_overrides", []))
     turn["stop_blocks"] = 0
     save_turn(turn)

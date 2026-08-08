@@ -434,6 +434,21 @@ def command_capability_audit(args: argparse.Namespace) -> int:
     return subprocess.run(command, cwd=SOURCE_ROOT, check=False).returncode
 
 
+def command_codex_resources(args: argparse.Namespace) -> int:
+    command = [
+        sys.executable,
+        str(SOURCE_ROOT / "scripts" / "codex_resources.py"),
+        args.resource_command,
+    ]
+    if args.state:
+        command.extend(["--state", args.state])
+    if args.resource_command == "read":
+        if args.codex_command:
+            command.extend(["--codex-command", args.codex_command])
+        command.extend(["--timeout", str(args.timeout)])
+    return subprocess.run(command, cwd=SOURCE_ROOT, check=False).returncode
+
+
 def command_eval(args: argparse.Namespace) -> int:
     command = [
         sys.executable,
@@ -888,9 +903,11 @@ def command_doctor(args: argparse.Namespace) -> int:
         ".github/copilot-instructions.md",
         "GEMINI.md",
         "scripts/agent_runtime.py",
+        "scripts/codex_resources.py",
         "scripts/run_check.py",
         "scripts/feature_list.py",
         "catalog/capability-registry.json",
+        "schemas/codex-resource-state.schema.json",
     ]
     for relative in required:
         ok = (target / relative).exists()
@@ -1096,6 +1113,20 @@ def build_parser() -> argparse.ArgumentParser:
     capability_audit.add_argument("--markdown", action="store_true")
     capability_audit.add_argument("--output")
     capability_audit.set_defaults(func=command_capability_audit)
+
+    codex_resources = sub.add_parser("codex-resources")
+    codex_resources_sub = codex_resources.add_subparsers(
+        dest="resource_command",
+        required=True,
+    )
+    resource_read = codex_resources_sub.add_parser("read")
+    resource_read.add_argument("--codex-command")
+    resource_read.add_argument("--state")
+    resource_read.add_argument("--timeout", type=float, default=15)
+    resource_read.set_defaults(func=command_codex_resources)
+    resource_status = codex_resources_sub.add_parser("status")
+    resource_status.add_argument("--state")
+    resource_status.set_defaults(func=command_codex_resources)
 
     eval_parser = sub.add_parser("eval")
     eval_parser.add_argument("--resume", action="store_true")
