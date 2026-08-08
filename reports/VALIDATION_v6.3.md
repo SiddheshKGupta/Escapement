@@ -12,7 +12,7 @@ Release: `6.3.0 — Capability Strength Orchestration`
 | Automatic context | PASS — tested packs below 1,800 words |
 | Invoked skill context | PASS — tested routes below 1,000 words |
 | Routing evaluations | PASS — 83 / 83 |
-| Unit tests | PASS — 165 / 165 |
+| Unit tests | PASS — 167 / 167 |
 | Runtime doctor | PASS — 0 failures |
 | Repository doctor | PASS — 0 failures, 0 warnings |
 | Native skill synchronisation | PASS — 35 / 35 |

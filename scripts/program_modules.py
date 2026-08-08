@@ -105,6 +105,19 @@ def command_add_module(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_reset(args: argparse.Namespace) -> int:
+    if not REGISTRY_FILE.exists():
+        print("Program registry already absent.")
+        return 0
+    if not args.confirm:
+        raise SystemExit(
+            "FAIL: reset would discard the current program registry. Re-run with --confirm."
+        )
+    REGISTRY_FILE.unlink()
+    print(f"Program registry cleared: {REGISTRY_FILE}")
+    return 0
+
+
 def command_list(_: argparse.Namespace) -> int:
     value = load()
     print(f"Program: {value.get('program') or '(unset)'}")
@@ -171,6 +184,10 @@ def build_parser() -> argparse.ArgumentParser:
     add_module.set_defaults(func=command_add_module)
 
     sub.add_parser("list").set_defaults(func=command_list)
+
+    reset = sub.add_parser("reset")
+    reset.add_argument("--confirm", action="store_true")
+    reset.set_defaults(func=command_reset)
 
     set_status = sub.add_parser("set-status")
     set_status.add_argument("--id", required=True)
