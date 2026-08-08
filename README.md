@@ -123,21 +123,6 @@ Overlap groups:             14
 Published case studies:      4
 Unit tests:                 189
 Routing evaluations:        122
-Version:                      6.3.0
-Repository files:             280
-Kernel:                       795 / 1000 words
-Profiles:                       2
-Doctrine packs:                11
-Native skills:                 35
-Capability strengths:          58
-Agent patterns:                21
-Governed external resources:   67
-Strategy adapters:             10
-Capability families:           10
-Overlap groups:                14
-Published case studies:         4
-Unit tests:                   186 / 186 PASS
-Routing evaluations:          122 / 122 PASS
 ```
 
 Escapement deliberately uses **more capabilities across the lifecycle, not more
@@ -1148,13 +1133,6 @@ Unit tests:                  189 / 189 PASS
 Runtime doctor:               0 failures
 Repository doctor:            0 failures, 0 warnings
 Security gate:                0 findings
-Unit tests:                  186 / 186 PASS
-
-Runtime doctor:                0 failures
-Repository doctor:             0 failures
-Repository warnings:           0
-
-Security gate:                 0 findings
 Self-test:                    PASS
 Fresh-install lifecycle:      PASS
 
@@ -1162,7 +1140,7 @@ Kernel:                       795 / 1000 words
 Native skills:                 35
 Capability strengths:          58
 Governed external resources:   67
-Repository files:             280
+Repository files:             282
 Published case studies:         4
 ```
 
