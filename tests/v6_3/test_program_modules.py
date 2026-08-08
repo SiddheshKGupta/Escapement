@@ -82,6 +82,24 @@ class ProgramModulesTest(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("billing is not done", result.stderr)
 
+    def test_reset_requires_confirm(self) -> None:
+        self.run_modules("set-program", "--name", "CRM Platform")
+        result = self.run_modules("reset")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("--confirm", result.stderr)
+        self.assertEqual(self.registry()["program"], "CRM Platform")
+
+    def test_reset_confirmed_clears_registry(self) -> None:
+        self.run_modules("set-program", "--name", "CRM Platform")
+        self.run_modules("add-module", "--id", "billing", "--name", "Billing")
+
+        result = self.run_modules("reset", "--confirm")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse((self.target / "docs" / "PROGRAM_MODULES.json").exists())
+
+        listing = self.run_modules("list")
+        self.assertIn("(unset)", listing.stdout)
+
     def test_unregistered_shared_artifact_is_rejected(self) -> None:
         self.run_modules("add-module", "--id", "billing", "--name", "Billing")
         result = self.run_modules(
