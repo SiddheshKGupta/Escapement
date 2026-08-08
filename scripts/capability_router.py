@@ -893,6 +893,9 @@ def select_skills(
                 ranked.append({**item, "score": 0, "matched": ["phase-default"]})
 
     ranked.sort(key=lambda item: (-item["score"], -item.get("priority", 0), item["id"]))
+    # Note: every native skill currently declares a unique overlap_group, so
+    # this rejection branch is unreachable in practice. Left as-is rather
+    # than extended with fallbacks, which would be code that cannot run.
     selected, rejected, used_groups = [], [], set()
     for item in ranked:
         group = item.get("overlap_group")
@@ -982,14 +985,24 @@ def select_external(prompt: str, phase: str, research: dict[str, Any], maximum: 
         if group.get("relation") == "SUBSTITUTE"
         for member in group.get("members", [])
     }
-    selected, used_groups = [], set()
+    # A displaced member is demoted, not discarded. Most external resources
+    # are not installed, so collapsing a group to a single choice with no
+    # recorded alternative turns "choose one" into a dead end when the
+    # primary cannot be installed or does not work.
+    selected, winner_of_group = [], {}
     for item in ranked:
         group = substitute_group_of.get(item["id"])
-        if group and group in used_groups:
+        if group and group in winner_of_group:
+            winner_of_group[group].setdefault("fallbacks", []).append({
+                "id": item["id"],
+                "name": item["name"],
+                "reason": f"overlap:{group}",
+            })
             continue
+        item = dict(item)
         selected.append(item)
         if group:
-            used_groups.add(group)
+            winner_of_group[group] = item
         if len(selected) >= maximum:
             break
     return selected
@@ -1287,6 +1300,10 @@ def build_context_pack(prompt: str, route: dict[str, Any]) -> str:
             f"{item.get('source') or 'source unresolved'}"
             + (f" — **{gate}** ({item.get('licence') or 'licence unknown'})" if gate else "")
         )
+        for fallback in item.get("fallbacks", []):
+            sections.append(
+                f"  - fallback if unavailable: `{fallback['id']}` — {fallback['name']}"
+            )
     sections.append(
         "Candidates are not active until overlap, licence, security, installation "
         "and approval requirements are satisfied."

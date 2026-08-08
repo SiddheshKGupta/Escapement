@@ -150,6 +150,22 @@ def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str
                 f"expected {expected_gate!r}"
             )
 
+    # A displaced SUBSTITUTE member should be demoted to a fallback on the
+    # winner, not dropped. Maps a winning candidate to the fallbacks it must
+    # carry, so the chain is asserted rather than assumed.
+    actual_fallbacks = {
+        item["id"]: [f["id"] for f in item.get("fallbacks", [])]
+        for item in route.get("external_candidates", [])
+    }
+    for winner, expected_chain in expected.get("external_fallbacks", {}).items():
+        if winner not in actual_fallbacks:
+            failures.append(f"fallback chain uncheckable, {winner} not routed")
+        elif actual_fallbacks[winner] != list(expected_chain):
+            failures.append(
+                f"{winner} fallbacks are {actual_fallbacks[winner]}, "
+                f"expected {list(expected_chain)}"
+            )
+
     actual_strengths = {
         item["id"] for item in route.get("capability_strengths", [])
     }

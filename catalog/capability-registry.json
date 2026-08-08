@@ -1642,6 +1642,128 @@
       "use_when": "A repository is large enough that agent context is expensive or imprecise, and a persistent code graph would cut tool calls and tokens.",
       "do_not": "Do not repeat its published benchmark numbers as though they were reproduced here, and do not run it alongside Graphify or Understand Anything -- memory-and-knowledge is a SUBSTITUTE group.",
       "notes": "Publishes a 162-run controlled efficiency benchmark and SWE-bench Verified results graded by the official harness. That paired vanilla-vs-augmented design is a reference implementation of the claim 3 method deferred in docs/decisions/ESCAPEMENT_BENCH_V1.md. No telemetry."
+    },
+    {
+      "id": "mattpocock-skills",
+      "name": "Matt Pocock Skills",
+      "kind": "agent-skill-suite",
+      "source": "https://github.com/mattpocock/skills",
+      "publisher": "Matt Pocock",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "skill-suite-source",
+      "use_modes": [
+        "reference",
+        "adapt-selectively"
+      ],
+      "triggers": [
+        "engineering skill suite",
+        "agent skill library",
+        "TypeScript agent skills",
+        ".agents directory"
+      ],
+      "use_when": "Looking for engineering-oriented agent skill definitions to read or adapt, rather than a single named skill.",
+      "do_not": "Do not install the whole suite to obtain one skill, and do not let it displace an equivalent native skill already routed for the phase.",
+      "notes": "The grilling skill from this repository is catalogued separately as mattpocock-grilling under decision-interview; this entry covers the suite as a source to read and adapt from."
+    },
+    {
+      "id": "supermemory",
+      "name": "Supermemory",
+      "kind": "memory-and-context-engine",
+      "source": "https://github.com/supermemoryai/supermemory",
+      "publisher": "Supermemory AI",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "session-memory",
+      "use_modes": [
+        "reference",
+        "integrate-separately"
+      ],
+      "triggers": [
+        "memory engine",
+        "context engine",
+        "persistent recall",
+        "memory API"
+      ],
+      "use_when": "A project needs a durable memory substrate beyond repository file state, and a demonstrated need justifies an external one.",
+      "do_not": "Do not adopt it alongside another memory substrate -- memory-and-knowledge is a SUBSTITUTE group and file state remains the default.",
+      "notes": "Runs fully locally as well as hosted."
+    },
+    {
+      "id": "sanyuan-skills",
+      "name": "Sanyuan Code Review Skill",
+      "kind": "agent-skill",
+      "source": "https://github.com/sanyuan0704/sanyuan-skills",
+      "publisher": "sanyuan0704",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "code-review",
+      "use_modes": [
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "SOLID review",
+        "boundary condition review",
+        "error handling review"
+      ],
+      "use_when": "A review pass needs an explicit SOLID, boundary-condition and error-handling checklist to supplement the native engineering review.",
+      "do_not": "Do not run it in addition to another full review workflow -- code-review is a SUBSTITUTE group.",
+      "notes": "Last published update 2026-05-11; confirm it is still maintained before relying on it."
+    },
+    {
+      "id": "awesome-claude-skills",
+      "name": "Awesome Claude Skills",
+      "kind": "discovery-index",
+      "source": "https://github.com/ComposioHQ/awesome-claude-skills",
+      "publisher": "ComposioHQ",
+      "license": "No licence file observed; all rights reserved",
+      "license_status": "unverified-restrict-copying",
+      "status": "reference-only",
+      "activation": "discovery-only",
+      "adoption": "approval-required",
+      "overlap_group": "external-discovery",
+      "use_modes": [
+        "reference"
+      ],
+      "triggers": [
+        "find a skill",
+        "skill directory",
+        "available skills"
+      ],
+      "use_when": "Discovering what agent skills exist before deciding whether any are worth evaluating.",
+      "do_not": "Do not copy list content or linked material into this repository. The GitHub licence endpoint returns 404, so despite its visibility the contents are all rights reserved -- treat every linked project as needing its own separate licence check.",
+      "notes": "Discovery only. Linked repositories are not catalogued or licence-checked by inclusion here."
+    },
+    {
+      "id": "floci",
+      "name": "Floci",
+      "kind": "local-cloud-emulator",
+      "source": "https://github.com/floci-io/floci",
+      "publisher": "floci-io",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "local-runtime-emulation",
+      "use_modes": [
+        "reference",
+        "integrate-separately"
+      ],
+      "triggers": [
+        "local AWS emulation",
+        "offline cloud testing",
+        "emulate cloud services"
+      ],
+      "use_when": "Verification needs cloud service behaviour reproduced locally instead of against a real account.",
+      "do_not": "Do not treat local emulation as evidence that the real cloud environment behaves identically.",
+      "notes": "Positioned as an alternative to LocalStack. Sole member of local-runtime-emulation, which has no declared relation yet."
     }
   ],
   "agents": [
