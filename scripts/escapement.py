@@ -877,6 +877,47 @@ def manifest_count_check(target: Path) -> tuple[int, list[str]]:
     return len(problems), problems
 
 
+LICENSE_STATUS_VALUES = {
+    "verified",
+    "must-verify",
+    "verified-unlicensed",
+    "not-open-source",
+    "not-code-resource",
+    "source-required",
+    "special-terms",
+}
+
+
+def license_status_check(target: Path) -> tuple[int, list[str]]:
+    """capability-registry.json's license_status field sprawled to 18
+    distinct values across 67 resources -- several were the same evidence
+    state spelled differently (verified, verified-from-readme, verified-in-
+    prior-review, verified-from-project-docs and verified-from-skill-docs
+    all meant "someone actually read a real source and confirmed the
+    licence"; the only real difference was where). Consolidated to 7 values
+    describing evidence state only -- what to do about a licence lives in
+    the `adoption` field, not here. This check keeps it from sprawling back
+    by rejecting any value outside the closed set; a genuinely new evidence
+    state is a deliberate addition to LICENSE_STATUS_VALUES, not a value
+    that silently appears because a new resource entry chose slightly
+    different wording than its sibling.
+    """
+    registry = read_json(target / "catalog/capability-registry.json", {})
+    if not registry:
+        return 0, []
+
+    problems: list[str] = []
+    for resource in registry.get("resources", []):
+        status = resource.get("license_status")
+        if status not in LICENSE_STATUS_VALUES:
+            problems.append(
+                f"{resource.get('id')}: license_status {status!r} is not one of "
+                f"the {len(LICENSE_STATUS_VALUES)} recognised values"
+            )
+
+    return len(problems), problems
+
+
 def overlap_group_tag_check(target: Path) -> tuple[int, list[str]]:
     """Each capability-registry.json resource carries its own overlap_group
     string, separate from the membership list that actually governs router
@@ -1047,6 +1088,15 @@ def command_doctor(args: argparse.Namespace) -> int:
         failures += tag_drift_count
     else:
         print("[PASS] overlap_group tags match formal group membership")
+
+    license_status_count, license_status_problems = license_status_check(target)
+    if license_status_count:
+        print(f"[FAIL] license_status values outside the recognised set: {license_status_count}")
+        for problem in license_status_problems[:10]:
+            print(f"  - {problem}")
+        failures += license_status_count
+    else:
+        print("[PASS] license_status values are all recognised")
 
     print(f"\nFailures: {failures}")
     print(f"Warnings: {warnings}")
