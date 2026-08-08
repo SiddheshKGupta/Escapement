@@ -161,6 +161,8 @@ It provides:
 - harness ablation against a shared evaluation corpus;
 - managed install, update, repair, backup, and drift detection;
 - automatic runtime hook packaging for Claude Code and Codex;
+- Codex App Server rate-limit and token-activity reads with a five-hour-window
+  execution policy;
 - bootstrap guidance for other repository-aware hosts.
 
 Escapement is **not**:
@@ -225,9 +227,11 @@ Add regression evidence
 real work. It does **not** mean a statistical benchmark or broad production
 adoption.
 
-Current real-use evidence is strongest on Claude Code. Codex has automatic
-runtime-hook packaging in the repository, but equivalent cross-host conformance
-and quota-aware execution validation remain future work.
+Current real-use evidence is strongest on Claude Code. Codex now has repository
+hook packaging, offline App Server contract tests, source-labelled resource
+state, and deterministic five-hour-window policy tests. Live account telemetry
+and automatic hook execution still require validation on each trusted Codex
+installation.
 
 ---
 
@@ -1045,7 +1049,7 @@ the runtime**.
 | Host | Current repository integration | Evidence boundary |
 |---|---|---|
 | Claude Code | `.claude/settings.json`, native skill mirror, Claude plugin manifest | Strongest current real-use evidence |
-| Codex | `.codex/hooks.json`, `.agents/skills`, Codex plugin manifest | Automatic runtime packaging exists; equivalent cross-host conformance is not yet established |
+| Codex | `.codex/hooks.json`, `.agents/skills`, Codex plugin manifest, App Server resource adapter | Runtime and offline resource contracts are tested; live host/account validation remains environment-specific |
 | Gemini CLI | `GEMINI.md` points to the authoritative kernel | Runtime bootstrap remains manual |
 | GitHub Copilot | `.github/copilot-instructions.md` points to the kernel where applicable | Runtime bootstrap remains host-dependent/manual |
 | Cursor / Antigravity / other repository-aware agents | Kernel can be followed where supported | Runtime activation depends on host capability |
@@ -1070,6 +1074,25 @@ as Claude plugin packaging metadata.
 
 `.codex/hooks.json` provides runtime hook packaging through shell and PowerShell
 wrappers.
+
+Codex requires project hooks to be reviewed and trusted by exact hash. In the
+Codex CLI, run `/hooks`, inspect the commands, and approve them before expecting
+automatic SessionStart, UserPromptSubmit, or Stop execution. A changed hook is
+untrusted until reviewed again.
+
+Read live resource state and inspect the resulting policy with:
+
+```bash
+python scripts/escapement.py codex-resources read
+python scripts/escapement.py codex-resources status
+```
+
+This invokes the installed `codex app-server`, reads rate limits and token
+activity, and persists `.agent/runtime/codex-resources.json`. The runtime treats
+a returned 300-minute rate window as the five-hour window. It conserves breadth
+at 75%, converges at 90%, and blocks only a new material turn at 100%. Expired
+state cannot block work. Token activity is reported separately and is not
+treated as a remaining-token balance.
 
 The repository also includes:
 
@@ -1236,8 +1259,10 @@ Current boundaries include:
 - the current ablation corpus measures routing, not final task quality;
 - cross-host conformance is not yet established at the same level as current
   Claude Code real-use evidence;
-- quota-aware model routing and execution-budget enforcement are not current
-  v6.3 capabilities;
+- live Codex resource reads depend on an accessible, authenticated local App
+  Server and remain `NOT_OBSERVABLE` when the host does not expose one;
+- the current policy reduces execution breadth but does not automatically
+  switch the Codex model or spend credits;
 - MCP exposure is future scope;
 - strict per-skill evidence mapping remains a future hardening opportunity;
 - one legacy catalogued capability, `skill-ui`, still has an unresolved exact

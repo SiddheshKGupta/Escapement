@@ -5,6 +5,8 @@ venv/
 node_modules/
 
 .agent/runtime/current-turn.json
+.agent/runtime/codex-resources.json
+.agent/runtime/codex-resources.json.tmp
 .agent/runtime/turns.jsonl
 .agent/evidence/
 .agent/evals/

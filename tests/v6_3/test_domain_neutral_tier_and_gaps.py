@@ -66,11 +66,24 @@ class TierClassificationIsDomainNeutralTest(unittest.TestCase):
             "responsive behaviour and subtle animations.",
             "Build a reconciliation report for invoices and payments.",
             "Implement a CSV export for the orders table with filters and pagination.",
+            "Add the legally required consent checkbox field to the signup form "
+            "and wire it to the existing form validation.",
         ):
             self.assertEqual(classify_tier(prompt), "MATERIAL", prompt)
 
     def test_micro_and_info_are_unaffected(self):
         self.assertEqual(classify_tier("Fix this typo in the header."), "MICRO")
+        self.assertEqual(
+            classify_tier("Fix a spelling mistake in a user-facing message."),
+            "MICRO",
+        )
+        self.assertEqual(
+            classify_tier(
+                "Add server-side validation so a username cannot be blank "
+                "and add appropriate tests."
+            ),
+            "MICRO",
+        )
         self.assertEqual(classify_tier("What does this five-line function do?"), "INFO")
 
     def test_enumeration_alone_does_not_force_program_without_a_product_verb(self):

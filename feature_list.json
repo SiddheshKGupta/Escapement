@@ -96,6 +96,34 @@
         "reports/VALIDATION_v6.3.md"
       ],
       "owner": "maintainer"
+    },
+    {
+      "id": "ESC-CODEX-01",
+      "behavior": "Codex compatibility classifies bounded MICRO work correctly, reports generated context size, hydrates durable recovery state, and keeps capability-audit phase output consistent with direct routing.",
+      "verification": "python -m unittest tests.v6_3.test_domain_neutral_tier_and_gaps tests.v6_3.test_readiness_audit tests.v6_3.test_runtime",
+      "state": "passing",
+      "required": true,
+      "dependencies": [
+        "ESC-630-06"
+      ],
+      "evidence": [
+        "reports/CODEX_COMPATIBILITY_VALIDATION_2026-08-08.md"
+      ],
+      "owner": "maintainer"
+    },
+    {
+      "id": "ESC-CODEX-02",
+      "behavior": "The Codex App Server adapter keeps token activity separate from rate-limit enforcement, persists source-labelled resource state, recognizes the 300-minute window, handles rate-limit updates, and applies conservative new-turn policy without weakening verification.",
+      "verification": "python -m unittest tests.v6_3.test_codex_resources",
+      "state": "passing",
+      "required": true,
+      "dependencies": [
+        "ESC-CODEX-01"
+      ],
+      "evidence": [
+        "reports/CODEX_COMPATIBILITY_VALIDATION_2026-08-08.md"
+      ],
+      "owner": "maintainer"
     }
   ]
 }
