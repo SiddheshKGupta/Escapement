@@ -135,6 +135,21 @@ def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str
     if forbidden_external:
         failures.append(f"forbidden external candidates selected {forbidden_external}")
 
+    # A licence gate is only worth having if it is asserted. Maps a candidate
+    # id to its expected adoption gate; null asserts the absence of one.
+    actual_adoption = {
+        item["id"]: item.get("adoption")
+        for item in route.get("external_candidates", [])
+    }
+    for candidate, expected_gate in expected.get("external_adoption", {}).items():
+        if candidate not in actual_adoption:
+            failures.append(f"adoption gate uncheckable, {candidate} not routed")
+        elif actual_adoption[candidate] != expected_gate:
+            failures.append(
+                f"{candidate} adoption gate is {actual_adoption[candidate]!r}, "
+                f"expected {expected_gate!r}"
+            )
+
     actual_strengths = {
         item["id"] for item in route.get("capability_strengths", [])
     }

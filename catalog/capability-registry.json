@@ -103,7 +103,8 @@
       ],
       "use_when": "An agent needs current patterns for research tooling, evaluation runners, safe binary distribution, or developer-tool inventory.",
       "do_not": "Do not assume every public repository in an organisation has the same licence.",
-      "notes": "Research extension, resumable evals, content-addressed records, self-tests, and safe installers."
+      "notes": "Research extension, resumable evals, content-addressed records, self-tests, and safe installers.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "perplexity-api-platform-developers",
@@ -154,7 +155,8 @@
       ],
       "use_when": "A user explicitly wants Perplexity-backed current web search or snippets and can provide an API key.",
       "do_not": "Do not copy repository code into Escapement or claim open-source reuse until a licence is present and verified.",
-      "notes": "Checksum-verified releases, atomic updates, JSON stdout, and agent-friendly CLI design."
+      "notes": "Checksum-verified releases, atomic updates, JSON stdout, and agent-friendly CLI design.",
+      "adoption": "approval-required"
     },
     {
       "id": "perplexity-search-evals",
@@ -233,7 +235,8 @@
       ],
       "use_when": "A project wants Perplexity search through MCP rather than a CLI.",
       "do_not": "Do not register remote MCP servers silently or make network access part of the default core.",
-      "notes": "Optional freshness and research integrations through a narrow MCP boundary."
+      "notes": "Optional freshness and research integrations through a narrow MCP boundary.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "perplexity-codescythe",
@@ -259,7 +262,8 @@
       ],
       "use_when": "A TypeScript or JavaScript repository needs deterministic dead-code analysis or dependency-path explanation.",
       "do_not": "Do not run destructive fixes without a clean branch, tests, and explicit approval.",
-      "notes": "Narrow deterministic contracts, doctor commands, explainability, and safe destructive-mode gates."
+      "notes": "Narrow deterministic contracts, doctor commands, explainability, and safe destructive-mode gates.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "appflowy",
@@ -285,7 +289,8 @@
       ],
       "use_when": "Designing local-first state, user-owned data, extensible workspace architecture, or self-hosted collaboration.",
       "do_not": "Do not copy AGPL code into Escapement's source-available core without a deliberate licence decision.",
-      "notes": "Privacy-first local control, cross-platform reliability, and extensible building blocks."
+      "notes": "Privacy-first local control, cross-platform reliability, and extensible building blocks.",
+      "adoption": "approval-required"
     },
     {
       "id": "plausible-analytics",
@@ -311,7 +316,8 @@
       ],
       "use_when": "Designing privacy-first observability, minimal dashboards, transparent metrics, or optional self-hosted analytics.",
       "do_not": "Do not embed AGPL application code into Escapement core without licence review.",
-      "notes": "Local-only telemetry by default, transparent metrics, and clutter-free observability."
+      "notes": "Local-only telemetry by default, transparent metrics, and clutter-free observability.",
+      "adoption": "approval-required"
     },
     {
       "id": "github-spec-kit",
@@ -445,7 +451,8 @@
       ],
       "use_when": "A product needs open design tokens, inspectable design-to-code workflows, or an optional design MCP/API.",
       "do_not": "Do not copy branding or assume a design file alone proves implementation correctness.",
-      "notes": "Design tokens as shared source of truth and programmable design-code integration."
+      "notes": "Design tokens as shared source of truth and programmable design-code integration.",
+      "adoption": "approval-required"
     },
     {
       "id": "helixdb",
@@ -707,7 +714,8 @@
         "continuous improvement"
       ],
       "use_when": "A long-running project wants to observe repeated task patterns and propose candidate skills.",
-      "do_not": "Do not let it modify skills automatically or observe sensitive sessions without approval."
+      "do_not": "Do not let it modify skills automatically or observe sensitive sessions without approval.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "taste-skill",
@@ -784,7 +792,8 @@
         "interaction polish"
       ],
       "use_when": "A UI needs specialised motion judgement or animation review.",
-      "do_not": "Do not use motion to compensate for weak hierarchy or load the full suite for static enterprise screens."
+      "do_not": "Do not use motion to compensate for weak hierarchy or load the full suite for static enterprise screens.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "impeccable",
@@ -859,7 +868,8 @@
         "long-running project"
       ],
       "use_when": "Local file handoffs are insufficient and the project accepts a background memory service and its licence.",
-      "do_not": "Do not install by default, duplicate Escapement state, or capture confidential sessions without a privacy decision."
+      "do_not": "Do not install by default, duplicate Escapement state, or capture confidential sessions without a privacy decision.",
+      "adoption": "approval-required"
     },
     {
       "id": "graphify",
@@ -909,7 +919,8 @@
         "release review"
       ],
       "use_when": "A project explicitly wants role-based plan reviews or fresh-context specialist reviews.",
-      "do_not": "Do not install its full workflow alongside Superpowers or ECC without deciding which system owns orchestration."
+      "do_not": "Do not install its full workflow alongside Superpowers or ECC without deciding which system owns orchestration.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "everything-claude-code",
@@ -985,7 +996,8 @@
         "HN"
       ],
       "use_when": "A decision benefits from recent community signals rather than only authoritative documentation.",
-      "do_not": "Do not use social discourse as authoritative evidence or load it for stable facts."
+      "do_not": "Do not use social discourse as authoritative evidence or load it for stable facts.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "skill-ui",
@@ -1005,7 +1017,8 @@
         "skill UI"
       ],
       "use_when": "Retained from the original capability set pending exact source confirmation.",
-      "do_not": "Do not install or attribute this entry until the exact repository is confirmed."
+      "do_not": "Do not install or attribute this entry until the exact repository is confirmed.",
+      "adoption": "approval-required"
     },
     {
       "id": "claude-code-review",
@@ -1028,7 +1041,8 @@
         "multi-agent review"
       ],
       "use_when": "A supported organisation wants Anthropic's managed PR review service.",
-      "do_not": "Do not present it as open source or use it in addition to another expensive full review workflow without reason."
+      "do_not": "Do not present it as open source or use it in addition to another expensive full review workflow without reason.",
+      "adoption": "approval-required"
     },
     {
       "id": "ponytail",
@@ -1052,7 +1066,8 @@
         "code bloat"
       ],
       "use_when": "An agent repeatedly overbuilds bounded implementation tasks.",
-      "do_not": "Do not let minimalism remove validation, security, observability, or approved requirements."
+      "do_not": "Do not let minimalism remove validation, security, observability, or approved requirements.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "mobbin",
@@ -1074,7 +1089,8 @@
         "screen flow"
       ],
       "use_when": "A designer needs real-product interaction and screen references.",
-      "do_not": "Do not scrape, redistribute, or copy protected screens and assets."
+      "do_not": "Do not scrape, redistribute, or copy protected screens and assets.",
+      "adoption": "approval-required"
     },
     {
       "id": "refero",
@@ -1141,7 +1157,8 @@
         "UI block"
       ],
       "use_when": "A project needs a component starting point compatible with its stack.",
-      "do_not": "Do not introduce copied components without licence, dependency, accessibility, and design-system review."
+      "do_not": "Do not introduce copied components without licence, dependency, accessibility, and design-system review.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "shadcn-ui",
@@ -1189,7 +1206,8 @@
         "complex motion"
       ],
       "use_when": "The approved interaction genuinely requires advanced timeline or scroll animation.",
-      "do_not": "Do not add it for ordinary transitions or without dependency and licence review."
+      "do_not": "Do not add it for ordinary transitions or without dependency and licence review.",
+      "adoption": "approval-required"
     },
     {
       "id": "headroom-js",
@@ -1289,7 +1307,8 @@
         "chart recommendation"
       ],
       "use_when": "A UI task benefits from searchable product-type, style, palette, typography, UX, chart or stack recommendations.",
-      "do_not": "Do not let generated recommendations override DESIGN.md or the design intelligence constitution."
+      "do_not": "Do not let generated recommendations override DESIGN.md or the design intelligence constitution.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "frontend-design",
@@ -1312,7 +1331,8 @@
         "anti-slop interface"
       ],
       "use_when": "An approved design specification needs production-grade frontend implementation.",
-      "do_not": "Do not use as the design constitution or alongside multiple primary art-direction systems."
+      "do_not": "Do not use as the design constitution or alongside multiple primary art-direction systems.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "playwright-mcp",
@@ -1358,7 +1378,8 @@
         "natural-language browser"
       ],
       "use_when": "Production browser automation needs a controlled blend of code, natural language, caching and self-healing.",
-      "do_not": "Do not add it for ordinary end-to-end tests or without reviewing network, model and credential requirements."
+      "do_not": "Do not add it for ordinary end-to-end tests or without reviewing network, model and credential requirements.",
+      "adoption": "verify-licence-first"
     },
     {
       "id": "cypress",
@@ -1400,7 +1421,8 @@
         "Puppeteer MCP"
       ],
       "use_when": "An existing approved project depends on the archived Puppeteer MCP server and migration is not immediate.",
-      "do_not": "Do not select for new projects; prefer maintained Playwright CLI/MCP or project-native tests."
+      "do_not": "Do not select for new projects; prefer maintained Playwright CLI/MCP or project-native tests.",
+      "adoption": "approval-required"
     },
     {
       "id": "prime-intellect-prime-agent",
@@ -1485,7 +1507,8 @@
       ],
       "use_when": "A project has meaningful runtime history, logs, repeated failure patterns, or closed-turn evidence (see scripts/harness_observability.py) that a self-improvement pass could act on.",
       "do_not": "Do not allow automatic modification of AGENTS.md, automatic mutation of native skills, automatic edits to policy or project state, a continuous loop by default, or sending repository logs to a network service without approval. Do not copy GPL code into Escapement's source-available core without a deliberate licence decision.",
-      "notes": "A GEP (Genome Evolution Protocol)-powered self-evolution engine for AI agents (Genes, Capsules, Events). The publisher has announced that future releases will move from fully open source to source-available; already-published MIT/GPL-3.0 versions are unaffected. Evolver may propose; Escapement skill-governance owns review, testing, approval, promotion and retirement -- the same META_OBSERVER relation as Task Observer."
+      "notes": "A GEP (Genome Evolution Protocol)-powered self-evolution engine for AI agents (Genes, Capsules, Events). The publisher has announced that future releases will move from fully open source to source-available; already-published MIT/GPL-3.0 versions are unaffected. Evolver may propose; Escapement skill-governance owns review, testing, approval, promotion and retirement -- the same META_OBSERVER relation as Task Observer.",
+      "adoption": "approval-required"
     },
     {
       "id": "agency-agents",
@@ -1593,6 +1616,32 @@
       "use_when": "A task concerns agent workspace design, capability-based security, sandboxed AI-built apps, human approval of side-effecting actions, or narrow resource introduction to agents.",
       "do_not": "Do not present it as a drop-in skill, add Cloudflare Workers dependencies to Escapement core, copy its full application architecture, or imply Escapement currently provides Cloudflare OS-style sandboxing or that Gatekeepers have been integrated rather than only referenced.",
       "notes": "Open-sourced 2026-08-05. Capability-based Gatekeeper Worker mediation where credentials never reach the agent or agent-generated code. The code is Apache-2.0, but production runtime depends on Cloudflare Workers -- open source here does not mean portable."
+    },
+    {
+      "id": "nanonets-graft",
+      "name": "Graft",
+      "kind": "code-context-layer-and-cli",
+      "source": "https://github.com/nanonets/graft",
+      "publisher": "Nanonets",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "code-knowledge",
+      "use_modes": [
+        "reference",
+        "install"
+      ],
+      "triggers": [
+        "context layer",
+        "codebase graph",
+        "token cost",
+        "agent efficiency",
+        "retrieval context"
+      ],
+      "use_when": "A repository is large enough that agent context is expensive or imprecise, and a persistent code graph would cut tool calls and tokens.",
+      "do_not": "Do not repeat its published benchmark numbers as though they were reproduced here, and do not run it alongside Graphify or Understand Anything -- memory-and-knowledge is a SUBSTITUTE group.",
+      "notes": "Publishes a 162-run controlled efficiency benchmark and SWE-bench Verified results graded by the official harness. That paired vanilla-vs-augmented design is a reference implementation of the claim 3 method deferred in docs/decisions/ESCAPEMENT_BENCH_V1.md. No telemetry."
     }
   ],
   "agents": [
