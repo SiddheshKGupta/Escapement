@@ -129,6 +129,12 @@ def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str
     if missing_external:
         failures.append(f"missing external candidates {missing_external}")
 
+    forbidden_external = sorted(
+        set(expected.get("forbidden_external_candidates", [])) & actual_external
+    )
+    if forbidden_external:
+        failures.append(f"forbidden external candidates selected {forbidden_external}")
+
     actual_strengths = {
         item["id"] for item in route.get("capability_strengths", [])
     }
@@ -189,6 +195,23 @@ def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str
             f"missing research sources {missing_research_sources}"
         )
 
+    # decision_brief.questions was previously unchecked entirely -- there was
+    # no way to assert "the ambiguity in this prompt actually gets asked
+    # about", which is exactly what an ambiguity-trap case needs to verify.
+    actual_questions = {
+        item["id"] for item in route.get("decision_brief", {}).get("questions", [])
+    }
+    required_questions = set(expected.get("questions_include", []))
+    missing_questions = sorted(required_questions - actual_questions)
+    if missing_questions:
+        failures.append(f"missing material questions {missing_questions}")
+
+    forbidden_questions = sorted(
+        set(expected.get("questions_exclude", [])) & actual_questions
+    )
+    if forbidden_questions:
+        failures.append(f"unexpected material questions asked {forbidden_questions}")
+
     identity = {
         "suite": suite_name,
         "suite_path": suite_path,
@@ -211,6 +234,8 @@ def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str
         "suite_path": suite_path,
         "case_id": case.get("id"),
         "description": case.get("description"),
+        "claim": case.get("claim"),
+        "category": case.get("category"),
         "prompt": prompt,
         "expected": expected,
         "actual": route,
