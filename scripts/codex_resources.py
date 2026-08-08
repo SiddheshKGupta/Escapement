@@ -259,12 +259,20 @@ def _reader(stream: Any, messages: queue.Queue[Any]) -> None:
         messages.put(EOFError("Codex App Server closed its output."))
 
 
-def _drain_stderr(stream: Any, chunks: deque[str]) -> None:
+def _drain_stderr(
+    stream: Any,
+    chunks: deque[str],
+    lock: threading.Lock | None = None,
+) -> None:
     while True:
         chunk = stream.read(4096)
         if not chunk:
             return
-        chunks.append(chunk)
+        if lock is None:
+            chunks.append(chunk)
+        else:
+            with lock:
+                chunks.append(chunk)
 
 
 def _wait_for_response(
@@ -332,9 +340,10 @@ def query_resource_state(
     )
     thread.start()
     stderr_chunks: deque[str] = deque(maxlen=16)
+    stderr_lock = threading.Lock()
     stderr_thread = threading.Thread(
         target=_drain_stderr,
-        args=(process.stderr, stderr_chunks),
+        args=(process.stderr, stderr_chunks, stderr_lock),
         daemon=True,
     )
     stderr_thread.start()
@@ -373,7 +382,8 @@ def query_resource_state(
             source=source,
         )
     except AppServerError as exc:
-        stderr_tail = "".join(stderr_chunks)[-4096:]
+        with stderr_lock:
+            stderr_tail = "".join(stderr_chunks)[-4096:]
         if stderr_tail:
             sanitized_tail = "".join(
                 character if character.isprintable() else " "
@@ -396,6 +406,7 @@ def query_resource_state(
                 process.wait(timeout=2)
             except subprocess.TimeoutExpired:
                 process.kill()
+        stderr_thread.join(timeout=2)
         if process.stdout:
             process.stdout.close()
         if process.stderr:

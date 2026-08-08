@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from collections import deque
 from copy import deepcopy
 import json
 import subprocess
 import sys
 import tempfile
 import textwrap
+import time
 import unittest
 from pathlib import Path
 
@@ -13,7 +15,9 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from capability_router import route_prompt  # noqa: E402
+import codex_resources  # noqa: E402
 from codex_resources import (  # noqa: E402
+    AppServerError,
     FIVE_HOUR_WINDOW_MINS,
     apply_resource_policy,
     assess_resource_policy,
@@ -240,6 +244,49 @@ class CodexResourceStateTest(unittest.TestCase):
             )
             self.assertEqual(state["five_hour_windows"][0]["used_percent"], 81)
             self.assertEqual(state["usage"]["summary"]["lifetimeTokens"], 99)
+
+    def test_app_server_error_sanitizes_bounded_stderr_tail_while_child_writes(self):
+        """The timeout remains an AppServerError while stderr is concurrently written."""
+        class SlowIterDeque(deque):
+            def __iter__(self):
+                iterator = super().__iter__()
+                yield next(iterator)
+                time.sleep(0.05)
+                yield from iterator
+
+        original_deque = codex_resources.deque
+        codex_resources.deque = SlowIterDeque
+        with tempfile.TemporaryDirectory() as temp_dir:
+            fixture = Path(temp_dir) / "app_server.py"
+            fixture.write_text(
+                textwrap.dedent(
+                    """
+                    import sys
+
+                    while True:
+                        sys.stderr.write("concurrent-diagnostic\\x00" + ("x" * 4096))
+                        sys.stderr.flush()
+                    """
+                ),
+                encoding="utf-8",
+            )
+            try:
+                with self.assertRaises(AppServerError) as raised:
+                    query_resource_state(
+                        [sys.executable, str(fixture)],
+                        source="FIXTURE",
+                        timeout_seconds=1,
+                    )
+            finally:
+                codex_resources.deque = original_deque
+
+            prefix = "App Server stderr tail: "
+            message = str(raised.exception)
+            self.assertIn(prefix, message)
+            tail = message.split(prefix, 1)[1]
+            self.assertLessEqual(len(tail), 4096)
+            self.assertNotIn("\x00", tail)
+            self.assertTrue(all(character.isprintable() for character in tail))
 
     def test_main_cli_exposes_persisted_resource_status(self):
         with tempfile.TemporaryDirectory() as temp:
