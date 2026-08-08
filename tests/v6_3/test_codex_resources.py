@@ -84,6 +84,22 @@ class CodexResourceStateTest(unittest.TestCase):
         self.assertTrue(policy["needs_refresh"])
         self.assertFalse(policy["block_new_turn"])
 
+    def test_non_five_hour_window_never_governs_policy(self):
+        state = {
+            "windows": [{
+                "limit_id": "codex",
+                "bucket": "secondary",
+                "used_percent": 100,
+                "window_duration_mins": 10_080,
+                "resets_at": 1_700_600_000,
+            }],
+            "five_hour_windows": [],
+        }
+        policy = assess_resource_policy(state, now_epoch=1_700_000_000)
+        self.assertEqual(policy["mode"], "UNOBSERVED")
+        self.assertTrue(policy["needs_refresh"])
+        self.assertFalse(policy["block_new_turn"])
+
     def test_convergence_reduces_breadth_but_keeps_verification(self):
         route = route_prompt(
             "Build a four-module claims-management platform containing intake, "

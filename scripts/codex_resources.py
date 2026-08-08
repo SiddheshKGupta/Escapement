@@ -102,16 +102,52 @@ def normalize_resource_snapshot(
     }
 
 
+def _validated_window(value: Any) -> dict[str, Any] | None:
+    if not isinstance(value, dict):
+        return None
+    limit_id = value.get("limit_id")
+    bucket = value.get("bucket")
+    used_percent = value.get("used_percent")
+    duration = value.get("window_duration_mins")
+    resets_at = value.get("resets_at")
+    if not isinstance(limit_id, str) or not limit_id:
+        return None
+    if bucket not in {"primary", "secondary"}:
+        return None
+    if isinstance(used_percent, bool) or not isinstance(used_percent, (int, float)):
+        return None
+    if isinstance(duration, bool) or not isinstance(duration, int):
+        return None
+    if resets_at is not None and (
+        isinstance(resets_at, bool) or not isinstance(resets_at, (int, float))
+    ):
+        return None
+    return value
+
+
+def _validated_five_hour_windows(state: dict[str, Any] | None) -> list[dict[str, Any]]:
+    if not isinstance(state, dict):
+        return []
+    raw = state.get("five_hour_windows")
+    if not isinstance(raw, list):
+        raw = state.get("windows", [])
+    if not isinstance(raw, list):
+        return []
+    validated = []
+    for value in raw:
+        window = _validated_window(value)
+        if window and window["window_duration_mins"] == FIVE_HOUR_WINDOW_MINS:
+            validated.append(window)
+    return validated
+
+
 def assess_resource_policy(
     state: dict[str, Any] | None,
     *,
     now_epoch: float | None = None,
 ) -> dict[str, Any]:
     now_value = time.time() if now_epoch is None else now_epoch
-    windows = state.get("windows", []) if isinstance(state, dict) else []
-    five_hour = state.get("five_hour_windows", []) if isinstance(state, dict) else []
-    if five_hour:
-        windows = five_hour
+    windows = _validated_five_hour_windows(state)
     if not windows:
         return {
             "mode": "UNOBSERVED",
