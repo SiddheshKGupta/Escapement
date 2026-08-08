@@ -133,7 +133,11 @@ def _validated_window(value: Any) -> dict[str, Any] | None:
         return None
     if not _is_finite_number(used_percent):
         return None
-    if isinstance(duration, bool) or not isinstance(duration, int):
+    if (
+        isinstance(duration, bool)
+        or not isinstance(duration, int)
+        or not _is_finite_number(duration)
+    ):
         return None
     if resets_at is not None and not _is_finite_number(resets_at):
         return None
@@ -291,9 +295,16 @@ def _drain_stderr(
 ) -> None:
     try:
         while True:
-            chunk = stream.read(4096)
-            if not chunk:
+            try:
+                raw = os.read(stream.fileno(), 4096)
+            except OSError:
                 return
+            if not raw:
+                return
+            chunk = raw.decode(
+                getattr(stream, "encoding", None) or "utf-8",
+                errors=getattr(stream, "errors", None) or "replace",
+            )
             if lock is None:
                 chunks.append(chunk)
             else:

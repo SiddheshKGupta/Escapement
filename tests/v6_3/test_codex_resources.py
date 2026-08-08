@@ -179,6 +179,7 @@ class CodexResourceStateTest(unittest.TestCase):
                 ("used_percent", float("nan")),
                 ("resets_at", float("inf")),
                 ("used_percent", 10**400),
+                ("window_duration_mins", 10**400),
             ):
                 with self.subTest("non-finite persisted state is rejected", field=field):
                     malformed = self.snapshot(82)
@@ -304,11 +305,13 @@ class CodexResourceStateTest(unittest.TestCase):
                 fixture.write_text(
                     textwrap.dedent(
                         """
+                        import subprocess
                         import sys
                         import time
 
                         sys.stderr.write("closed-input-diagnostic")
                         sys.stderr.flush()
+                        subprocess.Popen([sys.executable, "-c", "import time; time.sleep(6)"])
                         time.sleep(60)
                         """
                     ),
