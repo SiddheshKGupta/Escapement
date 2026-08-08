@@ -213,6 +213,28 @@ def write_resource_state(path: Path, state: dict[str, Any]) -> None:
     temporary.replace(path)
 
 
+def _validated_resource_state(value: Any) -> dict[str, Any] | None:
+    if not isinstance(value, dict):
+        return None
+    if value.get("schema_version") != "1.0":
+        return None
+    if value.get("source") not in {"LIVE_HOST_DATA", "FIXTURE", "MOCK"}:
+        return None
+    if not isinstance(value.get("observed_at"), str):
+        return None
+    if not isinstance(value.get("rate_limits"), dict):
+        return None
+    if not isinstance(value.get("usage"), dict):
+        return None
+    for key in ("windows", "five_hour_windows"):
+        raw = value.get(key)
+        if not isinstance(raw, list):
+            return None
+        if any(_validated_window(item) is None for item in raw):
+            return None
+    return value
+
+
 def load_resource_state(path: Path) -> dict[str, Any] | None:
     if not path.exists():
         return None
@@ -220,7 +242,7 @@ def load_resource_state(path: Path) -> dict[str, Any] | None:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return None
-    return value if isinstance(value, dict) else None
+    return _validated_resource_state(value)
 
 
 def _reader(stream: Any, messages: queue.Queue[Any]) -> None:

@@ -105,6 +105,24 @@ class CodexResourceStateTest(unittest.TestCase):
         self.assertTrue(policy["needs_refresh"])
         self.assertFalse(policy["block_new_turn"])
 
+    def test_malformed_five_hour_window_is_unobserved(self):
+        malformed = self.snapshot(82)
+        del malformed["five_hour_windows"][0]["bucket"]
+
+        self.assertEqual(
+            assess_resource_policy(malformed, now_epoch=1_700_000_000)["mode"],
+            "UNOBSERVED",
+        )
+
+    def test_load_rejects_malformed_persisted_window(self):
+        malformed = self.snapshot(82)
+        del malformed["five_hour_windows"][0]["bucket"]
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "state.json"
+            path.write_text(json.dumps(malformed), encoding="utf-8")
+
+            self.assertIsNone(load_resource_state(path))
+
     def test_warning_policy_only_attaches_resource_policy(self):
         baseline = route_prompt(
             "Build a four-module claims-management platform containing intake, "
