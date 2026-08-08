@@ -65,6 +65,22 @@ class CodexResourceStateTest(unittest.TestCase):
         self.assertEqual(state["usage"]["summary"]["lifetimeTokens"], 1234)
         self.assertNotIn("remainingTokens", window)
 
+        with self.subTest("non-five-hour windows cannot govern policy"):
+            state = {
+                "windows": [{
+                    "limit_id": "codex",
+                    "bucket": "secondary",
+                    "used_percent": 100,
+                    "window_duration_mins": 10_080,
+                    "resets_at": 1_700_600_000,
+                }],
+                "five_hour_windows": [],
+            }
+            policy = assess_resource_policy(state, now_epoch=1_700_000_000)
+            self.assertEqual(policy["mode"], "UNOBSERVED")
+            self.assertTrue(policy["needs_refresh"])
+            self.assertFalse(policy["block_new_turn"])
+
     def test_policy_uses_advisory_warning_bands(self):
         expected = [
             (74, "NORMAL", "normal-execution"),
@@ -93,47 +109,6 @@ class CodexResourceStateTest(unittest.TestCase):
         self.assertTrue(policy["needs_refresh"])
         self.assertFalse(policy["block_new_turn"])
 
-    def test_non_five_hour_window_never_governs_policy(self):
-        state = {
-            "windows": [{
-                "limit_id": "codex",
-                "bucket": "secondary",
-                "used_percent": 100,
-                "window_duration_mins": 10_080,
-                "resets_at": 1_700_600_000,
-            }],
-            "five_hour_windows": [],
-        }
-        policy = assess_resource_policy(state, now_epoch=1_700_000_000)
-        self.assertEqual(policy["mode"], "UNOBSERVED")
-        self.assertTrue(policy["needs_refresh"])
-        self.assertFalse(policy["block_new_turn"])
-
-    def test_malformed_five_hour_window_is_unobserved(self):
-        malformed = self.snapshot(82)
-        del malformed["five_hour_windows"][0]["bucket"]
-
-        self.assertEqual(
-            assess_resource_policy(malformed, now_epoch=1_700_000_000)["mode"],
-            "UNOBSERVED",
-        )
-
-    def test_load_rejects_malformed_persisted_window(self):
-        malformed = self.snapshot(82)
-        del malformed["five_hour_windows"][0]["bucket"]
-        with tempfile.TemporaryDirectory() as temp:
-            path = Path(temp) / "state.json"
-            path.write_text(json.dumps(malformed), encoding="utf-8")
-
-            self.assertIsNone(load_resource_state(path))
-
-    def test_load_rejects_non_utf8_persisted_state(self):
-        with tempfile.TemporaryDirectory() as temp:
-            path = Path(temp) / "state.json"
-            path.write_bytes(b"\xff\xfe\x00")
-
-            self.assertIsNone(load_resource_state(path))
-
     def test_warning_policy_only_attaches_resource_policy(self):
         baseline = route_prompt(
             "Build a four-module claims-management platform containing intake, "
@@ -155,8 +130,27 @@ class CodexResourceStateTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "codex-resources.json"
             state = self.snapshot(82)
-            write_resource_state(path, state)
-            self.assertEqual(load_resource_state(path), state)
+            with self.subTest("round trip"):
+                write_resource_state(path, state)
+                self.assertEqual(load_resource_state(path), state)
+
+            with self.subTest("malformed policy is unobserved"):
+                malformed = self.snapshot(82)
+                del malformed["five_hour_windows"][0]["bucket"]
+                self.assertEqual(
+                    assess_resource_policy(malformed, now_epoch=1_700_000_000)["mode"],
+                    "UNOBSERVED",
+                )
+
+            with self.subTest("malformed persisted window is rejected"):
+                malformed = self.snapshot(82)
+                del malformed["five_hour_windows"][0]["bucket"]
+                path.write_text(json.dumps(malformed), encoding="utf-8")
+                self.assertIsNone(load_resource_state(path))
+
+            with self.subTest("non-UTF-8 persisted state is rejected"):
+                path.write_bytes(b"\xff\xfe\x00")
+                self.assertIsNone(load_resource_state(path))
 
     def test_jsonl_app_server_contract_reads_limits_and_usage(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -206,87 +200,85 @@ class CodexResourceStateTest(unittest.TestCase):
             self.assertEqual(state["five_hour_windows"][0]["used_percent"], 88)
             self.assertEqual(state["usage"]["summary"]["lifetimeTokens"], 99)
 
-    def test_jsonl_app_server_drains_large_stderr_before_processing_requests(self):
-        """Fails if App Server stderr is not drained while requests are pending."""
-        with tempfile.TemporaryDirectory() as temp_dir:
-            fixture = Path(temp_dir) / "app_server.py"
-            fixture.write_text(
-                textwrap.dedent(
-                    """
-                    import json
-                    import sys
+        with self.subTest("large stderr is drained before requests"):
+            with tempfile.TemporaryDirectory() as temp_dir:
+                fixture = Path(temp_dir) / "app_server.py"
+                fixture.write_text(
+                    textwrap.dedent(
+                        """
+                        import json
+                        import sys
 
-                    sys.stderr.write("x" * (1024 * 1024))
-                    sys.stderr.flush()
-                    for line in sys.stdin:
-                        message = json.loads(line)
-                        method = message.get("method")
-                        if method == "initialize":
-                            result = {"userAgent": "fixture"}
-                        elif method == "account/rateLimits/read":
-                            result = {"rateLimits": {
-                                "limitId": "codex",
-                                "primary": {"usedPercent": 81, "windowDurationMins": 300,
-                                            "resetsAt": 1700000600},
-                                "secondary": None,
-                            }}
-                        elif method == "account/usage/read":
-                            result = {"summary": {"lifetimeTokens": 99}}
-                        else:
-                            continue
-                        print(json.dumps({"id": message["id"], "result": result}), flush=True)
-                    """
-                ),
-                encoding="utf-8",
-            )
-            state = query_resource_state(
-                [sys.executable, str(fixture)], source="FIXTURE", timeout_seconds=5
-            )
-            self.assertEqual(state["five_hour_windows"][0]["used_percent"], 81)
-            self.assertEqual(state["usage"]["summary"]["lifetimeTokens"], 99)
-
-    def test_app_server_error_sanitizes_bounded_stderr_tail_while_child_writes(self):
-        """The timeout remains an AppServerError while stderr is concurrently written."""
-        class SlowIterDeque(deque):
-            def __iter__(self):
-                iterator = super().__iter__()
-                yield next(iterator)
-                time.sleep(0.05)
-                yield from iterator
-
-        original_deque = codex_resources.deque
-        codex_resources.deque = SlowIterDeque
-        with tempfile.TemporaryDirectory() as temp_dir:
-            fixture = Path(temp_dir) / "app_server.py"
-            fixture.write_text(
-                textwrap.dedent(
-                    """
-                    import sys
-
-                    while True:
-                        sys.stderr.write("concurrent-diagnostic\\x00" + ("x" * 4096))
+                        sys.stderr.write("x" * (1024 * 1024))
                         sys.stderr.flush()
-                    """
-                ),
-                encoding="utf-8",
-            )
-            try:
-                with self.assertRaises(AppServerError) as raised:
-                    query_resource_state(
-                        [sys.executable, str(fixture)],
-                        source="FIXTURE",
-                        timeout_seconds=1,
-                    )
-            finally:
-                codex_resources.deque = original_deque
+                        for line in sys.stdin:
+                            message = json.loads(line)
+                            method = message.get("method")
+                            if method == "initialize":
+                                result = {"userAgent": "fixture"}
+                            elif method == "account/rateLimits/read":
+                                result = {"rateLimits": {
+                                    "limitId": "codex",
+                                    "primary": {"usedPercent": 81, "windowDurationMins": 300,
+                                                "resetsAt": 1700000600},
+                                    "secondary": None,
+                                }}
+                            elif method == "account/usage/read":
+                                result = {"summary": {"lifetimeTokens": 99}}
+                            else:
+                                continue
+                            print(json.dumps({"id": message["id"], "result": result}), flush=True)
+                        """
+                    ),
+                    encoding="utf-8",
+                )
+                state = query_resource_state(
+                    [sys.executable, str(fixture)], source="FIXTURE", timeout_seconds=5
+                )
+                self.assertEqual(state["five_hour_windows"][0]["used_percent"], 81)
+                self.assertEqual(state["usage"]["summary"]["lifetimeTokens"], 99)
 
-            prefix = "App Server stderr tail: "
-            message = str(raised.exception)
-            self.assertIn(prefix, message)
-            tail = message.split(prefix, 1)[1]
-            self.assertLessEqual(len(tail), 4096)
-            self.assertNotIn("\x00", tail)
-            self.assertTrue(all(character.isprintable() for character in tail))
+        with self.subTest("concurrent stderr diagnostics are bounded and sanitized"):
+            class SlowIterDeque(deque):
+                def __iter__(self):
+                    iterator = super().__iter__()
+                    yield next(iterator)
+                    time.sleep(0.05)
+                    yield from iterator
+
+            original_deque = codex_resources.deque
+            codex_resources.deque = SlowIterDeque
+            with tempfile.TemporaryDirectory() as temp_dir:
+                fixture = Path(temp_dir) / "app_server.py"
+                fixture.write_text(
+                    textwrap.dedent(
+                        """
+                        import sys
+
+                        while True:
+                            sys.stderr.write("concurrent-diagnostic\\x00" + ("x" * 4096))
+                            sys.stderr.flush()
+                        """
+                    ),
+                    encoding="utf-8",
+                )
+                try:
+                    with self.assertRaises(AppServerError) as raised:
+                        query_resource_state(
+                            [sys.executable, str(fixture)],
+                            source="FIXTURE",
+                            timeout_seconds=1,
+                        )
+                finally:
+                    codex_resources.deque = original_deque
+
+                prefix = "App Server stderr tail: "
+                message = str(raised.exception)
+                self.assertIn(prefix, message)
+                tail = message.split(prefix, 1)[1]
+                self.assertLessEqual(len(tail), 4096)
+                self.assertNotIn("\x00", tail)
+                self.assertTrue(all(character.isprintable() for character in tail))
 
     def test_main_cli_exposes_persisted_resource_status(self):
         with tempfile.TemporaryDirectory() as temp:
