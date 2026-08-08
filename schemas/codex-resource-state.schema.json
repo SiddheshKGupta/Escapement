@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Escapement Codex Resource State",
+  "type": "object",
+  "required": ["schema_version", "source", "observed_at", "rate_limits", "usage", "windows", "five_hour_windows"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "source": {"enum": ["LIVE_HOST_DATA", "FIXTURE", "MOCK"]},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "rate_limits": {"type": "object"},
+    "usage": {"type": "object"},
+    "windows": {"type": "array", "items": {"$ref": "#/$defs/window"}},
+    "five_hour_windows": {"type": "array", "items": {"$ref": "#/$defs/window"}}
+  },
+  "$defs": {
+    "window": {
+      "type": "object",
+      "required": ["limit_id", "bucket", "used_percent", "window_duration_mins", "resets_at"],
+      "properties": {
+        "limit_id": {"type": "string"},
+        "bucket": {"enum": ["primary", "secondary"]},
+        "used_percent": {"type": "number", "minimum": 0},
+        "window_duration_mins": {"type": "integer", "minimum": 1},
+        "resets_at": {"type": ["integer", "number", "null"]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

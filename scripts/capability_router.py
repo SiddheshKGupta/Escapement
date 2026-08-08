@@ -9,6 +9,7 @@ agents, implementation skills and independent verification.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -40,11 +41,15 @@ MICRO_WORDS = [
     r"\btypo\b", r"\bcopy change\b", r"\bsmall change\b",
     r"\bisolated\b", r"\bone file\b", r"\bone component\b",
     r"\bminor\b", r"\bquick fix\b", r"\brename\b",
+    r"\bspelling mistake\b", r"\bmisspell(?:ing|ed)\b",
 ]
 MATERIAL_RISK_WORDS = [
     r"\bschema\b", r"\bauth\b", r"\brbac\b", r"\bpermission\b",
     r"\bproduction\b", r"\bdependency\b", r"\bintegration\b",
     r"\bmigration\b", r"\bconfidential\b", r"\bpayment\b",
+    r"\bpassword\b", r"\bcredential\b", r"\bpii\b", r"\bphi\b",
+    r"\bpatient\b", r"\bfinancial\b", r"\bbiometric\b",
+    r"\bconsent\b", r"\blegally required\b",
 ]
 CONSULTING_WORDS = [
     r"\bconsult", r"\bbusiness\b", r"\bmanagement\b", r"\bgovernance\b",
@@ -266,7 +271,18 @@ def classify_tier(prompt: str) -> str:
     ))
     if builds_a_product and (technical_areas >= 3 or enumerated_scope_areas(prompt) >= 4):
         return "PROGRAM"
-    if matches(MICRO_WORDS, prompt) and not matches(MATERIAL_RISK_WORDS, prompt):
+    bounded_validation = bool(
+        len(prompt.split()) <= 35
+        and re.search(r"\b(add|fix|update|implement)\b", prompt, re.IGNORECASE)
+        and re.search(
+            r"\b(validation|validate|required|cannot be blank|must not be blank|empty input)\b",
+            prompt,
+            re.IGNORECASE,
+        )
+    )
+    if (
+        matches(MICRO_WORDS, prompt) or bounded_validation
+    ) and not matches(MATERIAL_RISK_WORDS, prompt):
         return "MICRO"
     return "MATERIAL"
 
@@ -1180,153 +1196,209 @@ def route_prompt(prompt: str, phase_override: str | None = None) -> dict[str, An
     }
 
 
-def build_context_pack(prompt: str, route: dict[str, Any]) -> str:
-    brief = route["decision_brief"]
-    sections = [
-        "# Active Context Pack",
-        "",
-        f"- Tier: `{route['tier']}`",
-        f"- Mode: `{route['mode']}`",
-        f"- Register: `{route['register']}`",
-        f"- Profile: `{route['profile']}`",
-        f"- Current phase: `{route['current_phase']}`",
-        f"- Context estimate: `{route['context_cost']['total']} / {route['context_cost']['budget']} words`",
-        "",
-        "## Decision Brief",
-        "",
-        f"- Actual decision: {brief['actual_decision']}",
-        f"- Request: {brief['known_request']}",
-        f"- Recommended action: {brief['recommended_action']}",
-        "",
-    ]
+def compact_context_text(text: str, maximum_words: int) -> str:
+    words = text.split()
+    if len(words) <= maximum_words:
+        return text.strip()
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()[:12]
+    return (
+        " ".join(words[:maximum_words])
+        + f" … [truncated in generated pack; full text remains in runtime state; sha256:{digest}]"
+    )
 
-    if brief["questions"]:
-        sections.extend(["## Material Questions", ""])
-        for index, item in enumerate(brief["questions"], 1):
+
+def build_context_pack(
+    prompt: str,
+    route: dict[str, Any],
+    durable_context: str | None = None,
+) -> str:
+    brief = route["decision_brief"]
+    request_text = compact_context_text(brief["known_request"], 180)
+    improved_text = compact_context_text(brief["improved_prompt"], 280)
+    durable_text = compact_context_text(durable_context or "", 320)
+
+    def render() -> str:
+        sections = [
+            "# Active Context Pack",
+            "",
+            f"- Tier: `{route['tier']}`",
+            f"- Mode: `{route['mode']}`",
+            f"- Register: `{route['register']}`",
+            f"- Profile: `{route['profile']}`",
+            f"- Current phase: `{route['current_phase']}`",
+            f"- Context estimate: `{route['context_cost']['total']} / {route['context_cost']['budget']} words`",
+            "",
+            "## Decision Brief",
+            "",
+            f"- Actual decision: {brief['actual_decision']}",
+            f"- Request: {request_text}",
+            f"- Recommended action: {brief['recommended_action']}",
+            "",
+        ]
+
+        if brief["questions"]:
+            sections.extend(["## Material Questions", ""])
+            for index, item in enumerate(brief["questions"], 1):
+                sections.extend([
+                    f"### {index}. {item['question']}",
+                    f"- Why: {item['why']}",
+                    f"- Recommended default: {item['recommended_default']}",
+                    f"- Consequence: {item['consequence']}",
+                    "",
+                ])
+
+        sections.extend([
+            "## Improved Execution Prompt",
+            "",
+            improved_text,
+            "",
+            "## Research",
+            "",
+            f"- Needed: `{route['research_plan']['needed']}`",
+            f"- Sources: {', '.join(route['research_plan']['sources'])}",
+        ])
+        for reason in route["research_plan"]["reasons"]:
+            sections.append(f"- Reason: {reason}")
+
+        resource_policy = route.get("resource_policy")
+        if isinstance(resource_policy, dict):
             sections.extend([
-                f"### {index}. {item['question']}",
-                f"- Why: {item['why']}",
-                f"- Recommended default: {item['recommended_default']}",
-                f"- Consequence: {item['consequence']}",
                 "",
+                "## Codex Resource Policy",
+                "",
+                f"- Mode: `{resource_policy.get('mode', 'UNOBSERVED')}`",
+                f"- Action: `{resource_policy.get('action', 'no-enforcement')}`",
+                f"- New material turn blocked: `{resource_policy.get('block_new_turn', False)}`",
+                f"- Refresh required: `{resource_policy.get('needs_refresh', False)}`",
+                f"- Reason: {resource_policy.get('reason', 'No resource observation.')}",
+                "- Token activity is telemetry; rate-window percentage is the enforcement signal.",
+                "- Resource conservation never removes required verification.",
             ])
 
-    sections.extend([
-        "## Improved Execution Prompt",
-        "",
-        brief["improved_prompt"],
-        "",
-        "## Research",
-        "",
-        f"- Needed: `{route['research_plan']['needed']}`",
-        f"- Sources: {', '.join(route['research_plan']['sources'])}",
-    ])
-    for reason in route["research_plan"]["reasons"]:
-        sections.append(f"- Reason: {reason}")
+        if durable_text:
+            sections.extend([
+                "",
+                "## Durable Recovery State",
+                "",
+                durable_text,
+            ])
 
-    profile_path = ROOT / "profiles" / route["profile"] / "PROFILE.md"
-    if profile_path.exists():
-        sections.extend([
-            "",
-            f"## Active Profile: {route['profile']}",
-            "",
-            profile_path.read_text(encoding="utf-8").strip(),
-        ])
+        profile_path = ROOT / "profiles" / route["profile"] / "PROFILE.md"
+        if profile_path.exists():
+            sections.extend([
+                "",
+                f"## Active Profile: {route['profile']}",
+                "",
+                profile_path.read_text(encoding="utf-8").strip(),
+            ])
 
-    sections.extend(["", "## Doctrine Loaded", ""])
-    if not route["doctrine_packs"]:
-        sections.append("Kernel only.")
-    for pack in route["doctrine_packs"]:
-        sections.extend([
-            f"### {pack['id']}",
-            "",
-            (ROOT / pack["path"]).read_text(encoding="utf-8").strip(),
-        ])
+        sections.extend(["", "## Doctrine Loaded", ""])
+        if not route["doctrine_packs"]:
+            sections.append("Kernel only.")
+        for pack in route["doctrine_packs"]:
+            sections.extend([
+                f"### {pack['id']}",
+                "",
+                (ROOT / pack["path"]).read_text(encoding="utf-8").strip(),
+            ])
 
-    sections.extend(["", "## Native Skills for Current Phase", ""])
-    if not route["native_skills"]:
-        sections.append("No native skill selected.")
-    for skill in route["native_skills"]:
-        sections.extend([
-            f"- `{skill['id']}` — matched: {', '.join(skill.get('matched', []))}",
-            f"  - Codex: `${skill['id']}`",
-            f"  - Claude: `/{skill['id']}`",
-            f"  - File: `skills/{skill['id']}/SKILL.md`",
-        ])
+        sections.extend(["", "## Native Skills for Current Phase", ""])
+        if not route["native_skills"]:
+            sections.append("No native skill selected.")
+        for skill in route["native_skills"]:
+            sections.extend([
+                f"- `{skill['id']}` — matched: {', '.join(skill.get('matched', []))}",
+                f"  - Codex: `${skill['id']}`",
+                f"  - Claude: `/{skill['id']}`",
+                f"  - File: `skills/{skill['id']}/SKILL.md`",
+            ])
 
-    sections.extend(["", "## Capability Strengths for Current Phase", ""])
-    if not route["capability_strengths"]:
-        sections.append("No additional specialist capability selected.")
-    for item in route["capability_strengths"]:
-        sections.append(
-            f"- `{item['id']}` — {item['strength']} "
-            f"| status: `{item['status']}` | reason: {item['reason']}"
-        )
-
-    readiness = route["capability_readiness"]
-    sections.extend(["", "## Skill and Readiness Audit", ""])
-    sections.append(
-        f"- Active native skills: {', '.join(readiness['active_native_skills']) or 'none'}"
-    )
-    sections.append(
-        f"- Active capability strengths: {', '.join(readiness['active_capability_strengths']) or 'none'}"
-    )
-    sections.append(
-        "- External install/load candidates: "
-        + (", ".join(readiness["external_install_or_load_candidates"]) or "none")
-    )
-    sections.append(f"- Rule: {readiness['rule']}")
-
-    sections.extend(["", "## Lifecycle Plan", ""])
-    for phase in route["phase_plan"]:
-        sections.append(
-            f"- `{phase['id']}` — {phase['purpose']} "
-            f"| skills: {', '.join(phase.get('native_skills', [])) or 'task-routed'} "
-            f"| strengths: {', '.join(phase.get('capability_strengths', [])) or 'none'} "
-            f"| external: {', '.join(phase.get('external_candidates', [])) or 'none'}"
-        )
-
-    sections.extend(["", "## External Candidates", ""])
-    if not route["external_candidates"]:
-        sections.append("None active.")
-    gate_labels = {
-        "approval-required": "ASK BEFORE ADOPTING",
-        "verify-licence-first": "VERIFY LICENCE FIRST",
-    }
-    for item in route["external_candidates"]:
-        gate = gate_labels.get(item.get("adoption"))
-        sections.append(
-            f"- `{item['id']}` — {item['name']} — {item['activation']} — "
-            f"{item.get('source') or 'source unresolved'}"
-            + (f" — **{gate}** ({item.get('licence') or 'licence unknown'})" if gate else "")
-        )
-        for fallback in item.get("fallbacks", []):
+        sections.extend(["", "## Capability Strengths for Current Phase", ""])
+        if not route["capability_strengths"]:
+            sections.append("No additional specialist capability selected.")
+        for item in route["capability_strengths"]:
             sections.append(
-                f"  - fallback if unavailable: `{fallback['id']}` — {fallback['name']}"
+                f"- `{item['id']}` — {item['strength']} "
+                f"| status: `{item['status']}` | reason: {item['reason']}"
             )
-    sections.append(
-        "Candidates are not active until overlap, licence, security, installation "
-        "and approval requirements are satisfied."
+
+        readiness = route["capability_readiness"]
+        sections.extend(["", "## Skill and Readiness Audit", ""])
+        sections.append(
+            f"- Active native skills: {', '.join(readiness['active_native_skills']) or 'none'}"
+        )
+        sections.append(
+            f"- Active capability strengths: {', '.join(readiness['active_capability_strengths']) or 'none'}"
+        )
+        sections.append(
+            "- External install/load candidates: "
+            + (", ".join(readiness["external_install_or_load_candidates"]) or "none")
+        )
+        sections.append(f"- Rule: {readiness['rule']}")
+
+        sections.extend(["", "## Lifecycle Plan", ""])
+        for phase in route["phase_plan"]:
+            sections.append(
+                f"- `{phase['id']}` — {phase['purpose']} "
+                f"| skills: {', '.join(phase.get('native_skills', [])) or 'task-routed'} "
+                f"| strengths: {', '.join(phase.get('capability_strengths', [])) or 'none'} "
+                f"| external: {', '.join(phase.get('external_candidates', [])) or 'none'}"
+            )
+
+        sections.extend(["", "## External Candidates", ""])
+        if not route["external_candidates"]:
+            sections.append("None active.")
+        gate_labels = {
+            "approval-required": "ASK BEFORE ADOPTING",
+            "verify-licence-first": "VERIFY LICENCE FIRST",
+        }
+        for item in route["external_candidates"]:
+            gate = gate_labels.get(item.get("adoption"))
+            sections.append(
+                f"- `{item['id']}` — {item['name']} — {item['activation']} — "
+                f"{item.get('source') or 'source unresolved'}"
+                + (f" — **{gate}** ({item.get('licence') or 'licence unknown'})" if gate else "")
+            )
+            for fallback in item.get("fallbacks", []):
+                sections.append(
+                    f"  - fallback if unavailable: `{fallback['id']}` — {fallback['name']}"
+                )
+        sections.append(
+            "Candidates are not active until overlap, licence, security, installation "
+            "and approval requirements are satisfied."
+        )
+
+        sections.extend([
+            "",
+            "## Parallel and Subagent Use",
+            "",
+            f"- Decision: `{route['parallel_assessment']['decision']}`",
+        ])
+        for requirement in route["parallel_assessment"]["requirements"]:
+            sections.append(f"- Requirement: {requirement}")
+
+        sections.extend([
+            "",
+            "## Closure",
+            "",
+            f"- Required: `{route['closure']['required']}`",
+            f"- Structured checks required: `{route['closure']['structured_checks_required']}`",
+            f"- Compact: `{route['closure']['compact']}`",
+        ])
+        return "\n".join(sections).rstrip() + "\n"
+
+    output = render()
+    generated_words = len(output.split())
+    cost = route["context_cost"]
+    cost["generated_pack_words"] = generated_words
+    cost["automatic_total"] = generated_words
+    cost["total"] = generated_words
+    cost["combined_total"] = generated_words + cost["invoked_skill_total"]
+    cost["over_budget"] = (
+        generated_words > cost["automatic_budget"]
+        or cost["invoked_skill_total"] > cost["skill_budget"]
     )
-
-    sections.extend([
-        "",
-        "## Parallel and Subagent Use",
-        "",
-        f"- Decision: `{route['parallel_assessment']['decision']}`",
-    ])
-    for requirement in route["parallel_assessment"]["requirements"]:
-        sections.append(f"- Requirement: {requirement}")
-
-    sections.extend([
-        "",
-        "## Closure",
-        "",
-        f"- Required: `{route['closure']['required']}`",
-        f"- Structured checks required: `{route['closure']['structured_checks_required']}`",
-        f"- Compact: `{route['closure']['compact']}`",
-    ])
-    return "\n".join(sections).rstrip() + "\n"
+    return render()
 
 
 def main() -> int:

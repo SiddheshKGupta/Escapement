@@ -1,0 +1,415 @@
+#!/usr/bin/env python3
+"""Codex App Server resource telemetry and five-hour-window policy.
+
+The adapter keeps live host data, fixture data, and unobservable state distinct.
+It uses only the Python standard library and the documented JSONL App Server
+transport.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import queue
+import subprocess
+import sys
+import threading
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Sequence
+
+FIVE_HOUR_WINDOW_MINS = 300
+CONSERVE_AT_PERCENT = 75.0
+CONVERGE_AT_PERCENT = 90.0
+EXHAUSTED_AT_PERCENT = 100.0
+STATE_RELATIVE = Path(".agent/runtime/codex-resources.json")
+
+
+class AppServerError(RuntimeError):
+    pass
+
+
+def utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def find_root(start: Path | None = None) -> Path:
+    current = (start or Path.cwd()).resolve()
+    for candidate in [current, *current.parents]:
+        if (candidate / "AGENTS.md").exists() and (candidate / "scripts").is_dir():
+            return candidate
+    return current
+
+
+def _window(limit_id: str, bucket: str, value: dict[str, Any]) -> dict[str, Any] | None:
+    duration = value.get("windowDurationMins")
+    used = value.get("usedPercent")
+    if not isinstance(duration, (int, float)) or not isinstance(used, (int, float)):
+        return None
+    return {
+        "limit_id": limit_id,
+        "bucket": bucket,
+        "used_percent": float(used),
+        "window_duration_mins": int(duration),
+        "resets_at": value.get("resetsAt"),
+    }
+
+
+def extract_windows(rate_limits_result: dict[str, Any]) -> list[dict[str, Any]]:
+    buckets = rate_limits_result.get("rateLimitsByLimitId")
+    if isinstance(buckets, dict) and buckets:
+        items = list(buckets.items())
+    else:
+        single = rate_limits_result.get("rateLimits")
+        items = [] if not isinstance(single, dict) else [
+            (str(single.get("limitId") or "codex"), single)
+        ]
+
+    windows: list[dict[str, Any]] = []
+    for limit_id, limit_value in items:
+        if not isinstance(limit_value, dict):
+            continue
+        for bucket in ("primary", "secondary"):
+            value = limit_value.get(bucket)
+            if isinstance(value, dict):
+                normalized = _window(str(limit_id), bucket, value)
+                if normalized:
+                    windows.append(normalized)
+    return windows
+
+
+def normalize_resource_snapshot(
+    rate_limits_result: dict[str, Any],
+    usage_result: dict[str, Any],
+    *,
+    source: str,
+    observed_at: str | None = None,
+) -> dict[str, Any]:
+    windows = extract_windows(rate_limits_result)
+    return {
+        "schema_version": "1.0",
+        "source": source,
+        "observed_at": observed_at or utc_now(),
+        "rate_limits": rate_limits_result,
+        "usage": usage_result,
+        "windows": windows,
+        "five_hour_windows": [
+            item for item in windows
+            if item["window_duration_mins"] == FIVE_HOUR_WINDOW_MINS
+        ],
+    }
+
+
+def assess_resource_policy(
+    state: dict[str, Any] | None,
+    *,
+    now_epoch: float | None = None,
+) -> dict[str, Any]:
+    now_value = time.time() if now_epoch is None else now_epoch
+    windows = state.get("windows", []) if isinstance(state, dict) else []
+    five_hour = state.get("five_hour_windows", []) if isinstance(state, dict) else []
+    if five_hour:
+        windows = five_hour
+    if not windows:
+        return {
+            "mode": "UNOBSERVED",
+            "action": "no-enforcement",
+            "block_new_turn": False,
+            "needs_refresh": True,
+            "governing_window": None,
+            "reason": "No Codex rate-limit window is available.",
+        }
+
+    active = []
+    for item in windows:
+        reset = item.get("resets_at")
+        if isinstance(reset, (int, float)) and reset <= now_value:
+            continue
+        active.append(item)
+    if not active:
+        return {
+            "mode": "STALE",
+            "action": "refresh-required",
+            "block_new_turn": False,
+            "needs_refresh": True,
+            "governing_window": None,
+            "reason": "All persisted Codex rate-limit windows have expired.",
+        }
+
+    governing = max(active, key=lambda item: float(item.get("used_percent", 0)))
+    used = float(governing.get("used_percent", 0))
+    if used >= EXHAUSTED_AT_PERCENT:
+        mode, action, blocked = "EXHAUSTED", "block-new-turn", True
+    elif used >= CONVERGE_AT_PERCENT:
+        mode, action, blocked = "CONVERGE", "converge-and-checkpoint", False
+    elif used >= CONSERVE_AT_PERCENT:
+        mode, action, blocked = "CONSERVE", "reduce-breadth", False
+    else:
+        mode, action, blocked = "NORMAL", "normal-execution", False
+    return {
+        "mode": mode,
+        "action": action,
+        "block_new_turn": blocked,
+        "needs_refresh": False,
+        "governing_window": governing,
+        "five_hour_window": governing.get("window_duration_mins") == FIVE_HOUR_WINDOW_MINS,
+        "reason": (
+            f"Codex {governing['bucket']} window is {used:g}% used and resets at "
+            f"{governing.get('resets_at')}."
+        ),
+    }
+
+
+def apply_resource_policy(route: dict[str, Any], policy: dict[str, Any]) -> dict[str, Any]:
+    mode = policy.get("mode")
+    limits = {
+        "CONSERVE": (3, 2, "resource-window-conservation"),
+        "CONVERGE": (2, 1, "resource-window-convergence"),
+        "EXHAUSTED": (1, 1, "resource-window-exhausted"),
+    }
+    route["resource_policy"] = policy
+    if mode not in limits:
+        return route
+
+    maximum_skills, maximum_packs, reason = limits[mode]
+    removed_skills = route.get("native_skills", [])[maximum_skills:]
+    removed_packs = route.get("doctrine_packs", [])[maximum_packs:]
+    route["native_skills"] = route.get("native_skills", [])[:maximum_skills]
+    route["doctrine_packs"] = route.get("doctrine_packs", [])[:maximum_packs]
+    route.setdefault("rejected", []).extend(
+        [{**item, "rejected_because": reason} for item in removed_skills + removed_packs]
+    )
+
+    parallel = route.setdefault("parallel_assessment", {})
+    parallel["decision"] = "resource-constrained"
+    parallel["potentially_useful"] = False
+    parallel["preferred_adapters"] = []
+
+    readiness = route.get("capability_readiness")
+    if isinstance(readiness, dict):
+        readiness["active_native_skills"] = [
+            item["id"] for item in route["native_skills"]
+        ]
+
+    cost = route.get("context_cost")
+    if isinstance(cost, dict):
+        selected_skills = {item["id"] for item in route["native_skills"]}
+        selected_packs = {item["id"] for item in route["doctrine_packs"]}
+        cost["skills"] = {
+            key: value for key, value in cost.get("skills", {}).items()
+            if key in selected_skills
+        }
+        cost["skill_pointers"] = {
+            key: value for key, value in cost.get("skill_pointers", {}).items()
+            if key in selected_skills
+        }
+        cost["packs"] = {
+            key: value for key, value in cost.get("packs", {}).items()
+            if key in selected_packs
+        }
+        cost["invoked_skill_total"] = sum(cost["skills"].values())
+        cost["combined_total"] = cost.get("total", 0) + cost["invoked_skill_total"]
+    return route
+
+
+def write_resource_state(path: Path, state: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(
+        json.dumps(state, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    temporary.replace(path)
+
+
+def load_resource_state(path: Path) -> dict[str, Any] | None:
+    if not path.exists():
+        return None
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    return value if isinstance(value, dict) else None
+
+
+def _reader(stream: Any, messages: queue.Queue[Any]) -> None:
+    try:
+        for line in stream:
+            if not line.strip():
+                continue
+            try:
+                messages.put(json.loads(line))
+            except json.JSONDecodeError as exc:
+                messages.put(AppServerError(f"Invalid App Server JSON: {exc}"))
+    finally:
+        messages.put(EOFError("Codex App Server closed its output."))
+
+
+def _wait_for_response(
+    messages: queue.Queue[Any],
+    request_id: int,
+    timeout_seconds: float,
+    notifications: list[dict[str, Any]],
+) -> dict[str, Any]:
+    deadline = time.monotonic() + timeout_seconds
+    while True:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise AppServerError(f"Timed out waiting for App Server request {request_id}.")
+        try:
+            message = messages.get(timeout=remaining)
+        except queue.Empty as exc:
+            raise AppServerError(
+                f"Timed out waiting for App Server request {request_id}."
+            ) from exc
+        if isinstance(message, BaseException):
+            raise AppServerError(str(message))
+        if message.get("id") != request_id:
+            if "method" in message and "id" not in message:
+                notifications.append(message)
+            continue
+        if "error" in message:
+            raise AppServerError(
+                f"App Server {request_id} failed: {json.dumps(message['error'])}"
+            )
+        result = message.get("result")
+        return result if isinstance(result, dict) else {}
+
+
+def query_resource_state(
+    command: Sequence[str],
+    *,
+    source: str = "LIVE_HOST_DATA",
+    timeout_seconds: float = 15,
+) -> dict[str, Any]:
+    if not command:
+        raise AppServerError("Codex App Server command is empty.")
+    try:
+        process = subprocess.Popen(
+            list(command),
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            shell=False,
+        )
+    except OSError as exc:
+        raise AppServerError(f"Unable to start Codex App Server: {exc}") from exc
+
+    if process.stdin is None or process.stdout is None:
+        process.kill()
+        raise AppServerError("Codex App Server stdio was not available.")
+    messages: queue.Queue[Any] = queue.Queue()
+    notifications: list[dict[str, Any]] = []
+    thread = threading.Thread(
+        target=_reader,
+        args=(process.stdout, messages),
+        daemon=True,
+    )
+    thread.start()
+
+    def send(message: dict[str, Any]) -> None:
+        process.stdin.write(json.dumps(message, ensure_ascii=False) + "\n")
+        process.stdin.flush()
+
+    try:
+        send({
+            "method": "initialize",
+            "id": 0,
+            "params": {
+                "clientInfo": {
+                    "name": "escapement",
+                    "title": "Escapement",
+                    "version": "6.3.0",
+                }
+            },
+        })
+        _wait_for_response(messages, 0, timeout_seconds, notifications)
+        send({"method": "initialized", "params": {}})
+        send({"method": "account/rateLimits/read", "id": 1})
+        rate_limits = _wait_for_response(messages, 1, timeout_seconds, notifications)
+        send({"method": "account/usage/read", "id": 2})
+        usage = _wait_for_response(messages, 2, timeout_seconds, notifications)
+
+        for notification in notifications:
+            if notification.get("method") == "account/rateLimits/updated":
+                params = notification.get("params")
+                if isinstance(params, dict) and isinstance(params.get("rateLimits"), dict):
+                    rate_limits["rateLimits"] = params["rateLimits"]
+        return normalize_resource_snapshot(
+            rate_limits,
+            usage,
+            source=source,
+        )
+    finally:
+        try:
+            process.stdin.close()
+        except OSError:
+            pass
+        try:
+            process.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            process.terminate()
+            try:
+                process.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                process.kill()
+        if process.stdout:
+            process.stdout.close()
+        if process.stderr:
+            process.stderr.close()
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="codex_resources")
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    read = sub.add_parser("read")
+    read.add_argument("--codex-command", default=os.getenv("CODEX_COMMAND", "codex"))
+    read.add_argument("--state")
+    read.add_argument("--timeout", type=float, default=15)
+
+    status = sub.add_parser("status")
+    status.add_argument("--state")
+    return parser
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    root = find_root()
+    state_path = Path(args.state).resolve() if args.state else root / STATE_RELATIVE
+    if args.command == "status":
+        state = load_resource_state(state_path)
+        print(json.dumps({
+            "state": state,
+            "policy": assess_resource_policy(state),
+        }, indent=2, ensure_ascii=False))
+        return 0 if state else 3
+
+    try:
+        state = query_resource_state(
+            [args.codex_command, "app-server"],
+            timeout_seconds=args.timeout,
+        )
+    except AppServerError as exc:
+        print(json.dumps({
+            "source": "NOT_OBSERVABLE",
+            "error": str(exc),
+            "state_path": str(state_path),
+        }, indent=2), file=sys.stderr)
+        return 2
+    write_resource_state(state_path, state)
+    print(json.dumps({
+        "state": state,
+        "policy": assess_resource_policy(state),
+        "state_path": str(state_path),
+    }, indent=2, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

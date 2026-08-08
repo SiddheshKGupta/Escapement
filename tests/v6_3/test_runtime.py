@@ -89,6 +89,94 @@ class RuntimeTest(unittest.TestCase):
         self.assertIn("## Skill and Readiness Audit", pack)
         self.assertIn("design-intelligence:constitution", pack)
 
+    def test_long_prompt_is_not_duplicated_beyond_context_budget(self):
+        prompt = (
+            "Build an API integration with deterministic verification. "
+            + "Preserve this detailed constraint. " * 200
+        )
+        start = self.run_runtime("manual-start", "--prompt", prompt, "--json")
+        self.assertEqual(start.returncode, 0, start.stderr)
+        payload = json.loads(start.stdout)
+        pack = (
+            self.target / ".agent/runtime/CONTEXT_PACK.md"
+        ).read_text(encoding="utf-8")
+        pack_words = len(pack.split())
+        self.assertLessEqual(pack_words, payload["context_cost"]["budget"])
+        self.assertEqual(
+            payload["context_cost"]["generated_pack_words"],
+            pack_words,
+        )
+
+    def test_fresh_turn_hydrates_durable_handoff_and_program_state(self):
+        (self.target / "SESSION_HANDOFF.md").write_text(
+            "# Session Handoff\n\n- Program: Claims Management Platform\n"
+            "- Current module: Intake\n- Next action: validate intake schema\n",
+            encoding="utf-8",
+        )
+        modules = self.target / "docs/PROGRAM_MODULES.json"
+        modules.parent.mkdir(parents=True, exist_ok=True)
+        modules.write_text(
+            json.dumps({
+                "program": "Claims Management Platform",
+                "modules": [{"id": "intake", "status": "IMPLEMENT"}],
+            }),
+            encoding="utf-8",
+        )
+
+        start = self.run_runtime(
+            "manual-start",
+            "--prompt",
+            "Continue the project from the repository's authoritative state.",
+            "--json",
+        )
+        self.assertEqual(start.returncode, 0, start.stderr)
+        pack = (
+            self.target / ".agent/runtime/CONTEXT_PACK.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Claims Management Platform", pack)
+        self.assertIn("Intake", pack)
+        self.assertIn("validate intake schema", pack)
+
+    def test_exhausted_five_hour_window_blocks_only_a_new_material_turn(self):
+        resource_path = self.target / ".agent/runtime/codex-resources.json"
+        resource_path.parent.mkdir(parents=True, exist_ok=True)
+        resource_path.write_text(
+            json.dumps({
+                "schema_version": "1.0",
+                "source": "FIXTURE",
+                "observed_at": "2023-11-14T22:13:20+00:00",
+                "windows": [{
+                    "limit_id": "codex",
+                    "bucket": "primary",
+                    "used_percent": 100,
+                    "window_duration_mins": 300,
+                    "resets_at": 4_102_444_800,
+                }],
+                "five_hour_windows": [{
+                    "limit_id": "codex",
+                    "bucket": "primary",
+                    "used_percent": 100,
+                    "window_duration_mins": 300,
+                    "resets_at": 4_102_444_800,
+                }],
+                "rate_limits": {},
+                "usage": {},
+            }),
+            encoding="utf-8",
+        )
+        start = self.run_runtime(
+            "manual-start",
+            "--prompt",
+            "Add authentication to this application.",
+            "--json",
+        )
+        self.assertEqual(start.returncode, 75)
+        payload = json.loads(start.stdout)
+        self.assertEqual(payload["resource_policy"]["mode"], "EXHAUSTED")
+        self.assertFalse(
+            (self.target / ".agent/runtime/current-turn.json").exists()
+        )
+
     def test_info_creates_no_open_turn(self):
         result = self.run_runtime(
             "manual-start",
