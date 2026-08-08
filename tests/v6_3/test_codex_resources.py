@@ -94,6 +94,16 @@ class CodexResourceStateTest(unittest.TestCase):
             self.assertEqual(policy["mode"], "UNOBSERVED")
             self.assertFalse(policy["block_new_turn"])
 
+        with self.subTest("oversized live numeric values are ignored safely"):
+            oversized = rate_result(100)
+            oversized["rateLimits"]["primary"]["windowDurationMins"] = 10**400
+            state = normalize_resource_snapshot(
+                oversized,
+                {"summary": {"lifetimeTokens": 1234}},
+                source="FIXTURE",
+            )
+            self.assertEqual(state["five_hour_windows"], [])
+
     def test_policy_uses_advisory_warning_bands(self):
         expected = [
             (74, "NORMAL", "normal-execution"),
@@ -168,6 +178,7 @@ class CodexResourceStateTest(unittest.TestCase):
             for field, invalid in (
                 ("used_percent", float("nan")),
                 ("resets_at", float("inf")),
+                ("used_percent", 10**400),
             ):
                 with self.subTest("non-finite persisted state is rejected", field=field):
                     malformed = self.snapshot(82)
@@ -286,6 +297,30 @@ class CodexResourceStateTest(unittest.TestCase):
                         timeout_seconds=0.5,
                     )
                 self.assertLess(time.monotonic() - started, 4.5)
+
+        with self.subTest("short stderr diagnostics survive request timeout"):
+            with tempfile.TemporaryDirectory() as temp_dir:
+                fixture = Path(temp_dir) / "app_server.py"
+                fixture.write_text(
+                    textwrap.dedent(
+                        """
+                        import sys
+                        import time
+
+                        sys.stderr.write("closed-input-diagnostic")
+                        sys.stderr.flush()
+                        time.sleep(60)
+                        """
+                    ),
+                    encoding="utf-8",
+                )
+                with self.assertRaises(AppServerError) as raised:
+                    query_resource_state(
+                        [sys.executable, str(fixture)],
+                        source="FIXTURE",
+                        timeout_seconds=0.5,
+                    )
+                self.assertIn("closed-input-diagnostic", str(raised.exception))
 
         with self.subTest("concurrent stderr diagnostics are bounded and sanitized"):
             class SlowIterDeque(deque):

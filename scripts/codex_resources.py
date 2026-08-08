@@ -45,26 +45,24 @@ def find_root(start: Path | None = None) -> Path:
     return current
 
 
+def _is_finite_number(value: Any) -> bool:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return False
+    try:
+        return math.isfinite(value)
+    except (OverflowError, ValueError):
+        return False
+
+
 def _window(limit_id: str, bucket: str, value: dict[str, Any]) -> dict[str, Any] | None:
     duration = value.get("windowDurationMins")
     used = value.get("usedPercent")
     resets_at = value.get("resetsAt")
     if (
-        isinstance(duration, bool)
-        or not isinstance(duration, (int, float))
-        or not math.isfinite(duration)
-        or not float(duration).is_integer()
-        or isinstance(used, bool)
-        or not isinstance(used, (int, float))
-        or not math.isfinite(used)
-        or (
-            resets_at is not None
-            and (
-                isinstance(resets_at, bool)
-                or not isinstance(resets_at, (int, float))
-                or not math.isfinite(resets_at)
-            )
-        )
+        not _is_finite_number(duration)
+        or (isinstance(duration, float) and not duration.is_integer())
+        or not _is_finite_number(used)
+        or (resets_at is not None and not _is_finite_number(resets_at))
     ):
         return None
     return {
@@ -133,19 +131,11 @@ def _validated_window(value: Any) -> dict[str, Any] | None:
         return None
     if bucket not in {"primary", "secondary"}:
         return None
-    if (
-        isinstance(used_percent, bool)
-        or not isinstance(used_percent, (int, float))
-        or not math.isfinite(used_percent)
-    ):
+    if not _is_finite_number(used_percent):
         return None
     if isinstance(duration, bool) or not isinstance(duration, int):
         return None
-    if resets_at is not None and (
-        isinstance(resets_at, bool)
-        or not isinstance(resets_at, (int, float))
-        or not math.isfinite(resets_at)
-    ):
+    if resets_at is not None and not _is_finite_number(resets_at):
         return None
     return value
 
@@ -393,6 +383,7 @@ def query_resource_state(
         process.stdin.write(json.dumps(message, ensure_ascii=False) + "\n")
         process.stdin.flush()
 
+    app_server_error: AppServerError | None = None
     try:
         send({
             "method": "initialize",
@@ -423,17 +414,7 @@ def query_resource_state(
             source=source,
         )
     except AppServerError as exc:
-        with stderr_lock:
-            stderr_tail = "".join(stderr_chunks)[-4096:]
-        if stderr_tail:
-            sanitized_tail = "".join(
-                character if character.isprintable() else " "
-                for character in stderr_tail
-            )
-            raise AppServerError(
-                f"{exc}\nApp Server stderr tail: {sanitized_tail}"
-            ) from exc
-        raise
+        app_server_error = exc
     finally:
         try:
             process.stdin.close()
@@ -452,6 +433,19 @@ def query_resource_state(
                 except subprocess.TimeoutExpired:
                     pass
         stderr_thread.join(timeout=0.5)
+
+    assert app_server_error is not None
+    with stderr_lock:
+        stderr_tail = "".join(stderr_chunks)[-4096:]
+    if stderr_tail:
+        sanitized_tail = "".join(
+            character if character.isprintable() else " "
+            for character in stderr_tail
+        )
+        raise AppServerError(
+            f"{app_server_error}\nApp Server stderr tail: {sanitized_tail}"
+        ) from app_server_error
+    raise app_server_error
 
 
 def build_parser() -> argparse.ArgumentParser:
