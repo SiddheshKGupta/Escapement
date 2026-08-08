@@ -13,7 +13,7 @@
 - Strategy adapters: `10`
 - Capability families: `10`
 - Overlap groups: `14`
-- Routing evaluations: `83 / 83 PASS`
+- Routing evaluations: `122 / 122 PASS`
 - Unit tests: `167 / 167 PASS`
 - Runtime doctor: `0 failures`
 - Repository doctor: `0 failures, 0 warnings`

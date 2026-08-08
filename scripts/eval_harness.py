@@ -201,6 +201,16 @@ def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str
             f"got {actual_skill_context}"
         )
 
+    # parallel_assessment had no assertion path at all before this -- a
+    # deterministic router output with zero test coverage.
+    actual_parallel = route.get("parallel_assessment", {})
+    for key in ("requested", "decision"):
+        value = expected.get(f"parallel_{key}")
+        if value is not None and actual_parallel.get(key) != value:
+            failures.append(
+                f"parallel.{key} expected {value!r} got {actual_parallel.get(key)!r}"
+            )
+
     expected_design_authority = expected.get("design_authority")
     actual_design_authority = (
         "design-intelligence:constitution" in actual_strengths
