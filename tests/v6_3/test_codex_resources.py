@@ -81,6 +81,19 @@ class CodexResourceStateTest(unittest.TestCase):
             self.assertTrue(policy["needs_refresh"])
             self.assertFalse(policy["block_new_turn"])
 
+        with self.subTest("fractional durations are not truncated into five-hour windows"):
+            fractional = rate_result(100)
+            fractional["rateLimits"]["primary"]["windowDurationMins"] = 300.9
+            state = normalize_resource_snapshot(
+                fractional,
+                {"summary": {"lifetimeTokens": 1234}},
+                source="FIXTURE",
+            )
+            self.assertEqual(state["five_hour_windows"], [])
+            policy = assess_resource_policy(state, now_epoch=1_700_000_000)
+            self.assertEqual(policy["mode"], "UNOBSERVED")
+            self.assertFalse(policy["block_new_turn"])
+
     def test_policy_uses_advisory_warning_bands(self):
         expected = [
             (74, "NORMAL", "normal-execution"),
@@ -151,6 +164,17 @@ class CodexResourceStateTest(unittest.TestCase):
             with self.subTest("non-UTF-8 persisted state is rejected"):
                 path.write_bytes(b"\xff\xfe\x00")
                 self.assertIsNone(load_resource_state(path))
+
+            for field, invalid in (
+                ("used_percent", float("nan")),
+                ("resets_at", float("inf")),
+            ):
+                with self.subTest("non-finite persisted state is rejected", field=field):
+                    malformed = self.snapshot(82)
+                    malformed["windows"][0][field] = invalid
+                    malformed["five_hour_windows"][0][field] = invalid
+                    path.write_text(json.dumps(malformed), encoding="utf-8")
+                    self.assertIsNone(load_resource_state(path))
 
     def test_jsonl_app_server_contract_reads_limits_and_usage(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -238,6 +262,31 @@ class CodexResourceStateTest(unittest.TestCase):
                 self.assertEqual(state["five_hour_windows"][0]["used_percent"], 81)
                 self.assertEqual(state["usage"]["summary"]["lifetimeTokens"], 99)
 
+        with self.subTest("a descendant retaining stderr cannot stall cleanup"):
+            with tempfile.TemporaryDirectory() as temp_dir:
+                fixture = Path(temp_dir) / "app_server.py"
+                fixture.write_text(
+                    textwrap.dedent(
+                        """
+                        import subprocess
+                        import sys
+                        import time
+
+                        subprocess.Popen([sys.executable, "-c", "import time; time.sleep(6)"])
+                        time.sleep(60)
+                        """
+                    ),
+                    encoding="utf-8",
+                )
+                started = time.monotonic()
+                with self.assertRaises(AppServerError):
+                    query_resource_state(
+                        [sys.executable, str(fixture)],
+                        source="FIXTURE",
+                        timeout_seconds=0.5,
+                    )
+                self.assertLess(time.monotonic() - started, 4.5)
+
         with self.subTest("concurrent stderr diagnostics are bounded and sanitized"):
             class SlowIterDeque(deque):
                 def __iter__(self):
@@ -248,6 +297,7 @@ class CodexResourceStateTest(unittest.TestCase):
 
             original_deque = codex_resources.deque
             codex_resources.deque = SlowIterDeque
+            self.addCleanup(setattr, codex_resources, "deque", original_deque)
             with tempfile.TemporaryDirectory() as temp_dir:
                 fixture = Path(temp_dir) / "app_server.py"
                 fixture.write_text(

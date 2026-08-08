@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 from collections import deque
 import json
+import math
 import os
 import queue
 import subprocess
@@ -47,14 +48,31 @@ def find_root(start: Path | None = None) -> Path:
 def _window(limit_id: str, bucket: str, value: dict[str, Any]) -> dict[str, Any] | None:
     duration = value.get("windowDurationMins")
     used = value.get("usedPercent")
-    if not isinstance(duration, (int, float)) or not isinstance(used, (int, float)):
+    resets_at = value.get("resetsAt")
+    if (
+        isinstance(duration, bool)
+        or not isinstance(duration, (int, float))
+        or not math.isfinite(duration)
+        or not float(duration).is_integer()
+        or isinstance(used, bool)
+        or not isinstance(used, (int, float))
+        or not math.isfinite(used)
+        or (
+            resets_at is not None
+            and (
+                isinstance(resets_at, bool)
+                or not isinstance(resets_at, (int, float))
+                or not math.isfinite(resets_at)
+            )
+        )
+    ):
         return None
     return {
         "limit_id": limit_id,
         "bucket": bucket,
         "used_percent": float(used),
         "window_duration_mins": int(duration),
-        "resets_at": value.get("resetsAt"),
+        "resets_at": resets_at,
     }
 
 
@@ -115,12 +133,18 @@ def _validated_window(value: Any) -> dict[str, Any] | None:
         return None
     if bucket not in {"primary", "secondary"}:
         return None
-    if isinstance(used_percent, bool) or not isinstance(used_percent, (int, float)):
+    if (
+        isinstance(used_percent, bool)
+        or not isinstance(used_percent, (int, float))
+        or not math.isfinite(used_percent)
+    ):
         return None
     if isinstance(duration, bool) or not isinstance(duration, int):
         return None
     if resets_at is not None and (
-        isinstance(resets_at, bool) or not isinstance(resets_at, (int, float))
+        isinstance(resets_at, bool)
+        or not isinstance(resets_at, (int, float))
+        or not math.isfinite(resets_at)
     ):
         return None
     return value
@@ -214,6 +238,10 @@ def write_resource_state(path: Path, state: dict[str, Any]) -> None:
     temporary.replace(path)
 
 
+def _reject_json_constant(token: str) -> None:
+    raise ValueError(f"Invalid JSON numeric constant: {token}")
+
+
 def _validated_resource_state(value: Any) -> dict[str, Any] | None:
     if not isinstance(value, dict):
         return None
@@ -240,8 +268,11 @@ def load_resource_state(path: Path) -> dict[str, Any] | None:
     if not path.exists():
         return None
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        value = json.loads(
+            path.read_text(encoding="utf-8"),
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, ValueError):
         return None
     return _validated_resource_state(value)
 
@@ -257,6 +288,10 @@ def _reader(stream: Any, messages: queue.Queue[Any]) -> None:
                 messages.put(AppServerError(f"Invalid App Server JSON: {exc}"))
     finally:
         messages.put(EOFError("Codex App Server closed its output."))
+        try:
+            stream.close()
+        except OSError:
+            pass
 
 
 def _drain_stderr(
@@ -264,15 +299,21 @@ def _drain_stderr(
     chunks: deque[str],
     lock: threading.Lock | None = None,
 ) -> None:
-    while True:
-        chunk = stream.read(4096)
-        if not chunk:
-            return
-        if lock is None:
-            chunks.append(chunk)
-        else:
-            with lock:
+    try:
+        while True:
+            chunk = stream.read(4096)
+            if not chunk:
+                return
+            if lock is None:
                 chunks.append(chunk)
+            else:
+                with lock:
+                    chunks.append(chunk)
+    finally:
+        try:
+            stream.close()
+        except OSError:
+            pass
 
 
 def _wait_for_response(
@@ -399,18 +440,18 @@ def query_resource_state(
         except OSError:
             pass
         try:
-            process.wait(timeout=2)
+            process.wait(timeout=0.25)
         except subprocess.TimeoutExpired:
             process.terminate()
             try:
-                process.wait(timeout=2)
+                process.wait(timeout=1)
             except subprocess.TimeoutExpired:
                 process.kill()
-        stderr_thread.join(timeout=2)
-        if process.stdout:
-            process.stdout.close()
-        if process.stderr:
-            process.stderr.close()
+                try:
+                    process.wait(timeout=1)
+                except subprocess.TimeoutExpired:
+                    pass
+        stderr_thread.join(timeout=0.5)
 
 
 def build_parser() -> argparse.ArgumentParser:
