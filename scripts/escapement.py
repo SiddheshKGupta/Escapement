@@ -877,6 +877,50 @@ def manifest_count_check(target: Path) -> tuple[int, list[str]]:
     return len(problems), problems
 
 
+def overlap_group_tag_check(target: Path) -> tuple[int, list[str]]:
+    """Each capability-registry.json resource carries its own overlap_group
+    string, separate from the membership list that actually governs router
+    dedup behaviour in catalog/overlap-groups.json. The two can silently
+    disagree -- confirmed on this repo: 20 resources carried a stale tag
+    left over from a prior group rename/consolidation (session-memory ->
+    memory-and-knowledge, harness-methodology -> delivery-methodology,
+    design-director -> design-authority, browser-automation ->
+    browser-verification, engineering-minimalism -> engineering-behaviour,
+    code-knowledge -> memory-and-knowledge, and a component-source /
+    component-sources typo), including two resources added in the same
+    session that introduced this check, by copying an already-stale
+    resource as a template.
+
+    Membership, not the tag, is what actually governs SUBSTITUTE dedup in
+    capability_router.py's select_external(). A stale tag is therefore a
+    display/audit bug, not a routing bug -- but it means a human reading
+    the catalogue, or a future maintainer keying logic off the tag field
+    instead of formal membership, sees the wrong grouping.
+    """
+    registry = read_json(target / "catalog/capability-registry.json", {})
+    groups = read_json(target / "catalog/overlap-groups.json", {}).get("groups", [])
+    if not registry or not groups:
+        return 0, []
+
+    formal_group_of: dict[str, list[str]] = {}
+    for group in groups:
+        for member in group.get("members", []):
+            formal_group_of.setdefault(member, []).append(group["id"])
+
+    problems: list[str] = []
+    for resource in registry.get("resources", []):
+        rid = resource.get("id")
+        tag = resource.get("overlap_group")
+        formal = formal_group_of.get(rid, [])
+        if formal and tag not in formal:
+            problems.append(
+                f"{rid}: overlap_group tag {tag!r} does not match its formal "
+                f"group membership {formal}"
+            )
+
+    return len(problems), problems
+
+
 def command_doctor(args: argparse.Namespace) -> int:
     target = Path(args.root).expanduser().resolve()
     failures = 0
@@ -994,6 +1038,15 @@ def command_doctor(args: argparse.Namespace) -> int:
             failures += drift_count
         else:
             print("[PASS] manifest.json counts match actual repository state")
+
+    tag_drift_count, tag_drift_problems = overlap_group_tag_check(target)
+    if tag_drift_count:
+        print(f"[FAIL] overlap_group tags drifted from formal group membership: {tag_drift_count}")
+        for problem in tag_drift_problems[:10]:
+            print(f"  - {problem}")
+        failures += tag_drift_count
+    else:
+        print("[PASS] overlap_group tags match formal group membership")
 
     print(f"\nFailures: {failures}")
     print(f"Warnings: {warnings}")
