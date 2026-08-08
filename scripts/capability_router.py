@@ -909,6 +909,9 @@ def select_skills(
                 ranked.append({**item, "score": 0, "matched": ["phase-default"]})
 
     ranked.sort(key=lambda item: (-item["score"], -item.get("priority", 0), item["id"]))
+    # Note: every native skill currently declares a unique overlap_group, so
+    # this rejection branch is unreachable in practice. Left as-is rather
+    # than extended with fallbacks, which would be code that cannot run.
     selected, rejected, used_groups = [], [], set()
     for item in ranked:
         group = item.get("overlap_group")
@@ -958,6 +961,11 @@ def select_external(prompt: str, phase: str, research: dict[str, Any], maximum: 
                 "status": item.get("status"),
                 "activation": item.get("activation"),
                 "overlap_group": item.get("overlap_group"),
+                # The kernel already says to ask before licence-sensitive
+                # reuse, but nothing said which resources are sensitive.
+                # Absent means a verified permissive licence.
+                "adoption": item.get("adoption"),
+                "licence": item.get("license"),
                 "score": score,
                 "matched": matched,
             })
@@ -979,7 +987,41 @@ def select_external(prompt: str, phase: str, research: dict[str, Any], maximum: 
             })
 
     ranked.sort(key=lambda item: (-item["score"], item["id"]))
-    return ranked[:maximum]
+
+    # Native skills already reject a second member of the same overlap group;
+    # external candidates did not, so two competing tools could surface at
+    # once. Membership comes from the formal group's members list rather than
+    # the resource's own overlap_group tag -- the two use different keys
+    # (graphify is tagged code-knowledge but governed by memory-and-knowledge).
+    # Only SUBSTITUTE groups collapse; COMPLEMENTARY groups such as
+    # research-freshness are designed to stack.
+    substitute_group_of = {
+        member: group["id"]
+        for group in load_json("catalog/overlap-groups.json")["groups"]
+        if group.get("relation") == "SUBSTITUTE"
+        for member in group.get("members", [])
+    }
+    # A displaced member is demoted, not discarded. Most external resources
+    # are not installed, so collapsing a group to a single choice with no
+    # recorded alternative turns "choose one" into a dead end when the
+    # primary cannot be installed or does not work.
+    selected, winner_of_group = [], {}
+    for item in ranked:
+        group = substitute_group_of.get(item["id"])
+        if group and group in winner_of_group:
+            winner_of_group[group].setdefault("fallbacks", []).append({
+                "id": item["id"],
+                "name": item["name"],
+                "reason": f"overlap:{group}",
+            })
+            continue
+        item = dict(item)
+        selected.append(item)
+        if group:
+            winner_of_group[group] = item
+        if len(selected) >= maximum:
+            break
+    return selected
 
 
 def estimate_cost(
@@ -1306,11 +1348,21 @@ def build_context_pack(
         sections.extend(["", "## External Candidates", ""])
         if not route["external_candidates"]:
             sections.append("None active.")
+        gate_labels = {
+            "approval-required": "ASK BEFORE ADOPTING",
+            "verify-licence-first": "VERIFY LICENCE FIRST",
+        }
         for item in route["external_candidates"]:
+            gate = gate_labels.get(item.get("adoption"))
             sections.append(
                 f"- `{item['id']}` — {item['name']} — {item['activation']} — "
                 f"{item.get('source') or 'source unresolved'}"
+                + (f" — **{gate}** ({item.get('licence') or 'licence unknown'})" if gate else "")
             )
+            for fallback in item.get("fallbacks", []):
+                sections.append(
+                    f"  - fallback if unavailable: `{fallback['id']}` — {fallback['name']}"
+                )
         sections.append(
             "Candidates are not active until overlap, licence, security, installation "
             "and approval requirements are satisfied."

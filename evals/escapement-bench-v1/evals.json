@@ -685,6 +685,748 @@
           "prime-intellect-prime-agent"
         ]
       }
+    },
+    {
+      "id": "overlap-external-01-substitute-collapses",
+      "claim": 1,
+      "category": "overlap-resolution",
+      "description": "Two members of a SUBSTITUTE overlap group must not both surface as external candidates. helixdb and understand-anything are both members of memory-and-knowledge, whose rule says choose one code-knowledge system per repository.",
+      "prompt": "Build an architecture map of this unfamiliar codebase and a knowledge graph of the relationship query paths.",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL",
+        "external_candidates": [
+          "egonex-understand-anything"
+        ],
+        "forbidden_external_candidates": [
+          "helixdb",
+          "nanonets-graft"
+        ]
+      }
+    },
+    {
+      "id": "overlap-external-02-complementary-preserved",
+      "claim": 1,
+      "category": "overlap-resolution",
+      "description": "Negative control for the SUBSTITUTE dedup: research-freshness is COMPLEMENTARY and is designed to stack, so agent-reach, context7 and last30days must all still surface together. A blind dedup that ignores the declared relation would collapse these to one and fail here.",
+      "prompt": "Find current documentation for this library and recent community discussion from the last month.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL",
+        "external_candidates": [
+          "agent-reach",
+          "context7",
+          "last30days"
+        ]
+      }
+    },
+    {
+      "id": "graft-01-context-layer-routes",
+      "claim": 1,
+      "category": "explicit-invocation-discipline",
+      "description": "Graft surfaces on its own trigger language: a large repository where agent context is expensive.",
+      "prompt": "Add a persistent context layer so the agent stops burning token cost re-reading this large repository.",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL",
+        "external_candidates": [
+          "nanonets-graft"
+        ]
+      }
+    },
+    {
+      "id": "graft-02-not-for-ordinary-fix",
+      "claim": 2,
+      "category": "false-positive-over-triggering",
+      "description": "A newly catalogued external resource must stay silent on ordinary unrelated work. Guards the sixth external-candidate addition against the over-triggering this category was built for.",
+      "prompt": "Fix the off-by-one error in the pagination helper.",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "nanonets-graft"
+        ]
+      }
+    },
+    {
+      "id": "licence-01-copyleft-requires-approval",
+      "claim": 1,
+      "category": "licence-adoption-gating",
+      "description": "AGPL resources stay discoverable and routable, but carry an explicit approval gate so the agent must ask before making them part of the project rather than treating a routed candidate as an approved one.",
+      "prompt": "Design privacy analytics with a simple dashboard and no cookies for self-hosting.",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "plausible-analytics",
+          "appflowy"
+        ],
+        "external_adoption": {
+          "plausible-analytics": "approval-required",
+          "appflowy": "approval-required"
+        }
+      }
+    },
+    {
+      "id": "licence-02-unknown-licence-verify-first",
+      "claim": 1,
+      "category": "licence-adoption-gating",
+      "description": "An unverified licence is a different problem from a restrictive one: the remedy is verification, not permission. last30days must carry verify-licence-first while verified-permissive siblings routed in the same turn carry no gate at all.",
+      "prompt": "Find current documentation for this library and recent community discussion from the last month.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "external_adoption": {
+          "last30days": "verify-licence-first",
+          "context7": null,
+          "agent-reach": null
+        }
+      }
+    },
+    {
+      "id": "licence-03-verified-permissive-ungated",
+      "claim": 1,
+      "category": "licence-adoption-gating",
+      "description": "Negative control. A verified MIT resource must not acquire a gate, otherwise the gating becomes noise the agent learns to ignore.",
+      "prompt": "Add a persistent context layer so the agent stops burning token cost re-reading this large repository.",
+      "expected": {
+        "material": true,
+        "external_adoption": {
+          "nanonets-graft": null
+        }
+      }
+    },
+    {
+      "id": "overlap-external-03-displaced-member-becomes-fallback",
+      "claim": 1,
+      "category": "overlap-resolution",
+      "description": "Collapsing a SUBSTITUTE group must demote the loser, not delete it. Most external resources are not installed, so a group collapsed to one choice with no recorded alternative becomes a dead end when the primary cannot be installed or does not work. The displaced member is carried on the winner as an ordered fallback.",
+      "prompt": "Build an architecture map of this unfamiliar codebase and a knowledge graph of the relationship query paths.",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "egonex-understand-anything"
+        ],
+        "forbidden_external_candidates": [
+          "helixdb",
+          "nanonets-graft"
+        ],
+        "external_fallbacks": {
+          "egonex-understand-anything": [
+            "helixdb"
+          ]
+        }
+      }
+    },
+    {
+      "id": "registry-new-01-unlicensed-index-gated",
+      "claim": 1,
+      "category": "licence-adoption-gating",
+      "description": "awesome-claude-skills has 72k stars but its GitHub licence endpoint returns 404, so it is all rights reserved. It stays catalogued and discoverable, carrying an approval gate rather than being excluded -- the exact case the two-tier policy was built for.",
+      "prompt": "Find a skill directory to see what available skills exist.",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "awesome-claude-skills"
+        ],
+        "external_adoption": {
+          "awesome-claude-skills": "approval-required"
+        }
+      }
+    },
+    {
+      "id": "registry-new-02-permissive-additions-ungated",
+      "claim": 1,
+      "category": "licence-adoption-gating",
+      "description": "Verified MIT additions must not pick up a gate, otherwise gating becomes noise.",
+      "prompt": "Add a persistent memory engine for context so recall survives across sessions.",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "supermemory"
+        ],
+        "external_adoption": {
+          "supermemory": null
+        }
+      }
+    },
+    {
+      "id": "registry-new-03-batch-no-over-trigger",
+      "claim": 2,
+      "category": "false-positive-over-triggering",
+      "description": "Five external resources added in one batch is the largest single expansion of routable surface so far. None may fire on an ordinary unrelated bug fix.",
+      "prompt": "Fix the off-by-one error in the pagination helper.",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "supermemory",
+          "sanyuan-skills",
+          "awesome-claude-skills",
+          "floci",
+          "mattpocock-skills"
+        ]
+      }
+    },
+    {
+      "id": "domain-01-consulting-fires",
+      "claim": 1,
+      "category": "domain-question-coverage",
+      "description": "CONSULTING register with incomplete DOMAIN_CONTEXT.md must surface the domain question -- untested by any prior case in this suite.",
+      "prompt": "Recommend the right governance operating model and risk controls for this financial services business.",
+      "expected": {
+        "material": true,
+        "register": "CONSULTING",
+        "questions_include": [
+          "domain"
+        ]
+      }
+    },
+    {
+      "id": "domain-02-dual-fires",
+      "claim": 1,
+      "category": "domain-question-coverage",
+      "description": "DUAL register (consulting language plus engineering language) also qualifies for the domain question.",
+      "prompt": "Design a compliant onboarding workflow for lending applications with proper risk controls.",
+      "expected": {
+        "material": true,
+        "register": "DUAL",
+        "questions_include": [
+          "domain"
+        ]
+      }
+    },
+    {
+      "id": "domain-03-engineering-negative",
+      "claim": 2,
+      "category": "domain-question-coverage",
+      "description": "Negative control: ENGINEERING register never asks the domain question regardless of DOMAIN_CONTEXT.md state.",
+      "prompt": "Fix the pagination bug in the reporting dashboard code.",
+      "expected": {
+        "material": true,
+        "register": "ENGINEERING",
+        "questions_exclude": [
+          "domain"
+        ]
+      }
+    },
+    {
+      "id": "domain-04-artifact-negative",
+      "claim": 2,
+      "category": "domain-question-coverage",
+      "description": "Negative control: ARTIFACT register never asks the domain question, even though it is a non-engineering register.",
+      "prompt": "Write a proposal document summarizing quarterly progress.",
+      "expected": {
+        "material": true,
+        "register": "ARTIFACT",
+        "questions_exclude": [
+          "domain"
+        ]
+      }
+    },
+    {
+      "id": "micro-tier-01-typo",
+      "claim": 1,
+      "category": "micro-tier-coverage",
+      "description": "A genuinely trivial fix classifies MICRO, not MATERIAL -- the tier this suite's other cases almost never exercise (1 of 61 prior cases).",
+      "prompt": "Fix a typo in the button label copy.",
+      "expected": {
+        "material": true,
+        "tier": "MICRO"
+      }
+    },
+    {
+      "id": "micro-tier-02-rename",
+      "claim": 1,
+      "category": "micro-tier-coverage",
+      "description": "An isolated one-file rename classifies MICRO.",
+      "prompt": "Update this one variable rename in a single file for clarity.",
+      "expected": {
+        "material": true,
+        "tier": "MICRO"
+      }
+    },
+    {
+      "id": "micro-tier-03-quick-fix-isolated",
+      "claim": 1,
+      "category": "micro-tier-coverage",
+      "description": "An isolated quick fix in one component classifies MICRO.",
+      "prompt": "Apply a quick fix to an isolated bug in one component.",
+      "expected": {
+        "material": true,
+        "tier": "MICRO"
+      }
+    },
+    {
+      "id": "micro-tier-04-minor-copy-change",
+      "claim": 1,
+      "category": "micro-tier-coverage",
+      "description": "A minor copy change classifies MICRO.",
+      "prompt": "Make a minor copy change and update the footer text.",
+      "expected": {
+        "material": true,
+        "tier": "MICRO"
+      }
+    },
+    {
+      "id": "micro-tier-05-risk-word-still-elevates",
+      "claim": 2,
+      "category": "micro-tier-coverage",
+      "description": "Generalises budget-05's finding across the MICRO_WORDS vocabulary: a typo fix touching RBAC-adjacent text is still elevated past MICRO to MATERIAL by MATERIAL_RISK_WORDS -- deliberate design, not a bug, confirmed here with a fresh prompt rather than relying on a single earlier case.",
+      "prompt": "Fix a typo in the RBAC error message string.",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL"
+      }
+    },
+    {
+      "id": "artifact-register-01-email",
+      "claim": 1,
+      "category": "artifact-register-coverage",
+      "description": "An email-writing request classifies ARTIFACT register and routes artifact-production at SPECIFY -- a register this suite barely exercised (1 of 61 prior cases).",
+      "prompt": "Write a welcome email for new subscribers.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "register": "ARTIFACT",
+        "skills": [
+          "artifact-production"
+        ]
+      }
+    },
+    {
+      "id": "artifact-register-02-proposal",
+      "claim": 1,
+      "category": "artifact-register-coverage",
+      "description": "A proposal-document request classifies ARTIFACT register and routes artifact-production at SPECIFY.",
+      "prompt": "Draft a proposal document for the new vendor partnership.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "register": "ARTIFACT",
+        "skills": [
+          "artifact-production"
+        ]
+      }
+    },
+    {
+      "id": "artifact-register-03-spreadsheet-tracker",
+      "claim": 1,
+      "category": "artifact-register-coverage",
+      "description": "A tracker-spreadsheet request classifies ARTIFACT register.",
+      "prompt": "Build a tracker spreadsheet for quarterly budget review.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "register": "ARTIFACT",
+        "skills": [
+          "artifact-production"
+        ]
+      }
+    },
+    {
+      "id": "artifact-register-04-sop",
+      "claim": 1,
+      "category": "artifact-register-coverage",
+      "description": "An SOP-document request classifies ARTIFACT register.",
+      "prompt": "Draft an SOP document for the incident response process.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "register": "ARTIFACT",
+        "skills": [
+          "artifact-production"
+        ]
+      }
+    },
+    {
+      "id": "artifact-register-05-verify-phase-writing-quality",
+      "claim": 1,
+      "category": "artifact-register-coverage",
+      "description": "At VERIFY, ARTIFACT register additionally routes writing-quality alongside artifact-production -- a different phase-conditional pairing than SPECIFY, so this is not redundant with the SPECIFY cases above.",
+      "prompt": "Write a welcome email for new subscribers.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "material": true,
+        "register": "ARTIFACT",
+        "skills": [
+          "artifact-production",
+          "writing-quality"
+        ]
+      }
+    },
+    {
+      "id": "motion-01-scroll-animation",
+      "claim": 1,
+      "category": "motion-strength-coverage",
+      "description": "Scroll-triggered animation language routes the Emil Kowalski external skill (the capability strength itself additionally requires DESIGN_WORDS, which \"Add scroll-triggered animation\" does not match -- covered separately by motion-02) -- MOTION_WORDS is entirely untested by this suite's prior 61 cases.",
+      "prompt": "Add scroll-triggered animation and easing transitions to the landing page.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "emil-kowalski-skill"
+        ]
+      }
+    },
+    {
+      "id": "motion-02-gesture-motion",
+      "claim": 1,
+      "category": "motion-strength-coverage",
+      "description": "Gesture-based motion interaction language also routes the emil strength and skill.",
+      "prompt": "Design gesture-based motion interactions for the mobile onboarding flow.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "strengths": [
+          "emil:emil-design-eng"
+        ],
+        "external_candidates": [
+          "emil-kowalski-skill"
+        ]
+      }
+    },
+    {
+      "id": "motion-03-negative-design-without-motion",
+      "claim": 2,
+      "category": "motion-strength-coverage",
+      "description": "Negative control: ordinary design work with no motion language does not route the emil strength or skill, even though it is otherwise a design-heavy prompt.",
+      "prompt": "Update the button colour on the pricing page to match the brand palette.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "forbidden_strengths": [
+          "emil:emil-design-eng"
+        ],
+        "forbidden_external_candidates": [
+          "emil-kowalski-skill"
+        ]
+      }
+    },
+    {
+      "id": "motion-04-negative-non-design-engineering",
+      "claim": 2,
+      "category": "motion-strength-coverage",
+      "description": "Negative control: ordinary backend engineering work does not route the emil strength or skill.",
+      "prompt": "Implement the payment retry logic with exponential backoff.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "forbidden_strengths": [
+          "emil:emil-design-eng"
+        ],
+        "forbidden_external_candidates": [
+          "emil-kowalski-skill"
+        ]
+      }
+    },
+    {
+      "id": "motion-05-gsap-explicit",
+      "claim": 1,
+      "category": "motion-strength-coverage",
+      "description": "Explicit GSAP mention routes the gsap external candidate, which carries an approval-required licence gate from the licence-adoption-gating change -- generalises that gate beyond the AGPL cases it was originally built against.",
+      "prompt": "Implement a GSAP-driven scroll animation sequence for the product page.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "gsap"
+        ],
+        "external_adoption": {
+          "gsap": "approval-required"
+        }
+      }
+    },
+    {
+      "id": "browser-verify-01-substitute-collision",
+      "claim": 1,
+      "category": "browser-verification-coverage",
+      "description": "Two browser-test triggers in one prompt collide inside the browser-verification SUBSTITUTE group; playwright wins and agent-browser is demoted to a fallback rather than dropped -- generalises the fallback-chain mechanism beyond memory-and-knowledge, the only group it was verified against before.",
+      "prompt": "Write browser test and E2E visual test coverage for the checkout flow.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "playwright"
+        ],
+        "forbidden_external_candidates": [
+          "agent-browser"
+        ],
+        "external_fallbacks": {
+          "playwright": [
+            "agent-browser"
+          ]
+        }
+      }
+    },
+    {
+      "id": "browser-verify-02-cypress-specific",
+      "claim": 1,
+      "category": "browser-verification-coverage",
+      "description": "An explicit Cypress mention routes cypress specifically.",
+      "prompt": "Write Cypress tests for the checkout flow.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "cypress"
+        ]
+      }
+    },
+    {
+      "id": "browser-verify-03-stagehand-specific",
+      "claim": 1,
+      "category": "browser-verification-coverage",
+      "description": "An explicit Stagehand mention routes stagehand specifically.",
+      "prompt": "Verify this workflow using Stagehand natural-language browser automation.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "stagehand"
+        ]
+      }
+    },
+    {
+      "id": "browser-verify-04-negative-unit-test",
+      "claim": 2,
+      "category": "browser-verification-coverage",
+      "description": "Negative control: an ordinary unit-test fix does not route any browser-verification member.",
+      "prompt": "Fix the unit test for the pagination helper.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "playwright",
+          "cypress",
+          "stagehand",
+          "agent-browser",
+          "puppeteer-mcp"
+        ]
+      }
+    },
+    {
+      "id": "browser-verify-05-single-member-no-fallback",
+      "claim": 1,
+      "category": "browser-verification-coverage",
+      "description": "When only one browser-verification member's trigger is present, it routes alone with no fallback recorded -- distinguishes an uncontested selection from the collision case above.",
+      "prompt": "Write Cypress tests for the checkout flow.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "cypress"
+        ],
+        "external_fallbacks": {
+          "cypress": []
+        }
+      }
+    },
+    {
+      "id": "minimalism-01-yagni-language",
+      "claim": 1,
+      "category": "minimalism-ponytail-coverage",
+      "description": "Explicit YAGNI/over-engineering-avoidance language routes the ponytail:full intensifier alongside the karpathy baseline -- engineering-behaviour is a BASELINE_PLUS_INTENSIFIER group, untested by this suite until now.",
+      "prompt": "Implement this feature using the smallest, most minimal approach -- avoid over-engineering and boilerplate.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "strengths": [
+          "ponytail:full",
+          "karpathy:surgical-changes"
+        ]
+      }
+    },
+    {
+      "id": "minimalism-02-shortest-smallest",
+      "claim": 1,
+      "category": "minimalism-ponytail-coverage",
+      "description": "Shortest/simplest/bloat language also routes ponytail:full.",
+      "prompt": "Refactor this function to the shortest, simplest implementation, avoiding bloat.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "strengths": [
+          "ponytail:full"
+        ]
+      }
+    },
+    {
+      "id": "minimalism-03-negative-ordinary-implementation",
+      "claim": 2,
+      "category": "minimalism-ponytail-coverage",
+      "description": "Negative control: ordinary implementation work without minimalism-pressure language keeps the karpathy baseline but does not add the ponytail intensifier.",
+      "prompt": "Implement the payment retry logic with exponential backoff.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "strengths": [
+          "karpathy:surgical-changes"
+        ],
+        "forbidden_strengths": [
+          "ponytail:full"
+        ]
+      }
+    },
+    {
+      "id": "minimalism-04-karpathy-always-present",
+      "claim": 1,
+      "category": "minimalism-ponytail-coverage",
+      "description": "karpathy:surgical-changes remains present even when ponytail also fires -- confirms BASELINE_PLUS_INTENSIFIER means both stack, not that the intensifier replaces the baseline.",
+      "prompt": "Implement this feature using the smallest, most minimal approach -- avoid over-engineering and boilerplate.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "strengths": [
+          "karpathy:surgical-changes",
+          "ponytail:full"
+        ]
+      }
+    },
+    {
+      "id": "minimalism-05-non-implement-phase-negative",
+      "claim": 2,
+      "category": "minimalism-ponytail-coverage",
+      "description": "Negative control: ponytail is phase-gated to PLAN/IMPLEMENT (RESOURCE_PHASES); the same minimalism language at RESEARCH does not route the ponytail external candidate.",
+      "prompt": "Plan the smallest, most minimal approach and avoid over-engineering for this feature.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "ponytail"
+        ]
+      }
+    },
+    {
+      "id": "agent-blueprint-01-singular-ai-agent",
+      "claim": 1,
+      "category": "agent-blueprint-coverage",
+      "description": "Singular 'AI agent' language routes agent-blueprint-discovery -- untested by this suite until now.",
+      "prompt": "Deploy an AI agent to automate the customer support triage workflow.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "skills": [
+          "agent-blueprint-discovery"
+        ]
+      }
+    },
+    {
+      "id": "agent-blueprint-02-agent-blueprint-phrase",
+      "claim": 1,
+      "category": "agent-blueprint-coverage",
+      "description": "The literal phrase 'agent blueprint' routes agent-blueprint-discovery.",
+      "prompt": "Design an agent blueprint for the research pipeline system.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "skills": [
+          "agent-blueprint-discovery"
+        ]
+      }
+    },
+    {
+      "id": "agent-blueprint-03-multi-agent-solution-phrase",
+      "claim": 1,
+      "category": "agent-blueprint-coverage",
+      "description": "The literal phrase 'multi-agent solution' routes agent-blueprint-discovery.",
+      "prompt": "Plan a multi-agent solution for order fulfillment.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "skills": [
+          "agent-blueprint-discovery"
+        ]
+      }
+    },
+    {
+      "id": "agent-blueprint-04-negative-ordinary-api",
+      "claim": 2,
+      "category": "agent-blueprint-coverage",
+      "description": "Negative control: an ordinary REST API build does not route agent-blueprint-discovery.",
+      "prompt": "Build a REST API for the inventory service.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "forbidden_skills": [
+          "agent-blueprint-discovery"
+        ]
+      }
+    },
+    {
+      "id": "agent-blueprint-05-plural-agents-does-not-match-singular-trigger",
+      "claim": 2,
+      "category": "agent-blueprint-coverage",
+      "description": "Documents a real, evidenced complete-term-matching boundary rather than papering over it: 'AI agents' (plural) does not match the 'AI agent' (singular) trigger, because trigger_score's word-boundary guard treats the trailing 's' as part of the same token. Same class of vocabulary gap as the earlier 'technician' vs 'operator' finding in the users question guard. Not fixed here -- recorded as a negative control so the suite reflects actual behaviour, not assumed behaviour.",
+      "prompt": "Deploy AI agents to automate the customer support triage workflow.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "forbidden_skills": [
+          "agent-blueprint-discovery"
+        ]
+      }
+    },
+    {
+      "id": "parallel-01-explicit-request-material",
+      "claim": 1,
+      "category": "parallel-assessment-coverage",
+      "description": "Explicit parallel/subagent delegation language sets parallel_assessment.requested even at MATERIAL tier -- this field had zero test coverage anywhere in the corpus before this case; eval_harness.py gained parallel_requested/parallel_decision assertions to make it checkable.",
+      "prompt": "Build this by delegating independent workstreams to parallel subagents.",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL",
+        "parallel_requested": true,
+        "parallel_decision": "evaluate-after-plan"
+      }
+    },
+    {
+      "id": "parallel-02-program-tier-implies-useful-without-request",
+      "claim": 1,
+      "category": "parallel-assessment-coverage",
+      "description": "PROGRAM tier alone makes parallel work potentially useful and the decision fires, even without explicit parallel language in the prompt -- distinguishes tier-driven from request-driven parallel assessment.",
+      "prompt": "Build a new enterprise platform from scratch, a major transformation of the operating model.",
+      "expected": {
+        "material": true,
+        "tier": "PROGRAM",
+        "parallel_requested": false,
+        "parallel_decision": "evaluate-after-plan"
+      }
+    },
+    {
+      "id": "parallel-03-negative-ordinary-material",
+      "claim": 2,
+      "category": "parallel-assessment-coverage",
+      "description": "Negative control: an ordinary MATERIAL-tier fix with no parallel language and no PROGRAM tier gets not-indicated.",
+      "prompt": "Fix the pagination bug in the reporting dashboard code.",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL",
+        "parallel_requested": false,
+        "parallel_decision": "not-indicated"
+      }
+    },
+    {
+      "id": "parallel-04-delegate-word-alone",
+      "claim": 1,
+      "category": "parallel-assessment-coverage",
+      "description": "The word 'delegate' alone (one of PARALLEL_WORDS) is sufficient to set requested, independent of tier language.",
+      "prompt": "Update the deployment script and delegate the rollout verification to a separate reviewer.",
+      "expected": {
+        "material": true,
+        "parallel_requested": true
+      }
+    },
+    {
+      "id": "parallel-05-negative-info-tier-no-request-language",
+      "claim": 2,
+      "category": "parallel-assessment-coverage",
+      "description": "Negative control: a question with no parallel language and no build/create verb (INFO tier) still resolves parallel_assessment deterministically to not-indicated rather than leaving it unset.",
+      "prompt": "What is the current status of the deployment pipeline?",
+      "expected": {
+        "material": false,
+        "tier": "INFO",
+        "parallel_requested": false,
+        "parallel_decision": "not-indicated"
+      }
     }
   ]
 }

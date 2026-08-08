@@ -13,8 +13,8 @@ verification, truthful closure, and measurement of the harness itself.
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square&logo=python&logoColor=white)](.github/workflows/validate-standard.yml)
 [![Kernel](https://img.shields.io/badge/kernel-795%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
-[![Unit tests](https://img.shields.io/badge/unit%20tests-165%20passing-2F855A?style=flat-square)](manifest.json)
-[![Routing evals](https://img.shields.io/badge/routing%20evals-72%20%2F%2072-2F855A?style=flat-square)](evals/)
+[![Unit tests](https://img.shields.io/badge/unit%20tests-183%20passing-2F855A?style=flat-square)](manifest.json)
+[![Routing evals](https://img.shields.io/badge/routing%20evals-122%20%2F%20122-2F855A?style=flat-square)](evals/)
 [![Case studies](https://img.shields.io/badge/case%20studies-4-2F855A?style=flat-square)](#evidence-from-real-use)
 [![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
 
@@ -94,20 +94,20 @@ Current inventory:
 
 ```text
 Version:                   6.3.0
-Repository files:          269
+Repository files:          278
 Kernel:                    795 / 1000 words
 Profiles:                    2
 Doctrine packs:             11
 Native skills:              35
 Capability strengths:       58
 Agent patterns:             21
-Governed external resources: 61
+Governed external resources: 67
 Strategy adapters:          10
 Capability families:        10
 Overlap groups:             14
 Published case studies:      4
-Unit tests:                 165
-Routing evaluations:        72
+Unit tests:                 183
+Routing evaluations:        122
 ```
 
 Escapement deliberately uses **more capabilities across the lifecycle, not more
@@ -1207,6 +1207,7 @@ python scripts/program_modules.py add-shared --path <path>
 python scripts/program_modules.py add-module --id <id> --name "<name>"
 python scripts/program_modules.py set-status --id <id> --status <status>
 python scripts/program_modules.py list
+python scripts/program_modules.py reset --confirm
 ```
 
 ---
@@ -1218,8 +1219,8 @@ exercised through the standard CI workflow.
 
 ```text
 Validated:                   2026-08-07
-Routing evaluations:         72 / 72 PASS
-Unit tests:                  165 / 165 PASS
+Routing evaluations:         122 / 122 PASS
+Unit tests:                  183 / 183 PASS
 Runtime doctor:               0 failures
 Repository doctor:            0 failures, 0 warnings
 Security gate:                0 findings
@@ -1230,7 +1231,7 @@ Latest main validation run:   SUCCESS
 Kernel:                       795 / 1000 words
 Native skills:                35
 Capability strengths:         58
-Governed external resources:  61
+Governed external resources:  67
 Published case studies:        4
 ```
 

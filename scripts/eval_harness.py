@@ -135,6 +135,37 @@ def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str
     if forbidden_external:
         failures.append(f"forbidden external candidates selected {forbidden_external}")
 
+    # A licence gate is only worth having if it is asserted. Maps a candidate
+    # id to its expected adoption gate; null asserts the absence of one.
+    actual_adoption = {
+        item["id"]: item.get("adoption")
+        for item in route.get("external_candidates", [])
+    }
+    for candidate, expected_gate in expected.get("external_adoption", {}).items():
+        if candidate not in actual_adoption:
+            failures.append(f"adoption gate uncheckable, {candidate} not routed")
+        elif actual_adoption[candidate] != expected_gate:
+            failures.append(
+                f"{candidate} adoption gate is {actual_adoption[candidate]!r}, "
+                f"expected {expected_gate!r}"
+            )
+
+    # A displaced SUBSTITUTE member should be demoted to a fallback on the
+    # winner, not dropped. Maps a winning candidate to the fallbacks it must
+    # carry, so the chain is asserted rather than assumed.
+    actual_fallbacks = {
+        item["id"]: [f["id"] for f in item.get("fallbacks", [])]
+        for item in route.get("external_candidates", [])
+    }
+    for winner, expected_chain in expected.get("external_fallbacks", {}).items():
+        if winner not in actual_fallbacks:
+            failures.append(f"fallback chain uncheckable, {winner} not routed")
+        elif actual_fallbacks[winner] != list(expected_chain):
+            failures.append(
+                f"{winner} fallbacks are {actual_fallbacks[winner]}, "
+                f"expected {list(expected_chain)}"
+            )
+
     actual_strengths = {
         item["id"] for item in route.get("capability_strengths", [])
     }
@@ -169,6 +200,16 @@ def evaluate(case: dict[str, Any], suite_name: str, suite_path: str) -> dict[str
             f"skill context expected <= {maximum_skill_context} "
             f"got {actual_skill_context}"
         )
+
+    # parallel_assessment had no assertion path at all before this -- a
+    # deterministic router output with zero test coverage.
+    actual_parallel = route.get("parallel_assessment", {})
+    for key in ("requested", "decision"):
+        value = expected.get(f"parallel_{key}")
+        if value is not None and actual_parallel.get(key) != value:
+            failures.append(
+                f"parallel.{key} expected {value!r} got {actual_parallel.get(key)!r}"
+            )
 
     expected_design_authority = expected.get("design_authority")
     actual_design_authority = (

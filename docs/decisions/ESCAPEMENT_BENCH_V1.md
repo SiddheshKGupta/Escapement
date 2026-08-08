@@ -29,6 +29,22 @@ this suite: 5-10 paired cases, single model, single host, identical task/
 tool access/time budget, with the harness's own `pass@k` vs `pass^k`
 distinction applied to reliability, not just success rate.
 
+### Prior art for that design
+
+Graft (`nanonets-graft` in the capability registry) has already run this
+shape of experiment for a context layer rather than a governance layer,
+and it is worth reading before building ours. It reports a 162-run
+controlled efficiency comparison holding the agent, the file tools and
+the task fixed so that only the context differs, and separately reports
+SWE-bench Verified graded by the official harness rather than by its own
+scoring. Two things transfer regardless of whether its numbers hold up
+elsewhere: isolating a single variable while everything else stays
+identical, and outsourcing the grading to a harness the authors do not
+control. Both are the parts of claim 3 that are easy to get wrong in a
+self-authored benchmark. Its published figures are cited here as method,
+not as evidence about Escapement -- nothing in that comparison has been
+reproduced here.
+
 ## Suite: `evals/escapement-bench-v1/evals.json`
 
 50 cases, run via `python scripts/eval_harness.py run --suite escapement-bench-v1`.
@@ -148,10 +164,111 @@ suite built the same way:
   reversibility detector, which is itself worth knowing when reading
   `reversibility-*` results as evidence.
 
-## Result
+## Result (v1)
 
 50/50 passing on a clean run, after fixing the authoring bugs above and
 one real trigger gap. Re-run the full corpus (`python scripts/eval_harness.py
 run`) after any change to `capability_router.py`'s trigger/classification
 logic -- 72/72 across both suites confirms no regression to the existing
 22-case corpus from the `biometric` trigger addition.
+
+## Expansion to 100 cases
+
+The suite grew organically past 50 as later work added regression
+coverage for its own changes -- `overlap-resolution` gained the
+SUBSTITUTE-dedup and fallback-chain cases, and a new
+`licence-adoption-gating` category was added wholesale. That growth was
+reactive: each case existed because a specific change needed proof it
+worked. Reaching 100 needed the opposite motion -- auditing the router
+for surface area no case anywhere touched, independent of any pending
+change, and writing cases for what that audit found.
+
+Eight gaps surfaced this way, none padding an existing category:
+
+```text
+domain-question-coverage        4   -- the `domain` material question
+                                       (register CONSULTING/DUAL plus an
+                                       incomplete DOMAIN_CONTEXT.md) had
+                                       zero coverage; the suite tested
+                                       five of the six question ids and
+                                       never noticed the sixth was untested
+micro-tier-coverage              5  -- MICRO tier appeared in 1 of the
+                                       prior 61 cases by accident, never
+                                       as a deliberate target
+artifact-register-coverage       5  -- ARTIFACT register (writing/reporting
+                                       requests) appeared in 1 of 61
+motion-strength-coverage         5  -- MOTION_WORDS and the emil capability
+                                       strength/external-skill pairing had
+                                       no coverage at all
+browser-verification-coverage    5  -- the browser-verification SUBSTITUTE
+                                       group (playwright/cypress/stagehand/
+                                       agent-browser/puppeteer-mcp) was
+                                       never exercised, despite being a
+                                       second real instance of the
+                                       fallback-chain mechanism beyond
+                                       memory-and-knowledge
+minimalism-ponytail-coverage     5   -- engineering-behaviour is this
+                                       registry's only BASELINE_PLUS_
+                                       INTENSIFIER relation and had never
+                                       been tested as one -- whether
+                                       ponytail:full stacks with the
+                                       karpathy baseline rather than
+                                       replacing it was assumed, not shown
+agent-blueprint-coverage         5   -- AGENT_BLUEPRINT_WORDS and
+                                       agent-blueprint-discovery had no
+                                       coverage
+parallel-assessment-coverage     5   -- parallel_assessment() is a fully
+                                       deterministic route_prompt() output
+                                       with no assertion path in
+                                       eval_harness.py at all before this
+```
+
+`external_adoption` (finding #40) and `external_fallbacks` (finding #41)
+each got a second exercise here beyond the case that introduced them --
+`motion-05` shows the licence gate generalises to `gsap`, not just the
+AGPL entries it was built against; `browser-verify-01` shows the
+fallback chain generalises to a second SUBSTITUTE group, not just
+`memory-and-knowledge`.
+
+`parallel_assessment` needed a new harness field, following the same
+shape as every prior extension: `parallel_requested` / `parallel_decision`
+in `expected`, checked only when present.
+
+### Authoring bugs found this round
+
+Same two classes as v1, worth naming again because they recurred rather
+than being new kinds of mistake:
+
+- The unlisted-verb-classifies-INFO pattern hit two more prompts
+  (`browser-verify-03`'s "Automate this workflow..." and
+  `minimalism-05`'s "Research the smallest..." -- neither `automate` nor
+  `research` is in `MATERIAL_WORDS`). Same fix as v1: reword to include a
+  verb the list recognises without changing the case's intent.
+- A genuine authoring error, not a router quirk: `motion-01` originally
+  asserted the `emil:emil-design-eng` *capability strength* for a prompt
+  ("Add scroll-triggered animation...") that only matches `MOTION_WORDS`,
+  not `DESIGN_WORDS`. The strength requires both; the `emil-kowalski-skill`
+  *external candidate* requires only `MOTION_WORDS`. Conflating the two
+  fields produced a case that asserted something the router was never
+  going to do. `motion-02` ("Design gesture-based motion...") matches
+  both word lists and correctly asserts both the strength and the
+  external candidate -- kept as the positive case for the strength.
+
+Also documented, not fixed, per the same overfitting discipline as the
+`governance-risk-controls` and `authority`-guard findings in v1:
+`agent-blueprint-05` shows `trigger_score`'s complete-term-boundary
+matching treats "AI agents" (plural) as not matching the "AI agent"
+(singular) trigger, because the boundary guard requires a non-alphanumeric
+character after the match and the trailing `s` fails that. Same class of
+gap as the `users` guard's "technician" vs "operator" finding -- a
+narrow-vocabulary limitation, recorded as a negative control rather than
+patched.
+
+## Result (v2)
+
+100/100 on `escapement-bench-v1` after fixing the three authoring bugs
+above, 122/122 combined with `core-routing`. No changes to
+`capability_router.py`'s trigger or classification logic in this round --
+the two new fields (`parallel_requested`/`parallel_decision`) are
+additive assertions in `eval_harness.py`, not routing changes, so no
+regression risk to the existing 72 cases.

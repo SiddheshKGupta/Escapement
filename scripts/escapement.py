@@ -23,6 +23,7 @@ import hashlib
 import json
 import os
 import py_compile
+import re
 import shutil
 import subprocess
 import sys
@@ -747,6 +748,135 @@ def command_spec_tasks(args: argparse.Namespace) -> int:
     return 0
 
 
+def manifest_count_check(target: Path) -> tuple[int, list[str]]:
+    """Compare manifest.json's declared counts against counts computed from
+    the actual catalogue, eval and test files.
+
+    manifest.json is a hand-maintained snapshot, not read by any script
+    (confirmed by grep before this was written) -- nothing previously
+    verified it matched reality. It drifted twice in one session: a
+    routing-evaluation count missed by a shell heredoc encoding mismatch,
+    and a files count that fell behind after two documents landed without
+    a second manual increment. Both would have been caught immediately by
+    this check instead of surviving until the next person happened to grep
+    for stale numbers.
+    """
+    manifest_path = target / "manifest.json"
+    manifest = read_json(manifest_path)
+    if not isinstance(manifest, dict):
+        return 0, []
+
+    problems: list[str] = []
+
+    def parse_pass_fraction(value: Any) -> int | None:
+        if not isinstance(value, str):
+            return None
+        match = re.search(r"(\d+)\s*/\s*(\d+)", value)
+        if not match or match.group(1) != match.group(2):
+            return None
+        return int(match.group(1))
+
+    declared_counts = manifest.get("counts", {})
+    declared_validation = manifest.get("validation", {})
+
+    native_skills = read_json(target / "catalog/native-skills.json", {})
+    actual_native_skills = len(native_skills.get("skills", []))
+    if declared_counts.get("native_skills") != actual_native_skills:
+        problems.append(
+            f"manifest.json counts.native_skills={declared_counts.get('native_skills')} "
+            f"but catalog/native-skills.json has {actual_native_skills}"
+        )
+
+    strengths = read_json(target / "catalog/skill-strengths.json", {})
+    strengths_key = next((k for k, v in strengths.items() if isinstance(v, list)), None)
+    actual_strengths = len(strengths.get(strengths_key, [])) if strengths_key else 0
+    if declared_counts.get("capability_strengths") != actual_strengths:
+        problems.append(
+            f"manifest.json counts.capability_strengths="
+            f"{declared_counts.get('capability_strengths')} but "
+            f"catalog/skill-strengths.json has {actual_strengths}"
+        )
+
+    registry = read_json(target / "catalog/capability-registry.json", {})
+    actual_external = len(registry.get("resources", []))
+    if declared_counts.get("external_resources") != actual_external:
+        problems.append(
+            f"manifest.json counts.external_resources="
+            f"{declared_counts.get('external_resources')} but "
+            f"catalog/capability-registry.json has {actual_external} resources"
+        )
+
+    actual_evals = 0
+    for eval_path in sorted((target / "evals").rglob("evals.json")):
+        suite = read_json(eval_path, {})
+        actual_evals += len(suite.get("evals", []))
+    declared_evals = parse_pass_fraction(declared_validation.get("routing_evaluations"))
+    if declared_evals is not None and declared_evals != actual_evals:
+        problems.append(
+            f"manifest.json validation.routing_evaluations claims "
+            f"{declared_evals} but evals/**/evals.json total {actual_evals}"
+        )
+
+    tests_dir = target / "tests"
+    if tests_dir.exists():
+        loader = __import__("unittest").TestLoader()
+        suite = loader.discover(str(tests_dir), pattern="test_*.py", top_level_dir=str(target))
+        actual_tests = suite.countTestCases()
+        declared_tests = parse_pass_fraction(declared_validation.get("unit_tests"))
+        if declared_tests is not None and declared_tests != actual_tests:
+            problems.append(
+                f"manifest.json validation.unit_tests claims {declared_tests} "
+                f"but discovering tests/**/test_*.py finds {actual_tests}"
+            )
+
+    actual_files = None
+    git_dir = target / ".git"
+    if git_dir.exists():
+        result = subprocess.run(
+            ["git", "ls-files"], cwd=target, text=True, capture_output=True, check=False,
+        )
+        if result.returncode == 0:
+            actual_files = len([line for line in result.stdout.splitlines() if line.strip()])
+            declared_files = declared_counts.get("files")
+            if declared_files is not None and declared_files != actual_files:
+                problems.append(
+                    f"manifest.json counts.files={declared_files} but "
+                    f"'git ls-files' tracks {actual_files}"
+                )
+
+    # README.md restates every one of these numbers by hand in prose and
+    # badges, and drifted from manifest.json's own counts more than once in
+    # one session despite manual syncing each time. Each pattern's single
+    # capture group is the declared number; a pattern that no longer
+    # matches (wording changed) is skipped rather than failed, since that
+    # is a maintenance signal for this check, not a drift in the repo.
+    readme_path = target / "README.md"
+    if readme_path.exists():
+        readme = readme_path.read_text(encoding="utf-8", errors="replace")
+        readme_checks = [
+            (r"native%20skills-(\d+)-", "Native skills badge", actual_native_skills),
+            (r"Native skills:\s+(\d+)", "Native skills inventory", actual_native_skills),
+            (r"Capability strengths:\s+(\d+)", "Capability strengths inventory", actual_strengths),
+            (r"Governed external resources:\s+(\d+)", "External resources inventory", actual_external),
+            (r"unit%20tests-(\d+)%20passing-", "Unit tests badge", actual_tests if tests_dir.exists() else None),
+            (r"Unit tests:\s+(\d+)(?:\s*/\s*\d+\s*PASS)?", "Unit tests inventory", actual_tests if tests_dir.exists() else None),
+            (r"routing%20evals-(\d+)%20%2F%20\d+-", "Routing evals badge", actual_evals),
+            (r"Routing evaluations:\s+(\d+)(?:\s*/\s*\d+\s*PASS)?", "Routing evaluations inventory", actual_evals),
+            (r"Repository files:\s+(\d+)", "Repository files inventory", actual_files),
+        ]
+        for pattern, label, expected in readme_checks:
+            if expected is None:
+                continue
+            for found in re.finditer(pattern, readme):
+                declared = int(found.group(1))
+                if declared != expected:
+                    problems.append(
+                        f"README.md {label} says {declared} but actual is {expected}"
+                    )
+
+    return len(problems), problems
+
+
 def command_doctor(args: argparse.Namespace) -> int:
     target = Path(args.root).expanduser().resolve()
     failures = 0
@@ -854,6 +984,16 @@ def command_doctor(args: argparse.Namespace) -> int:
     elif target != SOURCE_ROOT:
         print(f"[WARN] {INSTALL_RECORD} missing")
         warnings += 1
+
+    if (target / "manifest.json").exists():
+        drift_count, drift_problems = manifest_count_check(target)
+        if drift_count:
+            print(f"[FAIL] manifest.json counts drifted from actual repository state: {drift_count}")
+            for problem in drift_problems:
+                print(f"  - {problem}")
+            failures += drift_count
+        else:
+            print("[PASS] manifest.json counts match actual repository state")
 
     print(f"\nFailures: {failures}")
     print(f"Warnings: {warnings}")
