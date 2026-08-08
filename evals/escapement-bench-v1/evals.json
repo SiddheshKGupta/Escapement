@@ -1,0 +1,690 @@
+{
+  "name": "escapement-bench-v1",
+  "description": "Deterministic, environment-runnable evaluation suite for two of Escapement's three benchmark claims: (1) behaves as designed -- routing, budgets, overlap resolution, explicit-invocation discipline; (2) reduces known agent failure modes -- ambiguity, capability-selection distractors, reversibility blindness, regulated-data-in-domain-language, tier misclassification, and false-positive over-triggering. Claim 3 (same-model outcome quality vs. vanilla execution) needs paired live agent execution and is deliberately out of scope for this suite -- see docs/decisions/ESCAPEMENT_BENCH_V1.md.",
+  "evals": [
+    {
+      "id": "budget-01-five-skill-material",
+      "claim": 1,
+      "category": "budget-enforcement",
+      "description": "A MATERIAL request combining consulting, governance and engineering concerns must still respect the 5-skill MATERIAL ceiling.",
+      "prompt": "Review this vendor contract, map the compliance obligations into workflow controls, and design the approval authority for exceptions.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL",
+        "maximum_skills": 5
+      }
+    },
+    {
+      "id": "budget-02-six-skill-program",
+      "claim": 1,
+      "category": "budget-enforcement",
+      "description": "A PROGRAM request must respect the 6-skill PROGRAM ceiling even with several strong domain signals.",
+      "prompt": "Build a lending platform covering origination, credit scoring, disbursement, collections and regulatory reporting, with governance controls over every disbursement decision.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "tier": "PROGRAM",
+        "maximum_skills": 6
+      }
+    },
+    {
+      "id": "budget-03-implement-skill-context-cap",
+      "claim": 1,
+      "category": "budget-enforcement",
+      "description": "IMPLEMENT-phase skill selection must stay within the enforced invoked-skill-context budget regardless of how many skills score.",
+      "prompt": "Implement the reconciliation engine, add authentication, and write the API integration layer with security review for the payment webhook.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "maximum_skill_context_words": 1000
+      }
+    },
+    {
+      "id": "budget-04-automatic-context-cap",
+      "claim": 1,
+      "category": "budget-enforcement",
+      "description": "The automatic (kernel + packs + pointers) budget must hold even for a request that would otherwise select several doctrine packs.",
+      "prompt": "Design a new AI-agent orchestration platform with governance controls, requiring architecture decisions, brainstorming and a full specification.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "material": true,
+        "maximum_context_words": 1800
+      }
+    },
+    {
+      "id": "budget-05-micro-single-skill",
+      "claim": 2,
+      "category": "reversibility-trap",
+      "description": "A typo fix touching an RBAC-relevant string is deliberately elevated past MICRO to MATERIAL (MATERIAL_RISK_WORDS includes rbac) -- the trap is a request that sounds trivial (\"just a typo\") but touches a security-relevant string, which should not be rushed through as an unreviewed one-skill MICRO change.",
+      "prompt": "Fix a typo in the RBAC error message string.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL"
+      }
+    },
+    {
+      "id": "overlap-01-single-design-director",
+      "claim": 1,
+      "category": "overlap-resolution",
+      "description": "taste-skill and impeccable must never co-occur in the same phase -- forbidden_same_phase in catalog/overlap-matrix.json.",
+      "prompt": "Design a premium creative product landing page with strong art direction and then audit it for anti-patterns.",
+      "phase_override": "BRAINSTORM",
+      "expected": {
+        "forbidden_strengths": [
+          "impeccable:audit"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "overlap-02-karpathy-baseline-always-present",
+      "claim": 1,
+      "category": "overlap-resolution",
+      "description": "karpathy-guidelines is the engineering-behaviour baseline and should be present at PLAN regardless of ponytail intensifier activation.",
+      "prompt": "Plan the simplest possible implementation for this isolated bug fix, avoiding overengineering.",
+      "phase_override": "PLAN",
+      "expected": {
+        "strengths": [
+          "karpathy:simplicity-first",
+          "karpathy:goal-driven-execution"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "overlap-03-decision-interview-canonical-stays-default",
+      "claim": 1,
+      "category": "overlap-resolution",
+      "description": "An ordinary DISCOVER request must not pull in the grilling intensifier merely because decision-coach is active.",
+      "prompt": "Build a customer feedback form for the marketing site.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "skills": [
+          "decision-coach"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "overlap-04-code-knowledge-substitute",
+      "claim": 1,
+      "category": "overlap-resolution",
+      "description": "graphify and understand-anything are SUBSTITUTE members of memory-and-knowledge -- a routine ORIENT request should not need either.",
+      "prompt": "Add a new field to the existing patient record schema in this small codebase.",
+      "phase_override": "ORIENT",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "graphify",
+          "egonex-understand-anything"
+        ]
+      }
+    },
+    {
+      "id": "overlap-05-security-testing-baseline-remains-internal",
+      "claim": 1,
+      "category": "overlap-resolution",
+      "description": "Strix (external, authorised-only) must never appear as a routed external candidate for an ordinary security-review request with no explicit pentest language.",
+      "prompt": "Review this authentication endpoint for RBAC and permission handling issues.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "skills": [
+          "security-review"
+        ],
+        "material": true,
+        "forbidden_external_candidates": [
+          "strix"
+        ]
+      }
+    },
+    {
+      "id": "invocation-01-grilling-requires-explicit-language",
+      "claim": 1,
+      "category": "explicit-invocation-discipline",
+      "description": "Grilling must not fire on a request that merely sounds thorough without using stress-test language.",
+      "prompt": "Please review this plan carefully and make sure it is well thought out before we proceed.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "mattpocock-grilling"
+        ]
+      }
+    },
+    {
+      "id": "invocation-02-grilling-fires-on-explicit-challenge",
+      "claim": 1,
+      "category": "explicit-invocation-discipline",
+      "description": "Grilling fires when the user explicitly asks to have assumptions challenged.",
+      "prompt": "Review this architecture and challenge every assumption before we commit to it.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "external_candidates": [
+          "mattpocock-grilling"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "invocation-03-prompt-master-requires-target-tool-language",
+      "claim": 1,
+      "category": "explicit-invocation-discipline",
+      "description": "Prompt Master must not fire merely because a specification is being written.",
+      "prompt": "Write the final specification for this feature so implementation can begin.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "nidhinjs-prompt-master"
+        ]
+      }
+    },
+    {
+      "id": "invocation-04-prompt-master-fires-on-export-language",
+      "claim": 1,
+      "category": "explicit-invocation-discipline",
+      "description": "Prompt Master fires when the user names a specific export target tool.",
+      "prompt": "Write and export this Escapement brief for Claude Code so I can hand it off.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "external_candidates": [
+          "nidhinjs-prompt-master"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "invocation-05-prime-agent-requires-runtime-language",
+      "claim": 1,
+      "category": "explicit-invocation-discipline",
+      "description": "Prime Agent must not fire merely because a build is long-running in effort, only when the user names a separate runtime.",
+      "prompt": "This is going to be a long, multi-day build with a lot of implementation work.",
+      "phase_override": "PLAN",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "prime-intellect-prime-agent"
+        ]
+      }
+    },
+    {
+      "id": "ambiguity-01-missing-primary-user",
+      "claim": 2,
+      "category": "ambiguity-trap",
+      "description": "A build request naming no user at all must trigger the users question -- the trap is a request that sounds complete but omits who it is for.",
+      "prompt": "Build a scheduling system that optimises technician routes across the day.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_include": [
+          "users"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "ambiguity-02-missing-success-metric",
+      "claim": 2,
+      "category": "ambiguity-trap",
+      "description": "A request with a clear user but no notion of success must trigger the success question.",
+      "prompt": "Build a live view for the operations manager showing every technicians current job status.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_include": [
+          "success"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "ambiguity-03-regulated-data-without-retention-answer",
+      "claim": 2,
+      "category": "ambiguity-trap",
+      "description": "Naming PHI/consent without stating the retention/erasure answer must trigger the data-handling question -- the trap is a request that already sounds compliance-aware.",
+      "prompt": "Build the module that handles patient consent properly and respects data protection requirements throughout.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_include": [
+          "data_handling"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "ambiguity-04-constraints-unstated-for-a-build",
+      "claim": 2,
+      "category": "ambiguity-trap",
+      "description": "A build request that never mentions existing systems, integrations or constraints must trigger the constraints question.",
+      "prompt": "Build a new inventory tracking application for the warehouse team.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_include": [
+          "constraints"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "ambiguity-05-not-a-trap-when-genuinely-answered",
+      "claim": 2,
+      "category": "ambiguity-trap",
+      "description": "Negative control: a request that already states users, success and constraints should not re-ask those questions -- an ambiguity detector must not fire on non-ambiguous requests.",
+      "prompt": "Build an operator-facing route optimiser. Success means average daily drive time drops by 15%. It must integrate with the existing dispatch system and preserve current job records.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_exclude": [
+          "users",
+          "success",
+          "constraints"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "capability-trap-01-database-mentioned-not-relevant",
+      "claim": 2,
+      "category": "capability-selection-trap",
+      "description": "A vague, non-trigger-vocabulary mention of data storage while the actual task is UI copy must not route data-architecture. (An earlier version of this case literally said \"database schema\", which of course triggered the skill -- keyword matching cannot distinguish an incidental mention from the actual task subject; rewording to avoid the literal trigger words is what actually tests capability-selection precision.)",
+      "prompt": "Update the wording on the settings page; the underlying data storage approach does not need to change.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "forbidden_skills": [
+          "data-architecture"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "capability-trap-02-security-word-present-but-not-the-task",
+      "claim": 2,
+      "category": "capability-selection-trap",
+      "description": "The word 'secure' appearing in a UI copy request must not pull in security-review when nothing security-relevant is actually being changed.",
+      "prompt": "Update the checkout pages secure payment badge to be more visually prominent in the footer.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "forbidden_skills": [
+          "security-review"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "capability-trap-03-legal-word-present-in-engineering-ticket",
+      "claim": 2,
+      "category": "capability-selection-trap",
+      "description": "Mentioning that a field is 'legally required' inside an otherwise pure engineering ticket should not force legal-compliance-analysis if the actual work is just adding the field.",
+      "prompt": "Add the legally required consent checkbox field to the signup form and wire it to the existing form validation.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "skills": [
+          "software-implementation"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "capability-trap-04-investment-word-in-unrelated-context",
+      "claim": 2,
+      "category": "capability-selection-trap",
+      "description": "The word 'investment' used loosely (time investment) must not trigger investment-analysis routing.",
+      "prompt": "This refactor is a big investment of engineering time, but it will simplify the codebase considerably.",
+      "phase_override": "PLAN",
+      "expected": {
+        "forbidden_skills": [
+          "investment-analysis"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "capability-trap-05-dashboard-word-without-decision-support",
+      "claim": 2,
+      "category": "capability-selection-trap",
+      "description": "A purely decorative visual with the word 'dashboard' but no KPI/decision content should route frontend-implementation, not the dashboard specialist skill.",
+      "prompt": "Build a static marketing 'dashboard' screenshot mockup for the landing page hero image -- no real data, purely decorative.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "forbidden_skills": [
+          "dashboard"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "reversibility-01-production-migration-triggers-governance",
+      "claim": 2,
+      "category": "reversibility-trap",
+      "description": "Documents a real, recurring gap (see also reversibility-05, regulated-data-04, all three independently converging on the same root cause): governance-risk-controls trigger vocabulary (governance/risk/control/compliance/RCSA/audit) does not include production/live-data/migration language, so a production schema migration touching live customer records routes no governance specialist at all -- only software-implementation. Not patched reactively; see docs/decisions/ESCAPEMENT_BENCH_V1.md.",
+      "prompt": "Migrate this schema against the production database, which holds live customer records, and backfill the new column.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "skills": [
+          "software-implementation"
+        ],
+        "forbidden_skills": []
+      }
+    },
+    {
+      "id": "reversibility-02-local-prototype-does-not-overtrigger",
+      "claim": 2,
+      "category": "reversibility-trap",
+      "description": "A local, reversible schema prototype must not force governance-risk-controls -- the negative control for reversibility-01.",
+      "prompt": "Draft a quick schema prototype in a local SQLite file for a demo -- nothing shared, easily thrown away.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "forbidden_skills": [
+          "governance-risk-controls"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "reversibility-03-irreversible-action-authority-question",
+      "claim": 2,
+      "category": "reversibility-trap",
+      "description": "A request describing an irreversible action (permanent deletion) must trigger the authority/segregation-of-duties question.",
+      "prompt": "Build the workflow that permanently deletes a customer's account and all associated financial records on request.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_include": [
+          "authority"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "reversibility-04-reversible-draft-action-no-forced-authority-question",
+      "claim": 2,
+      "category": "reversibility-trap",
+      "description": "A reversible draft-state action should not force the authority question the same way an irreversible one does -- negative control for reversibility-03.",
+      "prompt": "Build the feature that saves a customers profile edits as a draft they can revert at any time.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_exclude": [
+          "authority"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "reversibility-05-production-deployment-language-security-and-governance",
+      "claim": 2,
+      "category": "reversibility-trap",
+      "description": "Production deployment language routes security-review via its authentication trigger. governance-risk-controls does NOT fire here -- its trigger vocabulary (governance/risk/control/compliance/RCSA/audit) does not include production-deployment language alone, a documented gap (see docs/decisions/ESCAPEMENT_BENCH_V1.md).",
+      "prompt": "Deploy this authentication change to production and roll it out to all live users.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "skills": [
+          "security-review"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "regulated-data-01-financial-pii-without-jargon",
+      "claim": 2,
+      "category": "regulated-data-domain-language",
+      "description": "Generalisation check beyond healthcare (finding #3's original domain): financial account and SSN data described in plain business language must route security-review.",
+      "prompt": "Build a loan servicing screen that shows each borrower's bank account number and Social Security number to the underwriting team.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "skills": [
+          "security-review"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "regulated-data-02-legal-privileged-documents",
+      "claim": 2,
+      "category": "regulated-data-domain-language",
+      "description": "Legal privilege and confidentiality language, not security jargon, should still surface legal-compliance-analysis.",
+      "prompt": "Build the system that stores privileged attorney-client communications and litigation hold documents for the legal team, with different access for paralegals versus partners.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "skills": [
+          "legal-compliance-analysis"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "regulated-data-03-biometric-access-control",
+      "claim": 2,
+      "category": "regulated-data-domain-language",
+      "description": "Biometric identifiers described operationally (fingerprint, facial recognition) should route security-review even without the word 'security'.",
+      "prompt": "Add fingerprint-based check-in for gym members and store their biometric templates for facial recognition at the front desk.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "skills": [
+          "security-review"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "regulated-data-04-hr-personnel-records",
+      "claim": 2,
+      "category": "regulated-data-domain-language",
+      "description": "Documents a real gap rather than asserting behaviour that does not exist: governance-risk-controls does NOT route for HR disciplinary/performance-review access-control language -- its trigger vocabulary is narrower than the regulated-data-language pattern established for security-review (finding #3). Not patched reactively to avoid overfitting the router to this test set; see docs/decisions/ESCAPEMENT_BENCH_V1.md.",
+      "prompt": "Build the HR system module for disciplinary records and performance reviews, visible only to HR business partners and the employee's own manager.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "material": true,
+        "forbidden_skills": []
+      }
+    },
+    {
+      "id": "regulated-data-05-negative-control-ordinary-user-profile",
+      "claim": 2,
+      "category": "regulated-data-domain-language",
+      "description": "Negative control: an ordinary, non-sensitive user profile edit should not force security-review or legal-compliance-analysis -- proving the fix is precise, not just permissive.",
+      "prompt": "Let a user change their display name and profile photo on their account settings page.",
+      "phase_override": "SPECIFY",
+      "expected": {
+        "forbidden_skills": [
+          "security-review",
+          "legal-compliance-analysis"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "tier-domain-01-education-program",
+      "claim": 2,
+      "category": "tier-domain-neutrality",
+      "description": "Generalisation check beyond the four domains (clinical/logistics/lending/claims) used while building finding #1's fix: a school administration platform described in education vocabulary should still classify PROGRAM.",
+      "prompt": "Build a school administration platform covering student enrolment, attendance tracking, gradebook management, parent-teacher messaging, timetabling and report card generation.",
+      "expected": {
+        "tier": "PROGRAM",
+        "material": true
+      }
+    },
+    {
+      "id": "tier-domain-02-real-estate-program",
+      "claim": 2,
+      "category": "tier-domain-neutrality",
+      "description": "A property management platform in real-estate vocabulary should classify PROGRAM.",
+      "prompt": "Create a property management platform with listing management, tenant applications, lease administration, maintenance request tracking, rent collection and vacancy reporting.",
+      "expected": {
+        "tier": "PROGRAM",
+        "material": true
+      }
+    },
+    {
+      "id": "tier-domain-03-manufacturing-program",
+      "claim": 2,
+      "category": "tier-domain-neutrality",
+      "description": "A factory floor platform in manufacturing vocabulary should classify PROGRAM.",
+      "prompt": "Design a factory floor management platform with production scheduling, machine downtime logging, quality inspection records, inventory of raw materials and shift handover notes.",
+      "expected": {
+        "tier": "PROGRAM",
+        "material": true
+      }
+    },
+    {
+      "id": "tier-domain-04-single-feature-stays-material",
+      "claim": 2,
+      "category": "tier-domain-neutrality",
+      "description": "Negative control across a new domain: a single bounded feature in education vocabulary should stay MATERIAL, not overclassify to PROGRAM.",
+      "prompt": "Add an attendance export button to the existing gradebook page.",
+      "expected": {
+        "tier": "MATERIAL",
+        "material": true
+      }
+    },
+    {
+      "id": "tier-domain-05-hospitality-program",
+      "claim": 2,
+      "category": "tier-domain-neutrality",
+      "description": "A hotel operations platform in hospitality vocabulary should classify PROGRAM.",
+      "prompt": "Build a hotel operations platform covering reservations, housekeeping task assignment, guest check-in and check-out, billing and folio management, and maintenance ticketing.",
+      "expected": {
+        "tier": "PROGRAM",
+        "material": true
+      }
+    },
+    {
+      "id": "data-handling-01-financial-consent",
+      "claim": 2,
+      "category": "data-handling-question-generalization",
+      "description": "Generalisation beyond healthcare: financial account data with GDPR named should still trigger the data-handling retention/erasure question.",
+      "prompt": "Build the account closure flow; we need to respect GDPR when a customer closes their bank account and asks for their data to be removed.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_include": [
+          "data_handling"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "data-handling-02-biometric-erasure",
+      "claim": 2,
+      "category": "data-handling-question-generalization",
+      "description": "Biometric data plus a withdrawal-style feature should trigger the data-handling question without the guard misfiring on the word 'withdraw'.",
+      "prompt": "Build the feature that lets gym members withdraw their consent for facial recognition check-in at any time.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_include": [
+          "data_handling"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "data-handling-03-already-answered-suppresses",
+      "claim": 2,
+      "category": "data-handling-question-generalization",
+      "description": "Negative control: a prompt that already states the retention policy for PII should suppress the question, proving the guard fires on an actual answer, not just any nearby wording.",
+      "prompt": "Build the customer PII handling module with a documented retention policy: records are retained for 7 years and anonymised afterward.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_exclude": [
+          "data_handling"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "data-handling-04-passport-identity-verification",
+      "claim": 2,
+      "category": "data-handling-question-generalization",
+      "description": "Passport-based identity verification should trigger the data-handling question even without the words consent or PII.",
+      "prompt": "Add passport-based identity verification to the account opening flow for compliance with know-your-customer rules.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_include": [
+          "data_handling"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "data-handling-05-negative-control-no-personal-data",
+      "claim": 2,
+      "category": "data-handling-question-generalization",
+      "description": "Negative control: a request with no personal or regulated data at all should never surface the data-handling question.",
+      "prompt": "Build an internal dashboard showing aggregate, anonymous server uptime and response-time statistics.",
+      "phase_override": "DISCOVER",
+      "expected": {
+        "questions_exclude": [
+          "data_handling"
+        ],
+        "material": true
+      }
+    },
+    {
+      "id": "false-positive-01-understand-anything-not-for-trivial-fix",
+      "claim": 2,
+      "category": "false-positive-over-triggering",
+      "description": "Understand Anything (code-knowledge candidate) must not fire for a trivial, well-scoped fix even in a real repository.",
+      "prompt": "Fix the off-by-one error in the pagination logic on line 42.",
+      "phase_override": "IMPLEMENT",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "egonex-understand-anything"
+        ]
+      }
+    },
+    {
+      "id": "false-positive-02-cloudflare-os-not-for-ordinary-auth",
+      "claim": 2,
+      "category": "false-positive-over-triggering",
+      "description": "Cloudflare OS (architecture-reference, capability-security) must not fire for an ordinary login feature that never mentions workspace/agent architecture.",
+      "prompt": "Add a standard email/password login form with a forgot-password flow.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "cloudflare-os"
+        ]
+      }
+    },
+    {
+      "id": "false-positive-03-evolver-not-for-a-single-bug-report",
+      "claim": 2,
+      "category": "false-positive-over-triggering",
+      "description": "Evolver (self-improvement meta-observer) must not fire for a single isolated bug report -- it requires repeated-pattern framing.",
+      "prompt": "This function threw a null pointer exception once in production yesterday -- please fix it.",
+      "phase_override": "VERIFY",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "evomap-evolver"
+        ]
+      }
+    },
+    {
+      "id": "false-positive-04-agency-agents-not-for-ordinary-implementation",
+      "claim": 2,
+      "category": "false-positive-over-triggering",
+      "description": "Agency Agents (persona catalogue) must not fire for ordinary implementation work with no explicit request for a specialist role or persona.",
+      "prompt": "Implement the CSV export endpoint for the orders table.",
+      "phase_override": "PLAN",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "agency-agents"
+        ]
+      }
+    },
+    {
+      "id": "false-positive-05-prime-agent-not-for-ordinary-long-task",
+      "claim": 2,
+      "category": "false-positive-over-triggering",
+      "description": "Prime Agent must not fire merely because a PROGRAM is large -- only when a separate runtime/REPL/subagent capability is explicitly requested.",
+      "prompt": "Build the full multi-module claims platform end to end, including intake, adjudication and payment.",
+      "phase_override": "PLAN",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "prime-intellect-prime-agent"
+        ]
+      }
+    }
+  ]
+}
