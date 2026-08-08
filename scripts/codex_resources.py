@@ -9,7 +9,9 @@ transport.
 from __future__ import annotations
 
 import argparse
+from collections import deque
 import json
+import math
 import os
 import queue
 import subprocess
@@ -43,17 +45,32 @@ def find_root(start: Path | None = None) -> Path:
     return current
 
 
+def _is_finite_number(value: Any) -> bool:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return False
+    try:
+        return math.isfinite(value)
+    except (OverflowError, ValueError):
+        return False
+
+
 def _window(limit_id: str, bucket: str, value: dict[str, Any]) -> dict[str, Any] | None:
     duration = value.get("windowDurationMins")
     used = value.get("usedPercent")
-    if not isinstance(duration, (int, float)) or not isinstance(used, (int, float)):
+    resets_at = value.get("resetsAt")
+    if (
+        not _is_finite_number(duration)
+        or (isinstance(duration, float) and not duration.is_integer())
+        or not _is_finite_number(used)
+        or (resets_at is not None and not _is_finite_number(resets_at))
+    ):
         return None
     return {
         "limit_id": limit_id,
         "bucket": bucket,
         "used_percent": float(used),
         "window_duration_mins": int(duration),
-        "resets_at": value.get("resetsAt"),
+        "resets_at": resets_at,
     }
 
 
@@ -102,16 +119,54 @@ def normalize_resource_snapshot(
     }
 
 
+def _validated_window(value: Any) -> dict[str, Any] | None:
+    if not isinstance(value, dict):
+        return None
+    limit_id = value.get("limit_id")
+    bucket = value.get("bucket")
+    used_percent = value.get("used_percent")
+    duration = value.get("window_duration_mins")
+    resets_at = value.get("resets_at")
+    if not isinstance(limit_id, str) or not limit_id:
+        return None
+    if bucket not in {"primary", "secondary"}:
+        return None
+    if not _is_finite_number(used_percent):
+        return None
+    if (
+        isinstance(duration, bool)
+        or not isinstance(duration, int)
+        or not _is_finite_number(duration)
+    ):
+        return None
+    if resets_at is not None and not _is_finite_number(resets_at):
+        return None
+    return value
+
+
+def _validated_five_hour_windows(state: dict[str, Any] | None) -> list[dict[str, Any]]:
+    if not isinstance(state, dict):
+        return []
+    raw = state.get("five_hour_windows")
+    if not isinstance(raw, list):
+        raw = state.get("windows", [])
+    if not isinstance(raw, list):
+        return []
+    validated = []
+    for value in raw:
+        window = _validated_window(value)
+        if window and window["window_duration_mins"] == FIVE_HOUR_WINDOW_MINS:
+            validated.append(window)
+    return validated
+
+
 def assess_resource_policy(
     state: dict[str, Any] | None,
     *,
     now_epoch: float | None = None,
 ) -> dict[str, Any]:
     now_value = time.time() if now_epoch is None else now_epoch
-    windows = state.get("windows", []) if isinstance(state, dict) else []
-    five_hour = state.get("five_hour_windows", []) if isinstance(state, dict) else []
-    if five_hour:
-        windows = five_hour
+    windows = _validated_five_hour_windows(state)
     if not windows:
         return {
             "mode": "UNOBSERVED",
@@ -141,11 +196,11 @@ def assess_resource_policy(
     governing = max(active, key=lambda item: float(item.get("used_percent", 0)))
     used = float(governing.get("used_percent", 0))
     if used >= EXHAUSTED_AT_PERCENT:
-        mode, action, blocked = "EXHAUSTED", "block-new-turn", True
+        mode, action, blocked = "EXHAUSTED", "warn-user-100-percent", False
     elif used >= CONVERGE_AT_PERCENT:
-        mode, action, blocked = "CONVERGE", "converge-and-checkpoint", False
+        mode, action, blocked = "CONVERGE", "warn-user-90-percent", False
     elif used >= CONSERVE_AT_PERCENT:
-        mode, action, blocked = "CONSERVE", "reduce-breadth", False
+        mode, action, blocked = "CONSERVE", "warn-user-75-percent", False
     else:
         mode, action, blocked = "NORMAL", "normal-execution", False
     return {
@@ -163,54 +218,7 @@ def assess_resource_policy(
 
 
 def apply_resource_policy(route: dict[str, Any], policy: dict[str, Any]) -> dict[str, Any]:
-    mode = policy.get("mode")
-    limits = {
-        "CONSERVE": (3, 2, "resource-window-conservation"),
-        "CONVERGE": (2, 1, "resource-window-convergence"),
-        "EXHAUSTED": (1, 1, "resource-window-exhausted"),
-    }
     route["resource_policy"] = policy
-    if mode not in limits:
-        return route
-
-    maximum_skills, maximum_packs, reason = limits[mode]
-    removed_skills = route.get("native_skills", [])[maximum_skills:]
-    removed_packs = route.get("doctrine_packs", [])[maximum_packs:]
-    route["native_skills"] = route.get("native_skills", [])[:maximum_skills]
-    route["doctrine_packs"] = route.get("doctrine_packs", [])[:maximum_packs]
-    route.setdefault("rejected", []).extend(
-        [{**item, "rejected_because": reason} for item in removed_skills + removed_packs]
-    )
-
-    parallel = route.setdefault("parallel_assessment", {})
-    parallel["decision"] = "resource-constrained"
-    parallel["potentially_useful"] = False
-    parallel["preferred_adapters"] = []
-
-    readiness = route.get("capability_readiness")
-    if isinstance(readiness, dict):
-        readiness["active_native_skills"] = [
-            item["id"] for item in route["native_skills"]
-        ]
-
-    cost = route.get("context_cost")
-    if isinstance(cost, dict):
-        selected_skills = {item["id"] for item in route["native_skills"]}
-        selected_packs = {item["id"] for item in route["doctrine_packs"]}
-        cost["skills"] = {
-            key: value for key, value in cost.get("skills", {}).items()
-            if key in selected_skills
-        }
-        cost["skill_pointers"] = {
-            key: value for key, value in cost.get("skill_pointers", {}).items()
-            if key in selected_skills
-        }
-        cost["packs"] = {
-            key: value for key, value in cost.get("packs", {}).items()
-            if key in selected_packs
-        }
-        cost["invoked_skill_total"] = sum(cost["skills"].values())
-        cost["combined_total"] = cost.get("total", 0) + cost["invoked_skill_total"]
     return route
 
 
@@ -224,14 +232,43 @@ def write_resource_state(path: Path, state: dict[str, Any]) -> None:
     temporary.replace(path)
 
 
+def _reject_json_constant(token: str) -> None:
+    raise ValueError(f"Invalid JSON numeric constant: {token}")
+
+
+def _validated_resource_state(value: Any) -> dict[str, Any] | None:
+    if not isinstance(value, dict):
+        return None
+    if value.get("schema_version") != "1.0":
+        return None
+    if value.get("source") not in {"LIVE_HOST_DATA", "FIXTURE", "MOCK"}:
+        return None
+    if not isinstance(value.get("observed_at"), str):
+        return None
+    if not isinstance(value.get("rate_limits"), dict):
+        return None
+    if not isinstance(value.get("usage"), dict):
+        return None
+    for key in ("windows", "five_hour_windows"):
+        raw = value.get(key)
+        if not isinstance(raw, list):
+            return None
+        if any(_validated_window(item) is None for item in raw):
+            return None
+    return value
+
+
 def load_resource_state(path: Path) -> dict[str, Any] | None:
     if not path.exists():
         return None
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+        value = json.loads(
+            path.read_text(encoding="utf-8"),
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, ValueError):
         return None
-    return value if isinstance(value, dict) else None
+    return _validated_resource_state(value)
 
 
 def _reader(stream: Any, messages: queue.Queue[Any]) -> None:
@@ -245,6 +282,39 @@ def _reader(stream: Any, messages: queue.Queue[Any]) -> None:
                 messages.put(AppServerError(f"Invalid App Server JSON: {exc}"))
     finally:
         messages.put(EOFError("Codex App Server closed its output."))
+        try:
+            stream.close()
+        except OSError:
+            pass
+
+
+def _drain_stderr(
+    stream: Any,
+    chunks: deque[str],
+    lock: threading.Lock | None = None,
+) -> None:
+    try:
+        while True:
+            try:
+                raw = os.read(stream.fileno(), 4096)
+            except OSError:
+                return
+            if not raw:
+                return
+            chunk = raw.decode(
+                getattr(stream, "encoding", None) or "utf-8",
+                errors=getattr(stream, "errors", None) or "replace",
+            )
+            if lock is None:
+                chunks.append(chunk)
+            else:
+                with lock:
+                    chunks.append(chunk)
+    finally:
+        try:
+            stream.close()
+        except OSError:
+            pass
 
 
 def _wait_for_response(
@@ -300,7 +370,7 @@ def query_resource_state(
     except OSError as exc:
         raise AppServerError(f"Unable to start Codex App Server: {exc}") from exc
 
-    if process.stdin is None or process.stdout is None:
+    if process.stdin is None or process.stdout is None or process.stderr is None:
         process.kill()
         raise AppServerError("Codex App Server stdio was not available.")
     messages: queue.Queue[Any] = queue.Queue()
@@ -311,11 +381,20 @@ def query_resource_state(
         daemon=True,
     )
     thread.start()
+    stderr_chunks: deque[str] = deque(maxlen=16)
+    stderr_lock = threading.Lock()
+    stderr_thread = threading.Thread(
+        target=_drain_stderr,
+        args=(process.stderr, stderr_chunks, stderr_lock),
+        daemon=True,
+    )
+    stderr_thread.start()
 
     def send(message: dict[str, Any]) -> None:
         process.stdin.write(json.dumps(message, ensure_ascii=False) + "\n")
         process.stdin.flush()
 
+    app_server_error: AppServerError | None = None
     try:
         send({
             "method": "initialize",
@@ -345,23 +424,39 @@ def query_resource_state(
             usage,
             source=source,
         )
+    except AppServerError as exc:
+        app_server_error = exc
     finally:
         try:
             process.stdin.close()
         except OSError:
             pass
         try:
-            process.wait(timeout=2)
+            process.wait(timeout=0.25)
         except subprocess.TimeoutExpired:
             process.terminate()
             try:
-                process.wait(timeout=2)
+                process.wait(timeout=1)
             except subprocess.TimeoutExpired:
                 process.kill()
-        if process.stdout:
-            process.stdout.close()
-        if process.stderr:
-            process.stderr.close()
+                try:
+                    process.wait(timeout=1)
+                except subprocess.TimeoutExpired:
+                    pass
+        stderr_thread.join(timeout=0.5)
+
+    assert app_server_error is not None
+    with stderr_lock:
+        stderr_tail = "".join(stderr_chunks)[-4096:]
+    if stderr_tail:
+        sanitized_tail = "".join(
+            character if character.isprintable() else " "
+            for character in stderr_tail
+        )
+        raise AppServerError(
+            f"{app_server_error}\nApp Server stderr tail: {sanitized_tail}"
+        ) from app_server_error
+    raise app_server_error
 
 
 def build_parser() -> argparse.ArgumentParser:
