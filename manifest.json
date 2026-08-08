@@ -5,7 +5,7 @@
   "release": "Capability Strength Orchestration \u2014 Real Project Validated",
   "validated_on": "2026-08-07",
   "validation": {
-    "routing_evaluations": "PASS \u2014 83/83",
+    "routing_evaluations": "PASS \u2014 122/122",
     "unit_tests": "PASS \u2014 167/167",
     "runtime_doctor": "PASS \u2014 0 failures",
     "repository_doctor": "PASS \u2014 0 failures, 0 warnings",

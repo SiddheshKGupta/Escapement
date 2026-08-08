@@ -14,7 +14,7 @@ verification, truthful closure, and measurement of the harness itself.
 [![Kernel](https://img.shields.io/badge/kernel-795%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
 [![Unit tests](https://img.shields.io/badge/unit%20tests-167%20passing-2F855A?style=flat-square)](manifest.json)
-[![Routing evals](https://img.shields.io/badge/routing%20evals-83%20%2F%2083-2F855A?style=flat-square)](evals/)
+[![Routing evals](https://img.shields.io/badge/routing%20evals-122%20%2F%20122-2F855A?style=flat-square)](evals/)
 [![Case studies](https://img.shields.io/badge/case%20studies-4-2F855A?style=flat-square)](#evidence-from-real-use)
 [![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
 
@@ -107,7 +107,7 @@ Capability families:        10
 Overlap groups:             14
 Published case studies:      4
 Unit tests:                 167
-Routing evaluations:        83
+Routing evaluations:        122
 ```
 
 Escapement deliberately uses **more capabilities across the lifecycle, not more
@@ -1196,7 +1196,7 @@ exercised through the standard CI workflow.
 
 ```text
 Validated:                   2026-08-07
-Routing evaluations:         83 / 83 PASS
+Routing evaluations:         122 / 122 PASS
 Unit tests:                  167 / 167 PASS
 Runtime doctor:               0 failures
 Repository doctor:            0 failures, 0 warnings
