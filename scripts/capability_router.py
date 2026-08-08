@@ -942,6 +942,11 @@ def select_external(prompt: str, phase: str, research: dict[str, Any], maximum: 
                 "status": item.get("status"),
                 "activation": item.get("activation"),
                 "overlap_group": item.get("overlap_group"),
+                # The kernel already says to ask before licence-sensitive
+                # reuse, but nothing said which resources are sensitive.
+                # Absent means a verified permissive licence.
+                "adoption": item.get("adoption"),
+                "licence": item.get("license"),
                 "score": score,
                 "matched": matched,
             })
@@ -1271,10 +1276,16 @@ def build_context_pack(prompt: str, route: dict[str, Any]) -> str:
     sections.extend(["", "## External Candidates", ""])
     if not route["external_candidates"]:
         sections.append("None active.")
+    gate_labels = {
+        "approval-required": "ASK BEFORE ADOPTING",
+        "verify-licence-first": "VERIFY LICENCE FIRST",
+    }
     for item in route["external_candidates"]:
+        gate = gate_labels.get(item.get("adoption"))
         sections.append(
             f"- `{item['id']}` — {item['name']} — {item['activation']} — "
             f"{item.get('source') or 'source unresolved'}"
+            + (f" — **{gate}** ({item.get('licence') or 'licence unknown'})" if gate else "")
         )
     sections.append(
         "Candidates are not active until overlap, licence, security, installation "

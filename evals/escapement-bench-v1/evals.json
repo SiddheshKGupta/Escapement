@@ -747,6 +747,53 @@
           "nanonets-graft"
         ]
       }
+    },
+    {
+      "id": "licence-01-copyleft-requires-approval",
+      "claim": 1,
+      "category": "licence-adoption-gating",
+      "description": "AGPL resources stay discoverable and routable, but carry an explicit approval gate so the agent must ask before making them part of the project rather than treating a routed candidate as an approved one.",
+      "prompt": "Design privacy analytics with a simple dashboard and no cookies for self-hosting.",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "plausible-analytics",
+          "appflowy"
+        ],
+        "external_adoption": {
+          "plausible-analytics": "approval-required",
+          "appflowy": "approval-required"
+        }
+      }
+    },
+    {
+      "id": "licence-02-unknown-licence-verify-first",
+      "claim": 1,
+      "category": "licence-adoption-gating",
+      "description": "An unverified licence is a different problem from a restrictive one: the remedy is verification, not permission. last30days must carry verify-licence-first while verified-permissive siblings routed in the same turn carry no gate at all.",
+      "prompt": "Find current documentation for this library and recent community discussion from the last month.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "external_adoption": {
+          "last30days": "verify-licence-first",
+          "context7": null,
+          "agent-reach": null
+        }
+      }
+    },
+    {
+      "id": "licence-03-verified-permissive-ungated",
+      "claim": 1,
+      "category": "licence-adoption-gating",
+      "description": "Negative control. A verified MIT resource must not acquire a gate, otherwise the gating becomes noise the agent learns to ignore.",
+      "prompt": "Add a persistent context layer so the agent stops burning token cost re-reading this large repository.",
+      "expected": {
+        "material": true,
+        "external_adoption": {
+          "nanonets-graft": null
+        }
+      }
     }
   ]
 }
