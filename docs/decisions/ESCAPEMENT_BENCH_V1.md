@@ -29,6 +29,22 @@ this suite: 5-10 paired cases, single model, single host, identical task/
 tool access/time budget, with the harness's own `pass@k` vs `pass^k`
 distinction applied to reliability, not just success rate.
 
+### Prior art for that design
+
+Graft (`nanonets-graft` in the capability registry) has already run this
+shape of experiment for a context layer rather than a governance layer,
+and it is worth reading before building ours. It reports a 162-run
+controlled efficiency comparison holding the agent, the file tools and
+the task fixed so that only the context differs, and separately reports
+SWE-bench Verified graded by the official harness rather than by its own
+scoring. Two things transfer regardless of whether its numbers hold up
+elsewhere: isolating a single variable while everything else stays
+identical, and outsourcing the grading to a harness the authors do not
+control. Both are the parts of claim 3 that are easy to get wrong in a
+self-authored benchmark. Its published figures are cited here as method,
+not as evidence about Escapement -- nothing in that comparison has been
+reproduced here.
+
 ## Suite: `evals/escapement-bench-v1/evals.json`
 
 50 cases, run via `python scripts/eval_harness.py run --suite escapement-bench-v1`.

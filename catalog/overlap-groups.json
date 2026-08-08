@@ -111,10 +111,11 @@
         "appflowy",
         "helixdb",
         "graphify",
-        "egonex-understand-anything"
+        "egonex-understand-anything",
+        "nanonets-graft"
       ],
       "relation": "SUBSTITUTE",
-      "rule": "File state is default. Claude Mem, AppFlowy or HelixDB may become the primary external memory substrate only after a demonstrated need. Graphify or Understand Anything may complement file state for code relationships -- choose one code-knowledge/graph system per repository and prefer ordinary repository inspection for small projects."
+      "rule": "File state is default. Claude Mem, AppFlowy or HelixDB may become the primary external memory substrate only after a demonstrated need. Graphify, Understand Anything or Graft may complement file state for code relationships -- choose one code-knowledge/graph system per repository and prefer ordinary repository inspection for small projects."
     },
     {
       "id": "decision-interview",

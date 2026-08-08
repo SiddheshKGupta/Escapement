@@ -1593,6 +1593,32 @@
       "use_when": "A task concerns agent workspace design, capability-based security, sandboxed AI-built apps, human approval of side-effecting actions, or narrow resource introduction to agents.",
       "do_not": "Do not present it as a drop-in skill, add Cloudflare Workers dependencies to Escapement core, copy its full application architecture, or imply Escapement currently provides Cloudflare OS-style sandboxing or that Gatekeepers have been integrated rather than only referenced.",
       "notes": "Open-sourced 2026-08-05. Capability-based Gatekeeper Worker mediation where credentials never reach the agent or agent-generated code. The code is Apache-2.0, but production runtime depends on Cloudflare Workers -- open source here does not mean portable."
+    },
+    {
+      "id": "nanonets-graft",
+      "name": "Graft",
+      "kind": "code-context-layer-and-cli",
+      "source": "https://github.com/nanonets/graft",
+      "publisher": "Nanonets",
+      "license": "MIT",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "code-knowledge",
+      "use_modes": [
+        "reference",
+        "install"
+      ],
+      "triggers": [
+        "context layer",
+        "codebase graph",
+        "token cost",
+        "agent efficiency",
+        "retrieval context"
+      ],
+      "use_when": "A repository is large enough that agent context is expensive or imprecise, and a persistent code graph would cut tool calls and tokens.",
+      "do_not": "Do not repeat its published benchmark numbers as though they were reproduced here, and do not run it alongside Graphify or Understand Anything -- memory-and-knowledge is a SUBSTITUTE group.",
+      "notes": "Publishes a 162-run controlled efficiency benchmark and SWE-bench Verified results graded by the official harness. That paired vanilla-vs-augmented design is a reference implementation of the claim 3 method deferred in docs/decisions/ESCAPEMENT_BENCH_V1.md. No telemetry."
     }
   ],
   "agents": [

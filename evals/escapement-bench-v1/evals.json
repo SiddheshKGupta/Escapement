@@ -699,7 +699,8 @@
           "egonex-understand-anything"
         ],
         "forbidden_external_candidates": [
-          "helixdb"
+          "helixdb",
+          "nanonets-graft"
         ]
       }
     },
@@ -717,6 +718,33 @@
           "agent-reach",
           "context7",
           "last30days"
+        ]
+      }
+    },
+    {
+      "id": "graft-01-context-layer-routes",
+      "claim": 1,
+      "category": "explicit-invocation-discipline",
+      "description": "Graft surfaces on its own trigger language: a large repository where agent context is expensive.",
+      "prompt": "Add a persistent context layer so the agent stops burning token cost re-reading this large repository.",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL",
+        "external_candidates": [
+          "nanonets-graft"
+        ]
+      }
+    },
+    {
+      "id": "graft-02-not-for-ordinary-fix",
+      "claim": 2,
+      "category": "false-positive-over-triggering",
+      "description": "A newly catalogued external resource must stay silent on ordinary unrelated work. Guards the sixth external-candidate addition against the over-triggering this category was built for.",
+      "prompt": "Fix the off-by-one error in the pagination helper.",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "nanonets-graft"
         ]
       }
     }
