@@ -275,7 +275,7 @@
       "license_status": "verified",
       "status": "catalogued",
       "activation": "on-demand",
-      "overlap_group": "session-memory",
+      "overlap_group": "memory-and-knowledge",
       "use_modes": [
         "reference",
         "integrate-separately"
@@ -329,7 +329,7 @@
       "license_status": "verified",
       "status": "catalogued",
       "activation": "on-demand",
-      "overlap_group": "harness-methodology",
+      "overlap_group": "delivery-methodology",
       "use_modes": [
         "reference",
         "adapt",
@@ -464,7 +464,7 @@
       "license_status": "verified",
       "status": "catalogued",
       "activation": "on-demand",
-      "overlap_group": "session-memory",
+      "overlap_group": "memory-and-knowledge",
       "use_modes": [
         "integrate",
         "reference",
@@ -518,7 +518,7 @@
       "license_status": "verified",
       "status": "catalogued",
       "activation": "on-demand",
-      "overlap_group": "browser-automation",
+      "overlap_group": "browser-verification",
       "use_modes": [
         "integrate",
         "reference"
@@ -544,7 +544,7 @@
       "license_status": "verified-from-readme",
       "status": "catalogued",
       "activation": "on-demand",
-      "overlap_group": "harness-methodology",
+      "overlap_group": "delivery-methodology",
       "use_modes": [
         "reference",
         "integrate",
@@ -622,7 +622,7 @@
       "license_status": "verified-from-readme",
       "status": "catalogued",
       "activation": "on-demand",
-      "overlap_group": "harness-methodology",
+      "overlap_group": "delivery-methodology",
       "use_modes": [
         "reference",
         "integrate-selectively"
@@ -727,7 +727,7 @@
       "license_status": "verified",
       "status": "optional",
       "activation": "choose-one-design-director",
-      "overlap_group": "design-director",
+      "overlap_group": "design-authority",
       "use_modes": [
         "install",
         "reference"
@@ -754,7 +754,7 @@
       "license_status": "verified",
       "status": "optional",
       "activation": "choose-one-design-director",
-      "overlap_group": "design-director",
+      "overlap_group": "component-sources",
       "use_modes": [
         "integrate",
         "install",
@@ -805,7 +805,7 @@
       "license_status": "verified",
       "status": "optional",
       "activation": "choose-one-design-director",
-      "overlap_group": "design-director",
+      "overlap_group": "design-authority",
       "use_modes": [
         "install",
         "integrate",
@@ -831,7 +831,7 @@
       "license_status": "verified",
       "status": "optional",
       "activation": "choose-one-external-methodology",
-      "overlap_group": "harness-methodology",
+      "overlap_group": "delivery-methodology",
       "use_modes": [
         "install",
         "reference"
@@ -856,7 +856,7 @@
       "license_status": "verified-with-obligations",
       "status": "conditional",
       "activation": "choose-one-session-memory",
-      "overlap_group": "session-memory",
+      "overlap_group": "memory-and-knowledge",
       "use_modes": [
         "integrate",
         "reference"
@@ -881,7 +881,7 @@
       "license_status": "verified",
       "status": "conditional",
       "activation": "on-demand",
-      "overlap_group": "code-knowledge",
+      "overlap_group": "memory-and-knowledge",
       "use_modes": [
         "install",
         "integrate",
@@ -1054,7 +1054,7 @@
       "license_status": "must-verify",
       "status": "optional",
       "activation": "on-demand",
-      "overlap_group": "engineering-minimalism",
+      "overlap_group": "engineering-behaviour",
       "use_modes": [
         "install",
         "reference"
@@ -1146,7 +1146,7 @@
       "license_status": "must-verify",
       "status": "optional",
       "activation": "on-demand",
-      "overlap_group": "component-source",
+      "overlap_group": "component-sources",
       "use_modes": [
         "integrate",
         "reference"
@@ -1170,7 +1170,7 @@
       "license_status": "verified",
       "status": "optional",
       "activation": "on-demand",
-      "overlap_group": "component-source",
+      "overlap_group": "component-sources",
       "use_modes": [
         "integrate",
         "reference"
@@ -1242,7 +1242,7 @@
       "license_status": "verified",
       "status": "preferred-when-existing",
       "activation": "choose-one-browser-driver",
-      "overlap_group": "browser-automation",
+      "overlap_group": "browser-verification",
       "use_modes": [
         "integrate",
         "reference"
@@ -1434,7 +1434,7 @@
       "license_status": "verified",
       "status": "conditional",
       "activation": "integrate-separately-or-adapter",
-      "overlap_group": "harness-methodology",
+      "overlap_group": "delivery-methodology",
       "use_modes": [
         "reference",
         "integrate-separately",
@@ -1462,7 +1462,7 @@
       "license_status": "verified",
       "status": "optional",
       "activation": "on-demand-read-only-analysis",
-      "overlap_group": "code-knowledge",
+      "overlap_group": "memory-and-knowledge",
       "use_modes": [
         "install",
         "integrate",
@@ -1627,7 +1627,7 @@
       "license_status": "verified",
       "status": "optional",
       "activation": "on-demand",
-      "overlap_group": "code-knowledge",
+      "overlap_group": "memory-and-knowledge",
       "use_modes": [
         "reference",
         "install"
@@ -1678,7 +1678,7 @@
       "license_status": "verified",
       "status": "optional",
       "activation": "on-demand",
-      "overlap_group": "session-memory",
+      "overlap_group": "memory-and-knowledge",
       "use_modes": [
         "reference",
         "integrate-separately"
