@@ -123,6 +123,13 @@ class CodexResourceStateTest(unittest.TestCase):
 
             self.assertIsNone(load_resource_state(path))
 
+    def test_load_rejects_non_utf8_persisted_state(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "state.json"
+            path.write_bytes(b"\xff\xfe\x00")
+
+            self.assertIsNone(load_resource_state(path))
+
     def test_warning_policy_only_attaches_resource_policy(self):
         baseline = route_prompt(
             "Build a four-module claims-management platform containing intake, "
