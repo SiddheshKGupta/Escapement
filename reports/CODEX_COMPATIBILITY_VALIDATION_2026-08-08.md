@@ -65,3 +65,114 @@ python scripts/escapement.py codex-resources status
 ```
 
 These commands expose the last supported resource observation and its policy decision without conflating token volume with the five-hour rate-limit window.
+
+## Approved Codex Performance Design
+
+Status: approved in principle on 2026-08-08; implementation remains gated on review of this persisted specification.
+
+### Outcome
+
+Make Escapement feel native, predictable, and fast inside Codex without changing the behavior of the shared Escapement engine or any Claude/Gemini integration. The Codex adapter may remove redundant work and irrelevant ceremony, but it may not weaken tiering, risk escalation, lifecycle state, verification, evidence, or resource governance.
+
+### Scope and protected files
+
+Implementation is restricted to these existing Codex-specific files:
+
+- `.codex/hooks.json`
+- `scripts/codex_resources.py`
+- `tests/v6_3/test_codex_resources.py`
+- `reports/CODEX_COMPATIBILITY_VALIDATION_2026-08-08.md`
+
+The following shared or other-host files must remain byte-for-byte unchanged:
+
+- `AGENTS.md`, `README.md`, `manifest.json`, `feature_list.json`, and `SESSION_HANDOFF.md`
+- `scripts/capability_router.py`, `scripts/agent_runtime.py`, and `scripts/escapement.py`
+- `CLAUDE.md` and `.claude/**`
+- `GEMINI.md` and Gemini configuration
+
+No new tracked file or counted unit-test method will be introduced, avoiding manifest and inventory drift.
+
+### Architecture and data flow
+
+```text
+Codex project hook
+  -> existing Codex adapter (`scripts/codex_resources.py`)
+     -> install process-local read caches
+     -> call the unchanged shared router/runtime
+     -> apply bounded Codex normalization when eligible
+     -> emit a compact Codex context pack
+     -> persist the existing runtime/resource formats
+```
+
+The adapter remains a thin host boundary. It must not become a second lifecycle engine or a fork of Escapement policy.
+
+### Fast-path eligibility
+
+The fast path is eligible only when the prompt clearly concerns local repository engineering, runtime performance, or a local deterministic benchmark. It is ineligible when the prompt needs current external information or contains legal, regulatory, medical, financial, credential, privacy, biometric, security-sensitive, production-deployment, or other material-risk signals.
+
+For an eligible prompt, the adapter may:
+
+- cache immutable catalog/profile reads for the lifetime of the hook process;
+- suppress external domain research caused only by an incomplete `DOMAIN_CONTEXT.md` or the generic word `benchmark`;
+- remove generic user/industry questions that cannot change a local developer-tool refactor;
+- remove a falsely selected `RESEARCH` phase and select the already-applicable local engineering phase;
+- render a Codex context pack no larger than 600 words.
+
+It may not:
+
+- lower the shared router's tier;
+- remove `VERIFY` or structured-check requirements;
+- change rate-limit, token-telemetry, five-hour-window, stale-state, or open-turn policy;
+- activate an external capability without approval;
+- label fixture/mock resource data as live;
+- change shared persisted schemas.
+
+### Failure handling and rollback
+
+Any adapter exception must fail open to the unchanged shared runtime path and emit a source-labelled diagnostic without exposing prompt contents or credentials. A Codex-only environment switch will disable the fast path for rollback while retaining the standard runtime. No background daemon, new dependency, network call, or persistent cache service is permitted in this phase.
+
+Changing `.codex/hooks.json` changes its trust hash. Codex must require review and approval of the exact new hook configuration before automatic execution resumes.
+
+### Benchmark contract
+
+Current measured baseline for the representative Codex performance-refactor prompt:
+
+| Measure | Baseline | Acceptance |
+| --- | ---: | ---: |
+| Hot `route_prompt` latency | 228 ms median; 381 ms p95 | p95 below 75 ms |
+| Cold Codex prompt/preview path | shared control `escapement.py explain`: 1.68-2.91 s | adapter below 1.0 s |
+| Codex capability-audit path | shared control: 6.0-6.9 s | adapter below 2.0 s |
+| Generated context | 1,102 words | no more than 600 words |
+| Persisted active context observed in this task | 1,302-1,505 words | no more than 600 words for eligible prompts |
+
+The adapter will expose deterministic preview, audit, and benchmark commands from `scripts/codex_resources.py`. The protected shared `escapement.py` commands remain unchanged and serve only as control measurements. The benchmark will run enough iterations to report median and p95, compare the unchanged control path with the Codex fast path in the same environment, and test three semantic fixtures:
+
+1. local runtime benchmark: fast path eligible, no external research;
+2. current external benchmark: fast path ineligible, research preserved;
+3. sensitive or regulated request: fast path ineligible, tier and verification preserved.
+
+Performance passes only when all latency/context targets and all semantic guardrails pass. A faster result that weakens routing or verification is a failure.
+
+### Verification and evidence
+
+The existing Codex resource test module will be extended without adding a counted test method. Verification will include:
+
+- protected-file hash comparison before and after implementation;
+- existing Codex resource tests;
+- fast-path eligibility and exclusion assertions;
+- fallback-path assertion;
+- hook JSON validation;
+- focused security gate;
+- benchmark output persisted in this report with environment and source labels.
+
+### Recommended follow-on improvements
+
+After this bounded phase proves stable, the next Codex-specific improvements should be evaluated separately:
+
+1. a `codex doctor` preflight that reports hook trust, Python availability, runtime writability, App Server visibility, and latency-budget status;
+2. per-stage timing telemetry that stores durations and outcome labels but not prompt bodies;
+3. a new-task smoke test that proves trusted hooks execute automatically;
+4. a compatibility matrix for Codex desktop/CLI and supported Python versions;
+5. a compact degraded-mode message when live quota data or App Server access is unavailable.
+
+These are recommendations, not part of the approved performance implementation, and require their own evidence before adoption.
