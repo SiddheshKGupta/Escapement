@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 import subprocess
 import sys
@@ -11,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from capability_router import build_context_pack, route_prompt  # noqa: E402
+from capability_router import route_prompt  # noqa: E402
 from codex_resources import (  # noqa: E402
     FIVE_HOUR_WINDOW_MINS,
     apply_resource_policy,
@@ -60,20 +61,22 @@ class CodexResourceStateTest(unittest.TestCase):
         self.assertEqual(state["usage"]["summary"]["lifetimeTokens"], 1234)
         self.assertNotIn("remainingTokens", window)
 
-    def test_policy_conserves_then_converges_then_blocks_new_work(self):
+    def test_policy_uses_advisory_warning_bands(self):
         expected = [
-            (74, "NORMAL", False),
-            (75, "CONSERVE", False),
-            (90, "CONVERGE", False),
-            (100, "EXHAUSTED", True),
+            (74, "NORMAL", "normal-execution"),
+            (75, "CONSERVE", "warn-user-75-percent"),
+            (90, "CONVERGE", "warn-user-90-percent"),
+            (100, "EXHAUSTED", "warn-user-100-percent"),
+            (101, "EXHAUSTED", "warn-user-100-percent"),
         ]
-        for used, mode, blocked in expected:
+        for used, mode, action in expected:
             with self.subTest(used=used):
                 policy = assess_resource_policy(
                     self.snapshot(used), now_epoch=1_700_000_000
                 )
                 self.assertEqual(policy["mode"], mode)
-                self.assertEqual(policy["block_new_turn"], blocked)
+                self.assertEqual(policy["action"], action)
+                self.assertFalse(policy["block_new_turn"])
 
     def test_expired_window_is_stale_and_cannot_block(self):
         policy = assess_resource_policy(
@@ -100,29 +103,22 @@ class CodexResourceStateTest(unittest.TestCase):
         self.assertTrue(policy["needs_refresh"])
         self.assertFalse(policy["block_new_turn"])
 
-    def test_convergence_reduces_breadth_but_keeps_verification(self):
-        route = route_prompt(
+    def test_warning_policy_only_attaches_resource_policy(self):
+        baseline = route_prompt(
             "Build a four-module claims-management platform containing intake, "
             "assessment, approval, and reporting.",
             phase_override="DISCOVER",
         )
-        policy = assess_resource_policy(self.snapshot(95), now_epoch=1_700_000_000)
-        original_checks = route["closure"]["structured_checks_required"]
-        apply_resource_policy(route, policy)
-        self.assertLessEqual(len(route["native_skills"]), 2)
-        self.assertLessEqual(len(route["doctrine_packs"]), 1)
-        self.assertEqual(route["parallel_assessment"]["decision"], "resource-constrained")
-        self.assertEqual(route["closure"]["structured_checks_required"], original_checks)
-        self.assertTrue(
-            any(
-                item.get("rejected_because") == "resource-window-convergence"
-                for item in route["rejected"]
-            )
-        )
-        pack = build_context_pack("Build the platform.", route)
-        self.assertIn("## Codex Resource Policy", pack)
-        self.assertIn("CONVERGE", pack)
-        self.assertIn("converge-and-checkpoint", pack)
+        for used in (75, 90, 100):
+            with self.subTest(used=used):
+                route = deepcopy(baseline)
+                original = deepcopy(route)
+                policy = assess_resource_policy(
+                    self.snapshot(used), now_epoch=1_700_000_000
+                )
+                apply_resource_policy(route, policy)
+                self.assertEqual(route.pop("resource_policy"), policy)
+                self.assertEqual(route, original)
 
     def test_state_persistence_round_trip(self):
         with tempfile.TemporaryDirectory() as temp:

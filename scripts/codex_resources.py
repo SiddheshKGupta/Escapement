@@ -177,11 +177,11 @@ def assess_resource_policy(
     governing = max(active, key=lambda item: float(item.get("used_percent", 0)))
     used = float(governing.get("used_percent", 0))
     if used >= EXHAUSTED_AT_PERCENT:
-        mode, action, blocked = "EXHAUSTED", "block-new-turn", True
+        mode, action, blocked = "EXHAUSTED", "warn-user-100-percent", False
     elif used >= CONVERGE_AT_PERCENT:
-        mode, action, blocked = "CONVERGE", "converge-and-checkpoint", False
+        mode, action, blocked = "CONVERGE", "warn-user-90-percent", False
     elif used >= CONSERVE_AT_PERCENT:
-        mode, action, blocked = "CONSERVE", "reduce-breadth", False
+        mode, action, blocked = "CONSERVE", "warn-user-75-percent", False
     else:
         mode, action, blocked = "NORMAL", "normal-execution", False
     return {
@@ -199,54 +199,7 @@ def assess_resource_policy(
 
 
 def apply_resource_policy(route: dict[str, Any], policy: dict[str, Any]) -> dict[str, Any]:
-    mode = policy.get("mode")
-    limits = {
-        "CONSERVE": (3, 2, "resource-window-conservation"),
-        "CONVERGE": (2, 1, "resource-window-convergence"),
-        "EXHAUSTED": (1, 1, "resource-window-exhausted"),
-    }
     route["resource_policy"] = policy
-    if mode not in limits:
-        return route
-
-    maximum_skills, maximum_packs, reason = limits[mode]
-    removed_skills = route.get("native_skills", [])[maximum_skills:]
-    removed_packs = route.get("doctrine_packs", [])[maximum_packs:]
-    route["native_skills"] = route.get("native_skills", [])[:maximum_skills]
-    route["doctrine_packs"] = route.get("doctrine_packs", [])[:maximum_packs]
-    route.setdefault("rejected", []).extend(
-        [{**item, "rejected_because": reason} for item in removed_skills + removed_packs]
-    )
-
-    parallel = route.setdefault("parallel_assessment", {})
-    parallel["decision"] = "resource-constrained"
-    parallel["potentially_useful"] = False
-    parallel["preferred_adapters"] = []
-
-    readiness = route.get("capability_readiness")
-    if isinstance(readiness, dict):
-        readiness["active_native_skills"] = [
-            item["id"] for item in route["native_skills"]
-        ]
-
-    cost = route.get("context_cost")
-    if isinstance(cost, dict):
-        selected_skills = {item["id"] for item in route["native_skills"]}
-        selected_packs = {item["id"] for item in route["doctrine_packs"]}
-        cost["skills"] = {
-            key: value for key, value in cost.get("skills", {}).items()
-            if key in selected_skills
-        }
-        cost["skill_pointers"] = {
-            key: value for key, value in cost.get("skill_pointers", {}).items()
-            if key in selected_skills
-        }
-        cost["packs"] = {
-            key: value for key, value in cost.get("packs", {}).items()
-            if key in selected_packs
-        }
-        cost["invoked_skill_total"] = sum(cost["skills"].values())
-        cost["combined_total"] = cost.get("total", 0) + cost["invoked_skill_total"]
     return route
 
 
