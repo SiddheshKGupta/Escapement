@@ -94,7 +94,7 @@ Current inventory:
 
 ```text
 Version:                   6.3.0
-Repository files:          272
+Repository files:          273
 Kernel:                    795 / 1000 words
 Profiles:                    2
 Doctrine packs:             11
