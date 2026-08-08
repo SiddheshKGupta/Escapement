@@ -685,6 +685,40 @@
           "prime-intellect-prime-agent"
         ]
       }
+    },
+    {
+      "id": "overlap-external-01-substitute-collapses",
+      "claim": 1,
+      "category": "overlap-resolution",
+      "description": "Two members of a SUBSTITUTE overlap group must not both surface as external candidates. helixdb and understand-anything are both members of memory-and-knowledge, whose rule says choose one code-knowledge system per repository.",
+      "prompt": "Build an architecture map of this unfamiliar codebase and a knowledge graph of the relationship query paths.",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL",
+        "external_candidates": [
+          "egonex-understand-anything"
+        ],
+        "forbidden_external_candidates": [
+          "helixdb"
+        ]
+      }
+    },
+    {
+      "id": "overlap-external-02-complementary-preserved",
+      "claim": 1,
+      "category": "overlap-resolution",
+      "description": "Negative control for the SUBSTITUTE dedup: research-freshness is COMPLEMENTARY and is designed to stack, so agent-reach, context7 and last30days must all still surface together. A blind dedup that ignores the declared relation would collapse these to one and fail here.",
+      "prompt": "Find current documentation for this library and recent community discussion from the last month.",
+      "phase_override": "RESEARCH",
+      "expected": {
+        "material": true,
+        "tier": "MATERIAL",
+        "external_candidates": [
+          "agent-reach",
+          "context7",
+          "last30days"
+        ]
+      }
     }
   ]
 }

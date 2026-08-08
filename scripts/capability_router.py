@@ -963,7 +963,31 @@ def select_external(prompt: str, phase: str, research: dict[str, Any], maximum: 
             })
 
     ranked.sort(key=lambda item: (-item["score"], item["id"]))
-    return ranked[:maximum]
+
+    # Native skills already reject a second member of the same overlap group;
+    # external candidates did not, so two competing tools could surface at
+    # once. Membership comes from the formal group's members list rather than
+    # the resource's own overlap_group tag -- the two use different keys
+    # (graphify is tagged code-knowledge but governed by memory-and-knowledge).
+    # Only SUBSTITUTE groups collapse; COMPLEMENTARY groups such as
+    # research-freshness are designed to stack.
+    substitute_group_of = {
+        member: group["id"]
+        for group in load_json("catalog/overlap-groups.json")["groups"]
+        if group.get("relation") == "SUBSTITUTE"
+        for member in group.get("members", [])
+    }
+    selected, used_groups = [], set()
+    for item in ranked:
+        group = substitute_group_of.get(item["id"])
+        if group and group in used_groups:
+            continue
+        selected.append(item)
+        if group:
+            used_groups.add(group)
+        if len(selected) >= maximum:
+            break
+    return selected
 
 
 def estimate_cost(
