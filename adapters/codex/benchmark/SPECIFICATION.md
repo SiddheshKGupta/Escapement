@@ -145,13 +145,15 @@ The deterministic resource suite covers:
 11. high token activity with normal quota;
 12. competing primary and secondary windows.
 
-Primary live confirmatory blocks require a fresh, live, source-labelled resource read
-and start only below 70% of the governing five-hour window.
-At 75% no new block starts; at 90% checkpoint; at 100% block. If a paired block
-crosses a policy band or reset boundary, exclude it from primary analysis and rerun
-both lanes after reset. `NOT_OBSERVABLE` resource state permits only a separately
-predeclared secondary cohort and can never enter the primary analysis. The benchmark
-never deliberately burns quota to reach a threshold.
+Primary live confirmatory blocks require a fresh, live, source-labelled resource read.
+The governing five-hour window is advisory only: at 75%, 90%, and 100% Escapement
+warns the user but does not block work, shrink capabilities, suppress parallel work,
+or force closure. The user decides whether to pause or continue a long task. A paired
+block crossing a policy band remains eligible when both lanes remain comparable; a
+reset between lanes is recorded and handled through the predeclared sensitivity
+analysis. `NOT_OBSERVABLE` resource state permits only a separately predeclared
+secondary cohort and can never enter the primary analysis. The benchmark never
+deliberately burns quota to reach a threshold.
 
 The simulated scenario file supplies a fixed clock, source label, raw window payload,
 and expected `mode`, `action`, `block_new_turn`, `needs_refresh`, governing-window
@@ -274,7 +276,8 @@ stated prominently.
 5. Aggregation distinguishes scored failures, timeouts, exclusions, infrastructure
    errors, and `NOT_OBSERVABLE` fields.
 6. Protected-file preflight fails on any changed protected path.
-7. Simulated resource thresholds behave exactly at 75%, 90%, and 100%.
+7. Simulated resource thresholds emit the specified warnings at 75%, 90%, and 100%
+   without blocking, capability reduction, parallel suppression, or forced closure.
 8. A run interrupted during capture can resume without duplicating a scored record or
    accepting a broken event hash chain.
 9. No live quota is consumed by unit tests, dry runs, or simulated scenarios.

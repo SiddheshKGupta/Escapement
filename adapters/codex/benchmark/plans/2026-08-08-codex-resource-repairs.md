@@ -15,7 +15,7 @@
 - Add no dependency.
 - Write and run each regression test before its production change.
 - Keep valid persisted-state round trips backward compatible.
-- Resource enforcement uses only validated 300-minute windows.
+- Resource warnings use only validated 300-minute windows and never enforce a stop.
 - Retain at most a bounded stderr tail; never allow child stderr to block stdout protocol progress.
 
 ---
@@ -96,6 +96,47 @@ Run the focused test and then the complete Codex resource test module. Both must
 - [ ] **Step 5: Commit**
 
 Commit only the two owned files with message `Fix five-hour Codex quota selection`.
+
+### Task 1A: Make all five-hour thresholds advisory
+
+**Files:**
+- Modify: `tests/v6_3/test_codex_resources.py`
+- Modify: `scripts/codex_resources.py`
+
+**Interfaces:**
+- Consumes: `assess_resource_policy(...)` and `apply_resource_policy(route, policy)`
+- Produces: warning-only five-hour policy with unchanged route capability breadth
+
+- [ ] **Step 1: Write failing warning-only regressions**
+
+Update the threshold table so 75%, 90%, and 100% all assert
+`block_new_turn is False`. Add a route test that deep-copies a routed result,
+applies each warning-band policy, and asserts native skills, doctrine packs,
+parallel assessment, closure requirements, and context cost remain unchanged.
+Only `route["resource_policy"]` may be added.
+
+- [ ] **Step 2: Verify RED**
+
+Run the new tests. Expected: 100% currently blocks and warning bands currently
+reduce route breadth or disable parallel work.
+
+- [ ] **Step 3: Implement advisory actions**
+
+Keep the existing band names for compatibility, but set `block_new_turn` to
+`False` in every band. Use actions `warn-user-75-percent`,
+`warn-user-90-percent`, and `warn-user-100-percent`. Simplify
+`apply_resource_policy` to attach `route["resource_policy"] = policy` and return
+the otherwise unchanged route.
+
+- [ ] **Step 4: Verify GREEN**
+
+Run the warning-only regressions and the complete Codex resource module. All
+must pass and the route snapshot must remain unchanged except for the attached
+policy.
+
+- [ ] **Step 5: Commit**
+
+Commit only the two owned files with message `Make Codex quota thresholds advisory`.
 
 ### Task 2: Reject malformed persisted resource state safely
 
