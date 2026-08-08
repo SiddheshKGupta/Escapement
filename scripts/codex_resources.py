@@ -9,6 +9,7 @@ transport.
 from __future__ import annotations
 
 import argparse
+from collections import deque
 import json
 import os
 import queue
@@ -258,6 +259,14 @@ def _reader(stream: Any, messages: queue.Queue[Any]) -> None:
         messages.put(EOFError("Codex App Server closed its output."))
 
 
+def _drain_stderr(stream: Any, chunks: deque[str]) -> None:
+    while True:
+        chunk = stream.read(4096)
+        if not chunk:
+            return
+        chunks.append(chunk)
+
+
 def _wait_for_response(
     messages: queue.Queue[Any],
     request_id: int,
@@ -311,7 +320,7 @@ def query_resource_state(
     except OSError as exc:
         raise AppServerError(f"Unable to start Codex App Server: {exc}") from exc
 
-    if process.stdin is None or process.stdout is None:
+    if process.stdin is None or process.stdout is None or process.stderr is None:
         process.kill()
         raise AppServerError("Codex App Server stdio was not available.")
     messages: queue.Queue[Any] = queue.Queue()
@@ -322,6 +331,13 @@ def query_resource_state(
         daemon=True,
     )
     thread.start()
+    stderr_chunks: deque[str] = deque(maxlen=16)
+    stderr_thread = threading.Thread(
+        target=_drain_stderr,
+        args=(process.stderr, stderr_chunks),
+        daemon=True,
+    )
+    stderr_thread.start()
 
     def send(message: dict[str, Any]) -> None:
         process.stdin.write(json.dumps(message, ensure_ascii=False) + "\n")
@@ -356,6 +372,17 @@ def query_resource_state(
             usage,
             source=source,
         )
+    except AppServerError as exc:
+        stderr_tail = "".join(stderr_chunks)[-4096:]
+        if stderr_tail:
+            sanitized_tail = "".join(
+                character if character.isprintable() else " "
+                for character in stderr_tail
+            )
+            raise AppServerError(
+                f"{exc}\nApp Server stderr tail: {sanitized_tail}"
+            ) from exc
+        raise
     finally:
         try:
             process.stdin.close()

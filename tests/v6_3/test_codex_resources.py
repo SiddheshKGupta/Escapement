@@ -202,6 +202,45 @@ class CodexResourceStateTest(unittest.TestCase):
             self.assertEqual(state["five_hour_windows"][0]["used_percent"], 88)
             self.assertEqual(state["usage"]["summary"]["lifetimeTokens"], 99)
 
+    def test_jsonl_app_server_drains_large_stderr_before_processing_requests(self):
+        """Fails if App Server stderr is not drained while requests are pending."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            fixture = Path(temp_dir) / "app_server.py"
+            fixture.write_text(
+                textwrap.dedent(
+                    """
+                    import json
+                    import sys
+
+                    sys.stderr.write("x" * (1024 * 1024))
+                    sys.stderr.flush()
+                    for line in sys.stdin:
+                        message = json.loads(line)
+                        method = message.get("method")
+                        if method == "initialize":
+                            result = {"userAgent": "fixture"}
+                        elif method == "account/rateLimits/read":
+                            result = {"rateLimits": {
+                                "limitId": "codex",
+                                "primary": {"usedPercent": 81, "windowDurationMins": 300,
+                                            "resetsAt": 1700000600},
+                                "secondary": None,
+                            }}
+                        elif method == "account/usage/read":
+                            result = {"summary": {"lifetimeTokens": 99}}
+                        else:
+                            continue
+                        print(json.dumps({"id": message["id"], "result": result}), flush=True)
+                    """
+                ),
+                encoding="utf-8",
+            )
+            state = query_resource_state(
+                [sys.executable, str(fixture)], source="FIXTURE", timeout_seconds=5
+            )
+            self.assertEqual(state["five_hour_windows"][0]["used_percent"], 81)
+            self.assertEqual(state["usage"]["summary"]["lifetimeTokens"], 99)
+
     def test_main_cli_exposes_persisted_resource_status(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "state.json"
