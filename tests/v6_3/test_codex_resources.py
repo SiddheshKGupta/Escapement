@@ -65,7 +65,9 @@ class CodexResourceStateTest(unittest.TestCase):
         expected = [
             (74, "NORMAL", "normal-execution"),
             (75, "CONSERVE", "warn-user-75-percent"),
+            (89, "CONSERVE", "warn-user-75-percent"),
             (90, "CONVERGE", "warn-user-90-percent"),
+            (99, "CONVERGE", "warn-user-90-percent"),
             (100, "EXHAUSTED", "warn-user-100-percent"),
             (101, "EXHAUSTED", "warn-user-100-percent"),
         ]
