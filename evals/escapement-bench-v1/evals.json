@@ -794,6 +794,77 @@
           "nanonets-graft": null
         }
       }
+    },
+    {
+      "id": "overlap-external-03-displaced-member-becomes-fallback",
+      "claim": 1,
+      "category": "overlap-resolution",
+      "description": "Collapsing a SUBSTITUTE group must demote the loser, not delete it. Most external resources are not installed, so a group collapsed to one choice with no recorded alternative becomes a dead end when the primary cannot be installed or does not work. The displaced member is carried on the winner as an ordered fallback.",
+      "prompt": "Build an architecture map of this unfamiliar codebase and a knowledge graph of the relationship query paths.",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "egonex-understand-anything"
+        ],
+        "forbidden_external_candidates": [
+          "helixdb",
+          "nanonets-graft"
+        ],
+        "external_fallbacks": {
+          "egonex-understand-anything": [
+            "helixdb"
+          ]
+        }
+      }
+    },
+    {
+      "id": "registry-new-01-unlicensed-index-gated",
+      "claim": 1,
+      "category": "licence-adoption-gating",
+      "description": "awesome-claude-skills has 72k stars but its GitHub licence endpoint returns 404, so it is all rights reserved. It stays catalogued and discoverable, carrying an approval gate rather than being excluded -- the exact case the two-tier policy was built for.",
+      "prompt": "Find a skill directory to see what available skills exist.",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "awesome-claude-skills"
+        ],
+        "external_adoption": {
+          "awesome-claude-skills": "approval-required"
+        }
+      }
+    },
+    {
+      "id": "registry-new-02-permissive-additions-ungated",
+      "claim": 1,
+      "category": "licence-adoption-gating",
+      "description": "Verified MIT additions must not pick up a gate, otherwise gating becomes noise.",
+      "prompt": "Add a persistent memory engine for context so recall survives across sessions.",
+      "expected": {
+        "material": true,
+        "external_candidates": [
+          "supermemory"
+        ],
+        "external_adoption": {
+          "supermemory": null
+        }
+      }
+    },
+    {
+      "id": "registry-new-03-batch-no-over-trigger",
+      "claim": 2,
+      "category": "false-positive-over-triggering",
+      "description": "Five external resources added in one batch is the largest single expansion of routable surface so far. None may fire on an ordinary unrelated bug fix.",
+      "prompt": "Fix the off-by-one error in the pagination helper.",
+      "expected": {
+        "material": true,
+        "forbidden_external_candidates": [
+          "supermemory",
+          "sanyuan-skills",
+          "awesome-claude-skills",
+          "floci",
+          "mattpocock-skills"
+        ]
+      }
     }
   ]
 }

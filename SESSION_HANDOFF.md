@@ -9,11 +9,11 @@
 - Native skills: `35`
 - Capability strengths: `58`
 - Agent patterns: `21`
-- External resources: `62`
+- External resources: `67`
 - Strategy adapters: `10`
 - Capability families: `10`
 - Overlap groups: `14`
-- Routing evaluations: `79 / 79 PASS`
+- Routing evaluations: `83 / 83 PASS`
 - Unit tests: `165 / 165 PASS`
 - Runtime doctor: `0 failures`
 - Repository doctor: `0 failures, 0 warnings`

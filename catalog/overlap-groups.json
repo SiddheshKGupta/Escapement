@@ -112,7 +112,8 @@
         "helixdb",
         "graphify",
         "egonex-understand-anything",
-        "nanonets-graft"
+        "nanonets-graft",
+        "supermemory"
       ],
       "relation": "SUBSTITUTE",
       "rule": "File state is default. Claude Mem, AppFlowy or HelixDB may become the primary external memory substrate only after a demonstrated need. Graphify, Understand Anything or Graft may complement file state for code relationships -- choose one code-knowledge/graph system per repository and prefer ordinary repository inspection for small projects."
@@ -171,7 +172,8 @@
         "engineering-review",
         "superpowers-requesting-code-review",
         "claude-code-review",
-        "gstack-review"
+        "gstack-review",
+        "sanyuan-skills"
       ],
       "relation": "SUBSTITUTE",
       "rule": "Choose one primary review workflow. Add a second independent reviewer only for material/high-risk changes with a stated reason."
