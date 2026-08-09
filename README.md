@@ -109,7 +109,7 @@ Durable handoff
 
 ```text
 Version:                   6.3.0
-Repository files:          282
+Repository files:          284
 Kernel:                    795 / 1000 words
 Profiles:                    2
 Doctrine packs:             11
@@ -205,7 +205,7 @@ Escapement is **not**:
 - a universal provider abstraction;
 - an MCP server today;
 - a statistically proven claim that governed execution always beats vanilla execution;
-- the adaptive research architecture described by Quantum Escapement.
+- the adaptive research architecture described by Escapement-Continuum.
 
 ---
 
@@ -1140,7 +1140,7 @@ Kernel:                       795 / 1000 words
 Native skills:                 35
 Capability strengths:          58
 Governed external resources:   67
-Repository files:             282
+Repository files:             284
 Published case studies:         4
 ```
 
@@ -1154,9 +1154,17 @@ Remaining boundaries include:
 
 ---
 
-# Escapement and Quantum Escapement
+# Escapement and Escapement-Continuum
 
-Escapement v1 and Quantum Escapement are separate lineages.
+Escapement v1 and Escapement-Continuum are separate lineages.
+
+Escapement-Continuum is a research line, not a successor. **v1 is the
+stable product line and is not deprecated, superseded, or waiting to be
+replaced.** Nothing in the research lineage is a reason to delay adopting
+or continuing to use v1.
+
+Repository: [SiddheshKGupta/Escapement-Continuum](https://github.com/SiddheshKGupta/Escapement-Continuum)
+— `0.1.0-alpha`, deliberately not inheriting v1's version number.
 
 ```text
 ESCAPEMENT
@@ -1175,7 +1183,7 @@ EMPIRICAL BASELINE
 ```
 
 ```text
-QUANTUM ESCAPEMENT
+ESCAPEMENT-CONTINUUM
 
 Separate experimental research lineage
         ↓
@@ -1192,8 +1200,15 @@ RESEARCH HYPOTHESIS
 
 Escapement v1 remains the control and evidence base.
 
-Quantum Escapement asks whether a more adaptive execution architecture can
-outperform that baseline under controlled experiments.
+Escapement-Continuum asks whether a more adaptive execution architecture can
+outperform that baseline under controlled experiments. It has not yet shown
+that it can: its first experiment produces a candidate result that has not
+been independently scored, and no comparison against v1 has been run. Treat
+it as a research question with a repository attached, not as a roadmap.
+
+Within Continuum's own capability model, Escapement v1 is catalogued as a
+`HARNESS` capability — prior art to measure against, not a legacy to migrate
+away from.
 
 > **v1 is evidence, not baggage.**
 
