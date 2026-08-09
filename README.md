@@ -109,7 +109,7 @@ Durable handoff
 
 ```text
 Version:                   6.3.0
-Repository files:          282
+Repository files:          284
 Kernel:                    795 / 1000 words
 Profiles:                    2
 Doctrine packs:             11
@@ -1140,7 +1140,7 @@ Kernel:                       795 / 1000 words
 Native skills:                 35
 Capability strengths:          58
 Governed external resources:   67
-Repository files:             282
+Repository files:             284
 Published case studies:         4
 ```
 
