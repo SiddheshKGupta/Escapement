@@ -1,3 +1,225 @@
+# Escapement v2.0 Future Scope
+## Historical snapshot and pointer
+
+> **Status:** Historical record. Not an active roadmap.  
+> **Escapement v1 is the stable product line.** It is not being replaced, deprecated, or superseded by anything in this document.  
+> **What happened:** the architecture explored below outgrew v1 and moved to a separate research repository, **Escapement-Continuum**. It is research, not a product.  
+> **What did not move:** several items below are still genuine v1 roadmap material and are marked as such in the disposition table.
+
+---
+
+# A. Why this document changed
+
+This file used to be a second active roadmap. It described an "Escapement
+v2.0" that would evolve the v1 harness into a portable, provider-aware
+execution control plane.
+
+That plan was abandoned in its original form — not because the ideas were
+wrong, but because they stopped fitting inside v1.
+
+The v2 roadmap treated v1 compatibility as an architecture constraint. That
+framed the wrong question:
+
+```text
+Can we add this without disturbing v1?
+```
+
+The better question was:
+
+```text
+What architecture does the problem actually require?
+```
+
+Answering the second question honestly produced a system with strategy
+ensembles, belief state, delayed commitment, and evidence-driven execution —
+a different kind of system, not a larger v1. Building it inside v1 would have
+meant either destabilising a released framework or crippling the research to
+protect backward compatibility.
+
+The resolution was a repository split. v1 keeps its discipline and its users.
+The research goes elsewhere and has to earn its claims.
+
+This document is therefore kept as a **record of what was considered**, plus
+a pointer to where each idea went. It is no longer a commitment.
+
+---
+
+# B. Escapement v1 status
+
+Unchanged by any of this:
+
+```text
+Escapement v1
+=
+stable product line
+maintained, evaluated, security-reviewed
+backward compatible
+the empirical baseline
+```
+
+v1 continues to receive maintenance, security work, evaluation, and the
+roadmap items listed in section E. The current validated baseline is in
+[`manifest.json`](manifest.json); the honest boundaries are in
+[`README.md`](README.md).
+
+Nothing in this document should be read as v1 being in transition, on a
+migration path, or waiting for a successor.
+
+---
+
+# C. Escapement-Continuum — the successor research line
+
+**Escapement-Continuum** is a separate, public research repository exploring
+an adaptive execution architecture:
+
+```text
+https://github.com/SiddheshKGupta/Escapement-Continuum
+```
+
+It was previously called *Quantum Escapement*, and
+older documents use that name; the "quantum" framing was dropped because the
+work is quantum-*inspired* and classical in implementation, and the branding
+invited claims the research does not make.
+
+Its research question:
+
+> How should an AI execution system manage uncertainty and organise models,
+> agents, tools, context, memory, information gathering, human input, trust,
+> resources, and verification when multiple execution paths remain plausible?
+
+Its shape, in contrast to v1's fixed routing:
+
+```text
+INTENT + OBSERVED STATE + BELIEF STATE + CAPABILITIES + POLICY
+        ↓
+STRATEGY ENSEMBLE
+        ↓
+GATHER INFORMATION WHEN ITS EXPECTED VALUE JUSTIFIES THE COST
+        ↓
+UPDATE BELIEFS
+        ↓
+COMMIT ONLY AS FAR AS THE NEXT ACTION REQUIRES
+        ↓
+EXECUTION → EVIDENCE → NEW STATE
+```
+
+## Status — read this before citing it
+
+```text
+Line:       research → experimental → validated
+Version:    0.1.0-alpha (it does not inherit v1's version number)
+Stage:      Experiment 001 runs and produces a trace, but that result has
+            not been independently scored — it currently passes tests
+            written by the author of the implementation
+```
+
+Escapement-Continuum is **not**:
+
+- a product;
+- a replacement for Escapement v1, today or on any announced date;
+- validated, benchmarked, or shown to outperform v1;
+- a reason to defer adopting or upgrading v1.
+
+Its first proof-of-mechanism experiment has produced a candidate result, not
+a confirmed one: the run executes and emits a trace, but it has not been
+scored by anyone independent of its implementation. Its own baseline requires
+that every mechanism earn inclusion through experiments and survive ablation
+before any claim is made. Treat everything about it as a hypothesis under
+test.
+
+v1 is the control in that comparison. v1 is evidence, not baggage.
+
+---
+
+# D. Disposition of the original sections
+
+Where each part of the original roadmap went. The full original text is
+preserved verbatim in Part II below.
+
+| § | Topic | Disposition |
+|---|---|---|
+| 1 | Purpose / evolution framing | Superseded — the split replaced the "v1 grows into a control plane" premise |
+| 2 | Proposed v2.0 identity | Superseded — Escapement-Continuum has its own identity |
+| 3 | Integration taxonomy | Moved — became the Capability Fabric, where hosts, providers, gateways and runtimes are all capabilities |
+| 4.1 | Reference hosts (Claude Code, Codex, Gemini CLI) | Delivered in v1 |
+| 4.2–4.5 | Broad host / provider / gateway / local-runtime matrix | Moved — capability-based, not an adapter catalogue |
+| 5 | Feature detection before brand detection | Moved — but retained as a v1 coding principle |
+| 6 | Adapter capability manifests | Moved — became capability descriptions in the fabric |
+| 7 | Stable Escapement Core API | Withdrawn — this was a v1 refactor premised on v1 becoming the v2 substrate; the split removed the reason |
+| 8 | Installable package | **Still v1 roadmap** |
+| 9 | Execution Governor (channels, roles, billing, modes, budgets, escalation) | Moved — this is the largest single migration; it became strategy ensembles, policy architecture, and the commitment architecture |
+| 10 | Local MCP server | **Still v1 roadmap**, unscheduled |
+| 11 | MCP resources | **Still v1 roadmap**, unscheduled |
+| 12 | MCP risk classes | **Still v1 roadmap** |
+| 13 | Tool Context Broker | **Still v1 roadmap** — partially served today by governed external resources and reference routing |
+| 14 | Host adapter layer | Moved as architecture; v1 keeps and extends its existing per-host integrations |
+| 15 | Provider / gateway / local runtime layer | Moved |
+| 16 | Host Conformance Lab | **Still v1 roadmap** — broader host conformance and cross-host equivalence tests |
+| 17 | Context utility and context-rot detection | **Still v1 roadmap** — richer context-health measurement |
+| 18 | Context and tool trust firewall | **Still v1 roadmap** |
+| 19 | Worktree isolation manager | **Still v1 roadmap** |
+| 20 | Sprint contracts | **Still v1 roadmap** |
+| 21 | Failure attribution engine | **Still v1 roadmap** — stricter evidence attribution |
+| 22 | Harness ablation lab | Delivered in v1 — `escapement ablate`, `catalog/harness-components.json` |
+| 23 | Harness garbage collector | **Still v1 roadmap** — partially served by `escapement capability-audit` and `scripts/registry_audit.py` |
+| 24 | Portable execution trace | Partially delivered — `escapement observability`; richer tracing and exporters **remain v1 roadmap** |
+| 25 | Outcome contract | **Still v1 roadmap** |
+| 26 | Plugin and distribution layer | Partially delivered — Claude and Codex plugin packaging; wider distribution **remains v1 roadmap** |
+| 27 | Optional UI | Partially delivered as a local read-only viewer (`escapement view`); the wider management surface is shelved |
+| 28 | Optional remote / team control plane | Shelved — no owner, no schedule, in neither line |
+| 29 | Proposed v2.0 delivery sequence | Withdrawn — there is no v2.0 of v1 |
+| 30 | Proposed v2.0 exit criteria | Withdrawn — no such release gate exists |
+| 31 | Explicit non-goals | Retained — still binding on v1 |
+| 32 | Compatibility principle | Retained — standing v1 principle, not future work |
+| 33 | Recommended v2.0 architecture | Superseded |
+| 34 | Strategic positioning | Superseded — the positioning was never adopted and should not be quoted as one |
+| 35 | Guiding rule | Retained — standing v1 discipline |
+
+---
+
+# E. What stayed on the v1 roadmap
+
+These were **not** reassigned to the research line. They remain v1 work,
+unscheduled unless stated otherwise in [`README.md`](README.md):
+
+```text
+installable package and distribution        (§8, §26)
+local MCP server and MCP resources          (§10, §11)
+MCP risk classification                     (§12)
+tool context broker                         (§13)
+host conformance lab                        (§16)
+context health and context-rot detection    (§17)
+context and tool trust firewall             (§18)
+worktree isolation                          (§19)
+sprint contracts                            (§20)
+failure attribution                         (§21)
+harness garbage collection                  (§23)
+richer execution tracing and exporters      (§24)
+outcome contract                            (§25)
+```
+
+The common thread: these improve a repository-native governed harness without
+requiring an uncertainty-aware execution architecture. They do not depend on
+Escapement-Continuum and are not blocked by it.
+
+As always, v1 should not claim any of these before implementation and
+validation support them.
+
+---
+
+# F. Reading Part II
+
+Part II is the original document, preserved unedited, including its original
+status header and its forward-looking language. That language was accurate
+when written and is retained deliberately so the record is not sanitised.
+
+Read it as a snapshot of what was proposed, dated to before the repository
+split. Where it conflicts with sections A–E above, sections A–E win.
+
+---
+
+# Part II — Original document, preserved verbatim
+
 # Escapement v2.0
 ## Future Scope of Work
 
