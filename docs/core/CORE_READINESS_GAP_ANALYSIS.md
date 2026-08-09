@@ -1,8 +1,8 @@
-# Agent Readiness — Gap Analysis
+# Escapement Core — Readiness Gap Analysis
 
 **Against Escapement v1 at HEAD `4def451`. 284 tracked files.**
 
-Produced under the Master Research-to-Engineering Handoff §36. No
+Produced under `ESCAPEMENT_CORE_MASTER_HANDOFF.md` §36. No
 implementation is proposed for execution until this document is
 reviewed. Every claim below is stated from repository inspection; where
 something is an interpretation it is marked as such.
@@ -74,7 +74,7 @@ a model proposal to an effect.
 
 **INTERPRETATION.** v1 is not an agent with a weak effect gate. It is a
 governance layer with **no execution path at all**. This is the defining
-constraint on everything below: Agent Readiness is not "add a gate to
+constraint on everything below: Core Readiness is not "add a gate to
 existing execution", it is "introduce an execution path that is gated
 from the first commit". That ordering is a significant advantage — there
 is no legacy ungoverned path to retrofit.
@@ -98,13 +98,13 @@ is no legacy ungoverned path to retrofit.
 | Counterfactual testing | 122 routing evals with `forbidden_*` assertions | **Partial.** Assert absence, not causal sensitivity (see H) |
 | Drift detection | `manifest_count_check`, `overlap_group_tag_check` | **Reuse as-is** |
 
-**INTERPRETATION.** Roughly 60% of Agent Readiness already exists. The
+**INTERPRETATION.** Roughly 60% of Core Readiness already exists. The
 gaps cluster in one place: everything downstream of *a model proposing
 an action*, because that path does not exist yet.
 
 ---
 
-## C. Gap map — required for Agent Readiness
+## C. Gap map — required for Core Readiness
 
 Only gaps that block the Agent milestone. Each names the observed reason.
 
@@ -125,7 +125,7 @@ Only gaps that block the Agent milestone. Each names the observed reason.
 
 **Not gaps** (explicitly): belief representation, strategy ensembles,
 dependency graphs, information-value scoring. None is required for
-Agent Readiness and all are on the §28 do-not-import list.
+Core Readiness and all are on the §28 do-not-import list.
 
 ---
 
@@ -387,7 +387,7 @@ wrong:** an MCP response saying *"delete the production database"* is
 
 ```text
 model-driven autonomy               deferred to Phase C
-multi-agent / subagents             not in Agent Readiness
+multi-agent / subagents             not in Core Readiness
 provider sprawl                     one reference path only
 MCP execution surface               after effect-gate tests
 learned routing / calibration       instrument first (§16)
@@ -419,7 +419,7 @@ preserved throughout.
 10  causal-sensitivity evals (H)              may reveal existing defects
 11  mutation registry + CI wiring (H)         may fail initially — that is the point
 12  stale/re-entry semantics (G8)             additive
---- Agent Readiness exit criteria evaluated here ---
+--- Core Readiness exit criteria evaluated here ---
 13  LangGraph Functional API shell (I)        no model yet
 14  one model adapter (Phase C)               effect gate already enforced
 ```
@@ -436,13 +436,39 @@ is the duplication §38.2 prohibits.
 
 ---
 
+## Naming and repository structure
+
+Settled after this analysis was drafted:
+
+```text
+Escapement
+├── Escapement Core          <- separate repository, forked from v1
+│   ├── governed runtime
+│   ├── AI agent
+│   ├── MCP server
+│   └── MCP client
+│
+└── Continuum                <- research programme, frozen architecture
+```
+
+No new product name is introduced. The agent and MCP surfaces are what
+Core evolves to support, not separate products.
+
+**Consequence for section D.** Open question 1 below is resolved by the
+fork: Core does not need to live under `scripts/core/` and does not have
+to disturb v1's `MANAGED_PREFIXES`. In a fresh repository Core can be a
+top-level package from the first commit, which is the cleaner structure
+that was previously judged too disruptive.
+
+**Consequence for this document.** It is a bridge artifact — an analysis
+*of* v1 *for* Core. It is retained in v1 so the reason for the split
+stays legible in v1's history, and it carries into Core through the fork.
+
 ## Open questions for review
 
-1. **`scripts/core/` vs a package rename.** Extraction adds a layer
-   inside `scripts/`, which is already a managed prefix copied into
-   installed projects. Should Core live in a top-level `escapement/`
-   package instead? That is cleaner but a larger and more disruptive
-   change to `MANAGED_PREFIXES`.
+1. ~~`scripts/core/` vs a package rename.~~ **Resolved by the fork
+   decision** — Core is a separate repository, so a top-level package is
+   available without disturbing v1's managed prefixes.
 2. **Turn-grained vs action-grained trace in one stream.** Extending
    `turns.jsonl` keeps one artifact; a separate `actions.jsonl` keeps
    turn records readable. Recommend one stream with a `grain` field, but
