@@ -9,7 +9,7 @@
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square&logo=python&logoColor=white)](.github/workflows/validate-standard.yml)
 [![Kernel](https://img.shields.io/badge/kernel-795%20%2F%201000-2F855A?style=flat-square)](AGENTS.md)
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
-[![Unit tests](https://img.shields.io/badge/unit%20tests-186%20passing-2F855A?style=flat-square)](manifest.json)
+[![Unit tests](https://img.shields.io/badge/unit%20tests-189%20passing-2F855A?style=flat-square)](manifest.json)
 [![Routing evals](https://img.shields.io/badge/routing%20evals-122%20%2F%20122-2F855A?style=flat-square)](evals/)
 [![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
 
@@ -59,7 +59,7 @@ The phases are adaptive. Future phases can be added or removed where justified. 
 | Governed external resources | `67` |
 | Overlap groups | `14` |
 | Published case studies | `4` |
-| Unit tests | `186 / 186 PASS` |
+| Unit tests | `189 / 189 PASS` |
 | Routing evaluations | `122 / 122 PASS` |
 | Repository doctor | `0 failures, 0 warnings` |
 | Security gate | `0 findings` |
@@ -551,11 +551,13 @@ Current boundaries:
 - some Codex resource data remains environment-dependent;
 - cross-host conformance is not yet equivalent across all environments.
 
-## Escapement and Quantum Escapement
+## Escapement and Escapement-Continuum
 
 Escapement v1 is the empirical baseline.
 
-Quantum Escapement is a separate research lineage exploring uncertainty-aware execution, strategy selection and delayed commitment.
+[Escapement-Continuum](https://github.com/SiddheshKGupta/Escapement-Continuum) is a separate research lineage exploring uncertainty-aware execution, strategy selection and delayed commitment. It was previously called *Quantum Escapement*; the name was changed because the metaphor caused engineering errors rather than only marketing confusion.
+
+It is `0.1.0-alpha` research and has not validated its thesis. Its first experiment has been independently scored three times and has not yet passed. It is not a successor, not a replacement, and not a reason to defer adopting v1.
 
 v1 remains the control against which later architecture can be evaluated.
 
@@ -582,6 +584,18 @@ Escapement is **source-available** and is not distributed under an OSI-approved 
 Use is governed by [`LICENSE.md`](LICENSE.md).
 
 Third-party resources retain their own licences and adoption conditions.
+
+## Authorship
+
+The idea, architecture, research direction and every material decision in Escapement are **Siddhesh Gupta's**.
+
+AI agents — Claude, Codex, Gemini and others — were used as instruments inside that direction. Their contribution was execution, not authorship: implementing against a specification, running trial and error, building and executing benchmarks, adversarial testing, triaging failures, and updating repository files where doing so improved the repository.
+
+They did not originate the concept, choose the strategy, or decide what the framework should become. Where an agent's finding conflicted with the direction, the direction governed — which is the same rule the framework applies to host feedback:
+
+> **Host feedback is evidence, not authority.**
+
+That division is deliberate, and it is part of the thesis rather than a disclaimer attached to it. Escapement exists to make capable models useful under explicit human direction rather than autonomous. A framework making that claim should be built the same way it asks others to work.
 
 <div align="center">
 
