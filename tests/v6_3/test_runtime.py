@@ -137,7 +137,7 @@ class RuntimeTest(unittest.TestCase):
         self.assertIn("Intake", pack)
         self.assertIn("validate intake schema", pack)
 
-    def test_exhausted_five_hour_window_blocks_only_a_new_material_turn(self):
+    def test_exhausted_five_hour_window_warns_but_allows_new_material_turn(self):
         resource_path = self.target / ".agent/runtime/codex-resources.json"
         resource_path.parent.mkdir(parents=True, exist_ok=True)
         resource_path.write_text(
@@ -170,12 +170,12 @@ class RuntimeTest(unittest.TestCase):
             "Add authentication to this application.",
             "--json",
         )
-        self.assertEqual(start.returncode, 75)
+        self.assertEqual(start.returncode, 0, start.stderr)
         payload = json.loads(start.stdout)
         self.assertEqual(payload["resource_policy"]["mode"], "EXHAUSTED")
-        self.assertFalse(
-            (self.target / ".agent/runtime/current-turn.json").exists()
-        )
+        self.assertEqual(payload["resource_policy"]["action"], "warn-user-100-percent")
+        self.assertFalse(payload["resource_policy"]["block_new_turn"])
+        self.assertTrue((self.target / ".agent/runtime/current-turn.json").exists())
 
     def test_info_creates_no_open_turn(self):
         result = self.run_runtime(
