@@ -180,38 +180,87 @@ among new ones.
 
 Minimal addition. Do **not** import Continuum's `BeliefState`.
 
-`PROJECT_STATE.yaml` gains typed entries alongside existing keys:
+### The dimensional separation
+
+The first draft used one enum mixing four unrelated concepts:
+`OBSERVED | INFERRED | DECIDED | AUTHORIZED | SUPERSEDED`. That collapses
+epistemic origin, decision status, authority and lifecycle validity into
+a single axis — the exact error Continuum spent weeks learning to avoid
+(`StrategyBelief` conflated belief with utility).
+
+**Challenge to the four-dimension proposal.** Separating the axes is
+right, but two of the proposed four are not orthogonal. A state item
+cannot be both `epistemic=OBSERVED` and `decision_status=DECIDED` — an
+observation is not a decision. Two nullable fields make illegal states
+representable (`OBSERVED` + `DECIDED`), which is the mirror image of
+collapsing concepts: a sum type modelled as a product type.
+
+Authority and validity **are** genuinely orthogonal — any kind can be
+authorised or not, active or stale. So one discriminator plus two
+orthogonal axes:
 
 ```yaml
-state:
-  - id: decision.persistence_backend
-    kind: DECIDED           # OBSERVED | INFERRED | DECIDED | AUTHORIZED | SUPERSEDED
-    claim: PostgreSQL is the approved persistence backend
-    validity: ACTIVE        # ACTIVE | STALE | SUPERSEDED
-    evidence: [check:9f2a..., architecture_review_017]
-    authority: [user_approval_004]
-    provenance:
-      origin: internal
-      created_at: 2026-08-09T...
-    supersedes: null
+state_item:
+  kind:       OBSERVATION | INTERPRETATION | DECISION   # exactly one
+  authority:  INFORMATIONAL | AUTHORIZED                # orthogonal
+  validity:   ACTIVE | STALE | SUPERSEDED               # orthogonal
+  provenance:
+    origin:      internal | external
+    source:      <capability id>
+    produced_by: <action or actor id>
+    at:          <timestamp>
 ```
 
-**The invariant that must be enforced by type, not convention:**
+Worked examples:
 
 ```text
-OBSERVED  != INFERRED  != DECIDED  != AUTHORIZED
+external MCP response      kind=OBSERVATION    authority=INFORMATIONAL  validity=ACTIVE
+model conclusion           kind=INTERPRETATION authority=INFORMATIONAL  validity=ACTIVE
+proposed architecture      kind=DECISION       authority=INFORMATIONAL  validity=ACTIVE
+approved architecture      kind=DECISION       authority=AUTHORIZED     validity=ACTIVE
+contradicted decision      kind=DECISION       authority=AUTHORIZED     validity=STALE
 ```
 
-No code path may promote an inference to an authorised decision without
-an explicit authority record. **INTERPRETATION.** This is the single
-highest-value item in the whole milestone, because it is what makes
-"information is not authority" (§8) checkable rather than aspirational.
+Human approval changes **only** `authority`. The object does not change
+semantic identity — a decision does not *become* an authorisation.
 
-Existing `accepted_assumptions` and `blocking_decisions` migrate to
-`kind: INFERRED` and `kind: DECIDED` respectively, preserving current
-behaviour.
+### Unresolved tension, surfaced rather than decided
 
----
+**Can an `OBSERVATION` ever be `AUTHORIZED`?** Authority governs
+permission; a fact confers none. For observations the field is always
+`INFORMATIONAL` — a constant carrying no information, which argues for
+kind-specific fields.
+
+Counter-argument, and the reason the current recommendation keeps it:
+an always-present field means no code path can forget to check it, and
+there is no shape in which a *missing* field could read as authorised.
+Defensive uniformity over minimal modelling. **Worth revisiting once
+there is a real MCP input surface.**
+
+### The invariant enforced by type, not convention
+
+```text
+OBSERVATION != INTERPRETATION != DECISION
+INFORMATIONAL != AUTHORIZED
+```
+
+No code path may raise `authority` to `AUTHORIZED` without an
+`ACTION_AUTHORIZED` or `USER_APPROVED` event in the trace. **INTERPRETATION.**
+This is what makes "information is not authority" checkable rather than
+aspirational, and it is the state-level counterpart of the
+`ActionProposal` / `AuthorizedAction` split in section F.
+
+### Migration of existing keys
+
+`PROJECT_STATE.yaml`'s `accepted_assumptions` become
+`kind: INTERPRETATION`; `blocking_decisions` become `kind: DECISION,
+authority: INFORMATIONAL`. Current behaviour is preserved; the fields
+gain structure rather than changing meaning.
+
+**Design note:** state typing (E) and provenance (G6) should be
+*designed together* even if committed separately. An `OBSERVATION` with
+unknown provenance is close to useless — the whole point is being able to
+answer "where did this come from and what was it allowed to establish?"
 
 ## F. Effect Boundary plan
 
@@ -226,22 +275,62 @@ EXTERNAL_SIDE_EFFECT network, MCP write, API call
 DESTRUCTIVE          delete, force-push, production mutation
 ```
 
-Single chokepoint — **no second path may exist**:
+### The type boundary — enforced structurally, not by discipline
+
+A model produces untrusted reasoning output. An executor accepts only
+authorised authority. **These must be different types**, so that bypass
+is a type error rather than a code-review miss.
+
+```python
+proposal   = ActionProposal(...)        # untrusted; anyone may construct
+decision   = effect_gate.evaluate(proposal)
+authorized = decision.authorized()      # ONLY the gate can construct this
+executor.execute(authorized)            # accepts AuthorizedAction only
+```
+
+```python
+executor.execute(proposal)              # must not type-check
+```
+
+`AuthorizedAction` has no public constructor. It is producible only by
+the effect gate, after effect classification, policy check, authority
+check and any required approval. This is the runtime equivalent of the
+state invariant in section E:
 
 ```text
-proposal -> classify_effect -> capability policy -> authority check
-         -> approval required? -> execute -> record evidence
-         -> verification if required
+untrusted reasoning output  !=  executable authority
+observed != inferred != decided != authorized
+```
+
+**INTERPRETATION.** This is the single clearest thing Core can do
+differently from generic agent frameworks, which typically pass a
+loosely-typed tool call straight from model output to a dispatcher.
+
+### The chokepoint
+
+```text
+ActionProposal
+      -> classify_effect
+      -> capability policy
+      -> authority check
+      -> approval required?
+      -> AuthorizedAction        (gate-only construction)
+      -> Executor
+      -> evidence
+      -> verification if required
 ```
 
 Gate strength keyed to reversibility (handoff §5.1), reusing the
 `Reversibility` concept v1 already applies to external resources.
 
-**Enforcement test (must exist before any executor ships):** a test that
-attempts to reach an executor without passing the gate, and **fails the
-build if it succeeds**. This is the effect-gate-bypass test in §38.4.
+**Enforcement tests, required before any executor ships:**
 
----
+1. A test attempting to reach an executor without the gate — **build
+   fails if it succeeds**.
+2. A test attempting to construct `AuthorizedAction` outside the gate —
+   must fail.
+3. A test that a `DESTRUCTIVE` proposal without approval is denied and
+   the denial is evented.
 
 ## G. Trace and instrumentation plan
 
@@ -252,13 +341,29 @@ build if it succeeds**. This is the effect-gate-bypass test in §38.4.
 (G12).
 
 Extend the existing `append_jsonl` mechanism — do not build a second
-trace system. New event types on the same stream:
+trace system, and do not split causal history across files. One typed
+event model, queryable by turn or by action:
+
+```yaml
+event_id:
+event_type:
+turn_id:
+action_id:      # null for turn-grained events
+caused_by:
+actor:
+timestamp:
+payload:
+```
+
+Event types on the single stream:
 
 ```text
-TASK_CLASSIFIED     CONTEXT_COMPOSED     CAPABILITY_SELECTED
-MODEL_CALLED        ACTION_PROPOSED      ACTION_AUTHORIZED
-TOOL_EXECUTED       CHECK_EXECUTED       DECISION_STALE
-DECISION_SUPERSEDED USER_APPROVED
+TURN_STARTED        TASK_CLASSIFIED      CONTEXT_COMPOSED
+CAPABILITY_SELECTED MODEL_CALLED
+ACTION_PROPOSED     ACTION_DENIED        ACTION_AUTHORIZED
+ACTION_EXECUTED     EVIDENCE_RECORDED    CHECK_EXECUTED
+DECISION_RECORDED   DECISION_STALE       DECISION_SUPERSEDED
+USER_APPROVED       TURN_CLOSED
 ```
 
 Each carries `caused_by`. **Do not log chain-of-thought** — control
@@ -410,19 +515,46 @@ preserved throughout.
  1  extract core/classify + core/context      behaviour-identical
  2  extract core/decisions + core/evidence    behaviour-identical
  3  extract core/lifecycle + close_turn       behaviour-identical
- 4  typed state (E), migrate existing keys    additive
- 5  provenance/authority metadata (G6)        additive
- 6  effect taxonomy + gate, NO executor (F)   additive; bypass test lands here
- 7  structured action proposal type (G3)      additive
- 8  action-grained trace events (G)           extends turns.jsonl
+ 4  typed state (E)                           additive; designed with 5
+ 5  provenance/authority metadata (G6)        additive; designed with 4
+ 6  effect taxonomy + gate, NO executor       additive
+ 7  ActionProposal / AuthorizedAction types   gate-only construction
+ 8  action-grained trace events (G)           one typed event model
  9  cost instrumentation (G12)                recorded, unused
 10  causal-sensitivity evals (H)              may reveal existing defects
-11  mutation registry + CI wiring (H)         may fail initially — that is the point
+11  mutation registry + CI wiring (H)         may fail initially
 12  stale/re-entry semantics (G8)             additive
---- Core Readiness exit criteria evaluated here ---
-13  LangGraph Functional API shell (I)        no model yet
-14  one model adapter (Phase C)               effect gate already enforced
+
+--- CORE READINESS exit criteria evaluated here ---
+
+13  LangGraph Functional API shell (I)        no model, no executor yet
+14  Executor interface, deterministic         Executor.execute(AuthorizedAction)
+15  one reference executor                    READ + bounded local EXECUTION only
+16  executor bypass / adversarial validation  must fail the build if bypassable
+17  one model adapter                         proposes only; cannot execute
+18  model proposes through the existing gate  first autonomous path
 ```
+
+### The ordering invariant
+
+```text
+Effect Gate   exists before
+Executor      exists before
+Model         can propose executable actions
+```
+
+Stated as a permanent repository rule:
+
+> **Governance precedes execution; execution precedes autonomy.**
+
+A model adapter (17) is **not** an executor. The model proposes
+`run pytest`, `write file`, `call MCP tool` — something must still turn
+an authorised proposal into an effect, and that thing is introduced at
+14–16, fully deterministic and adversarially tested, *before* any model
+can reach it.
+
+**No commit may introduce an ungoverned model-controlled execution
+path.** Steps 6–7 land before 14, and 14–16 land before 17.
 
 **Steps 10 and 11 are expected to fail on first run.** If the causal
 sensitivity evals all pass immediately, that is evidence they are not
@@ -442,7 +574,7 @@ Settled after this analysis was drafted:
 
 ```text
 Escapement
-├── Escapement Core          <- separate repository, forked from v1
+├── Escapement Core          <- independent repository derived from v1 history
 │   ├── governed runtime
 │   ├── AI agent
 │   ├── MCP server
@@ -454,28 +586,55 @@ Escapement
 No new product name is introduced. The agent and MCP surfaces are what
 Core evolves to support, not separate products.
 
-**Consequence for section D.** Open question 1 below is resolved by the
-fork: Core does not need to live under `scripts/core/` and does not have
-to disturb v1's `MANAGED_PREFIXES`. In a fresh repository Core can be a
-top-level package from the first commit, which is the cleaner structure
-that was previously judged too disruptive.
+Core is created by **cloning v1, preserving full Git history, and
+pushing as a new independent repository**. There is deliberately **no
+GitHub fork relationship**: PRs must not default upstream, and the
+repository must be freely private-able. The word *fork* is avoided in
+Core documentation because GitHub assigns it a specific meaning.
+
+Escapement v1 remains the independent stable baseline. Core diverges
+independently. Core may become public only after Core Readiness and the
+first governed execution path have received independent review.
+
+**Consequence for section D.** Open question 1 is resolved by the
+independent-repository decision: Core does not need to live under
+`scripts/core/` and does not have to disturb v1's `MANAGED_PREFIXES`. In
+a fresh repository Core can be a top-level package from the first
+commit, which is the cleaner structure previously judged too disruptive.
 
 **Consequence for this document.** It is a bridge artifact — an analysis
 *of* v1 *for* Core. It is retained in v1 so the reason for the split
-stays legible in v1's history, and it carries into Core through the fork.
+stays legible in v1's history, and it carries into Core through the
+preserved clone history.
 
 ## Open questions for review
 
-1. ~~`scripts/core/` vs a package rename.~~ **Resolved by the fork
+1. ~~`scripts/core/` vs a package rename.~~ **Resolved by the independent-repository
    decision** — Core is a separate repository, so a top-level package is
    available without disturbing v1's managed prefixes.
 2. **Turn-grained vs action-grained trace in one stream.** Extending
    `turns.jsonl` keeps one artifact; a separate `actions.jsonl` keeps
    turn records readable. Recommend one stream with a `grain` field, but
    this is a judgement call.
-3. **Where authority records live.** `PROJECT_STATE.yaml` (durable,
-   human-editable) or the event trace (append-only, tamper-evident)?
-   Recommend the trace as the record and project state as a projection.
+3. ~~Where authority records live.~~ **Resolved.** Both, with distinct
+   roles and no duplicate truth:
+
+   ```text
+   EVENT TRACE      authoritative historical record — what happened
+   PROJECT_STATE    current projection            — what is true now
+   ```
+
+   ```text
+   USER_APPROVED action_17
+         -> append immutable event        (authoritative)
+         -> projection updates            (derived)
+         -> action_17.authority = AUTHORIZED
+   ```
+
+   If projection and history disagree, rebuild state from events or
+   **fail loudly** — never silently prefer one. This gives replay a
+   legitimate, bounded role without importing Continuum's replay
+   architecture.
 4. **Codex resources as the provenance pilot.** `codex_resources.py`
    already reads external data. It is the natural first consumer of
    trust/authority classes — worth doing before MCP client rather than
