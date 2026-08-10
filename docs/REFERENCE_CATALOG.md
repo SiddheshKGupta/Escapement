@@ -257,7 +257,7 @@ Designing local-first state, user-owned data, extensible workspace architecture,
 
 ### Do not
 
-Do not copy AGPL code into Escapement's source-available core without a deliberate licence decision.
+Do not copy AGPL code into Escapement's Apache-2.0 core. Under a permissive licence this is stricter than before, not looser: downstream users receive the code under Apache-2.0 terms they could not lawfully exercise over AGPL material.
 
 ## Plausible Analytics
 
@@ -1313,7 +1313,7 @@ A project has meaningful runtime history, logs, repeated failure patterns, or cl
 
 ### Do not
 
-Do not allow automatic modification of AGENTS.md, automatic mutation of native skills, automatic edits to policy or project state, a continuous loop by default, or sending repository logs to a network service without approval. Do not copy GPL code into Escapement's source-available core without a deliberate licence decision.
+Do not allow automatic modification of AGENTS.md, automatic mutation of native skills, automatic edits to policy or project state, a continuous loop by default, or sending repository logs to a network service without approval. Do not copy GPL code into Escapement's Apache-2.0 core. Under a permissive licence this is stricter than before, not looser.
 
 ## Agency Agents
 

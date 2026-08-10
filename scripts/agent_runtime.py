@@ -83,7 +83,7 @@ def load_turn() -> dict[str, Any] | None:
     try:
         value = json.loads(TURN.read_text(encoding="utf-8"))
         return value if isinstance(value, dict) else None
-    except Exception:
+    except (OSError, ValueError):
         return None
 
 
@@ -364,7 +364,7 @@ def load_checks(paths: list[str]) -> tuple[list[dict[str, Any]], list[str]]:
             continue
         try:
             record = json.loads(path.read_text(encoding="utf-8"))
-        except Exception as exc:
+        except (OSError, ValueError) as exc:
             errors.append(f"invalid check record {relative}: {exc}")
             continue
         missing = CHECK_RECORD_REQUIRED_FIELDS - set(record)
