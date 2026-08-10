@@ -6,7 +6,7 @@
     "name": "Escapement Project"
   },
   "repository": "https://github.com/SiddheshKGupta/escapement",
-  "license": "See LICENSE.md",
+  "license": "Apache-2.0",
   "skills": ".claude/skills",
   "settings": ".claude/settings.json"
 }

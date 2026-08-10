@@ -11,7 +11,7 @@
 [![Native skills](https://img.shields.io/badge/native%20skills-35-2F855A?style=flat-square)](catalog/native-skills.json)
 [![Unit tests](https://img.shields.io/badge/unit%20tests-189%20passing-2F855A?style=flat-square)](manifest.json)
 [![Routing evals](https://img.shields.io/badge/routing%20evals-122%20%2F%20122-2F855A?style=flat-square)](evals/)
-[![Licence](https://img.shields.io/badge/licence-source--available-6B7280?style=flat-square)](LICENSE.md)
+[![Licence](https://img.shields.io/badge/licence-Apache--2.0-4A5568?style=flat-square)](LICENSE)
 
 </div>
 
@@ -579,11 +579,13 @@ v1 remains the control against which later architecture can be evaluated.
 
 ## Licence
 
-Escapement is **source-available** and is not distributed under an OSI-approved open-source licence.
+Escapement is licensed under the **Apache License 2.0** — see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
 
-Use is governed by [`LICENSE.md`](LICENSE.md).
+Apache-2.0 was chosen over MIT for its explicit patent grant (§3), which matters for organisations adopting a governance harness.
 
-Third-party resources retain their own licences and adoption conditions.
+Third-party resources retain their own licences and adoption conditions. Nothing in the capability registry is vendored into this repository; listing a resource is a routing decision, not incorporation. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
+[Escapement Core](https://github.com/SiddheshKGupta/Escapement-Core) is a **separate repository under different, non-open-source terms**. Apache-2.0 covers this repository only.
 
 ## Authorship
 
