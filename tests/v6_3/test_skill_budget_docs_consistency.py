@@ -11,11 +11,17 @@ from capability_router import active_profile, enforce_context_budget  # noqa: E4
 ROOT = Path(__file__).resolve().parents[2]
 DOCUMENTED_SKILL_BUDGET = 1000
 
+# Each claim is a REGEX over one line, not an exact string. Pinning exact
+# spacing meant a README switching from prose to a table failed a test whose
+# subject -- the 1,000-word budget -- had not changed at all. Assert the fact,
+# not the layout.
 DOC_CLAIMS = {
-    "README.md": "Invoked skill context:    <= 1,000 words",
+    "README.md": r"Invoked skill context.*1,000 words",
     "PROJECT_CONTEXT.md": "invoked native skill context below 1,000 words",
     "SESSION_HANDOFF.md": "Invoked skill context: tested below `1,000` words",
-    "reports/VALIDATION_v6.3.md": "Invoked skill context | PASS — tested routes below 1,000 words",
+    # `\|` escaped: as a regex an unescaped pipe is alternation, which would
+    # make this pass on either half of the sentence.
+    "reports/VALIDATION_v6.3.md": r"Invoked skill context \| PASS — tested routes below 1,000 words",
 }
 
 
@@ -73,7 +79,7 @@ class SkillBudgetDocsConsistencyTest(unittest.TestCase):
     def test_documents_state_the_real_number(self) -> None:
         for relative, claim in DOC_CLAIMS.items():
             content = (ROOT / relative).read_text(encoding="utf-8")
-            self.assertIn(claim, content, f"{relative} no longer states the budget")
+            self.assertRegex(content, claim, f"{relative} no longer states the budget")
             self.assertNotIn("1,200 words", content, relative)
 
 

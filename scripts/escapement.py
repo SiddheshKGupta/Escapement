@@ -853,26 +853,45 @@ def manifest_count_check(target: Path) -> tuple[int, list[str]]:
     readme_path = target / "README.md"
     if readme_path.exists():
         readme = readme_path.read_text(encoding="utf-8", errors="replace")
+        # Inventory patterns accept BOTH the prose form ("Native skills: 35")
+        # and the table form ("| Native skills | `35` |"). The README moved to
+        # tables and every prose pattern silently stopped matching, which took
+        # six of these nine checks out of service without a word: the README
+        # said 280 files while the repository held 286 and doctor still
+        # reported zero failures. See the dead-pattern guard below.
         readme_checks = [
             (r"native%20skills-(\d+)-", "Native skills badge", actual_native_skills),
-            (r"Native skills:\s+(\d+)", "Native skills inventory", actual_native_skills),
-            (r"Capability strengths:\s+(\d+)", "Capability strengths inventory", actual_strengths),
-            (r"Governed external resources:\s+(\d+)", "External resources inventory", actual_external),
+            (r"Native skills\s*[:|]\s*`?(\d+)", "Native skills inventory", actual_native_skills),
+            (r"Capability strengths\s*[:|]\s*`?(\d+)", "Capability strengths inventory", actual_strengths),
+            (r"Governed external resources\s*[:|]\s*`?(\d+)", "External resources inventory", actual_external),
             (r"unit%20tests-(\d+)%20passing-", "Unit tests badge", actual_tests if tests_dir.exists() else None),
-            (r"Unit tests:\s+(\d+)(?:\s*/\s*\d+\s*PASS)?", "Unit tests inventory", actual_tests if tests_dir.exists() else None),
+            (r"Unit tests\s*[:|]\s*`?(\d+)(?:\s*/\s*\d+\s*PASS)?", "Unit tests inventory", actual_tests if tests_dir.exists() else None),
             (r"routing%20evals-(\d+)%20%2F%20\d+-", "Routing evals badge", actual_evals),
-            (r"Routing evaluations:\s+(\d+)(?:\s*/\s*\d+\s*PASS)?", "Routing evaluations inventory", actual_evals),
-            (r"Repository files:\s+(\d+)", "Repository files inventory", actual_files),
+            (r"Routing evaluations\s*[:|]\s*`?(\d+)(?:\s*/\s*\d+\s*PASS)?", "Routing evaluations inventory", actual_evals),
+            (r"Repository files\s*[:|]\s*`?(\d+)", "Repository files inventory", actual_files),
         ]
         for pattern, label, expected in readme_checks:
             if expected is None:
                 continue
+            matched = False
             for found in re.finditer(pattern, readme):
+                matched = True
                 declared = int(found.group(1))
                 if declared != expected:
                     problems.append(
                         f"README.md {label} says {declared} but actual is {expected}"
                     )
+            # A pattern matching nothing used to be skipped silently, on the
+            # reasoning that rewording is "a maintenance signal for this check,
+            # not a drift in the repo". But the signal went nowhere, so the
+            # check died unnoticed and let real drift through. A dead pattern
+            # is now a failure: this check cannot verify what it cannot find,
+            # and silently passing is the worse of the two outcomes.
+            if not matched:
+                problems.append(
+                    f"README.md {label} pattern matched nothing -- the wording "
+                    f"changed and this check is no longer verifying anything"
+                )
 
     return len(problems), problems
 

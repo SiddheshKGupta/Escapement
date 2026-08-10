@@ -69,7 +69,11 @@ class ManifestCountCheckTest(unittest.TestCase):
         # excludes .git (same ignore list ablation_harness.py uses).
         readme_path = self.copy / "README.md"
         readme = readme_path.read_text(encoding="utf-8")
-        match = re.search(r"Native skills:\s+(\d+)", readme)
+        # Accepts prose ("Native skills: 35") and table ("| Native skills |
+        # `35` |") form. Pinning one layout is what broke this test when the
+        # README moved to tables -- and the same wording change silently
+        # disabled six of doctor's own README checks at the same time.
+        match = re.search(r"Native skills\s*[:|]\s*`?(\d+)", readme)
         self.assertIsNotNone(match, "README.md's Native skills line moved or changed format")
         wrong_count = int(match.group(1)) + 1
         readme = readme[:match.start(1)] + str(wrong_count) + readme[match.end(1):]
