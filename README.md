@@ -51,7 +51,7 @@ The phases are adaptive. Future phases can be added or removed where justified. 
 | Measure | Current state |
 |---|---:|
 | Version | `6.3.0` |
-| Repository files | `280` |
+| Repository files | `286` |
 | Kernel | `795 / 1000 words` |
 | Native skills | `35` |
 | Capability strengths | `58` |

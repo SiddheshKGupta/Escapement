@@ -748,7 +748,7 @@ def command_spec_tasks(args: argparse.Namespace) -> int:
     return 0
 
 
-def manifest_count_check(target: Path) -> tuple[int, list[str]]:
+def manifest_count_check(target: Path) -> tuple[int, list[str], list[str]]:
     """Compare manifest.json's declared counts against counts computed from
     the actual catalogue, eval and test files.
 
@@ -764,9 +764,10 @@ def manifest_count_check(target: Path) -> tuple[int, list[str]]:
     manifest_path = target / "manifest.json"
     manifest = read_json(manifest_path)
     if not isinstance(manifest, dict):
-        return 0, []
+        return 0, [], []
 
     problems: list[str] = []
+    unverified: list[str] = []
 
     def parse_pass_fraction(value: Any) -> int | None:
         if not isinstance(value, str):
@@ -853,28 +854,69 @@ def manifest_count_check(target: Path) -> tuple[int, list[str]]:
     readme_path = target / "README.md"
     if readme_path.exists():
         readme = readme_path.read_text(encoding="utf-8", errors="replace")
+        # Inventory patterns accept BOTH the prose form ("Native skills: 35")
+        # and the table form ("| Native skills | `35` |"). The README moved to
+        # tables and every prose pattern silently stopped matching, which took
+        # six of these nine checks out of service without a word: the README
+        # said 280 files while the repository held 286 and doctor still
+        # reported zero failures. See the dead-pattern guard below.
+        # Patterns are grouped by MEASURE, and each accepts the badge form,
+        # the prose form ("Native skills: 35") and the table form
+        # ("| Native skills | `35` |"). The README moved to tables and every
+        # prose pattern silently stopped matching, taking six of these checks
+        # out of service without a word -- the README said 280 repository
+        # files while the repo held 286 and doctor still reported zero
+        # failures.
         readme_checks = [
-            (r"native%20skills-(\d+)-", "Native skills badge", actual_native_skills),
-            (r"Native skills:\s+(\d+)", "Native skills inventory", actual_native_skills),
-            (r"Capability strengths:\s+(\d+)", "Capability strengths inventory", actual_strengths),
-            (r"Governed external resources:\s+(\d+)", "External resources inventory", actual_external),
-            (r"unit%20tests-(\d+)%20passing-", "Unit tests badge", actual_tests if tests_dir.exists() else None),
-            (r"Unit tests:\s+(\d+)(?:\s*/\s*\d+\s*PASS)?", "Unit tests inventory", actual_tests if tests_dir.exists() else None),
-            (r"routing%20evals-(\d+)%20%2F%20\d+-", "Routing evals badge", actual_evals),
-            (r"Routing evaluations:\s+(\d+)(?:\s*/\s*\d+\s*PASS)?", "Routing evaluations inventory", actual_evals),
-            (r"Repository files:\s+(\d+)", "Repository files inventory", actual_files),
+            ("Native skills", actual_native_skills, [
+                r"native%20skills-(\d+)-",
+                r"Native skills\s*[:|]\s*`?(\d+)",
+            ]),
+            ("Capability strengths", actual_strengths, [
+                r"Capability strengths\s*[:|]\s*`?(\d+)",
+            ]),
+            ("External resources", actual_external, [
+                r"Governed external resources\s*[:|]\s*`?(\d+)",
+            ]),
+            ("Unit tests", actual_tests if tests_dir.exists() else None, [
+                r"unit%20tests-(\d+)%20passing-",
+                r"Unit tests\s*[:|]\s*`?(\d+)(?:\s*/\s*\d+\s*PASS)?",
+            ]),
+            ("Routing evaluations", actual_evals, [
+                r"routing%20evals-(\d+)%20%2F%20\d+-",
+                r"Routing evaluations\s*[:|]\s*`?(\d+)(?:\s*/\s*\d+\s*PASS)?",
+            ]),
+            ("Repository files", actual_files, [
+                r"Repository files\s*[:|]\s*`?(\d+)",
+            ]),
         ]
-        for pattern, label, expected in readme_checks:
+        for label, expected, patterns in readme_checks:
             if expected is None:
                 continue
-            for found in re.finditer(pattern, readme):
-                declared = int(found.group(1))
-                if declared != expected:
-                    problems.append(
-                        f"README.md {label} says {declared} but actual is {expected}"
-                    )
+            matched = False
+            for pattern in patterns:
+                for found in re.finditer(pattern, readme):
+                    matched = True
+                    declared = int(found.group(1))
+                    if declared != expected:
+                        problems.append(
+                            f"README.md {label} says {declared} but actual is {expected}"
+                        )
+            # A measure no pattern matches used to be skipped silently, on the
+            # reasoning that rewording is "a maintenance signal for this check,
+            # not a drift in the repo". The signal went nowhere, so the check
+            # died unnoticed. It is now a warning rather than silence -- and a
+            # warning rather than a failure, because a README that makes no
+            # claim about a measure is a legitimate choice (Core's does not,
+            # and a badge is a style decision, not an invariant). A wrong
+            # claim fails; an absent claim is merely reported.
+            if not matched:
+                unverified.append(
+                    f"README.md states no {label} count -- "
+                    f"this check is not verifying it"
+                )
 
-    return len(problems), problems
+    return len(problems), problems, unverified
 
 
 LICENSE_STATUS_VALUES = {
@@ -1071,7 +1113,10 @@ def command_doctor(args: argparse.Namespace) -> int:
         warnings += 1
 
     if (target / "manifest.json").exists():
-        drift_count, drift_problems = manifest_count_check(target)
+        drift_count, drift_problems, drift_unverified = manifest_count_check(target)
+        for note in drift_unverified:
+            print(f"[WARN] {note}")
+            warnings += 1
         if drift_count:
             print(f"[FAIL] manifest.json counts drifted from actual repository state: {drift_count}")
             for problem in drift_problems:
