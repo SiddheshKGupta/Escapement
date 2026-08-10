@@ -80,7 +80,7 @@ class ManifestCountCheckTest(unittest.TestCase):
         readme_path.write_text(readme, encoding="utf-8")
 
         result = self.run_doctor()
-        self.assertIn(f"README.md Native skills inventory says {wrong_count}", result.stdout)
+        self.assertIn(f"README.md Native skills says {wrong_count}", result.stdout)
 
     def test_missing_manifest_skips_the_check_without_failing(self) -> None:
         self.manifest_path.unlink()
