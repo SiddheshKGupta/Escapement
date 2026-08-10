@@ -95,12 +95,12 @@ Overlap is explicit — `SUBSTITUTE` capabilities are not stacked. Where a prefe
 ## Current baseline
 
 ```text
-Repository files:             286
+Repository files:             288
 Kernel:                       795 / 1000 words
 Native skills:                35
 Capability strengths:         58
 Governed external resources:  67
-Unit tests:                   189
+Unit tests:                   196
 Routing evaluations:          122
 ```
 

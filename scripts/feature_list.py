@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shlex
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -27,6 +28,12 @@ def find_root() -> Path:
 ROOT = find_root()
 FEATURE_FILE = ROOT / "feature_list.json"
 ALLOWED = {"not_started", "active", "blocked", "passing"}
+
+# A verification command reaching a shell is the one place a model-authored
+# string in feature_list.json could become arbitrary execution. Commands are
+# split to argv and run with shell=False; anything needing these characters
+# is rejected rather than silently mangled by the split.
+SHELL_METACHARACTERS = (";", "|", "&", "$", "`", ">", "<", "\n", "\r")
 
 
 def load() -> dict[str, Any]:
@@ -140,6 +147,22 @@ def command_verify(args: argparse.Namespace) -> int:
         print("FAIL: feature has no verification command.")
         return 1
 
+    if any(character in command for character in SHELL_METACHARACTERS):
+        print(
+            f"FAIL: verification command contains shell metacharacters: {command!r}. "
+            "Put it in a script and call that instead.",
+            file=sys.stderr,
+        )
+        return 1
+    try:
+        command_argv = shlex.split(command)
+    except ValueError as exc:
+        print(f"FAIL: cannot parse verification command: {exc}", file=sys.stderr)
+        return 1
+    if not command_argv:
+        print("FAIL: verification command is empty after parsing.", file=sys.stderr)
+        return 1
+
     runner = ROOT / "scripts" / "run_check.py"
     process = subprocess.run(
         [
@@ -149,8 +172,8 @@ def command_verify(args: argparse.Namespace) -> int:
             f"feature-{args.feature_id}",
             "--scope",
             f"feature:{args.feature_id}",
-            "--shell",
-            command,
+            "--",
+            *command_argv,
         ],
         cwd=ROOT,
         text=True,

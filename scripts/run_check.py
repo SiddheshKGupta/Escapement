@@ -53,25 +53,23 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--scope", action="append", default=[])
     parser.add_argument("--cwd", default=".")
     parser.add_argument("--timeout", type=int, default=0)
-    parser.add_argument(
-        "--shell",
-        help="Run one trusted shell command string instead of argv after --.",
-    )
+    # There is deliberately no --shell. It used to accept one command string
+    # and run it through subprocess with shell=True, guarded by nothing but
+    # the word "trusted" in this help text. Its only caller passed a command
+    # read out of feature_list.json, a file the agent itself writes, so a
+    # model-authored string reached a shell. argv only, shell=False always.
     parser.add_argument("command", nargs=argparse.REMAINDER)
     return parser
 
 
 def main() -> int:
     args = build_parser().parse_args()
-    if args.shell and args.command:
-        print("FAIL: choose --shell or argv after --, not both.", file=sys.stderr)
-        return 2
 
     command_argv = list(args.command)
     if command_argv and command_argv[0] == "--":
         command_argv = command_argv[1:]
 
-    if not args.shell and not command_argv:
+    if not command_argv:
         print("FAIL: no command supplied.", file=sys.stderr)
         return 2
 
@@ -88,7 +86,7 @@ def main() -> int:
     started_at = utc_now()
     started_monotonic = time.monotonic()
     provisional = hashlib.sha256(
-        f"{args.name}|{started_at}|{args.shell or command_argv}".encode("utf-8")
+        f"{args.name}|{started_at}|{command_argv}".encode("utf-8")
     ).hexdigest()[:16]
     output_dir = ROOT / ".agent" / "evidence" / "checks" / provisional
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -97,9 +95,9 @@ def main() -> int:
 
     try:
         completed = subprocess.run(
-            args.shell if args.shell else command_argv,
+            command_argv,
             cwd=cwd,
-            shell=bool(args.shell),
+            shell=False,
             text=True,
             capture_output=True,
             timeout=args.timeout or None,
@@ -115,11 +113,20 @@ def main() -> int:
             ((exc.stderr or "") if isinstance(exc.stderr, str) else "")
             + f"\nCommand timed out after {args.timeout} seconds.\n"
         )
+    except OSError as exc:
+        # With no shell there is nothing to turn "command not found" into an
+        # exit status, so this would otherwise raise and write no record at
+        # all -- and a check that could not run must still leave evidence
+        # that it did not run. 127 is the conventional code for a missing
+        # command. Under the old shell=True path the shell produced this.
+        exit_code = 127
+        stdout_text = ""
+        stderr_text = f"Could not execute {command_argv!r}: {exc}\n"
 
     stdout_path.write_text(stdout_text, encoding="utf-8")
     stderr_path.write_text(stderr_text, encoding="utf-8")
     completed_at = utc_now()
-    command_value: str | list[str] = args.shell if args.shell else command_argv
+    command_value: list[str] = command_argv
 
     identity = {
         "name": args.name,
@@ -136,7 +143,7 @@ def main() -> int:
         "schema_version": "1.0",
         "name": args.name,
         "command": command_value,
-        "command_display": args.shell or shlex.join(command_argv),
+        "command_display": shlex.join(command_argv),
         "cwd": relative(cwd),
         "scope": args.scope,
         "started_at": started_at,
