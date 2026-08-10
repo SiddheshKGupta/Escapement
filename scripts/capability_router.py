@@ -159,7 +159,6 @@ RESOURCE_PHASES = {
     "everything-claude-code": {"BRAINSTORM", "PLAN", "IMPLEMENT", "VERIFY"},
     "ecc": {"BRAINSTORM", "PLAN", "IMPLEMENT", "VERIFY"},
     "voltagent-awesome-design-md": {"RESEARCH"},
-    "500-ai-agents-projects": {"RESEARCH", "BRAINSTORM", "PLAN"},
     "strix": {"VERIFY"},
     "perplexity-bumblebee": {"RESEARCH", "VERIFY"},
     "perplexity-org": {"RESEARCH"},

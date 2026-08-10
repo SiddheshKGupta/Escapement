@@ -21,7 +21,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import py_compile
 import re
 import shutil
@@ -148,7 +147,7 @@ def read_json(path: Path, default: Any = None) -> Any:
         return default
     try:
         return json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
+    except (OSError, ValueError):
         return default
 
 
@@ -1047,7 +1046,7 @@ def command_doctor(args: argparse.Namespace) -> int:
             try:
                 json.loads(path.read_text(encoding="utf-8"))
                 print(f"[PASS] JSON {relative}")
-            except Exception as exc:
+            except (OSError, ValueError) as exc:
                 print(f"[FAIL] JSON {relative}: {exc}")
                 failures += 1
 

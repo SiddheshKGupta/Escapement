@@ -160,7 +160,7 @@ def scan_hooks(findings: list[dict[str, Any]]) -> None:
             continue
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
-        except Exception as exc:
+        except (OSError, ValueError) as exc:
             add_finding(
                 findings,
                 finding_id=f"invalid-hook-json:{rel}",
@@ -212,7 +212,7 @@ def scan_mcp(findings: list[dict[str, Any]]) -> None:
         text = path.read_text(encoding="utf-8", errors="replace")
         try:
             data = json.loads(text)
-        except Exception:
+        except (OSError, ValueError):
             data = {}
 
         server_blocks = []

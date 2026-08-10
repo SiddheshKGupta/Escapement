@@ -30,7 +30,7 @@ def read_json(path: Path):
         return None
     try:
         return json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
+    except (OSError, ValueError):
         return None
 
 
@@ -65,7 +65,7 @@ def build_data() -> dict:
     }
 
 
-def page(token: str) -> str:
+def page() -> str:
     data = build_data()
     escaped = html.escape(json.dumps(data, indent=2, ensure_ascii=False))
     return f"""<!doctype html>
@@ -125,7 +125,7 @@ def main() -> int:
                 self.end_headers()
                 self.wfile.write(payload)
                 return
-            payload = page(token).encode("utf-8")
+            payload = page().encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Cache-Control", "no-store")

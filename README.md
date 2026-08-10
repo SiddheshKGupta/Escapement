@@ -95,7 +95,7 @@ Overlap is explicit — `SUBSTITUTE` capabilities are not stacked. Where a prefe
 ## Current baseline
 
 ```text
-Repository files:             288
+Repository files:             289
 Kernel:                       795 / 1000 words
 Native skills:                35
 Capability strengths:         58

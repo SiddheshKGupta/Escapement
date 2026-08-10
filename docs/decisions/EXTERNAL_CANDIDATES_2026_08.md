@@ -103,7 +103,7 @@ inspection).
 |---|---|---|
 | Prime Agent | MIT | Verified from repository and coverage. |
 | Understand Anything | MIT | Verified from `package.json`. |
-| Evolver | GPL-3.0-or-later (current release) | Publisher has announced future releases move to source-available; not retroactive. Do not copy GPL code into Escapement's source-available core without a deliberate legal/architectural decision. |
+| Evolver | GPL-3.0-or-later (current release) | Publisher has announced future releases move to source-available; not retroactive. Do not copy GPL code into Escapement's Apache-2.0 core. Referencing and routing to it remains fine; incorporation does not. |
 | Agency Agents | MIT | Verified from repository. |
 | Prompt Master | MIT | Verified via community catalogue listing. |
 | Matt Pocock Grilling / Grill Me | MIT | Verified from `mattpocock/skills` repository LICENSE. |
