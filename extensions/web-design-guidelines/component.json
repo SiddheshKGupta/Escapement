@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "type": "extension",
+  "name": "web-design-guidelines",
+  "version": "1.0.0",
+  "description": "Optional Web Interface Guidelines review skill. The guidelines repository is MIT; the Vercel Labs skill packaging repository publishes no licence at all, so its file is not copied and approval is required.",
+  "license": "Escapement wrapper content in original wording. Guidelines source vercel-labs/web-interface-guidelines is MIT; vercel-labs/agent-skills carries no LICENSE file and no package.json licence field, so it is treated as all-rights-reserved and is referenced, never vendored.",
+  "source_references": [
+    "https://github.com/vercel-labs/web-interface-guidelines",
+    "https://github.com/vercel-labs/agent-skills/blob/main/skills/web-design-guidelines/SKILL.md"
+  ],
+  "approval_required": true,
+  "files_root": "files"
+}

@@ -92,14 +92,33 @@ Overlap is explicit — `SUBSTITUTE` capabilities are not stacked. Where a prefe
 
 **Nothing in the registry is vendored into this repository.** Listing a resource is a routing decision, not incorporation.
 
+### Composable adoption
+
+Adopt Escapement for one job rather than the whole harness. A bundle installs only that job's skills and preset.
+
+```bash
+python scripts/escapement.py component list
+python scripts/escapement.py component install bundle ui-ux /path/to/your-project
+```
+
+| Bundle | Scope |
+|---|---|
+| `ui-ux` | interface work only — design direction, frontend implementation, UI quality review |
+| `codebase-audit` | existing-codebase audit only — engineering, security, quality, controls |
+| `developer` | implementation, API, UI review, release, governance |
+| `business-analyst` | discovery, workflow, dashboard, design, governance |
+| `security-reviewer` | security, external capability, integration, evidence |
+
+Presets (`lean-build`, `enterprise-governance`) set how much ceremony applies. Extensions add an external capability and are approval-gated — `component install extension <name> <target> --approved`.
+
 ## Current baseline
 
 ```text
-Repository files:             289
+Repository files:             296
 Kernel:                       795 / 1000 words
 Native skills:                35
 Capability strengths:         58
-Governed external resources:  67
+Governed external resources:  68
 Unit tests:                   196
 Routing evaluations:          122
 ```

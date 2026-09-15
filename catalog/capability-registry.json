@@ -1764,6 +1764,34 @@
       "use_when": "Verification needs cloud service behaviour reproduced locally instead of against a real account.",
       "do_not": "Do not treat local emulation as evidence that the real cloud environment behaves identically.",
       "notes": "Positioned as an alternative to LocalStack. Sole member of local-runtime-emulation, which has no declared relation yet."
+    },
+    {
+      "id": "vercel-web-interface-guidelines",
+      "name": "Web Interface Guidelines",
+      "kind": "agent-skill",
+      "source": "https://github.com/vercel-labs/web-interface-guidelines",
+      "publisher": "Vercel Labs",
+      "license": "MIT for the guidelines repository. The separate vercel-labs/agent-skills repository that packages the upstream skill has no LICENSE file and no package.json licence field, and the GitHub licence API reports null: all rights reserved.",
+      "license_status": "verified",
+      "status": "optional",
+      "activation": "on-demand",
+      "overlap_group": "design-reference",
+      "use_modes": [
+        "reference",
+        "adapt"
+      ],
+      "triggers": [
+        "review my UI",
+        "accessibility review",
+        "web interface guidelines",
+        "UI audit",
+        "UX review",
+        "interface compliance"
+      ],
+      "use_when": "Interface code needs checking against a current, public, external accessibility and interaction checklist rather than the harness's own judgement alone.",
+      "do_not": "Do not copy or vendor the vercel-labs/agent-skills SKILL.md -- that repository grants no licence to copy it. Do not review against an embedded snapshot of the guidelines; fetch them at review time. Do not let the checklist override DESIGN.md or enterprise-ui-review.",
+      "notes": "Packaged as extensions/web-design-guidelines, whose SKILL.md is original wording describing the same method, not a copy of the upstream file. The MIT guidelines text is fetched at review time and never vendored.",
+      "adoption": "approval-required"
     }
   ],
   "agents": [

@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "type": "bundle",
+  "name": "codebase-audit",
+  "version": "1.0.0",
+  "description": "Audit of an existing codebase only: engineering, security, quality, and controls review.",
+  "approval_required": false,
+  "files_root": "files",
+  "skills": [
+    "engineering-review",
+    "security-review",
+    "quality-engineering",
+    "governance-risk-controls"
+  ],
+  "preset": "enterprise-governance"
+}

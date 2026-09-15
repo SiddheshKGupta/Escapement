@@ -17,8 +17,8 @@
     "kernel_words": 795,
     "native_skills": 35,
     "capability_strengths": 58,
-    "external_resources": 67,
-    "files": 289
+    "external_resources": 68,
+    "files": 296
   },
   "traceability_report": "reports/ORIGINAL_INTENT_TRACEABILITY.md",
   "remaining_boundaries": [
