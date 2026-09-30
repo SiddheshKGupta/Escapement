@@ -1,0 +1,10 @@
+{
+  "description": "Audit of an existing codebase only: engineering, security, quality, and controls review.",
+  "skills": [
+    "engineering-review",
+    "security-review",
+    "quality-engineering",
+    "governance-risk-controls"
+  ],
+  "preset": "enterprise-governance"
+}

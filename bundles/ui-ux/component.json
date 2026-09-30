@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "type": "bundle",
+  "name": "ui-ux",
+  "version": "1.0.0",
+  "description": "Interface work only: design direction, frontend implementation, and UI quality review.",
+  "approval_required": false,
+  "files_root": "files",
+  "skills": [
+    "design-system",
+    "frontend-implementation",
+    "enterprise-ui-review"
+  ],
+  "preset": "lean-build"
+}
